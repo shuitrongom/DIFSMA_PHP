@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_message'] = 'Álbum creado correctamente.';
             $_SESSION['flash_type']    = 'success';
         } catch (PDOException $e) {
-            $_SESSION['flash_message'] = APP_DEBUG ? $e->getMessage() : 'Error al guardar en la base de datos.';
+            $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al guardar en la base de datos.';
             $_SESSION['flash_type']    = 'danger';
         }
 
@@ -166,7 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_message'] = 'Álbum actualizado correctamente.';
             $_SESSION['flash_type']    = 'success';
         } catch (PDOException $e) {
-            $_SESSION['flash_message'] = APP_DEBUG ? $e->getMessage() : 'Error al actualizar en la base de datos.';
+            $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al actualizar en la base de datos.';
             $_SESSION['flash_type']    = 'danger';
         }
 
@@ -214,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_message'] = 'Imagen agregada al álbum correctamente.';
             $_SESSION['flash_type']    = 'success';
         } catch (PDOException $e) {
-            $_SESSION['flash_message'] = APP_DEBUG ? $e->getMessage() : 'Error al guardar en la base de datos.';
+            $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al guardar en la base de datos.';
             $_SESSION['flash_type']    = 'danger';
         }
 
@@ -257,7 +257,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_message'] = 'Imagen eliminada correctamente.';
             $_SESSION['flash_type']    = 'success';
         } catch (PDOException $e) {
-            $_SESSION['flash_message'] = APP_DEBUG ? $e->getMessage() : 'Error al eliminar de la base de datos.';
+            $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al eliminar de la base de datos.';
             $_SESSION['flash_type']    = 'danger';
         }
 
@@ -316,7 +316,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_message'] = 'Álbum y todas sus imágenes eliminados correctamente.';
             $_SESSION['flash_type']    = 'success';
         } catch (PDOException $e) {
-            $_SESSION['flash_message'] = APP_DEBUG ? $e->getMessage() : 'Error al eliminar de la base de datos.';
+            $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al eliminar de la base de datos.';
             $_SESSION['flash_type']    = 'danger';
         }
 

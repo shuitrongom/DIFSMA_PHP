@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['flash_message'] = 'Organigrama actualizado correctamente.';
         $_SESSION['flash_type']    = 'success';
     } catch (PDOException $e) {
-        $_SESSION['flash_message'] = APP_DEBUG ? $e->getMessage() : 'Error al guardar en la base de datos.';
+        $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al guardar en la base de datos.';
         $_SESSION['flash_type']    = 'danger';
     }
 
