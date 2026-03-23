@@ -36,14 +36,16 @@ try {
 
 // 3. Verificar tablas
 echo "<h4>3. Tablas</h4>";
-$tablas = ['admin','slider_principal','slider_comunica','noticias','presidencia',
+$tablas = ['admin','slider_principal','slider_comunica','noticias_imagenes','presidencia',
            'direcciones','organigrama','tramites','galeria_albumes','galeria_imagenes',
-           'seac_bloques','seac_trimestres','seac_pdfs','cuenta_publica_bloques',
-           'cuenta_publica_trimestres','cuenta_publica_pdfs','presupuesto_anual_bloques',
-           'presupuesto_anual_conceptos','pae','matrices_indicadores',
-           'conac_bloques','conac_trimestres','conac_pdfs',
+           'seac_bloques','seac_conceptos','seac_pdfs',
+           'cp_bloques','cp_titulos','cp_conceptos',
+           'pa_bloques','pa_conceptos','pa_pdfs',
+           'pae_titulos','pae_pdfs','mi_pdfs',
+           'conac_bloques','conac_conceptos','conac_pdfs',
            'fin_bloques','fin_conceptos','avisos_privacidad','avisos_privacidad_config',
-           'transparencia_items','login_attempts','footer_config','institucion'];
+           'transparencia_items','login_attempts','footer_config','institucion_banner',
+           'programas','programas_secciones'];
 foreach ($tablas as $t) {
     try {
         $pdo->query("SELECT 1 FROM $t LIMIT 1");
