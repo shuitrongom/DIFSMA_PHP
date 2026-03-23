@@ -1,4 +1,6 @@
 ﻿<?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 /**
  * admin/slider_principal.php — CRUD para imágenes del Slider Principal
  *
