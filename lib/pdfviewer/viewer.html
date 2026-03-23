@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Visor PDF</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html{width:100%;height:100%;overflow:hidden;}
+body{width:100%;height:100%;overflow-y:auto;overflow-x:hidden;background:#525659;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;}
+canvas{display:block;margin:6px auto;box-shadow:0 1px 4px rgba(0,0,0,.3);max-width:900px;}
+#loading{color:#fff;padding:2rem;font-family:sans-serif;font-size:1rem;text-align:center;}
+</style>
+</head>
+<body>
+<div id="loading">Cargando PDF...</div>
+<script src="../../node_modules/pdfjs-dist/build/pdf.min.js"></script>
+<script>
+(function(){
+    pdfjsLib.GlobalWorkerOptions.workerSrc='../../node_modules/pdfjs-dist/build/pdf.worker.min.js';
+    var params=new URLSearchParams(window.location.search);
+    var file=params.get('file');
+    if(!file){document.getElementById('loading').textContent='No se especificó archivo.';return;}
+
+    pdfjsLib.getDocument(file).promise.then(function(pdf){
+        document.getElementById('loading').remove();
+        var maxW=Math.min(document.body.clientWidth-16,900);
+        var chain=Promise.resolve();
+        for(var i=1;i<=pdf.numPages;i++){
+            (function(num){
+                chain=chain.then(function(){
+                    return pdf.getPage(num).then(function(page){
+                        var nat=page.getViewport({scale:1});
+                        var scale=maxW/nat.width;
+                        var vp=page.getViewport({scale:scale});
+                        var c=document.createElement('canvas');
+                        c.width=Math.floor(vp.width);
+                        c.height=Math.floor(vp.height);
+                        document.body.appendChild(c);
+                        return page.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;
+                    });
+                });
+            })(i);
+        }
+    }).catch(function(err){
+        document.getElementById('loading').textContent='Error: '+err.message;
+    });
+
+    document.addEventListener('contextmenu',function(e){e.preventDefault();});
+    document.addEventListener('keydown',function(e){
+        var ok=['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '];
+        if(ok.indexOf(e.key)!==-1)return;
+        if(e.ctrlKey||e.metaKey){e.preventDefault();return false;}
+    },true);
+    document.addEventListener('selectstart',function(e){e.preventDefault();});
+    document.addEventListener('dragstart',function(e){e.preventDefault();});
+    document.addEventListener('copy',function(e){e.preventDefault();});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>DIF San Mateo Atenco</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Montserrat:wght@200;400;500;600;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="icon" href="img/favicon-32x32.png" sizes="35x35">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+    <!-- Swiper CSS (bundle) -->
+    <link rel="stylesheet" href="css/swiper-bundle.min.css" />
+    <style>
+        :root {
+            --bg: #0f1724;
+            --card-bg: #0b1220;
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 16px;
+            overflow: hidden;
+        }
+
+        /* Swiper 3D coverflow */
+        .swiper {
+            width: 100%;
+            padding: 30px 0 50px !important;
+        }
+
+        .swiper-slide {
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60%;
+            max-width: 520px;
+            transition: opacity .4s, transform .4s;
+            opacity: 0.45;
+            transform: scale(0.82);
+        }
+
+        .swiper-slide-active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .swiper-slide img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            border-radius: 10px;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        /* Pagination dots */
+        .swiper-pagination-bullet {
+            background: #aaa;
+            opacity: 1;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            transition: background .25s, width .25s;
+        }
+
+        .swiper-pagination-bullet-active {
+            background: #c0392b;
+            width: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .swiper-slide { width: 80%; }
+        }
+
+        @media (max-width: 480px) {
+            .swiper-slide { width: 92%; opacity: 1; transform: scale(1); }
+            .swiper-slide-active { transform: scale(1); }
+        }
+    </style>
+    <style>
+        :root {
+            --gap: 12px;
+            --nav-size: 40px;
+            --dot-size: 10px;
+            --accent: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        .slider {
+            position: relative;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+            border-radius: 0;
+        }
+
+        .viewport {
+            display: flex;
+            transition: transform .5s ease;
+        }
+
+        /* responsive height */
+        .slide {
+            min-width: 100%;
+            flex: 0 0 100%;
+            position: relative;
+        }
+
+        .slide img {
+            width: 100%;
+            height: auto;
+            max-height: 80vh;
+            object-fit: contain;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .slide img { max-height: 50vw; }
+        }
+
+        @media (max-width: 480px) {
+            .slide img { max-height: 60vw; }
+        }
+
+        /* captions (optional) */
+        .caption {
+            position: absolute;
+            left: 16px;
+            bottom: 16px;
+            padding: 10px 14px;
+            background: rgba(14, 13, 13, 0.45);
+            color: var(--accent);
+            border-radius: 6px;
+            font-size: 14px;
+            backdrop-filter: blur(4px)
+        }
+
+        /* dots */
+        .dots {
+            position: relative;
+            left: auto;
+            transform: none;
+            bottom: auto;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 0;
+            background: transparent;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            padding: 0;
+            transition: background .25s, transform .25s, width .25s;
+        }
+
+        .dot.active {
+            background: rgb(200,16,44);
+            width: 28px;
+            border-radius: 5px;
+            transform: none;
+        }
+
+        /* responsive tweaks */
+        @media (max-width:420px) {
+            .caption {
+                font-size: 12px;
+                padding: 8px 10px
+            }
+        }
+
+        /* hide buttons on small screens if desired */
+
+        /* Global section rhythm */
+        section, .container-fluid { scroll-margin-top: 70px; }
+        .section-title { margin-bottom: 2rem; }
+
+        /* Color de fuente principal al 80% negro — excluye navbar y footer */
+        body {
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Notice slider arrows */
+        /* Notice slider */
+        .notice-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            background: #3f3e3e;
+            color: #fff;
+            font-size: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background .2s, transform .2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,.2);
+        }
+        .notice-btn:hover { background: #868484; transform: scale(1.08); }
+        .notice-slide {
+            flex: 0 0 33.333%;
+            max-width: 33.333%;
+            box-sizing: border-box;
+        }
+        .notice-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 10px;
+            object-fit: contain;
+        }
+        .notice-swiper {
+            width: 100%;
+            padding-bottom: 8px;
+        }
+        .notice-swiper .swiper-slide {
+            width: auto;
+            opacity: 1;
+            transform: none;
+        }
+        @media (max-width: 768px) {
+            .notice-slide { flex: 0 0 50%; max-width: 50%; }
+        }
+        @media (max-width: 576px) {
+            .notice-slide { flex: 0 0 100%; max-width: 100%; }
+        }
+    </style>
+    <style>
+        .navbar-nav {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .nav-item {
+            flex: 1 0 calc(100% / 6);
+            text-align: center;
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Nav links principales — solo los que NO son dropdown-item */
+        .navbar-nav .nav-link-green,
+        .navbar-nav .nav-link-red,
+        .navbar-nav .nav-link-yellow,
+        .navbar-nav .nav-link-pink,
+        .navbar-nav .nav-link-purple,
+        .navbar-nav .nav-link-blue {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            color: #fff !important;
+        }
+        /* Hover en nav-links principales */
+        .navbar-nav .nav-link-green:hover,
+        .navbar-nav .nav-link-red:hover,
+        .navbar-nav .nav-link-yellow:hover,
+        .navbar-nav .nav-link-pink:hover,
+        .navbar-nav .nav-link-purple:hover,
+        .navbar-nav .nav-link-blue:hover {
+            color: var(--bs-primary) !important;
+        }
+        /* Dropdown items del NAVBAR — blancos */
+        .navbar .dropdown-menu .dropdown-item {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            color: #fff !important;
+        }
+        .navbar .dropdown-menu .dropdown-item:hover {
+            color: rgba(0,0,0,0.8) !important;
+        }
+
+        /* Botones Ver Programas */
+        .btn-ver-programas {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        /* Accordion body */
+        .accordion-body {
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Separador blanco en dropdown-items desde el segundo */
+        .dropdown-menu .dropdown-item + .dropdown-item {
+            border-top: 2px solid rgba(255,255,255,0.8);
+        }
+
+        /* Transparencia hover — tarjeta se levanta */
+        .program-item {
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .program-item:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+            z-index: 2;
+            position: relative;
+        }
+        /* Evitar que overflow:hidden corte la imagen en hover */
+        .program-item .overflow-hidden {
+            overflow: visible !important;
+        }
+        .program-item .img-border {
+            overflow: visible !important;
+        }
+
+        /* NAVBAR DROPDOWN ITEMS — FORZAR BLANCO */
+        #navbarCollapse .dropdown-menu a.dropdown-item,
+        #navbarCollapse .dropdown-menu a.dropdown-item:link,
+        #navbarCollapse .dropdown-menu a.dropdown-item:visited {
+            color: #ffffff !important;
+        }
+
+        /* Programas dropdown — acordeones en negro */
+        .events-text .dropdown-menu .accordion-button,
+        .events-text .dropdown-menu .accordion-body {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            color: rgba(0, 0, 0, 0.8) !important;
+        }
+
+        /* Copyright bar */
+        .copyright-bar {
+            background: #757575;
+            color: #fff;
+            padding: 16px 0;
+            text-align: center;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
+        <div class="spinner-grow text-primary" role="status"></div>
+    </div>
+    <!-- Spinner End -->
+
+    <!-- Logo Principal Start -->
+    <div class="container d-flex justify-content-center pt-4 pb-0">
+        <img src="img/logos.png" class="img-fluid" style="max-width:70%;" alt="DIF San Mateo Atenco">
+    </div>
+    <!-- Logo Principa End -->
+
+    <!-- Logo secundario Start -->
+    <div class="container pb-2">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <!-- Widget del clima izquierda -->
+            <div id="weather-widget" style="min-width:240px; max-width:320px; font-family:'Montserrat',sans-serif; font-size:13px; text-align:center; color:rgba(0,0,0,0.8);">
+                <div class="d-flex flex-column align-items-center gap-1">
+                    <div class="d-flex align-items-center gap-2">
+                        <span id="weather-icon" style="font-size:28px;">⏳</span>
+                        <div id="weather-temp" style="font-weight:600; font-size:16px; color:rgba(0,0,0,0.8);">--°C</div>
+                    </div>
+                    <div id="weather-desc" style="color:rgba(0,0,0,0.8); font-size:12px;">Cargando...</div>
+                    <div style="color:rgba(0,0,0,0.8); font-size:12px;">San Mateo Atenco</div>
+                </div>
+            </div>
+            <!-- Logo centrado -->
+            <img src="img/unidos con amor.png" class="img-fluid mx-auto" style="max-width:290px;" alt="Unidos con Amor">
+            <!-- Buscador derecha -->
+            <form class="d-flex align-items-center" role="search" onsubmit="doSearch(event)" style="min-width:220px; max-width:320px;">
+                <div class="input-group">
+                    <input id="siteSearchInput" type="search" class="form-control form-control-sm" placeholder="Buscar en la página..." aria-label="Buscar">
+                    <button class="btn btn-sm btn-dark" type="submit" aria-label="Buscar">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Logo secundario End -->
+
+    <!-- Navbar start -->
+    <div class="container-fluid border-bottom bg-white wow fadeIn" data-wow-delay="0.1s">
+        <div class="container px-0">
+            <nav class="navbar navbar-expand-xl py-3">
+                <a href="index.html" class="navbar-brand"></h1></a>
+                <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarCollapse" style="border-color:rgba(0,0,0,0.3);">
+                    <span class="fa fa-bars text-primary"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav mx-auto">
+                        <a href="index.html" class="nav-item nav-link-green active">INICIO</a>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link-red dropdown-toggle" data-bs-toggle="dropdown">ACERCA DEL
+                                DIF</a>
+                            <li class="dropdown-menu rounded-0">
+                                <a href="acerca del dif/presidencia.html" class="dropdown-item" style="color:#fff!important">Presidencia</a>
+                                <a href="acerca del dif/direcciones.html" class="dropdown-item" style="color:#fff!important">Direcciones</a>
+                                <a href="acerca del dif/organigrama.html" class="dropdown-item" style="color:#fff!important">Organigrama</a>
+                            </li>
+                        </div>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link-yellow dropdown-toggle" data-bs-toggle="dropdown">SERVICIOS</a>
+                            <div class="dropdown-menu m-0 rounded-0" >
+                                <a href="tramites y servicios/PMPNNA.html" class="dropdown-item" style="color:#fff!important">Procudaduría Municipal
+                                    de Protección de Niñas,
+                                    Niños Y Adolecentes</a>
+                                <a href="tramites y servicios/DAAM.html" class="dropdown-item" style="color:#fff!important">Dirección de Atención a
+                                    Adultos Mayores</a>
+                                <a href="tramites y servicios/DANF.html" class="dropdown-item" style="color:#fff!important">Dirección de Alimentación
+                                    y Nutrición Familiar</a>
+                                <a href="tramites y servicios/DAD.html" class="dropdown-item" style="color:#fff!important">Dirección de Atención a la
+                                    Discapacidad</a>
+                                <a href="tramites y servicios/DPAF.html" class="dropdown-item" style="color:#fff!important">Dirección de Prevención y
+                                    Bienestar Familiar</a>
+                                <a href="tramites y servicios/DSJAIG.html" class="dropdown-item" style="color:#fff!important">Dirección de Servicios
+                                    Jurídicos – Asistenciales e Igualdad de Género</a>
+                            </div>
+                        </div>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link-pink dropdown-toggle" data-bs-toggle="dropdown">COMUNICACIÓN
+                                SOCIAL</a>
+                            <div class="dropdown-menu m-0 rounded-0">
+                                <a href="comunicacion social/noticias.html" class="dropdown-item" style="color:#fff!important">Noticias</a>
+                                <a href="comunicacion social/galeria.html" class="dropdown-item" style="color:#fff!important">Galerías</a>
+                            </div>
+                        </div>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link-purple dropdown-toggle"
+                                data-bs-toggle="dropdown">TRANSPARENCIA</a>
+                            <div class="dropdown-menu m-0 rounded-0">
+                                <a href="https://www.ipomex.org.mx/ipo3/lgt/indice/DIFSANMATEO.web" target="_blank"
+                                    class="dropdown-item" style="color:#fff!important">IPOMEX</a>
+                                <a href="https://www.saimex.org.mx/saimex/ciudadano/login.page" target="_blank"
+                                    class="dropdown-item" style="color:#fff!important">SAIMEX</a>
+                                <a href="https://www.plataformadetransparencia.org.mx/" target="_blank"
+                                    class="dropdown-item" style="color:#fff!important">PLATAFORMA NACIONAL DE
+                                    TRANSPARENCIA</a>
+                                <a href="trasparencia/SEAC.html" class="dropdown-item" style="color:#fff!important">SISTEMA DE EVALUACIONES<br> DE LA
+                                    ARMONIZACIÓN CONTABLE</a>
+                                <a href="https://difsanmateoatenco.gob.mx/plantilla/29" class="dropdown-item" style="color:#fff!important">CUENTA
+                                    PÚBLICA</a>
+                                <a href="https://difsanmateoatenco.gob.mx/plantilla/30"
+                                    class="dropdown-item" style="color:#fff!important">PRESUPUESTO ANUAL</a>
+                                <a href="https://difsanmateoatenco.gob.mx/pagina/31" class="dropdown-item" style="color:#fff!important">PAE</a>
+                                <a href="https://difsanmateoatenco.gob.mx/pagina/34" class="dropdown-item" style="color:#fff!important">MATRICES DE
+                                    INDICADORES</a>
+                                <a href="https://difsanmateoatenco.gob.mx/plantilla/36" class="dropdown-item" style="color:#fff!important">CONAC</a>
+                                <a href="https://difsanmateoatenco.gob.mx/plantilla/37"
+                                    class="dropdown-item" style="color:#fff!important">FINANCIERO</a>
+                                <a href="../404.html" class="dropdown-item" style="color:#fff!important">AVISOS DE PRIVACIDAD</a>
+                            </div>
+                        </div>
+                        <a href="#" class="nav-item nav-link-blue">VOLUNTARIADO</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- Navbar End -->
+
+    <!-- Carousel Slaider 1 Start -->
+    <div class="container-fluid service px-0 py-0">
+        <section class="slider" aria-label="Galería de imágenes">
+            <div class="viewport" id="viewport"></div>
+            <div class="dots" id="dots" aria-hidden="false" style="margin-top: 12px;"></div>
+        </section>
+    </div>
+    <!-- Carousel Slaider 1 End -->
+
+    <!-- Espacio White Start -->
+    <div class="container-fluid py-3">
+        <div class="container">
+        </div>
+    </div>
+    <!-- Espacio White End -->
+
+    <!-- Swiper Carrousel Start -->
+    <div class="container-fluid service py-4">
+        <div class="container">
+            <div class="mx-auto text-center wow fadeIn" data-wow-delay="0.1s" style="max-width: 700px;">
+                <h4 class="mb-1 d-inline-block" style="font-family:'Montserrat',sans-serif; font-weight:800; letter-spacing:2px; color:rgba(0,0,0,0.8);">
+                    DIF COMUNICA</h4>
+                <div style="height:16px; background:rgb(200, 16, 44); border-radius:3px; width:23%; margin: 4px auto 24px;"></div>
+            </div>
+            <div class="wrap">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide"><img src="img/efemerides1.png" alt="Imagen 1"></div>
+                        <div class="swiper-slide"><img src="img/efemerides2.png" alt="Imagen 2"></div>
+                        <div class="swiper-slide"><img src="img/efemerides3.png" alt="Imagen 3"></div>
+                        <div class="swiper-slide"><img src="img/efemerides1.png" alt="Imagen 4"></div>
+                        <div class="swiper-slide"><img src="img/efemerides2.png" alt="Imagen 5"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Swiper Carrousel End -->
+
+    <!-- Programs DIF Start -->
+    <div class="container-fluid program py-4">
+        <div class="container py-4">
+            <div class="mx-auto text-center wow fadeIn" data-wow-delay="0.1s" style="max-width: 700px;">
+                    <h4 class="mb-1 d-inline-block" style="font-family:'Montserrat',sans-serif; font-weight:800; letter-spacing:2px; color:rgba(0,0,0,0.8);">
+                    TODOS NUESTROS PROGRAMAS</h4>
+                <div style="height:16px; background:rgb(200,16,44); border-radius:3px; width:23%; margin: 4px auto 24px;"></div>
+            </div>
+            <div class="row g-3 g-md-4 justify-content-center">
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 wow fadeIn" data-wow-delay="0.1s">
+                    <div class="events-item bg-black rounded">
+                        <div class="events-inner position-relative">
+                            <div class="events-img overflow-hidden position-relative">
+                                <img src="img/programas_niño.png" class="img-fluid w-100 " alt="Image">
+                            </div>
+                        </div>
+                        <div class="events-text p-1 border border-black bg-gray border-top-0 rounded-bottom">
+                            <!-- Botón del dropdown -->
+                            <div class="dropdown">
+                                <button class="btn btn-dark dropdown-toggle btn-ver-programas" type="button" id="dropdownMenuButton"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Ver Programas
+                                </button>
+
+                                <!-- Contenido del dropdown -->
+                                <ul class="dropdown-menu p-3" aria-labelledby="dropdownMenuButton"
+                                    style="width: 300px;">
+                                    <div class="accordion" id="accordionDropdown">
+
+                                        <!-- Item 1 -->
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingOne">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                                    aria-expanded="false" aria-controls="collapseOne">
+                                                    Sección 1
+                                                </button>
+                                            </h2>
+                                            <div id="collapseOne" class="accordion-collapse collapse"
+                                                aria-labelledby="headingOne" data-bs-parent="#accordionDropdown">
+                                                <div class="accordion-body">
+                                                    Contenido de la sección 1.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Item 2 -->
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingTwo">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                                    aria-expanded="false" aria-controls="collapseTwo">
+                                                    Sección 2
+                                                </button>
+                                            </h2>
+                                            <div id="collapseTwo" class="accordion-collapse collapse"
+                                                aria-labelledby="headingTwo" data-bs-parent="#accordionDropdown">
+                                                <div class="accordion-body">
+                                                    Contenido de la sección 2.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 wow fadeIn" data-wow-delay="0.3s">
+                    <div class="events-item bg-black rounded">
+                        <div class="events-inner position-relative">
+                            <div class="events-img overflow-hidden position-relative">
+                                <img src="img/programas_juridico.png" class="img-fluid w-100 " alt="Image">
+                            </div>
+                        </div>
+                        <div class="events-text p-1 border border-black bg-gray border-top-0 rounded-bottom">
+                            <!-- Botón del dropdown -->
+                            <div class="dropdown">
+                                <button class="btn btn-dark dropdown-toggle btn-ver-programas" type="button" id="dropdownMenuButton"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Ver Programas
+                                </button>
+
+                                <!-- Contenido del dropdown -->
+                                <ul class="dropdown-menu p-3" aria-labelledby="dropdownMenuButton"
+                                    style="width: 300px;">
+                                    <div class="accordion" id="accordionDropdown">
+
+                                        <!-- Item 1 -->
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingOne">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                                    aria-expanded="false" aria-controls="collapseOne">
+                                                    Sección 1
+                                                </button>
+                                            </h2>
+                                            <div id="collapseOne" class="accordion-collapse collapse"
+                                                aria-labelledby="headingOne" data-bs-parent="#accordionDropdown">
+                                                <div class="accordion-body">
+                                                    Contenido de la sección 1.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Item 2 -->
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingTwo">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                                    aria-expanded="false" aria-controls="collapseTwo">
+                                                    Sección 2
+                                                </button>
+                                            </h2>
+                                            <div id="collapseTwo" class="accordion-collapse collapse"
+                                                aria-labelledby="headingTwo" data-bs-parent="#accordionDropdown">
+                                                <div class="accordion-body">
+                                                    Contenido de la sección 2.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 wow fadeIn" data-wow-delay="0.5s">
+                    <div class="events-item bg-black rounded">
+                        <div class="events-inner position-relative">
+                            <div class="events-img overflow-hidden position-relative">
+                                <img src="img/programas_acarca_dif.png" class="img-fluid w-100 " alt="Image">
+                            </div>
+                        </div>
+                        <div class="events-text p-1 border border-black bg-gray border-top-0 rounded-bottom">
+                            <!-- Botón del dropdown -->
+                            <div class="dropdown">
+                                <button class="btn btn-dark dropdown-toggle btn-ver-programas" type="button" id="dropdownMenuButton"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Ver Programas
+                                </button>
+
+                                <!-- Contenido del dropdown -->
+                                <ul class="dropdown-menu p-3" aria-labelledby="dropdownMenuButton"
+                                    style="width: 300px;">
+                                    <div class="accordion" id="accordionDropdown">
+
+                                        <!-- Item 1 -->
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingOne">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                                    aria-expanded="false" aria-controls="collapseOne">
+                                                    Centros NIDO y CAIC
+                                                </button>
+                                            </h2>
+                                            <div id="collapseOne" class="accordion-collapse collapse"
+                                                aria-labelledby="headingOne" data-bs-parent="#accordionDropdown">
+                                                <div class="accordion-body">
+                                                    Los nidos son centros de desarrollo infantil, creados para la
+                                                    atención y cuidado de los niños de Zapopan. En ellos se estimulan
+                                                    las capacidades físicas e integrales, se desarrolla su aprendizaje y
+                                                    manejo de emociones.
+                                                    <br>
+                                                    <a
+                                                        href="https://www.difzapopan.gob.mx/mujeres-y-hombres/familia-de-acogida/">Ver
+                                                        más información</a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Item 2 -->
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingTwo">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                                    aria-expanded="false" aria-controls="collapseTwo">
+                                                    Sección 2
+                                                </button>
+                                            </h2>
+                                            <div id="collapseTwo" class="accordion-collapse collapse"
+                                                aria-labelledby="headingTwo" data-bs-parent="#accordionDropdown">
+                                                <div class="accordion-body">
+                                                    Contenido de la sección 2.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="row g-3 g-md-4 justify-content-center">
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 wow fadeIn" data-wow-delay="0.1s">
+                    <div class="events-item bg-black rounded">
+                        <div class="events-inner position-relative">
+                            <div class="events-img overflow-hidden position-relative">
+                                <img src="img/programas_discapacidad.png" class="img-fluid w-100 " alt="Image">
+                            </div>
+                        </div>
+                        <div class="events-text p-1 border border-black bg-gray border-top-0 rounded-bottom">
+                            <!-- Botón del dropdown -->
+                            <div class="dropdown">
+                                <button class="btn btn-dark dropdown-toggle btn-ver-programas" type="button" id="dropdownMenuButton"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Ver Programas
+                                </button>
+
+                                <!-- Contenido del dropdown -->
+                                <ul class="dropdown-menu p-3" aria-labelledby="dropdownMenuButton"
+                                    style="width: 300px;">
+                                    <div class="accordion" id="accordionDropdown">
+
+                                        <!-- Item 1 -->
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingOne">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                                    aria-expanded="false" aria-controls="collapseOne">
+                                                    Sección 1
+                                                </button>
+                                            </h2>
+                                            <div id="collapseOne" class="accordion-collapse collapse"
+                                                aria-labelledby="headingOne" data-bs-parent="#accordionDropdown">
+                                                <div class="accordion-body">
+                                                    Contenido de la sección 1.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Item 2 -->
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingTwo">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                                    aria-expanded="false" aria-controls="collapseTwo">
+                                                    Sección 2
+                                                </button>
+                                            </h2>
+                                            <div id="collapseTwo" class="accordion-collapse collapse"
+                                                aria-labelledby="headingTwo" data-bs-parent="#accordionDropdown">
+                                                <div class="accordion-body">
+                                                    Contenido de la sección 2.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 wow fadeIn" data-wow-delay="0.3s">
+                    <div class="events-item bg-black rounded">
+                        <div class="events-inner position-relative">
+                            <div class="events-img overflow-hidden position-relative">
+                                <img src="img/programas_mayores.png" class="img-fluid w-100 " alt="Image">
+                            </div>
+                        </div>
+                        <div class="events-text p-1 border border-black bg-gray border-top-0 rounded-bottom">
+                            <!-- Botón del dropdown -->
+                            <div class="dropdown">
+                                <button class="btn btn-dark dropdown-toggle btn-ver-programas" type="button" id="dropdownMenuButton"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Ver Programas
+                                </button>
+
+                                <!-- Contenido del dropdown -->
+                                <ul class="dropdown-menu p-3" aria-labelledby="dropdownMenuButton"
+                                    style="width: 300px;">
+                                    <div class="accordion" id="accordionDropdown">
+
+                                        <!-- Item 1 -->
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingOne">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                                    aria-expanded="false" aria-controls="collapseOne">
+                                                    Sección 1
+                                                </button>
+                                            </h2>
+                                            <div id="collapseOne" class="accordion-collapse collapse"
+                                                aria-labelledby="headingOne" data-bs-parent="#accordionDropdown">
+                                                <div class="accordion-body">
+                                                    Contenido de la sección 1.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Item 2 -->
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingTwo">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                                    aria-expanded="false" aria-controls="collapseTwo">
+                                                    Sección 2
+                                                </button>
+                                            </h2>
+                                            <div id="collapseTwo" class="accordion-collapse collapse"
+                                                aria-labelledby="headingTwo" data-bs-parent="#accordionDropdown">
+                                                <div class="accordion-body">
+                                                    Contenido de la sección 2.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 wow fadeIn" data-wow-delay="0.5s">
+                    <div class="events-item bg-black rounded">
+                        <div class="events-inner position-relative">
+                            <div class="events-img overflow-hidden position-relative">
+                                <img src="img/programas_alimentacion.png" class="img-fluid w-100 " alt="Image">
+                            </div>
+                        </div>
+                        <div class="events-text p-1 border border-black bg-gray border-top-0 rounded-bottom">
+                            <!-- Botón del dropdown -->
+                            <div class="dropdown">
+                                <button class="btn btn-dark dropdown-toggle btn-ver-programas" type="button" id="dropdownMenuButton"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Ver Programas
+                                </button>
+
+                                <!-- Contenido del dropdown -->
+                                <ul class="dropdown-menu p-3" aria-labelledby="dropdownMenuButton"
+                                    style="width: 300px;">
+                                    <div class="accordion" id="accordionDropdown">
+
+                                        <!-- Item 1 -->
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingOne">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                                    aria-expanded="false" aria-controls="collapseOne">
+                                                    Centros NIDO y CAIC
+                                                </button>
+                                            </h2>
+                                            <div id="collapseOne" class="accordion-collapse collapse"
+                                                aria-labelledby="headingOne" data-bs-parent="#accordionDropdown">
+                                                <div class="accordion-body">
+                                                    Los nidos son centros de desarrollo infantil, creados para la
+                                                    atención y cuidado de los niños de Zapopan. En ellos se estimulan
+                                                    las capacidades físicas e integrales, se desarrolla su aprendizaje y
+                                                    manejo de emociones.
+                                                    <br>
+                                                    <a
+                                                        href="https://www.difzapopan.gob.mx/mujeres-y-hombres/familia-de-acogida/">Ver
+                                                        más información</a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Item 2 -->
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingTwo">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                                    aria-expanded="false" aria-controls="collapseTwo">
+                                                    Sección 2
+                                                </button>
+                                            </h2>
+                                            <div id="collapseTwo" class="accordion-collapse collapse"
+                                                aria-labelledby="headingTwo" data-bs-parent="#accordionDropdown">
+                                                <div class="accordion-body">
+                                                    Contenido de la sección 2.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Program DIF End -->
+
+    <!-- Team Start-->
+    <div class="container-fluid program py-5">
+        <div class="container py-5">
+            <div class="row g-3 g-md-4 justify-content-center">
+                <div class="col-md-6 col-lg-4 col-xl-12 wow fadeIn" data-wow-delay="0.3s">
+                    <div>
+                        <a href="#">
+                            <img src="img/institucion.png" class="img-fluid" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Team End-->
+
+
+    <!-- Notice Start -->
+    <div class="container-fluid service py-4">
+        <div class="container py-4">
+            <div class="mx-auto text-center wow fadeIn" style="max-width: 900px;">
+                <h4 class="mb-1 d-inline-block" style="font-family:'Montserrat',sans-serif; font-weight:700; letter-spacing:2px; color:rgba(0,0,0,0.8);">
+                    ÚLTIMAS NOTICIAS INSTITUCIONALES</h4>
+                <div style="height:16px; background:rgb(200,16,44); border-radius:3px; width:23%; margin: 4px auto 24px;"></div>
+            </div>
+
+            <div class="swiper notice-swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img src="img/noticias_1.png" class="notice-img" alt="Noticia 1"></div>
+                    <div class="swiper-slide"><img src="img/noticias_2.png" class="notice-img" alt="Noticia 2"></div>
+                    <div class="swiper-slide"><img src="img/noticias_3.png" class="notice-img" alt="Noticia 3"></div>
+                    <div class="swiper-slide"><img src="img/noticias_1.png" class="notice-img" alt="Noticia 1"></div>
+                    <div class="swiper-slide"><img src="img/noticias_2.png" class="notice-img" alt="Noticia 2"></div>
+                    <div class="swiper-slide"><img src="img/noticias_3.png" class="notice-img" alt="Noticia 3"></div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center gap-3 mt-3">
+                <button class="notice-btn notice-swiper-prev" aria-label="Anterior">&#10094;</button>
+                <button class="notice-btn notice-swiper-next" aria-label="Siguiente">&#10095;</button>
+            </div>
+        </div>
+    </div>
+    <!-- Notice End -->
+
+
+    <!-- Trasparencia Start -->
+    <div class="container-fluid program py-4">
+        <div class="container py-4">
+            <div class="mx-auto text-center wow fadeIn" data-wow-delay="0.1s" style="max-width: 700px;">
+                      <h4 class="text-black mb-1 d-inline-block" style="font-family:'Montserrat',sans-serif; font-weight:700; letter-spacing:2px;">
+                    TRANSPARENCIA</h4>
+                <div style="height:16px; background:rgb(200,16,44); width:23%; margin: 4px auto 24px;"></div>
+            </div>
+            <div class="row g-4 g-md-5 justify-content-center">
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 wow fadeIn" data-wow-delay="0.1s">
+                    <div class="program-item rounded">
+                        <div class="program-img position-relative">
+                            <div class="overflow-hidden img-border">
+                                <a href="#">
+                                    <img src="img/SISTEMA_DE_EVALUACIÓNES_DE_LA_ARMONIZACIÓN_CONTABLE.png"
+                                        class="img-fluid-traspa w-100" alt="Image">
+                                </a>
+                                <div class="team-content text-center py-3">
+                                    <h6 class="text-black">SISTEMA DE EVALUACIONES DE LA ARMONIZACIÓN CONTABLE</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 wow fadeIn" data-wow-delay="0.3s">
+                    <div class="program-item rounded">
+                        <div class="program-img position-relative">
+                            <div class="overflow-hidden img-border">
+                                <a href="#">
+                                    <img src="img/CUENTA_PÚBLICA.png" class="img-fluid-traspa w-100" alt="Image">
+                                </a>
+                                <div class="team-content text-center py-3">
+                                    <h5 class="text-black">CUENTA PÚBLICA</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 wow fadeIn" data-wow-delay="0.5s">
+                    <div class="program-item rounded">
+                        <div class="program-img position-relative">
+                            <div class="overflow-hidden img-border">
+                                <a href="#">
+                                    <img src="img/PRESUPUESTO_ANUAL.png" class="img-fluid-traspa w-100" alt="Image">
+                                </a>
+                            </div>
+                            <div class="team-content text-center py-3">
+                                <h5 class="text-black">PRESUPUESTO ANUAL</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-4 g-md-5 justify-content-center">
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 wow fadeIn" data-wow-delay="0.1s">
+                    <div class="program-item rounded">
+                        <div class="program-img position-relative">
+                            <div class="overflow-hidden img-border">
+                                <a href="#">
+                                    <img src="img/PAE.png" class="img-fluid-traspa w-100" alt="Image">
+                                </a>
+                                <div class="team-content text-center py-3">
+                                    <h5 class="text-black">PAE</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 wow fadeIn" data-wow-delay="0.3s">
+                    <div class="program-item rounded">
+                        <div class="program-img position-relative">
+                            <div class="overflow-hidden img-border">
+                                <a href="#">
+                                    <img src="img/MATRICES_DE_INDICADORES.png" class="img-fluid-traspa w-100"
+                                        alt="Image">
+                                </a>
+                                <div class="team-content text-center py-3">
+                                    <h5 class="text-black">MATRICES DE INDICADORES</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 wow fadeIn" data-wow-delay="0.5s">
+                    <div class="program-item rounded">
+                        <div class="program-img position-relative">
+                            <div class="overflow-hidden img-border">
+                                <a href="#">
+                                    <img src="img/SISTEMA_DE_PORTALES_OT.png" class="img-fluid-traspa w-100"
+                                        alt="Image">
+                                </a>
+                            </div>
+                            <div class="team-content text-center py-3">
+                                <h5 class="text-black">SISTEMA DE PORTALES DE OBLIGACIONES DE TRANSPARENCIA</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-4 g-md-5 justify-content-center">
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 wow fadeIn" data-wow-delay="0.1s">
+                    <div class="program-item rounded">
+                        <div class="program-img position-relative">
+                            <div class="overflow-hidden img-border">
+                                <a href="#">
+                                    <img src="img/CONAC.png" class="img-fluid-traspa w-100" alt="Image">
+                                </a>
+                                <div class="team-content text-center py-3">
+                                    <h5 class="text-black">CONAC</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 wow fadeIn" data-wow-delay="0.3s">
+                    <div class="program-item rounded">
+                        <div class="program-img position-relative">
+                            <div class="overflow-hidden img-border">
+                                <a href="#">
+                                    <img src="img/FINANCIERO.png" class="img-fluid-traspa w-100" alt="Image">
+                                </a>
+                                <div class="team-content text-center py-3">
+                                    <h5 class="text-black">FINANCIERO</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 wow fadeIn" data-wow-delay="0.5s">
+                    <div class="program-item rounded">
+                        <div class="program-img position-relative">
+                            <div class="overflow-hidden img-border">
+                                <img src="img/ORGANIGRAMA.png" class="img-fluid-traspa w-100" alt="Image">
+                            </div>
+                            <div class="team-content text-center py-3">
+                                <h5 class="text-black">ORGANIGRAMA</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Trasparencia End -->
+
+    <!-- Pleca Start -->
+    <div class="pleca">
+        <img src="img/pleca.png" alt="pleca">
+    </div>
+    <!-- Pleca End -->
+
+    <!-- Footer Start -->
+    <div style="width:100%;">
+        <div class="container-fluid px-0">
+        <div class="row g-0 align-items-stretch">
+            <div class="col-12 col-md-4" style="background:#ffffff; padding: 2rem 2.5rem; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                <div class="footer-item" style="width:100%; max-width:280px;">
+                    <div class="mb-3">
+                        <img src="img/logo_DIF.png" class="img-fluid d-block" style="max-width:180px;" alt="Logo DIF San Mateo Atenco">
+                    </div>
+                    <div class="d-flex flex-column align-items-start">
+                        <p class="text-body mb-1 small">Horario de lunes a viernes</p>
+                        <p class="text-body mb-3 small">de 8:00 a 16:00 horas</p>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <img src="img/corazon_ubicacion.png" style="width:80px; height:80px; object-fit:contain; flex-shrink:0;" alt="Ubicación">
+                            <p class="text-body small mb-0" style="line-height:1.6;">
+                                Mariano Matamoros 310,<br>
+                                Bo. La Concepción,<br>
+                                San Mateo Atenco.<br>
+                                Teléfono 722 970 77 86
+                            </p>
+                        </div>
+                        <a href="mailto:presidencia@difsanmateoatenco.gob.mx"
+                            class="text-body small mb-3 text-decoration-none" target="_blank">
+                            <i class="fas fa-envelope text-black me-2"></i>presidencia@difsanmateoatenco.gob.mx
+                        </a>
+                        <div class="mt-2">
+                            <img src="img/unidos_con_amor_floter.png" class="img-fluid d-block" style="max-width:220px; width:100%;" alt="Unidos con Amor">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-8" style="background:rgb(200,16,44); padding: 2rem 2.5rem;">
+                <div class="footer-item">
+                    <div class="row g-3">
+                        <div class="d-flex flex-column align-items-start p-4">
+                            <a class="mb-2 text-white ms-5" href="#">Inicio</a>
+                            <a class="mb-2 text-white ms-5" href="#">Nosotros</a>
+                            <a class="mb-2 text-white ms-5" href="#">Noticias</a>
+                            <a class="mb-2 text-white ms-5" href="#">Transparencia</a>
+                            <a class="mb-2 text-white ms-5" href="#">Compras y adquisiciones</a>
+                            <a class="mb-2 text-white ms-5" href="#">Declaraciónes</a>
+                            <a class="mb-2 text-white ms-5" href="#">Sistema de Gestión de Usuarios</a>
+                            <a class="mb-2 text-white ms-5" href="#">Servicios en línea</a>
+                            <a class="mb-2 text-white ms-5" href="#">Ubícanos</a>
+                        </div>
+                        <div class="footer-icon d-flex">
+                             <a href="https://twitter.com/DIFSMA" class="text-start rounded-0 text-white mb-2 ms-5"
+                                target="_blank">@DIFSMA 
+                                <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:#fff;margin-right:8px;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#000"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></span></a>
+                            <a href="https://facebook.com/DifSanMateoAtenco/"
+                                class="text-start rounded-0 text-white mb-2 ms-5" target="_blank">@DIF San Mateo Atenco 
+                                <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:#fff;margin-right:8px;"><i class="fab fa-facebook-f" style="color:#000000;font-size:14px;"></i></span></a>
+                            <a href="https://www.instagram.com/difsma" class="text-start rounded-0 text-white mb-2 ms-5"
+                                target="_blank">@difsma_ 
+                                <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:#fff;margin-right:8px;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#000000"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- Copyright Start -->
+<div class="copyright-bar">
+    <img src="img/logo_administracion.png" width="200" class="img-fluid d-block mx-auto mb-2 rounded shadow" alt="Administración">
+    <p class="mb-0" style="font-size:12px;">© 2026 DIF San Mateo Atenco. Todos los derechos reservados.</p>
+</div>
+    <!-- Copyright End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn-up btn-dark border-3 border-end-0 rounded-circle back-to-top"><i
+            class="fa fa-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/lightbox/js/lightbox.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+    <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        // Swiper: infinite 3D coverflow — imagen central resaltada, laterales detrás
+        const swiper = new Swiper('.swiper:not(.notice-swiper)', {
+            effect: 'coverflow',
+            grabCursor: true,
+            centeredSlides: true,
+            loop: true,
+            speed: 700,
+            slidesPerView: 'auto',
+            coverflowEffect: {
+                rotate: 0,
+                stretch: 0,
+                depth: 200,
+                modifier: 2.5,
+                slideShadows: false
+            },
+            autoplay: {
+                delay: 3200,
+                disableOnInteraction: false
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true
+            },
+            keyboard: {
+                enabled: true,
+                onlyInViewport: true
+            }
+        });
+
+        // Notice Swiper — infinito, 3 slides visibles, manual
+        const noticeSwiper = new Swiper('.notice-swiper', {
+            loop: true,
+            slidesPerView: 1,
+            spaceBetween: 16,
+            autoplay: {
+                delay: 15000,
+                disableOnInteraction: false,
+            },
+            navigation: {
+                nextEl: '.notice-swiper-next',
+                prevEl: '.notice-swiper-prev'
+            },
+            breakpoints: {
+                576: { slidesPerView: 2 },
+                992: { slidesPerView: 3 }
+            }
+        });
+    </script>
+    <script>
+        // GitHub Copilot
+        (function () {
+            const images = [
+                { src: 'img/slider1.png', alt: 'slider1' },
+                { src: 'img/slider1.png', alt: 'slider2' },
+                { src: 'img/slider1.png', alt: 'slider3' },
+                { src: 'img/slider1.png', alt: 'slider4' }
+            ];
+            const viewport = document.getElementById('viewport');
+            const dotsEl = document.getElementById('dots');
+
+            // Build slides with clones for infinite looping
+            function buildSlides(list) {
+                viewport.innerHTML = '';
+                const fragment = document.createDocumentFragment();
+                // clone last
+                const last = makeSlide(list[list.length - 1]);
+                last.dataset.clone = 'last';
+                fragment.appendChild(last);
+                // real slides
+                list.forEach(item => fragment.appendChild(makeSlide(item)));
+                // clone first
+                const first = makeSlide(list[0]);
+                first.dataset.clone = 'first';
+                fragment.appendChild(first);
+                viewport.appendChild(fragment);
+            }
+            function makeSlide(item) {
+                const s = document.createElement('div');
+                s.className = 'slide';
+                const img = document.createElement('img');
+                img.src = item.src;
+                img.alt = item.alt || '';
+                s.appendChild(img);
+                if (item.caption) {
+                    const c = document.createElement('div');
+                    c.className = 'caption';
+                    c.textContent = item.caption;
+                    s.appendChild(c);
+                }
+                return s;
+            }
+
+            buildSlides(images);
+
+            const slides = viewport.querySelectorAll('.slide');
+            let index = 1; // because first node is clone of last
+            const slideCount = images.length;
+            let isTransitioning = false;
+            const intervalMs = 3000; // autoplay interval
+            let timer = null;
+
+            function setTranslate(i, animate = true) {
+                if (!animate) viewport.style.transition = 'none';
+                else viewport.style.transition = '';
+                viewport.style.transform = `translateX(${-i * 100}%)`;
+                if (!animate) {
+                    // Force reflow then restore transition
+                    void viewport.offsetWidth;
+                    viewport.style.transition = '';
+                }
+            }
+
+            // initial position
+            setTranslate(index, false);
+
+            // create dots
+            for (let i = 0; i < slideCount; i++) {
+                const d = document.createElement('button');
+                d.className = 'dot' + (i === 0 ? ' active' : '');
+                d.dataset.slide = i + 1; // maps to index 1..N
+                d.setAttribute('aria-label', 'Ir a la diapositiva ' + (i + 1));
+                dotsEl.appendChild(d);
+            }
+
+            function updateDots() {
+                const dots = dotsEl.querySelectorAll('.dot');
+                const active = (index - 1 + slideCount) % slideCount; // 0..N-1
+                dots.forEach((d, i) => d.classList.toggle('active', i === active));
+            }
+
+            function next() {
+                if (isTransitioning) return;
+                isTransitioning = true;
+                index++;
+                setTranslate(index, true);
+            }
+            function prev() {
+                if (isTransitioning) return;
+                isTransitioning = true;
+                index--;
+                setTranslate(index, true);
+            }
+
+            viewport.addEventListener('transitionend', () => {
+                // handle clones
+                const current = slides[index];
+                if (current && current.dataset.clone === 'first') {
+                    // jumped to clone of first -> reset to real first
+                    index = 1;
+                    setTranslate(index, false);
+                } else if (current && current.dataset.clone === 'last') {
+                    // jumped to clone of last -> reset to real last
+                    index = slideCount;
+                    setTranslate(index, false);
+                }
+                isTransitioning = false;
+                updateDots();
+            });
+
+            // autoplay
+            function startAutoplay() {
+                stopAutoplay();
+                timer = setInterval(next, intervalMs);
+            }
+            function stopAutoplay() {
+                if (timer) { clearInterval(timer); timer = null; }
+            }
+
+            // controls — dots only
+            dotsEl.addEventListener('click', (e) => {
+                const btn = e.target.closest('.dot');
+                if (!btn) return;
+                const targetIndex = Number(btn.dataset.slide);
+                if (isNaN(targetIndex)) return;
+                index = targetIndex;
+                setTranslate(index, true);
+                restartAutoplay();
+            });
+
+            // pause on hover/focus
+            const slider = document.querySelector('.slider');
+            slider.addEventListener('mouseenter', stopAutoplay);
+            slider.addEventListener('mouseleave', startAutoplay);
+            slider.addEventListener('focusin', stopAutoplay);
+            slider.addEventListener('focusout', startAutoplay);
+
+            function restartAutoplay() {
+                stopAutoplay();
+                startAutoplay();
+            }
+
+            // basic touch / pointer support for swipe
+            let startX = 0, deltaX = 0, isPointer = false;
+            viewport.addEventListener('pointerdown', (e) => {
+                isPointer = true;
+                startX = e.clientX;
+                viewport.style.transition = 'none';
+                stopAutoplay();
+                viewport.setPointerCapture(e.pointerId);
+            });
+            viewport.addEventListener('pointermove', (e) => {
+                if (!isPointer) return;
+                deltaX = e.clientX - startX;
+                const percent = (deltaX / viewport.clientWidth) * 100;
+                viewport.style.transform = `translateX(${-index * 100 + percent}%)`;
+            });
+            viewport.addEventListener('pointerup', (e) => {
+                if (!isPointer) return;
+                isPointer = false;
+                viewport.releasePointerCapture(e.pointerId);
+                viewport.style.transition = '';
+                const threshold = viewport.clientWidth * 0.15;
+                if (Math.abs(deltaX) > threshold) {
+                    if (deltaX < 0) next(); else prev();
+                } else {
+                    setTranslate(index, true);
+                }
+                deltaX = 0;
+                restartAutoplay();
+            });
+            viewport.addEventListener('pointercancel', () => { isPointer = false; setTranslate(index, true); restartAutoplay(); });
+
+            // keyboard navigation
+            slider.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight') { next(); restartAutoplay(); }
+                if (e.key === 'ArrowLeft') { prev(); restartAutoplay(); }
+            });
+
+            // init
+            startAutoplay();
+            // make slider focusable for keyboard
+            slider.tabIndex = 0;
+        })();
+    </script>
+    <!-- Notice slider init -->
+    <script>
+        (function () {
+            var wrap = document.querySelector('.notice-slider-wrap');
+            var track = document.getElementById('noticeTrack');
+            var slides = track.querySelectorAll('.notice-slide');
+            var total = slides.length;
+            var current = 0;
+
+            function getVisible() {
+                var w = window.innerWidth;
+                if (w >= 769) return 3;
+                if (w >= 577) return 2;
+                return 1;
+            }
+
+            function update(animate) {
+                var vis = getVisible();
+                var max = total - vis;
+                if (current > max) current = max;
+                if (current < 0) current = 0;
+
+                var slideWidthPct = 100 / vis;
+                // Set each slide width
+                slides.forEach(function(s) {
+                    s.style.flex = '0 0 ' + slideWidthPct + '%';
+                    s.style.maxWidth = slideWidthPct + '%';
+                });
+
+                // Offset in px: current slide index * slide width in px
+                var slideWidthPx = wrap.offsetWidth / vis;
+                track.style.transition = animate ? 'transform 0.4s ease' : 'none';
+                track.style.transform = 'translateX(-' + (current * slideWidthPx) + 'px)';
+            }
+
+            document.querySelector('.notice-prev').addEventListener('click', function () {
+                current = Math.max(0, current - 1);
+                update(true);
+            });
+            document.querySelector('.notice-next').addEventListener('click', function () {
+                var vis = getVisible();
+                current = Math.min(total - vis, current + 1);
+                update(true);
+            });
+
+            window.addEventListener('resize', function () { update(false); });
+            update(false);
+        })();
+    </script>
+
+    <!-- Widget Clima -->
+    <script>
+        (function () {
+            // Coordenadas de San Mateo Atenco, Estado de México
+            var lat = 19.2667, lon = -99.5333;
+            var icons = {
+                0:'☀️', 1:'🌤️', 2:'⛅', 3:'☁️',
+                45:'🌫️', 48:'🌫️',
+                51:'🌦️', 53:'🌦️', 55:'🌧️',
+                61:'🌧️', 63:'🌧️', 65:'🌧️',
+                71:'🌨️', 73:'🌨️', 75:'❄️',
+                80:'🌦️', 81:'🌧️', 82:'⛈️',
+                95:'⛈️', 96:'⛈️', 99:'⛈️'
+            };
+            var descs = {
+                0:'Despejado', 1:'Mayormente despejado', 2:'Parcialmente nublado', 3:'Nublado',
+                45:'Neblina', 48:'Neblina',
+                51:'Llovizna', 53:'Llovizna', 55:'Llovizna intensa',
+                61:'Lluvia ligera', 63:'Lluvia', 65:'Lluvia intensa',
+                71:'Nieve ligera', 73:'Nieve', 75:'Nieve intensa',
+                80:'Chubascos', 81:'Chubascos', 82:'Chubascos fuertes',
+                95:'Tormenta', 96:'Tormenta', 99:'Tormenta severa'
+            };
+            fetch('https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current_weather=true')
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    var cw = data.current_weather;
+                    var code = cw.weathercode;
+                    document.getElementById('weather-temp').textContent = Math.round(cw.temperature) + '°C';
+                    document.getElementById('weather-icon').textContent = icons[code] || '🌡️';
+                    document.getElementById('weather-desc').textContent = descs[code] || '';
+                })
+                .catch(function () {
+                    document.getElementById('weather-icon').textContent = '🌡️';
+                    document.getElementById('weather-desc').textContent = '';
+                });
+        })();
+    </script>
+
+    <!-- Evitar que el dropdown se cierre al hacer clic dentro -->
+    <script>
+        document.querySelectorAll('.dropdown-menu').forEach(function (element) {
+            element.addEventListener('click', function (e) {
+                e.stopPropagation();
+            });
+        });
+    </script>
+    <script>
+        (function () {
+            var matches = [];
+            var matchIndex = 0;
+            var lastQuery = '';
+            var HIGHLIGHT_CLASS = 'search-highlight';
+            var ACTIVE_CLASS = 'search-highlight-active';
+
+            // Inject highlight styles
+            var style = document.createElement('style');
+            style.textContent = '.' + HIGHLIGHT_CLASS + '{background:#ffe066;color:#000;border-radius:2px;padding:0 1px;}.' + ACTIVE_CLASS + '{background:#ff9800;color:#000;outline:2px solid #e65100;}';
+            document.head.appendChild(style);
+
+            function clearHighlights() {
+                document.querySelectorAll('.' + HIGHLIGHT_CLASS).forEach(function (el) {
+                    var parent = el.parentNode;
+                    parent.replaceChild(document.createTextNode(el.textContent), el);
+                    parent.normalize();
+                });
+                matches = [];
+                matchIndex = 0;
+            }
+
+            function highlightText(node, query) {
+                if (node.nodeType === 3) { // text node
+                    var idx = node.nodeValue.toLowerCase().indexOf(query.toLowerCase());
+                    if (idx === -1) return;
+                    var before = document.createTextNode(node.nodeValue.slice(0, idx));
+                    var mark = document.createElement('mark');
+                    mark.className = HIGHLIGHT_CLASS;
+                    mark.textContent = node.nodeValue.slice(idx, idx + query.length);
+                    var after = document.createTextNode(node.nodeValue.slice(idx + query.length));
+                    var parent = node.parentNode;
+                    parent.insertBefore(before, node);
+                    parent.insertBefore(mark, node);
+                    parent.insertBefore(after, node);
+                    parent.removeChild(node);
+                    matches.push(mark);
+                    // recurse on remaining text
+                    highlightText(after, query);
+                } else if (node.nodeType === 1 && !['SCRIPT','STYLE','NOSCRIPT','INPUT','TEXTAREA'].includes(node.tagName)) {
+                    Array.from(node.childNodes).forEach(function (child) { highlightText(child, query); });
+                }
+            }
+
+            function scrollToMatch(i) {
+                document.querySelectorAll('.' + ACTIVE_CLASS).forEach(function (el) { el.classList.remove(ACTIVE_CLASS); });
+                if (matches.length === 0) return;
+                matchIndex = ((i % matches.length) + matches.length) % matches.length;
+                matches[matchIndex].classList.add(ACTIVE_CLASS);
+                matches[matchIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            window.doSearch = function (e) {
+                e.preventDefault();
+                var q = document.getElementById('siteSearchInput').value.trim();
+                if (!q) { clearHighlights(); return; }
+                if (q !== lastQuery) {
+                    clearHighlights();
+                    lastQuery = q;
+                    highlightText(document.body, q);
+                    if (matches.length === 0) { alert('No se encontraron resultados para: "' + q + '"'); return; }
+                    scrollToMatch(0);
+                } else {
+                    scrollToMatch(matchIndex + 1);
+                }
+            };
+
+            // Clear on empty input
+            document.getElementById('siteSearchInput').addEventListener('input', function () {
+                if (!this.value) clearHighlights();
+            });
+        })();
+    </script>
+
+</body>
+
+</html>

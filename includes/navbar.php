@@ -1,0 +1,109 @@
+<?php
+/**
+ * Navbar principal del sitio DIF San Mateo Atenco
+ *
+ * Variables esperadas:
+ *   $base_path   string  Prefijo de ruta relativa (ej. '../' para subdirectorios). Default: ''
+ *   $active_page string  Página activa para resaltar en el menú.
+ *                        Valores: 'inicio', 'acerca', 'servicios', 'comunicacion', 'transparencia', 'voluntariado'
+ *                        Default: ''
+ */
+
+$base_path   = $base_path   ?? '';
+$active_page = $active_page ?? '';
+?>
+<!-- Navbar start -->
+<div class="container-fluid border-bottom bg-white wow fadeIn" data-wow-delay="0.1s">
+    <div class="container px-0">
+        <nav class="navbar navbar-expand-xl py-3">
+            <a href="<?= htmlspecialchars($base_path) ?>index.php" class="navbar-brand"></a>
+            <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarCollapse" style="border-color:rgba(0,0,0,0.3);">
+                <span class="fa fa-bars text-primary"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav mx-auto">
+
+                    <a href="<?= htmlspecialchars($base_path) ?>index.php"
+                       class="nav-item nav-link-green<?= $active_page === 'inicio' ? ' active' : '' ?>">INICIO</a>
+
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link-red dropdown-toggle<?= $active_page === 'acerca' ? ' active' : '' ?>"
+                           data-bs-toggle="dropdown">ACERCA DEL DIF</a>
+                        <li class="dropdown-menu rounded-0">
+                            <a href="<?= htmlspecialchars($base_path) ?>acerca-del-dif/presidencia.php"
+                               class="dropdown-item" style="color:#fff!important">Presidencia</a>
+                            <a href="<?= htmlspecialchars($base_path) ?>acerca-del-dif/direcciones.php"
+                               class="dropdown-item" style="color:#fff!important">Direcciones</a>
+                            <a href="<?= htmlspecialchars($base_path) ?>acerca-del-dif/organigrama.php"
+                               class="dropdown-item" style="color:#fff!important">Organigrama</a>
+                        </li>
+                    </div>
+
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link-yellow dropdown-toggle<?= $active_page === 'servicios' ? ' active' : '' ?>"
+                           data-bs-toggle="dropdown">SERVICIOS</a>
+                        <div class="dropdown-menu m-0 rounded-0">
+                            <a href="<?= htmlspecialchars($base_path) ?>tramites/PMPNNA.php"
+                               class="dropdown-item" style="color:#fff!important">Procudaduría Municipal de Protección de Niñas, Niños Y Adolecentes</a>
+                            <a href="<?= htmlspecialchars($base_path) ?>tramites/DAAM.php"
+                               class="dropdown-item" style="color:#fff!important">Dirección de Atención a Adultos Mayores</a>
+                            <a href="<?= htmlspecialchars($base_path) ?>tramites/DANF.php"
+                               class="dropdown-item" style="color:#fff!important">Dirección de Alimentación y Nutrición Familiar</a>
+                            <a href="<?= htmlspecialchars($base_path) ?>tramites/DAD.php"
+                               class="dropdown-item" style="color:#fff!important">Dirección de Atención a la Discapacidad</a>
+                            <a href="<?= htmlspecialchars($base_path) ?>tramites/DPAF.php"
+                               class="dropdown-item" style="color:#fff!important">Dirección de Prevención y Bienestar Familiar</a>
+                            <a href="<?= htmlspecialchars($base_path) ?>tramites/DSJAIG.php"
+                               class="dropdown-item" style="color:#fff!important">Dirección de Servicios Jurídicos – Asistenciales e Igualdad de Género</a>
+                        </div>
+                    </div>
+
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link-pink dropdown-toggle<?= $active_page === 'comunicacion' ? ' active' : '' ?>"
+                           data-bs-toggle="dropdown">COMUNICACIÓN SOCIAL</a>
+                        <div class="dropdown-menu m-0 rounded-0">
+                            <a href="<?= htmlspecialchars($base_path) ?>comunicacion-social/noticias.php"
+                               class="dropdown-item" style="color:#fff!important">Noticias</a>
+                            <a href="<?= htmlspecialchars($base_path) ?>comunicacion-social/galeria.php"
+                               class="dropdown-item" style="color:#fff!important">Galerías</a>
+                        </div>
+                    </div>
+
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link-purple dropdown-toggle<?= $active_page === 'transparencia' ? ' active' : '' ?>"
+                           data-bs-toggle="dropdown">TRANSPARENCIA</a>
+                        <div class="dropdown-menu m-0 rounded-0">
+                            <a href="https://www.ipomex.org.mx/ipo3/lgt/indice/DIFSANMATEO.web" target="_blank"
+                               class="dropdown-item" style="color:#fff!important">IPOMEX</a>
+                            <a href="https://www.saimex.org.mx/saimex/ciudadano/login.page" target="_blank"
+                               class="dropdown-item" style="color:#fff!important">SAIMEX</a>
+                            <a href="https://www.plataformadetransparencia.org.mx/" target="_blank"
+                               class="dropdown-item" style="color:#fff!important">PLATAFORMA NACIONAL DE TRANSPARENCIA</a>
+                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/SEAC.php"
+                               class="dropdown-item" style="color:#fff!important">SISTEMA DE EVALUACIONES DE LA ARMONIZACIÓN CONTABLE</a>
+                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/cuenta_publica.php"
+                               class="dropdown-item" style="color:#fff!important">CUENTA PÚBLICA</a>
+                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/presupuesto_anual.php"
+                               class="dropdown-item" style="color:#fff!important">PRESUPUESTO ANUAL</a>
+                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/pae.php"
+                               class="dropdown-item" style="color:#fff!important">PAE</a>
+                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/matrices_indicadores.php"
+                               class="dropdown-item" style="color:#fff!important">MATRICES DE INDICADORES</a>
+                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/conac.php"
+                               class="dropdown-item" style="color:#fff!important">CONAC</a>
+                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/financiero.php"
+                               class="dropdown-item" style="color:#fff!important">FINANCIERO</a>
+                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/avisos_privacidad.php"
+                               class="dropdown-item" style="color:#fff!important">AVISOS DE PRIVACIDAD</a>
+                        </div>
+                    </div>
+
+                    <a href="#" class="nav-item nav-link-blue<?= $active_page === 'voluntariado' ? ' active' : '' ?>">VOLUNTARIADO</a>
+
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+<!-- Navbar End -->

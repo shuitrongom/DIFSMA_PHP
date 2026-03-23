@@ -1,0 +1,77 @@
+.question-title {
+ 
+  /* padding: 0x 0; */
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 22px;
+  text-transform: capitalize;
+  background:url(../img/barra-cintadorada.png);
+  background-size: 100% 100%;
+  
+}
+
+.question-title > p {
+  /* color: rgb(202, 65, 65); */
+  text-align: center;
+  position: relative;
+  font-size: 30px;
+  top:15px;
+  color:black;
+}
+
+
+.question-btn {
+  border-style: none;
+  background-color: transparent;
+  position: relative;
+  top:-35px;
+  left: -50px;;
+  font-size: 28px;
+  cursor: pointer;
+  transition: all 0.6s ease-in-out;
+  transform-origin: center;
+}
+
+.question-btn:hover {
+  transform: rotate(90deg);
+}
+
+.minus-icon {
+  display: none;
+}
+
+.plus-icon {
+  /*visibility: hidden;*/
+  color:black;
+}
+
+/* hide text */
+.question-text {
+  display: none;
+}
+
+.question-text-div{
+  background:#c5547f; 
+  border-radius:10px; 
+  color:#ffffff; 
+  font-size:22px; 
+  padding:2px; 
+  text-align:center
+}
+
+.show-text .question-text {
+  display: block;
+  color:black;
+}
+
+.minus-icon {
+  display: none;
+  color:black;
+}
+
+.show-text .minus-icon {
+  display: inline;
+}
+.show-text .plus-icon {
+  display: none;
+}

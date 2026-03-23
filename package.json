@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "@wordpress/eslint-plugin": "^24.4.0",
+    "eslint-plugin-react": "^7.37.5"
+  },
+  "dependencies": {
+    "pdfjs-dist": "^2.16.105"
+  }
+}

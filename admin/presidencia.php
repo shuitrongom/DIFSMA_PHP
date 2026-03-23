@@ -1,0 +1,297 @@
+﻿<?php
+/**
+ * admin/presidencia.php — Gestión de datos de Presidencia
+ *
+ * Requisitos: 5.1, 5.2
+ */
+
+require_once __DIR__ . '/auth_guard.php';
+require_once __DIR__ . '/csrf.php';
+require_once __DIR__ . '/upload_handler.php';
+require_once __DIR__ . '/../includes/db.php';
+
+$pdo = get_db();
+
+// ── Procesamiento POST ─────────────────────────────────────────────────────────
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $token = $_POST['csrf_token'] ?? '';
+
+    if (!csrf_validate($token)) {
+        $_SESSION['flash_message'] = 'Token CSRF inválido. Intente de nuevo.';
+        $_SESSION['flash_type']    = 'danger';
+        header('Location: presidencia.php');
+        exit;
+    }
+
+    $nombre      = trim($_POST['nombre'] ?? '');
+    $cargo       = trim($_POST['cargo'] ?? '');
+    $descripcion = trim($_POST['descripcion'] ?? '');
+
+    if (empty($nombre) || empty($cargo)) {
+        $_SESSION['flash_message'] = 'El nombre y el cargo son obligatorios.';
+        $_SESSION['flash_type']    = 'warning';
+        header('Location: presidencia.php');
+        exit;
+    }
+
+    // Obtener registro actual
+    $stmt = $pdo->query('SELECT * FROM presidencia ORDER BY id ASC LIMIT 1');
+    $current = $stmt->fetch();
+
+    $imagenPath = $current ? $current['imagen_path'] : null;
+
+    // Si se envió un nuevo archivo, procesarlo
+    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] !== UPLOAD_ERR_NO_FILE) {
+        $upload = handle_upload($_FILES['imagen'], 'image');
+
+        if (!$upload['success']) {
+            $_SESSION['flash_message'] = $upload['error'];
+            $_SESSION['flash_type']    = 'danger';
+            header('Location: presidencia.php');
+            exit;
+        }
+
+        // Eliminar imagen anterior si existe
+        if ($current && !empty($current['imagen_path'])) {
+            $oldFile = BASE_PATH . '/' . $current['imagen_path'];
+            if (file_exists($oldFile)) {
+                unlink($oldFile);
+            }
+        }
+
+        $imagenPath = $upload['path'];
+    }
+
+    try {
+        if ($current) {
+            $stmt = $pdo->prepare(
+                'UPDATE presidencia SET nombre = ?, cargo = ?, descripcion = ?, imagen_path = ? WHERE id = ?'
+            );
+            $stmt->execute([$nombre, $cargo, $descripcion, $imagenPath, $current['id']]);
+        } else {
+            $stmt = $pdo->prepare(
+                'INSERT INTO presidencia (nombre, cargo, descripcion, imagen_path) VALUES (?, ?, ?, ?)'
+            );
+            $stmt->execute([$nombre, $cargo, $descripcion, $imagenPath]);
+        }
+
+        $_SESSION['flash_message'] = 'Datos de presidencia actualizados correctamente.';
+        $_SESSION['flash_type']    = 'success';
+    } catch (PDOException $e) {
+        $_SESSION['flash_message'] = APP_DEBUG ? $e->getMessage() : 'Error al guardar en la base de datos.';
+        $_SESSION['flash_type']    = 'danger';
+    }
+
+    header('Location: presidencia.php');
+    exit;
+}
+
+// ── Consultar registro actual ──────────────────────────────────────────────────
+$stmt = $pdo->query('SELECT * FROM presidencia ORDER BY id ASC LIMIT 1');
+$presidencia = $stmt->fetch();
+
+// ── Flash messages ─────────────────────────────────────────────────────────────
+$flashMessage = $_SESSION['flash_message'] ?? '';
+$flashType    = $_SESSION['flash_type'] ?? '';
+unset($_SESSION['flash_message'], $_SESSION['flash_type']);
+
+// Generar token CSRF para el formulario
+$token = csrf_token();
+
+// Secciones del sidebar (misma lista que dashboard)
+$sections = [
+    ['title' => 'Slider Principal',   'file' => 'slider_principal.php', 'icon' => 'bi-images'],
+    ['title' => 'Slider DIF Comunica','file' => 'slider_comunica.php',  'icon' => 'bi-megaphone'],
+    ['title' => 'Noticias',           'file' => 'noticias.php',         'icon' => 'bi-newspaper'],
+    ['title' => 'Presidencia',        'file' => 'presidencia.php',      'icon' => 'bi-person-badge'],
+    ['title' => 'Direcciones',        'file' => 'direcciones.php',      'icon' => 'bi-people'],
+    ['title' => 'Organigrama',        'file' => 'organigrama.php',      'icon' => 'bi-diagram-3'],
+    ['title' => 'Trámites',           'file' => 'tramites.php',         'icon' => 'bi-file-earmark-text'],
+    ['title' => 'Galería',            'file' => 'galeria.php',          'icon' => 'bi-camera'],
+    ['title' => 'SEAC',               'file' => 'seac.php',             'icon' => 'bi-file-earmark-pdf'],
+    ['title' => 'Cuenta Pública',     'file' => 'cuenta_publica.php',   'icon' => 'bi-cash-stack'],
+    ['title' => 'Presupuesto Anual',  'file' => 'presupuesto_anual.php', 'icon' => 'bi-wallet2'],
+    ['title' => 'PAE',               'file' => 'pae.php',              'icon' => 'bi-clipboard-data'],
+    ['title' => 'Matrices',          'file' => 'matrices_indicadores.php', 'icon' => 'bi-bar-chart-line'],
+    ['title' => 'CONAC',             'file' => 'conac.php',             'icon' => 'bi-bank'],
+    ['title' => 'Financiero',        'file' => 'financiero.php',       'icon' => 'bi-currency-dollar'],
+    ['title' => 'Avisos Privacidad', 'file' => 'avisos_privacidad.php','icon' => 'bi-shield-exclamation'],
+    ['title' => 'Programas',          'file' => 'programas.php',        'icon' => 'bi-grid-3x3-gap'],
+    ['title' => 'Transparencia',      'file' => 'transparencia.php',    'icon' => 'bi-shield-check'],
+    ['title' => 'Imagen Institucional','file' => 'institucion.php',     'icon' => 'bi-card-image'],
+    ['title' => 'Footer',             'file' => 'footer.php',           'icon' => 'bi-layout-text-window-reverse'],
+];
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presidencia — Panel de Administración DIF</title>
+    <link rel="icon" href="../img/favicon-32x32.png" sizes="35x35">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <style>
+        .img-preview { max-height: 200px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="sidebar d-flex flex-column">
+            <div class="sidebar-header d-flex align-items-center justify-content-between">
+                <a href="dashboard.php" class="text-white text-decoration-none">
+                    <img src="../img/escudo.png" alt="DIF" style="height:28px;margin-right:6px;vertical-align:middle;"> Admin DIF
+                </a>
+                <button class="btn btn-sm btn-outline-light d-md-none" id="closeSidebar" aria-label="Cerrar menú">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <ul class="nav flex-column mt-2">
+                <?php foreach ($sections as $s): ?>
+                    <li class="nav-item">
+                        <a class="nav-link<?= $s['file'] === 'presidencia.php' ? ' active' : '' ?>" href="<?= htmlspecialchars($s['file']) ?>">
+                            <i class="bi <?= htmlspecialchars($s['icon']) ?>"></i>
+                            <?= htmlspecialchars($s['title']) ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+            <div class="mt-auto p-3 border-top border-secondary">
+                <a href="logout.php" class="btn btn-outline-danger btn-sm w-100">
+                    <i class="bi bi-box-arrow-right me-1"></i> Cerrar sesión
+                </a>
+            </div>
+        </nav>
+
+        <!-- Main content -->
+        <div class="main-content">
+            <!-- Top bar -->
+            <nav class="navbar navbar-light bg-white shadow-sm px-3">
+                <button class="btn btn-outline-secondary me-2" id="toggleSidebar" aria-label="Abrir/cerrar menú">
+                    <i class="bi bi-list"></i>
+                </button>
+                <span class="navbar-brand mb-0 h6">Presidencia</span>
+                <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto">
+                    <i class="bi bi-box-arrow-right"></i> Salir
+                </a>
+            </nav>
+
+            <div class="container-fluid p-4">
+                <!-- Flash message -->
+                <?php if ($flashMessage): ?>
+                    <div class="alert alert-<?= htmlspecialchars($flashType) ?> alert-dismissible fade show" role="alert">
+                        <?= htmlspecialchars($flashMessage) ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                    </div>
+                <?php endif; ?>
+
+                <div class="row g-4">
+                    <!-- Vista previa actual -->
+                    <div class="col-lg-5">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="bi bi-person-badge me-1"></i> Datos actuales
+                            </div>
+                            <div class="card-body text-center">
+                                <?php if ($presidencia): ?>
+                                    <?php
+                                        $imgSrc = !empty($presidencia['imagen_path'])
+                                            ? '../' . htmlspecialchars($presidencia['imagen_path'])
+                                            : '../img/Presidente.png';
+                                    ?>
+                                    <img src="<?= $imgSrc ?>"
+                                         alt="Imagen de presidencia"
+                                         class="img-preview img-fluid mb-3">
+                                    <h5 class="mb-1"><?= htmlspecialchars($presidencia['nombre']) ?></h5>
+                                    <p class="text-muted"><?= htmlspecialchars($presidencia['cargo']) ?></p>
+                                    <?php if (!empty($presidencia['descripcion'])): ?>
+                                        <p class="text-muted small"><?= nl2br(htmlspecialchars($presidencia['descripcion'])) ?></p>
+                                    <?php endif; ?>
+                                    <?php if (!empty($presidencia['updated_at'])): ?>
+                                        <small class="text-muted">
+                                            <i class="bi bi-clock me-1"></i>
+                                            Última actualización: <?= htmlspecialchars($presidencia['updated_at']) ?>
+                                        </small>
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <div class="text-muted py-4">
+                                        <i class="bi bi-person-badge" style="font-size: 2rem;"></i>
+                                        <p class="mt-2 mb-0">No hay datos de presidencia registrados. Use el formulario para agregar.</p>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formulario de edición -->
+                    <div class="col-lg-7">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <i class="bi bi-pencil-square me-1"></i>
+                                <?= $presidencia ? 'Editar datos de presidencia' : 'Registrar datos de presidencia' ?>
+                            </div>
+                            <div class="card-body">
+                                <form method="POST" enctype="multipart/form-data" action="presidencia.php">
+                                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+                                    <div class="mb-3">
+                                        <label for="nombre" class="form-label">Nombre</label>
+                                        <input type="text" class="form-control" id="nombre" name="nombre"
+                                               value="<?= $presidencia ? htmlspecialchars($presidencia['nombre']) : '' ?>"
+                                               required maxlength="200"
+                                               placeholder="Nombre completo">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="cargo" class="form-label">Cargo</label>
+                                        <input type="text" class="form-control" id="cargo" name="cargo"
+                                               value="<?= $presidencia ? htmlspecialchars($presidencia['cargo']) : '' ?>"
+                                               required maxlength="200"
+                                               placeholder="Cargo o título">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="descripcion" class="form-label">Descripción</label>
+                                        <textarea class="form-control" id="descripcion" name="descripcion"
+                                                  rows="4" maxlength="2000"
+                                                  placeholder="Descripción o semblanza (opcional)"><?= $presidencia && !empty($presidencia['descripcion']) ? htmlspecialchars($presidencia['descripcion']) : '' ?></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="imagen" class="form-label">
+                                            Imagen (JPG, PNG, WEBP — máx. 20 MB)
+                                            <?php if ($presidencia): ?>
+                                                <small class="text-muted">— dejar vacío para conservar la actual</small>
+                                            <?php endif; ?>
+                                        </label>
+                                        <input type="file" class="form-control" id="imagen" name="imagen"
+                                               accept=".jpg,.jpeg,.png,.webp"
+                                               <?= !$presidencia ? 'required' : '' ?>>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="bi bi-save me-1"></i>
+                                        <?= $presidencia ? 'Guardar cambios' : 'Registrar' ?>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        if (window.innerWidth <= 768) sidebar.classList.add('collapsed');
+        document.getElementById('toggleSidebar').addEventListener('click', function () {
+            sidebar.classList.toggle('collapsed');
+        });
+        const closeBtn = document.getElementById('closeSidebar');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function () {
+                sidebar.classList.add('collapsed');
+            });
+        }
+    </script>
+</body>
+</html>

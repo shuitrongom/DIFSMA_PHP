@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>DIF San Mateo Atenco</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Montserrat:wght@200;400;500;600;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="icon" href="../img/favicon-32x32.png" sizes="35x35">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="../lib/animate/animate.min.css" rel="stylesheet">
+    <link href="../lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+    <link href="../lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="../lib/owlcarousel/assets/owl.theme.default.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="../css/style.css" rel="stylesheet">
+
+    <style>
+        .navbar-nav {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .nav-item {
+            flex: 1 0 calc(100% / 6);
+            text-align: center;
+            color: white;
+            text-decoration: none;
+        }
+
+        .navbar-nav .nav-item,
+        .navbar-nav .nav-link-green,
+        .navbar-nav .nav-link-red,
+        .navbar-nav .nav-link-yellow,
+        .navbar-nav .nav-link-pink,
+        .navbar-nav .nav-link-purple,
+        .navbar-nav .nav-link-blue {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+        }
+
+        /* Botones Ver Programas */
+        .btn-ver-programas {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Accordion body */
+        .accordion-body {
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Dropdown contenido programas */
+        .dropdown-menu .accordion-button,
+        .dropdown-menu .accordion-body,
+        .dropdown-menu .dropdown-item {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Transparencia hover — tarjeta se levanta */
+        .program-item {
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .program-item:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+            z-index: 2;
+            position: relative;
+        }
+        /* Evitar que overflow:hidden corte la imagen en hover */
+        .program-item .overflow-hidden {
+            overflow: visible !important;
+        }
+        .program-item .img-border {
+            overflow: visible !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
+        <div class="spinner-grow text-primary" role="status"></div>
+    </div>
+    <!-- Spinner End -->
+
+    <!-- Logo Principal Start -->
+    <div class="container d-flex justify-content-center pt-3 pb-1">
+        <img src="../img/cintillo_superior_creditos.png" class="img-fluid" style="max-width:100%;"
+            alt="DIF San Mateo Atenco">
+    </div>
+    <!-- Logo Principa End -->
+
+    <!-- Logo secundario Start -->
+    <div class="container pb-2">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <!-- Widget del clima izquierda -->
+            <div id="weather-widget"
+                style="min-width:180px; max-width:260px; font-family:'Montserrat',sans-serif; font-size:13px;">
+                <div class="d-flex align-items-center gap-2">
+                    <span id="weather-icon" style="font-size:28px;">⏳</span>
+                    <div>
+                        <div id="weather-temp" style="font-weight:600; font-size:16px; color:rgba(0,0,0,0.8);">--°C
+                        </div>
+                        <div id="weather-desc" style="color:rgba(0,0,0,0.6); font-size:12px;">San Mateo Atenco</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Logo centrado -->
+            <img src="../img/unidos con amor.png" class="img-fluid mx-auto" style="max-width:260px;"
+                alt="Unidos con Amor">
+            <!-- Buscador derecha -->
+            <form class="d-flex align-items-center" role="search" onsubmit="doSearch(event)"
+                style="min-width:220px; max-width:320px;">
+                <div class="input-group">
+                    <input id="siteSearchInput" type="search" class="form-control form-control-sm"
+                        placeholder="Buscar en la página..." aria-label="Buscar">
+                    <button class="btn btn-sm btn-dark" type="submit" aria-label="Buscar">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Logo secundario End -->
+
+    <!-- Navbar start -->
+    <div class="container-fluid border-bottom bg-white wow fadeIn" data-wow-delay="0.1s">
+        <div class="container px-0">
+            <nav class="navbar navbar-light navbar-expand-xl py-3">
+                <a href="../index.html" class="navbar-brand"></h1></a>
+                <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarCollapse">
+                    <span class="fa fa-bars text-primary"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav mx-auto">
+                        <a href="../index.html" class="nav-item nav-link-green active">INICIO</a>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link-red dropdown-toggle" data-bs-toggle="dropdown">ACERCA DEL
+                                DIF</a>
+                            <li class="dropdown-menu rounded-0">
+                                <a href="presidencia.html" class="dropdown-item">Presidencia</a>
+                                <a href="direcciones.html" class="dropdown-item">Direcciones</a>
+                                <a href="organigrama.html" class="dropdown-item">Organigrama</a>
+                            </li>
+                        </div>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link-yellow dropdown-toggle" data-bs-toggle="dropdown">SERVICIOS</a>
+                            <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                                <a href="../tramites y servicios/PMPNNA.html" class="dropdown-item">Procudaduría Municipal
+                                    de Protección de Niñas,
+                                    Niños Y Adolecentes</a>
+                                <a href="../tramites y servicios/DAAM.html" class="dropdown-item">Dirección de Atención a
+                                    Adultos Mayores</a>
+                                <a href="../tramites y servicios/DANF.html" class="dropdown-item">Dirección de Alimentación
+                                    y Nutrición Familiar</a>
+                                <a href="../tramites y servicios/DAD.html" class="dropdown-item">Dirección de Atención a la
+                                    Discapacidad</a>
+                                <a href="../tramites y servicios/DPAF.html" class="dropdown-item">Dirección de Prevención y
+                                    Bienestar Familiar</a>
+                                <a href="../tramites y servicios/DSJAIG.html" class="dropdown-item">Dirección de Servicios
+                                    Jurídicos – Asistenciales e Igualdad de Género</a>
+                            </div>
+                        </div>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link-pink dropdown-toggle" data-bs-toggle="dropdown">COMUNICACIÓN
+                                SOCIAL</a>
+                            <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                                <a href="../comunicacion social/noticias.html" class="dropdown-item">Noticias</a>
+                                <a href="../comunicacion social/galeria.html" class="dropdown-item">Galerías</a>
+                            </div>
+                        </div>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link-purple dropdown-toggle"
+                                data-bs-toggle="dropdown">TRANSPARENCIA</a>
+                            <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                                <a href="https://www.ipomex.org.mx/ipo3/lgt/indice/DIFSANMATEO.web" target="_blank"
+                                    class="dropdown-item">IPOMEX</a>
+                                <a href="https://www.saimex.org.mx/saimex/ciudadano/login.page" target="_blank"
+                                    class="dropdown-item">SAIMEX</a>
+                                <a href="https://www.plataformadetransparencia.org.mx/" target="_blank"
+                                    class="dropdown-item">PLATAFORMA NACIONAL DE
+                                    TRANSPARENCIA</a>
+                                <a href="../trasparencia/SEAC.html" class="dropdown-item">SISTEMA DE EVALUACIONES<br> DE LA
+                                    ARMONIZACIÓN CONTABLE</a>
+                                <a href="https://difsanmateoatenco.gob.mx/plantilla/29" class="dropdown-item">CUENTA
+                                    PÚBLICA</a>
+                                <a href="https://difsanmateoatenco.gob.mx/plantilla/30"
+                                    class="dropdown-item">PRESUPUESTO ANUAL</a>
+                                <a href="https://difsanmateoatenco.gob.mx/pagina/31" class="dropdown-item">PAE</a>
+                                <a href="https://difsanmateoatenco.gob.mx/pagina/34" class="dropdown-item">MATRICES DE
+                                    INDICADORES</a>
+                                <a href="https://difsanmateoatenco.gob.mx/plantilla/36" class="dropdown-item">CONAC</a>
+                                <a href="https://difsanmateoatenco.gob.mx/plantilla/37"
+                                    class="dropdown-item">FINANCIERO</a>
+                                <a href="../404.html" class="dropdown-item">AVISOS DE PRIVACIDAD</a>
+                            </div>
+                        </div>
+                        <a href="#" class="nav-item nav-link-blue">VOLUNTARIADO</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- Navbar End -->
+
+    <!-- Page Header Start -->
+    <div class="container-fluid page-header wow fadeIn" data-wow-delay="0.1s">
+        <div class="container text-center py-4">
+            <h1 class="display-2 text-white mb-4">Presidente DIF</h1>
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+
+    <!-- Team Start-->
+    <div class="container-fluid team py-5">
+        <div class="container py-5">
+            <div class="row g-5 justify-content-center">
+                <div class="col-md-6 col-lg-4 col-xl-6 wow fadeIn" data-wow-delay="0.1s">
+                    <div class="team-item border border-black img-border-radius overflow-hidden">
+                        <img src="../img/Presidente.png" class="img-fluid w-100" alt="">
+                        <div class="team-icon d-flex align-items-center justify-content-center">
+                            <a class="share btn btn-light btn-md-square text-black rounded-circle me-3" href=""><i
+                                    class="fas fa-share-alt"></i></a>
+                            <a class="share-link btn btn-light btn-md-square text-black rounded-circle me-3" href=""><i
+                                    class="fab fa-facebook-f"></i></a>
+                            <a class="share-link btn btn-light btn-md-square text-black rounded-circle me-3" href=""><i
+                                    class="fab fa-twitter"></i></a>
+                            <a class="share-link btn btn-light btn-md-square text-black rounded-circle" href=""><i
+                                    class="fab fa-instagram"></i></a>
+                        </div>
+                        <div class="team-content text-center py-3">
+                            <h4 class="text-black">Oscar Muñiz Maynez</h4>
+                            <p class="text-body mb-2">PRESIDENTE HONORARIO</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Team End-->
+
+
+    <!-- Pleca Start -->
+    <div class="pleca">
+        <img src="../img/pleca.png" alt="pleca">
+    </div>
+    <!-- Pleca End -->
+
+    <!-- Footer Start -->
+    <div class="container py-4">
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4 col-xl-4">
+                <div class="footer-item">
+                    <!-- Logo DIF más grande, alineado a la izquierda -->
+                    <div class="mb-3 text-start">
+                        <img src="../img/logo_DIF.png" class="img-fluid d-block" style="max-width:200px;" alt="Logo DIF San Mateo Atenco">
+                    </div>
+                    <div class="d-flex flex-column align-items-start">
+                        <p class="text-body mb-1 small">Horario de lunes a viernes</p>
+                        <p class="text-body mb-3 small">de 8:00 a 16:00 horas</p>
+                        <!-- Corazón + dirección -->
+                        <div class="d-flex align-items-start gap-2 mb-2">
+                            <img src="../img/corazon_ubicacion.png" style="width:118px; height:118px; object-fit:contain; flex-shrink:0; margin-top:2px;" alt="Ubicación">
+                            <p class="text-body small mb-0" style="text-align:justify; line-height:1.6;">
+                                Mariano Matamoros 310,<br>
+                                Bo. La Concepción,<br>
+                                San Mateo Atenco.<br>
+                                Teléfono 722 970 77 86
+                            </p>
+                        </div>
+                        <a href="mailto:presidencia@difsanmateoatenco.gob.mx"
+                            class="text-body small mb-3 text-decoration-none" target="_blank">
+                            <i class="fas fa-envelope text-black me-2"></i>presidencia@difsanmateoatenco.gob.mx
+                        </a>
+                        <div class="text-start mt-2">
+                            <img src="../img/unidos_con_amor_floter.png" class="img-fluid d-block" style="max-width:350px; width:100%;" alt="Unidos con Amor">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 col-xl-8 bg-danger-flotter">
+                <div class="footer-item">
+                    <div class="row g-3">
+                        <div class="d-flex flex-column align-items-start p-4">
+                            <a class="mb-2 text-white ms-5" href="#">Inicio</a>
+                            <a class="mb-2 text-white ms-5" href="#">Nosotros</a>
+                            <a class="mb-2 text-white ms-5" href="#">Noticias</a>
+                            <a class="mb-2 text-white ms-5" href="#">Transparencia</a>
+                            <a class="mb-2 text-white ms-5" href="#">Compras y adquisiciones</a>
+                            <a class="mb-2 text-white ms-5" href="#">Declaraciónes</a>
+                            <a class="mb-2 text-white ms-5" href="#">Sistema de Gestión de Usuarios</a>
+                            <a class="mb-2 text-white ms-5" href="#">Servicios en línea</a>
+                            <a class="mb-2 text-white ms-5" href="#">Ubícanos</a>
+                        </div>
+                        <div class="footer-icon d-flex">
+                             <a href="https://twitter.com/DIFSMA" class="text-start rounded-0 text-white mb-2 ms-5"
+                                target="_blank">@DIFSMA 
+                                <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:#fff;margin-right:8px;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#000"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></span></a>
+                            <a href="https://facebook.com/DifSanMateoAtenco/"
+                                class="text-start rounded-0 text-white mb-2 ms-5" target="_blank">@DIF San Mateo Atenco 
+                                <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:#fff;margin-right:8px;"><i class="fab fa-facebook-f" style="color:#000000;font-size:14px;"></i></span></a>
+                            <a href="https://www.instagram.com/difsma" class="text-start rounded-0 text-white mb-2 ms-5"
+                                target="_blank">@difsma_ 
+                                <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:#fff;margin-right:8px;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#000000"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- Copyright Start -->
+    <section class="pt-4 pb-4 text-white" style="background:#757575;">
+        <footer class="footer" style="font-family: 'Montserrat'; font-size:14px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <img src="../img/logo_administracion.png" width="250px"
+                            class="img-fluid d-block mx-auto rounded shadow">
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </section>
+    <!-- Copyright End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn-up btn-dark border-3 border-end-0 rounded-circle back-to-top"><i
+            class="fa fa-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../lib/wow/wow.min.js"></script>
+    <script src="../lib/easing/easing.min.js"></script>
+    <script src="../lib/waypoints/waypoints.min.js"></script>
+    <script src="../lib/lightbox/js/lightbox.min.js"></script>
+    <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="../js/main.js"></script>
+
+    <!-- Widget Clima -->
+    <script>
+        (function () {
+            var lat = 19.2667, lon = -99.5333;
+            var icons = {
+                0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️',
+                45: '🌫️', 48: '🌫️',
+                51: '🌦️', 53: '🌦️', 55: '🌧️',
+                61: '🌧️', 63: '🌧️', 65: '🌧️',
+                71: '🌨️', 73: '🌨️', 75: '❄️',
+                80: '🌦️', 81: '🌧️', 82: '⛈️',
+                95: '⛈️', 96: '⛈️', 99: '⛈️'
+            };
+            var descs = {
+                0: 'Despejado', 1: 'Mayormente despejado', 2: 'Parcialmente nublado', 3: 'Nublado',
+                45: 'Neblina', 48: 'Neblina',
+                51: 'Llovizna', 53: 'Llovizna', 55: 'Llovizna intensa',
+                61: 'Lluvia ligera', 63: 'Lluvia', 65: 'Lluvia intensa',
+                71: 'Nieve ligera', 73: 'Nieve', 75: 'Nieve intensa',
+                80: 'Chubascos', 81: 'Chubascos', 82: 'Chubascos fuertes',
+                95: 'Tormenta', 96: 'Tormenta', 99: 'Tormenta severa'
+            };
+            fetch('https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current_weather=true')
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    var cw = data.current_weather;
+                    var code = cw.weathercode;
+                    document.getElementById('weather-temp').textContent = Math.round(cw.temperature) + '°C';
+                    document.getElementById('weather-icon').textContent = icons[code] || '🌡️';
+                    document.getElementById('weather-desc').textContent = (descs[code] || 'San Mateo Atenco') + ' · San Mateo Atenco';
+                })
+                .catch(function () {
+                    document.getElementById('weather-icon').textContent = '🌡️';
+                    document.getElementById('weather-desc').textContent = 'San Mateo Atenco';
+                });
+        })();
+    </script>
+
+    <!-- Búsqueda en página -->
+    <script>
+        (function () {
+            var matches = [], matchIndex = 0, lastQuery = '';
+            var HIGHLIGHT_CLASS = 'search-highlight', ACTIVE_CLASS = 'search-highlight-active';
+            var style = document.createElement('style');
+            style.textContent = '.' + HIGHLIGHT_CLASS + '{background:#ffe066;color:#000;border-radius:2px;padding:0 1px;}.' + ACTIVE_CLASS + '{background:#ff9800;color:#000;outline:2px solid #e65100;}';
+            document.head.appendChild(style);
+            function clearHighlights() {
+                document.querySelectorAll('.' + HIGHLIGHT_CLASS).forEach(function (el) {
+                    var p = el.parentNode; p.replaceChild(document.createTextNode(el.textContent), el); p.normalize();
+                });
+                matches = []; matchIndex = 0;
+            }
+            function highlightText(node, query) {
+                if (node.nodeType === 3) {
+                    var idx = node.nodeValue.toLowerCase().indexOf(query.toLowerCase());
+                    if (idx === -1) return;
+                    var before = document.createTextNode(node.nodeValue.slice(0, idx));
+                    var mark = document.createElement('mark');
+                    mark.className = HIGHLIGHT_CLASS;
+                    mark.textContent = node.nodeValue.slice(idx, idx + query.length);
+                    var after = document.createTextNode(node.nodeValue.slice(idx + query.length));
+                    var p = node.parentNode;
+                    p.insertBefore(before, node); p.insertBefore(mark, node); p.insertBefore(after, node); p.removeChild(node);
+                    matches.push(mark);
+                    highlightText(after, query);
+                } else if (node.nodeType === 1 && !['SCRIPT', 'STYLE', 'NOSCRIPT', 'INPUT', 'TEXTAREA'].includes(node.tagName)) {
+                    Array.from(node.childNodes).forEach(function (c) { highlightText(c, query); });
+                }
+            }
+            function scrollToMatch(i) {
+                document.querySelectorAll('.' + ACTIVE_CLASS).forEach(function (el) { el.classList.remove(ACTIVE_CLASS); });
+                if (!matches.length) return;
+                matchIndex = ((i % matches.length) + matches.length) % matches.length;
+                matches[matchIndex].classList.add(ACTIVE_CLASS);
+                matches[matchIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            window.doSearch = function (e) {
+                e.preventDefault();
+                var q = document.getElementById('siteSearchInput').value.trim();
+                if (!q) { clearHighlights(); return; }
+                if (q !== lastQuery) {
+                    clearHighlights(); lastQuery = q;
+                    highlightText(document.body, q);
+                    if (!matches.length) { alert('No se encontraron resultados para: "' + q + '"'); return; }
+                    scrollToMatch(0);
+                } else { scrollToMatch(matchIndex + 1); }
+            };
+            document.getElementById('siteSearchInput').addEventListener('input', function () {
+                if (!this.value) clearHighlights();
+            });
+        })();
+    </script>
+</body>
+
+</html>

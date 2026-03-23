@@ -1,0 +1,24 @@
+{
+    "name": "dif-sma/cms-php",
+    "description": "DIF San Mateo Atenco CMS PHP Migration",
+    "type": "project",
+    "require": {
+        "php": ">=7.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "DifCms\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DifCms\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit --bootstrap tests/bootstrap.php tests/"
+    }
+}
