@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/slider_comunica.php — CRUD para imágenes del Slider DIF Comunica
  *

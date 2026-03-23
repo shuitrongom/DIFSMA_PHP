@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/galeria.php — CRUD para Galería Fotográfica (Álbumes e Imágenes)
  *
