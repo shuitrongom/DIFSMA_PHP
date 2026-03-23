@@ -11,9 +11,9 @@
 
 // ── Base de datos ──────────────────────────────────────────────────────────────
 define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
-define('DB_NAME', getenv('DB_NAME') ?: 'dif_cms');
-define('DB_USER', getenv('DB_USER') ?: 'root');
-define('DB_PASS', getenv('DB_PASS') ?: 'Pa55worD');
+define('DB_NAME', getenv('DB_NAME') ?: 'difsanma_dif_cms');
+define('DB_USER', getenv('DB_USER') ?: 'difsanma');
+define('DB_PASS', getenv('DB_PASS') ?: 'JSlf45#%$$235Ads');
 
 // ── Entorno ────────────────────────────────────────────────────────────────────
 // true  → muestra errores detallados (solo en desarrollo)
