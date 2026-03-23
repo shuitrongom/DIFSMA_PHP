@@ -1,0 +1,18 @@
+# Deny direct access and PHP execution in uploads directory
+
+# Deny all PHP execution
+<FilesMatch "\.php$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Apache 2.4+
+<IfModule mod_authz_core.c>
+    <FilesMatch "\.(php|php3|php4|php5|php7|phtml|phar)$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+
+# Disable script execution via Options
+Options -ExecCGI -Indexes
+AddHandler cgi-script .php .php3 .php4 .php5 .php7 .phtml .phar
