@@ -1,4 +1,5 @@
 <?php
+ob_start();
 /**
  * admin/login.php — Panel de administración: inicio de sesión
  *
