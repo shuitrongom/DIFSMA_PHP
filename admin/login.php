@@ -106,7 +106,7 @@ $csrf = csrf_token();
     <title>Administración — DIF</title>
     <link rel="icon" href="../img/favicon-32x32.png" sizes="35x35">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/admin.css?v=4">
+    <link rel="stylesheet" href="../css/admin.css?v=5">
     <style>
         body {
             margin: 0;
@@ -229,6 +229,6 @@ $csrf = csrf_token();
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/upload-progress.js"></script>
+    <script src="../js/upload-progress.js?v=3"></script>
 </body>
 </html>
