@@ -922,7 +922,7 @@ h6,
         object-fit: cover;
         /* Ajustar recortando si es necesario */
     }
-        .copyright-bar { background: #757575; color: #fff; padding: 16px 0; text-align: center; font-size: 13px; }
+        .copyright-bar { background: rgb(107,98,90); color: #fff; padding: 16px 0; text-align: center; font-size: 13px; }
 
 
     /*** Footer End ***/

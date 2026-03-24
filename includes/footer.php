@@ -177,7 +177,7 @@ if (count($horario_parts) === 2) {
     <!-- Copyright Start -->
     <div class="copyright-bar">
         <img src="<?= $base_path ?>img/logo_administracion.png" width="200" class="img-fluid d-block mx-auto mb-2" alt="Administración">
-        <p class="mb-0" style="font-size:12px;">© <?= date('Y') ?> DIF San Mateo Atenco. Todos los derechos reservados.</p>
+        <p class="mb-0" style="font-size:12px;color:#fff;">© <?= date('Y') ?> DIF San Mateo Atenco. Todos los derechos reservados.</p>
     </div>
     <!-- Copyright End -->
 
