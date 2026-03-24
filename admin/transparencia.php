@@ -22,6 +22,7 @@ $paginas_transparencia = [
     'transparencia/conac.php'                => 'CONAC',
     'transparencia/financiero.php'           => 'Financiero',
     'transparencia/avisos_privacidad.php'    => 'Avisos de Privacidad',
+    'acerca-del-dif/organigrama.php'         => 'Organigrama',
 ];
 
 // ── Procesamiento POST ─────────────────────────────────────────────────────────
