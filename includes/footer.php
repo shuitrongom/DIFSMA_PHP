@@ -92,10 +92,16 @@ if (count($horario_parts) === 2) {
                             <p class="text-body mb-3 small"><?= _fe($horario_linea2) ?></p>
                             <?php endif; ?>
                             <div class="d-flex align-items-center gap-2 mb-2">
-                                <img src="<?= $base_path ?>img/corazon_ubicacion.png" style="width:80px; height:80px; object-fit:contain; flex-shrink:0;" alt="Ubicación">
+                                <a href="https://www.google.com/maps/search/?api=1&query=<?= urlencode($footer['direccion']) ?>" target="_blank" rel="noopener" style="flex-shrink:0;">
+                                    <img src="<?= $base_path ?>img/corazon_ubicacion.png" style="width:80px; height:80px; object-fit:contain;" alt="Ubicación">
+                                </a>
                                 <p class="text-body small mb-0" style="line-height:1.6;">
-                                    <?= nl2br(_fe($footer['direccion'])) ?><br>
-                                    Teléfono <?= _fe($footer['telefono']) ?>
+                                    <a href="https://www.google.com/maps/search/?api=1&query=<?= urlencode($footer['direccion']) ?>" target="_blank" rel="noopener" class="text-body text-decoration-none" style="border-bottom:1px dotted #999;">
+                                        <?= nl2br(_fe($footer['direccion'])) ?>
+                                    </a><br>
+                                    <a href="tel:<?= preg_replace('/[^0-9+]/', '', $footer['telefono']) ?>" class="text-body text-decoration-none" style="border-bottom:1px dotted #999;">
+                                        Teléfono <?= _fe($footer['telefono']) ?>
+                                    </a>
                                 </p>
                             </div>
                             <div class="d-flex align-items-center mb-3" style="white-space:nowrap;">
