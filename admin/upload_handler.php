@@ -82,8 +82,24 @@ function handle_upload(array $file, string $type = 'image'): array
         return $result;
     }
 
-    // ── 6. Generar nombre aleatorio ────────────────────────────────────────────
-    $newName = bin2hex(random_bytes(16)) . '.' . $ext;
+    // ── 6. Generar nombre del archivo ─────────────────────────────────────────
+    if ($type === 'pdf') {
+        // PDFs: conservar nombre original (sanitizado)
+        $baseName = pathinfo($originalName, PATHINFO_FILENAME);
+        $baseName = preg_replace('/[^a-zA-Z0-9_\-\. áéíóúñÁÉÍÓÚÑ]/', '_', $baseName);
+        $baseName = trim($baseName, '_');
+        if (empty($baseName)) $baseName = 'documento';
+        $newName = $baseName . '.' . $ext;
+        // Si ya existe, agregar sufijo
+        $counter = 1;
+        while (file_exists($destDir . $newName)) {
+            $newName = $baseName . '_' . $counter . '.' . $ext;
+            $counter++;
+        }
+    } else {
+        // Imágenes: nombre aleatorio
+        $newName = bin2hex(random_bytes(16)) . '.' . $ext;
+    }
     $destPath = $destDir . $newName;
 
     // ── 7. Crear directorio si no existe ──────────────────────────────────────
