@@ -42,7 +42,7 @@ require_once __DIR__ . '/../includes/navbar.php';
         .dir-card-photo img{width:100%;height:100%;object-fit:cover;object-position:top center;}
         .dir-card-panel{flex:1;background:rgb(200,16,44);padding:1rem 1.2rem;border-radius:0 16px 16px 0;display:flex;flex-direction:column;justify-content:center;}
         .dir-card-panel .cargo{font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.5rem;color:#fff;}
-        .dir-card-panel .nombre{font-family:'Montserrat',sans-serif;font-weight:300;font-size:17px;margin-bottom:0;color:#fff;line-height:1.3;}
+        .dir-card-panel .nombre{font-family:'Montserrat',sans-serif;font-weight:300;font-size:22px;margin-bottom:0;color:#fff;line-height:1.3;}
         /* Tablet */
         @media(max-width:768px){
             .dir-card{flex-direction:column;height:auto;border-radius:0 16px 16px 16px;}
