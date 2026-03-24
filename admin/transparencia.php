@@ -45,7 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $orden     = (int) ($_POST['orden'] ?? 0);
 
         // Determinar URL final
-        if ($pagina !== '' && $pagina !== '__externa__') {
+        if ($pagina === '__ninguno__') {
+            $url = '#';
+        } elseif ($pagina !== '' && $pagina !== '__externa__') {
             $url = $pagina; // ruta relativa interna
         } elseif ($url_ext !== '') {
             $url = $url_ext;
@@ -60,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        if (empty($url)) {
+        if (empty($url) && $pagina !== '__ninguno__') {
             $_SESSION['flash_message'] = 'Debe seleccionar una página de destino o ingresar una URL externa.';
             $_SESSION['flash_type']    = 'warning';
             header('Location: transparencia.php');
@@ -114,7 +116,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $orden     = (int) ($_POST['orden'] ?? 0);
 
         // Determinar URL final
-        if ($pagina !== '' && $pagina !== '__externa__') {
+        if ($pagina === '__ninguno__') {
+            $url = '#';
+        } elseif ($pagina !== '' && $pagina !== '__externa__') {
             $url = $pagina;
         } elseif ($url_ext !== '') {
             $url = $url_ext;
@@ -136,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        if (empty($url)) {
+        if (empty($url) && $pagina !== '__ninguno__') {
             $_SESSION['flash_message'] = 'Debe seleccionar una página de destino o ingresar una URL externa.';
             $_SESSION['flash_type']    = 'warning';
             header('Location: transparencia.php');
@@ -315,6 +319,7 @@ $token = csrf_token();
                                             <?php foreach ($paginas_transparencia as $ruta => $nombre): ?>
                                             <option value="<?= htmlspecialchars($ruta) ?>"><?= htmlspecialchars($nombre) ?></option>
                                             <?php endforeach; ?>
+                                            <option value="__ninguno__">🚫 Sin enlace</option>
                                             <option value="__externa__">🔗 URL externa...</option>
                                         </select>
                                     </div>
@@ -375,7 +380,9 @@ $token = csrf_token();
                                                         <td>
                                                             <?php
                                                             $destino_label = $paginas_transparencia[$item['url']] ?? null;
-                                                            if ($destino_label): ?>
+                                                            if ($item['url'] === '#'): ?>
+                                                                <span class="badge bg-secondary">Sin enlace</span>
+                                                            <?php elseif ($destino_label): ?>
                                                                 <span class="badge bg-primary"><?= htmlspecialchars($destino_label) ?></span>
                                                             <?php else: ?>
                                                                 <a href="<?= htmlspecialchars($item['url']) ?>" target="_blank" rel="noopener" class="text-decoration-none">
@@ -452,6 +459,7 @@ $token = csrf_token();
                                     </div>
                                     <?php
                                     $es_interna = array_key_exists($item['url'], $paginas_transparencia);
+                                    $es_ninguno = ($item['url'] === '#');
                                     ?>
                                     <div class="mb-3">
                                         <label for="editPagina<?= (int) $item['id'] ?>" class="form-label">Página de destino</label>
@@ -461,13 +469,14 @@ $token = csrf_token();
                                             <?php foreach ($paginas_transparencia as $ruta => $nombre): ?>
                                             <option value="<?= htmlspecialchars($ruta) ?>"<?= ($es_interna && $item['url'] === $ruta) ? ' selected' : '' ?>><?= htmlspecialchars($nombre) ?></option>
                                             <?php endforeach; ?>
-                                            <option value="__externa__"<?= !$es_interna ? ' selected' : '' ?>>🔗 URL externa...</option>
+                                            <option value="__ninguno__"<?= $es_ninguno ? ' selected' : '' ?>>🚫 Sin enlace</option>
+                                            <option value="__externa__"<?= (!$es_interna && !$es_ninguno) ? ' selected' : '' ?>>🔗 URL externa...</option>
                                         </select>
                                     </div>
-                                    <div class="mb-3<?= $es_interna ? ' d-none' : '' ?>" id="urlExternaEdit<?= (int) $item['id'] ?>">
+                                    <div class="mb-3<?= ($es_interna || $es_ninguno) ? ' d-none' : '' ?>" id="urlExternaEdit<?= (int) $item['id'] ?>">
                                         <label for="editUrlExt<?= (int) $item['id'] ?>" class="form-label">URL externa</label>
                                         <input type="url" class="form-control" id="editUrlExt<?= (int) $item['id'] ?>" name="url_externa"
-                                               value="<?= !$es_interna ? htmlspecialchars($item['url']) : '' ?>"
+                                               value="<?= (!$es_interna && !$es_ninguno) ? htmlspecialchars($item['url']) : '' ?>"
                                                placeholder="https://ejemplo.com">
                                     </div>
                                     <?php if (!empty($item['imagen_path'])): ?>
