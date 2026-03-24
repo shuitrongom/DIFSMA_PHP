@@ -1,8 +1,1 @@
-# Activar output buffering (igual que XAMPP)
-# Resuelve "headers already sent" por BOM/espacios antes de <?php
-<IfModule mod_php.c>
-    php_value output_buffering 4096
-</IfModule>
-<IfModule mod_php7.c>
-    php_value output_buffering 4096
-</IfModule>
+# Output buffering se configura desde el panel de hosting (MultiPHP INI Editor)
