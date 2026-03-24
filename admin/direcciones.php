@@ -26,6 +26,95 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    // ── ADD: crear nuevo departamento ─────────────────────────────────────────
+    if ($action === 'add') {
+        $departamento = trim($_POST['departamento'] ?? '');
+        $nombre       = trim($_POST['nombre'] ?? '');
+        $apellidos    = trim($_POST['apellidos'] ?? '');
+        $cargo        = trim($_POST['cargo'] ?? '');
+
+        if (empty($departamento) || empty($nombre) || empty($cargo)) {
+            $_SESSION['flash_message'] = 'El departamento, nombre y cargo son obligatorios.';
+            $_SESSION['flash_type']    = 'warning';
+            header('Location: direcciones.php');
+            exit;
+        }
+
+        $imagenPath = null;
+        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] !== UPLOAD_ERR_NO_FILE) {
+            $upload = handle_upload($_FILES['imagen'], 'image');
+            if (!$upload['success']) {
+                $_SESSION['flash_message'] = $upload['error'];
+                $_SESSION['flash_type']    = 'danger';
+                header('Location: direcciones.php');
+                exit;
+            }
+            $imagenPath = $upload['path'];
+        }
+
+        try {
+            $stmt = $pdo->prepare('SELECT COALESCE(MAX(orden), 0) + 1 FROM direcciones');
+            $stmt->execute();
+            $nextOrden = (int) $stmt->fetchColumn();
+
+            $stmt = $pdo->prepare(
+                'INSERT INTO direcciones (departamento, nombre, apellidos, cargo, imagen_path, orden) VALUES (?, ?, ?, ?, ?, ?)'
+            );
+            $stmt->execute([$departamento, $nombre, $apellidos, $cargo, $imagenPath, $nextOrden]);
+
+            $_SESSION['flash_message'] = 'Departamento creado correctamente.';
+            $_SESSION['flash_type']    = 'success';
+        } catch (PDOException $e) {
+            $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al crear el departamento.';
+            $_SESSION['flash_type']    = 'danger';
+        }
+
+        header('Location: direcciones.php');
+        exit;
+    }
+
+    // ── DELETE: eliminar departamento completo ─────────────────────────────────
+    if ($action === 'delete') {
+        $id = (int) ($_POST['id'] ?? 0);
+        if ($id <= 0) {
+            $_SESSION['flash_message'] = 'ID inválido.';
+            $_SESSION['flash_type']    = 'danger';
+            header('Location: direcciones.php');
+            exit;
+        }
+
+        $stmt = $pdo->prepare('SELECT * FROM direcciones WHERE id = ?');
+        $stmt->execute([$id]);
+        $current = $stmt->fetch();
+
+        if (!$current) {
+            $_SESSION['flash_message'] = 'Departamento no encontrado.';
+            $_SESSION['flash_type']    = 'danger';
+            header('Location: direcciones.php');
+            exit;
+        }
+
+        try {
+            // Eliminar imagen si existe
+            if (!empty($current['imagen_path'])) {
+                $filePath = BASE_PATH . '/' . $current['imagen_path'];
+                if (file_exists($filePath)) unlink($filePath);
+            }
+
+            $stmt = $pdo->prepare('DELETE FROM direcciones WHERE id = ?');
+            $stmt->execute([$id]);
+
+            $_SESSION['flash_message'] = 'Departamento eliminado correctamente.';
+            $_SESSION['flash_type']    = 'success';
+        } catch (PDOException $e) {
+            $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al eliminar.';
+            $_SESSION['flash_type']    = 'danger';
+        }
+
+        header('Location: direcciones.php');
+        exit;
+    }
+
     // ── EDIT: actualizar nombre, cargo e imagen de un departamento ─────────────
     if ($action === 'edit') {
         $id           = (int) ($_POST['id'] ?? 0);
@@ -200,6 +289,47 @@ $token = csrf_token();
                     </div>
                 <?php endif; ?>
 
+                <div class="row g-4">
+                    <!-- Formulario de alta -->
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <i class="bi bi-plus-circle me-1"></i> Nuevo departamento
+                            </div>
+                            <div class="card-body">
+                                <form method="POST" enctype="multipart/form-data" action="direcciones.php">
+                                    <input type="hidden" name="action" value="add">
+                                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+                                    <div class="mb-3">
+                                        <label class="form-label">Departamento</label>
+                                        <input type="text" class="form-control" name="departamento" required maxlength="300" placeholder="Nombre del departamento">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Nombre</label>
+                                        <input type="text" class="form-control" name="nombre" required maxlength="200" placeholder="Nombre(s)">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Apellidos</label>
+                                        <input type="text" class="form-control" name="apellidos" maxlength="200" placeholder="Apellido(s)">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Cargo</label>
+                                        <input type="text" class="form-control" name="cargo" required maxlength="300" placeholder="Cargo o título">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Foto (opcional)</label>
+                                        <input type="file" class="form-control" name="imagen" accept=".jpg,.jpeg,.png,.webp">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="bi bi-plus-circle me-1"></i> Crear departamento
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Listado -->
+                    <div class="col-lg-8">
                 <div class="card">
                     <div class="card-header">
                         <i class="bi bi-people me-1"></i> Departamentos
@@ -271,6 +401,12 @@ $token = csrf_token();
                                                             <i class="bi bi-trash"></i> Quitar imagen
                                                         </button>
                                                     <?php endif; ?>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#deleteModal<?= (int) $dir['id'] ?>"
+                                                            title="Eliminar departamento">
+                                                        <i class="bi bi-x-circle"></i> Eliminar
+                                                    </button>
                                                 </td>
                                             </tr>
 
@@ -388,6 +524,37 @@ $token = csrf_token();
                                                 </div>
                                             </div>
                                             <?php endif; ?>
+
+                                            <!-- Modal Eliminar Departamento -->
+                                            <div class="modal fade" id="deleteModal<?= (int) $dir['id'] ?>" tabindex="-1" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <form method="POST" action="direcciones.php">
+                                                            <input type="hidden" name="action" value="delete">
+                                                            <input type="hidden" name="id" value="<?= (int) $dir['id'] ?>">
+                                                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title text-danger">
+                                                                    <i class="bi bi-exclamation-triangle me-1"></i> Eliminar departamento
+                                                                </h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p>¿Está seguro de eliminar este departamento?</p>
+                                                                <p><strong><?= htmlspecialchars($dir['departamento'], ENT_QUOTES, 'UTF-8') ?></strong><br>
+                                                                <?= htmlspecialchars($dir['nombre'], ENT_QUOTES, 'UTF-8') ?> <?= htmlspecialchars($dir['apellidos'] ?? '', ENT_QUOTES, 'UTF-8') ?></p>
+                                                                <p class="text-muted small">Esta acción no se puede deshacer. Se eliminará el registro y la imagen del servidor.</p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                <button type="submit" class="btn btn-danger">
+                                                                    <i class="bi bi-x-circle me-1"></i> Eliminar
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         <?php endforeach; ?>
                                     </tbody>
                                 </table>
@@ -395,6 +562,8 @@ $token = csrf_token();
                         <?php endif; ?>
                     </div>
                 </div>
+                    </div><!-- col-lg-8 -->
+                </div><!-- row -->
             </div>
         </div>
     </div>
