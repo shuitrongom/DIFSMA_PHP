@@ -12,16 +12,6 @@ $base_path   = '../';
 $active_page = 'acerca';
 $page_title  = 'Direcciones — DIF San Mateo Atenco';
 
-$default_images = [
-    'Procuraduría Municipal de Protección de Niñas, Niños y Adolescentes' => 'img/team-3.jpg',
-    'Dirección de Atención a Adultos Mayores'                             => 'img/team-3.jpg',
-    'Dirección de Alimentación y Nutrición Familiar'                      => 'img/team-4.jpg',
-    'Dirección de Atención a la Discapacidad'                             => 'img/team-1.jpg',
-    'Dirección de Prevención y Bienestar Familiar'                        => 'img/team-1.jpg',
-    'Dirección de Servicios Jurídicos – Asistenciales e Igualdad de Género' => 'img/team-3.jpg',
-];
-$fallback_image = 'img/team-3.jpg';
-
 $direcciones = [];
 try {
     $pdo  = get_db();
@@ -46,6 +36,30 @@ require_once __DIR__ . '/../includes/navbar.php';
                     DIRECCIONES</h4>
                 <div style="height:16px; background:rgb(200,16,44); width:23%; margin: 4px auto 24px;"></div>
             </div>
+    <style>
+        .dir-card{display:flex;border-radius:0 16px 16px 16px;overflow:hidden;box-shadow:0 3px 15px rgba(0,0,0,.12);height:220px;}
+        .dir-card-photo{width:40%;min-width:130px;background:#111;flex-shrink:0;}
+        .dir-card-photo img{width:100%;height:100%;object-fit:cover;object-position:top center;}
+        .dir-card-panel{flex:1;background:rgb(200,16,44);padding:1rem 1.2rem;border-radius:0 16px 16px 0;display:flex;flex-direction:column;justify-content:center;}
+        .dir-card-panel .cargo{font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.5rem;color:#fff;}
+        .dir-card-panel .nombre{font-family:'Montserrat',sans-serif;font-weight:300;font-size:17px;margin-bottom:0;color:#fff;line-height:1.3;}
+        /* Tablet */
+        @media(max-width:768px){
+            .dir-card{flex-direction:column;height:auto;border-radius:0 16px 16px 16px;}
+            .dir-card-photo{width:100%;min-width:unset;height:180px;}
+            .dir-card-panel{border-radius:0 0 16px 16px;padding:.8rem 1rem;}
+            .dir-card-panel .cargo{font-size:11px;}
+            .dir-card-panel .nombre{font-size:15px;}
+        }
+        /* Móvil */
+        @media(max-width:576px){
+            .dir-card-photo{height:150px;}
+            .dir-card-panel{padding:.7rem .8rem;}
+            .dir-card-panel .cargo{font-size:10px;}
+            .dir-card-panel .nombre{font-size:14px;}
+        }
+    </style>
+
 <?php if (empty($direcciones)): ?>
             <div class="text-center py-4">
                 <p class="text-muted">No hay direcciones disponibles.</p>
@@ -53,25 +67,29 @@ require_once __DIR__ . '/../includes/navbar.php';
 <?php else: ?>
             <div class="row g-4 justify-content-center">
 <?php foreach ($direcciones as $i => $dir):
-    if (!empty($dir['imagen_path'])) {
+    $has_photo = !empty($dir['imagen_path']);
+    if ($has_photo) {
         $img = htmlspecialchars($base_path . $dir['imagen_path'], ENT_QUOTES, 'UTF-8');
-    } else {
-        $dept = $dir['departamento'];
-        $img = $base_path . ($default_images[$dept] ?? $fallback_image);
     }
     $nombre_safe = htmlspecialchars($dir['nombre'], ENT_QUOTES, 'UTF-8');
     $cargo_safe  = htmlspecialchars($dir['cargo'], ENT_QUOTES, 'UTF-8');
 ?>
                 <div class="col-md-6 wow fadeIn" data-wow-delay="0.1s">
-                    <div class="row g-0" style="border-radius:12px;overflow:hidden;box-shadow:0 3px 15px rgba(0,0,0,0.12);height:100%;">
+                    <div class="dir-card">
                         <!-- Foto -->
-                        <div class="col-5" style="background:#111;min-height:160px;">
-                            <img src="<?= $img ?>" class="w-100 h-100" style="object-fit:cover;" alt="<?= $nombre_safe ?>">
+                        <div class="dir-card-photo">
+                            <?php if ($has_photo): ?>
+                                <img src="<?= $img ?>" alt="<?= $nombre_safe ?>">
+                            <?php else: ?>
+                                <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="background:#1a1a1a;">
+                                    <i class="bi bi-person-fill" style="font-size:4rem;color:#555;"></i>
+                                </div>
+                            <?php endif; ?>
                         </div>
                         <!-- Panel rojo -->
-                        <div class="col-7 d-flex flex-column justify-content-center text-center text-white" style="background:rgb(200,16,44);padding:1.2rem 1rem;">
-                            <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.6rem;color:#fff;"><?= $cargo_safe ?></p>
-                            <p style="font-family:'Montserrat',sans-serif;font-weight:400;font-size:16px;margin-bottom:0;color:#fff;"><?= $nombre_safe ?></p>
+                        <div class="dir-card-panel">
+                            <p class="cargo"><?= $cargo_safe ?></p>
+                            <p class="nombre"><?= $nombre_safe ?></p>
                         </div>
                     </div>
                 </div>

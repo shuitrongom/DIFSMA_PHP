@@ -12,16 +12,7 @@ require_once __DIR__ . '/../includes/db.php';
 
 $pdo = get_db();
 
-// ── Imágenes predeterminadas por departamento ────────────────────────────────
-$default_images = [
-    'Procuraduría Municipal de Protección de Niñas, Niños y Adolescentes'       => 'img/team-3.jpg',
-    'Dirección de Atención a Adultos Mayores'                                    => 'img/team-3.jpg',
-    'Dirección de Alimentación y Nutrición Familiar'                             => 'img/team-4.jpg',
-    'Dirección de Atención a la Discapacidad'                                    => 'img/team-1.jpg',
-    'Dirección de Prevención y Bienestar Familiar'                               => 'img/team-1.jpg',
-    'Dirección de Servicios Jurídicos – Asistenciales e Igualdad de Género'      => 'img/team-3.jpg',
-];
-$fallback_image = 'img/team-3.jpg';
+// (Las imágenes predeterminadas se eliminaron; si no hay foto se muestra silueta)
 
 // ── Procesamiento POST ─────────────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -143,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare('UPDATE direcciones SET imagen_path = NULL WHERE id = ?');
             $stmt->execute([$id]);
 
-            $_SESSION['flash_message'] = 'Imagen eliminada. Se restauró la imagen predeterminada del departamento.';
+            $_SESSION['flash_message'] = 'Imagen eliminada correctamente.';
             $_SESSION['flash_type']    = 'success';
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al actualizar la base de datos.';
@@ -235,25 +226,27 @@ $token = csrf_token();
                                         <?php foreach ($direcciones as $dir): ?>
                                             <?php
                                                 // Determine display image
-                                                if (!empty($dir['imagen_path'])) {
+                                                $hasCustomImage = !empty($dir['imagen_path']);
+                                                if ($hasCustomImage) {
                                                     $imgSrc = '../' . htmlspecialchars($dir['imagen_path'], ENT_QUOTES, 'UTF-8');
-                                                    $hasCustomImage = true;
-                                                } else {
-                                                    $dept = $dir['departamento'];
-                                                    $imgSrc = '../' . ($default_images[$dept] ?? $fallback_image);
-                                                    $hasCustomImage = false;
                                                 }
                                             ?>
                                             <tr>
                                                 <td>
-                                                    <img src="<?= $imgSrc ?>"
-                                                         alt="<?= htmlspecialchars($dir['departamento'], ENT_QUOTES, 'UTF-8') ?>"
-                                                         class="thumb-preview">
+                                                    <?php if ($hasCustomImage): ?>
+                                                        <img src="<?= $imgSrc ?>"
+                                                             alt="<?= htmlspecialchars($dir['departamento'], ENT_QUOTES, 'UTF-8') ?>"
+                                                             class="thumb-preview">
+                                                    <?php else: ?>
+                                                        <div class="thumb-preview d-flex align-items-center justify-content-center" style="background:#e9ecef;border-radius:6px;">
+                                                            <i class="bi bi-person-fill" style="font-size:2.2rem;color:#999;"></i>
+                                                        </div>
+                                                    <?php endif; ?>
                                                 </td>
                                                 <td>
                                                     <strong><?= htmlspecialchars($dir['departamento'], ENT_QUOTES, 'UTF-8') ?></strong>
                                                     <?php if (!$hasCustomImage): ?>
-                                                        <br><small class="text-muted"><i class="bi bi-info-circle"></i> Imagen predeterminada</small>
+                                                        <br><small class="text-muted"><i class="bi bi-camera"></i> Sin foto</small>
                                                     <?php endif; ?>
                                                 </td>
                                                 <td><?= htmlspecialchars($dir['nombre'], ENT_QUOTES, 'UTF-8') ?></td>
@@ -294,9 +287,16 @@ $token = csrf_token();
                                                             <div class="modal-body">
                                                                 <p class="text-muted small">Imagen actual:</p>
                                                                 <div class="text-center mb-3">
-                                                                    <img src="<?= $imgSrc ?>"
-                                                                         alt="Imagen actual"
-                                                                         class="img-fluid rounded" style="max-height: 200px;">
+                                                                    <?php if ($hasCustomImage): ?>
+                                                                        <img src="<?= $imgSrc ?>"
+                                                                             alt="Imagen actual"
+                                                                             class="img-fluid rounded" style="max-height: 200px;">
+                                                                    <?php else: ?>
+                                                                        <div class="d-inline-flex align-items-center justify-content-center rounded" style="width:120px;height:120px;background:#e9ecef;">
+                                                                            <i class="bi bi-person-fill" style="font-size:4rem;color:#999;"></i>
+                                                                        </div>
+                                                                        <p class="text-muted small mt-2 mb-0">Sin foto — sube una imagen</p>
+                                                                    <?php endif; ?>
                                                                 </div>
                                                                 <div class="mb-3">
                                                                     <label for="nombre<?= (int) $dir['id'] ?>" class="form-label">Nombre</label>

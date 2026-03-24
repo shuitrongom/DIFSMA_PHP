@@ -20,8 +20,9 @@ define('DB_PASS', getenv('DB_PASS') ?: 'Pa55worD');
 // false → errores genéricos al usuario, detalles solo en logs
 define('APP_DEBUG', (bool)(getenv('APP_DEBUG') ?: false));
 
-// ── Límites de subida de archivos ───────────────────────────define('UPLOAD_MAX_IMAGE_MB', 20);  // Máximo para imágenes (JPG, PNG, WEBP)
-define('UPLOAD_MAX_PDF_MB',  50);   // Máximo para PDFs  // Máximo para PDFs
+// ── Límites de subida de archivos ──────────────────────────────────────────
+define('UPLOAD_MAX_IMAGE_MB', 20);  // Máximo para imágenes (JPG, PNG, WEBP)
+define('UPLOAD_MAX_PDF_MB',  50);   // Máximo para PDFs
 
 // ── Rutas base ─────────────────────────────────────────────────────────────────
 define('BASE_PATH', __DIR__);
