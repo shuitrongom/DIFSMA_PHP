@@ -37,8 +37,8 @@ require_once __DIR__ . '/../includes/navbar.php';
 
     <div class="container-fluid service py-5">
         <div class="container py-5">
-            <div class="mx-auto text-center wow fadeIn" data-wow-delay="0.1s" style="max-width: 700px;">
-                <h4 class="mb-1 d-inline-block" style="font-family:'Montserrat',sans-serif; font-weight:800; letter-spacing:2px; color:rgb(107,98,90);">
+            <div class="mx-auto text-center wow fadeIn" data-wow-delay="0.1s" style="max-width: 900px;">
+                <h4 class="mb-1 d-inline-block" style="font-family:'Montserrat',sans-serif; font-weight:800; letter-spacing:2px; color:rgb(107,98,90); white-space:nowrap;">
                     Sistema de Evaluaciones de la Armonización Contable</h4>
                 <div style="height:16px; background:rgb(200,16,44); width:23%; margin: 4px auto 24px;"></div>
             </div>
@@ -132,21 +132,23 @@ require_once __DIR__ . '/../includes/navbar.php';
     <style>
     /* Grid de botones de año: 3 columnas web, 2 tablet, 1 móvil */
     .seac-buttons-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
         gap: 22px;
         margin-bottom: 20px;
         max-width: 1200px;
         margin-left: auto;
         margin-right: auto;
     }
+    .seac-btn-wrapper { width: calc(33.333% - 15px); }
     @media (max-width: 768px) {
-        .seac-buttons-grid { grid-template-columns: repeat(2, 1fr); max-width: 700px; }
+        .seac-btn-wrapper { width: calc(50% - 11px); }
         .seac-year-btn { min-height: 70px; }
         .seac-year-text { font-size: clamp(15px, 2.5vw, 22px); }
     }
     @media (max-width: 576px) {
-        .seac-buttons-grid { grid-template-columns: 1fr; max-width: 100%; padding: 0; }
+        .seac-buttons-grid { max-width: 100%; padding: 0; }
         .seac-btn-wrapper { width: 100%; margin: 0 auto; padding-left: 15%; }
         .seac-year-btn { min-height: 55px; background-position: left center; }
         .seac-year-text { font-size: clamp(16px, 5vw, 22px); width: 55%; padding-left: 0; }

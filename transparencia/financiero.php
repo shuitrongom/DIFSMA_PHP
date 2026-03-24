@@ -117,21 +117,23 @@ require_once __DIR__ . '/../includes/navbar.php';
 
     <style>
     .fin-buttons-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
         gap: 22px;
         margin-bottom: 20px;
         max-width: 1200px;
         margin-left: auto;
         margin-right: auto;
     }
+    .fin-btn-wrapper { width: calc(33.333% - 15px); }
     @media (max-width: 768px) {
-        .fin-buttons-grid { grid-template-columns: repeat(2, 1fr); max-width: 700px; }
+        .fin-btn-wrapper { width: calc(50% - 11px); }
         .fin-year-btn { min-height: 70px; }
         .fin-year-text { font-size: clamp(15px, 2.5vw, 22px); }
     }
     @media (max-width: 576px) {
-        .fin-buttons-grid { grid-template-columns: 1fr; max-width: 100%; padding: 0; }
+        .fin-buttons-grid { max-width: 100%; padding: 0; }
         .fin-btn-wrapper { width: 100%; margin: 0 auto; padding-left: 15%; }
         .fin-year-btn { min-height: 55px; background-position: left center; }
         .fin-year-text { font-size: clamp(16px, 5vw, 22px); width: 55%; padding-left: 0; }
