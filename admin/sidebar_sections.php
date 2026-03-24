@@ -15,6 +15,7 @@ $sidebar_groups = [
             ['title' => 'Slider DIF Comunica', 'file' => 'slider_comunica.php',  'icon' => 'bi-megaphone'],
             ['title' => 'Programas',           'file' => 'programas.php',        'icon' => 'bi-grid-3x3-gap'],
             ['title' => 'Imagen Institucional','file' => 'institucion.php',      'icon' => 'bi-card-image'],
+            ['title' => 'Transparencia Index', 'file' => 'transparencia.php',    'icon' => 'bi-shield-check'],
             ['title' => 'Footer',              'file' => 'footer.php',           'icon' => 'bi-layout-text-window-reverse'],
         ],
     ],
@@ -54,7 +55,6 @@ $sidebar_groups = [
             ['title' => 'CONAC',             'file' => 'conac.php',               'icon' => 'bi-bank'],
             ['title' => 'Financiero',        'file' => 'financiero.php',          'icon' => 'bi-currency-dollar'],
             ['title' => 'Avisos Privacidad', 'file' => 'avisos_privacidad.php',   'icon' => 'bi-shield-exclamation'],
-            ['title' => 'Transparencia',     'file' => 'transparencia.php',       'icon' => 'bi-shield-check'],
         ],
     ],
 ];
