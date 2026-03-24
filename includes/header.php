@@ -450,7 +450,7 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
                 </div>
             </div>
             <!-- Logo centrado -->
-            <img src="<?= $base_path ?>img/unidos con amor.png" class="img-fluid mx-auto" style="max-width:290px;" alt="Unidos con Amor">
+            <img src="<?= $base_path ?>img/unidos con amor.png" class="img-fluid mx-auto" style="max-width:420px;width:100%;" alt="Unidos con Amor">
             <!-- Buscador derecha -->
             <form class="d-flex align-items-center ms-auto" role="search" onsubmit="doSearch(event)" style="min-width:220px; max-width:320px;">
                 <div class="input-group">
