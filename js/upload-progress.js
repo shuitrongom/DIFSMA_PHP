@@ -65,8 +65,10 @@
 		xhr.addEventListener('load', function () {
 			bar.style.width = '100%';
 			bar.textContent = '100%';
-			// Redirigir a la misma página (el servidor hace redirect via header)
-			window.location.href = form.action || window.location.href;
+			// Recargar la página después de subir (el servidor ya procesó el archivo)
+			setTimeout(function () {
+				window.location.reload();
+			}, 500);
 		});
 
 		xhr.addEventListener('error', function () {
