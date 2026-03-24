@@ -31,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id           = (int) ($_POST['id'] ?? 0);
         $departamento = trim($_POST['departamento'] ?? '');
         $nombre       = trim($_POST['nombre'] ?? '');
+        $apellidos    = trim($_POST['apellidos'] ?? '');
         $cargo        = trim($_POST['cargo'] ?? '');
 
         if ($id <= 0) {
@@ -85,9 +86,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         try {
             $stmt = $pdo->prepare(
-                'UPDATE direcciones SET departamento = ?, nombre = ?, cargo = ?, imagen_path = ? WHERE id = ?'
+                'UPDATE direcciones SET departamento = ?, nombre = ?, apellidos = ?, cargo = ?, imagen_path = ? WHERE id = ?'
             );
-            $stmt->execute([$departamento, $nombre, $cargo, $imagenPath, $id]);
+            $stmt->execute([$departamento, $nombre, $apellidos, $cargo, $imagenPath, $id]);
 
             $_SESSION['flash_message'] = 'Departamento actualizado correctamente.';
             $_SESSION['flash_type']    = 'success';
@@ -218,6 +219,7 @@ $token = csrf_token();
                                             <th style="width: 90px;">Imagen</th>
                                             <th>Departamento</th>
                                             <th>Nombre</th>
+                                            <th>Apellidos</th>
                                             <th>Cargo</th>
                                             <th style="width: 60px;">Orden</th>
                                             <th style="width: 220px;">Acciones</th>
@@ -251,6 +253,7 @@ $token = csrf_token();
                                                     <?php endif; ?>
                                                 </td>
                                                 <td><?= htmlspecialchars($dir['nombre'], ENT_QUOTES, 'UTF-8') ?></td>
+                                                <td><?= htmlspecialchars($dir['apellidos'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
                                                 <td><?= htmlspecialchars($dir['cargo'], ENT_QUOTES, 'UTF-8') ?></td>
                                                 <td class="text-center"><?= (int) $dir['orden'] ?></td>
                                                 <td>
@@ -311,7 +314,14 @@ $token = csrf_token();
                                                                     <input type="text" class="form-control" id="nombre<?= (int) $dir['id'] ?>" name="nombre"
                                                                            value="<?= htmlspecialchars($dir['nombre'], ENT_QUOTES, 'UTF-8') ?>"
                                                                            required maxlength="200"
-                                                                           placeholder="Nombre completo">
+                                                                           placeholder="Nombre(s)">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="apellidos<?= (int) $dir['id'] ?>" class="form-label">Apellidos</label>
+                                                                    <input type="text" class="form-control" id="apellidos<?= (int) $dir['id'] ?>" name="apellidos"
+                                                                           value="<?= htmlspecialchars($dir['apellidos'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                                                                           maxlength="200"
+                                                                           placeholder="Apellido(s)">
                                                                 </div>
                                                                 <div class="mb-3">
                                                                     <label for="cargo<?= (int) $dir['id'] ?>" class="form-label">Cargo</label>

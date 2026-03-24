@@ -15,7 +15,7 @@ $page_title  = 'Direcciones — DIF San Mateo Atenco';
 $direcciones = [];
 try {
     $pdo  = get_db();
-    $stmt = $pdo->prepare('SELECT departamento, nombre, cargo, imagen_path FROM direcciones ORDER BY orden ASC');
+    $stmt = $pdo->prepare('SELECT departamento, nombre, apellidos, cargo, imagen_path FROM direcciones ORDER BY orden ASC');
     $stmt->execute();
     $direcciones = $stmt->fetchAll();
 } catch (PDOException $e) {
@@ -71,8 +71,9 @@ require_once __DIR__ . '/../includes/navbar.php';
     if ($has_photo) {
         $img = htmlspecialchars($base_path . $dir['imagen_path'], ENT_QUOTES, 'UTF-8');
     }
-    $nombre_safe = htmlspecialchars($dir['nombre'], ENT_QUOTES, 'UTF-8');
-    $cargo_safe  = htmlspecialchars($dir['cargo'], ENT_QUOTES, 'UTF-8');
+    $nombre_safe    = htmlspecialchars($dir['nombre'], ENT_QUOTES, 'UTF-8');
+    $apellidos_safe = htmlspecialchars($dir['apellidos'] ?? '', ENT_QUOTES, 'UTF-8');
+    $cargo_safe     = htmlspecialchars($dir['cargo'], ENT_QUOTES, 'UTF-8');
 ?>
                 <div class="col-md-6 wow fadeIn" data-wow-delay="0.1s">
                     <div class="dir-card">
@@ -90,6 +91,9 @@ require_once __DIR__ . '/../includes/navbar.php';
                         <div class="dir-card-panel">
                             <p class="cargo"><?= $cargo_safe ?></p>
                             <p class="nombre"><?= $nombre_safe ?></p>
+                            <?php if ($apellidos_safe): ?>
+                                <p class="nombre" style="margin-top:2px;"><?= $apellidos_safe ?></p>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
