@@ -36,15 +36,24 @@ if (!empty($slider_images)) {
     $images_js = ['img/carousel-1.jpg'];
 }
 
-// ── Consultar slider_comunica (DIF Comunica — Swiper 3D) ─────────────────────
+// ── Consultar slider_comunica del mes actual (DIF Comunica — Swiper 3D) ──────
 $comunica_images = [];
 try {
     $pdo  = $pdo ?? get_db();
     $stmt = $pdo->prepare(
-        'SELECT imagen_path FROM slider_comunica WHERE activo = 1 ORDER BY orden ASC'
+        'SELECT imagen_path FROM slider_comunica WHERE activo = 1 AND mes = MONTH(CURDATE()) AND anio = YEAR(CURDATE()) ORDER BY orden ASC'
     );
     $stmt->execute();
     $comunica_images = $stmt->fetchAll();
+
+    // Fallback: si no hay imágenes para el mes actual, mostrar todas las activas
+    if (empty($comunica_images)) {
+        $stmt = $pdo->prepare(
+            'SELECT imagen_path FROM slider_comunica WHERE activo = 1 ORDER BY orden ASC'
+        );
+        $stmt->execute();
+        $comunica_images = $stmt->fetchAll();
+    }
 } catch (PDOException $e) {
     if (defined('APP_DEBUG') && APP_DEBUG) {
         error_log('index.php slider_comunica PDOException: ' . $e->getMessage());
