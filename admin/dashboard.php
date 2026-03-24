@@ -18,17 +18,17 @@ require_once __DIR__ . '/auth_guard.php';
     <link rel="icon" href="../img/favicon-32x32.png" sizes="35x35">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/admin.css?v=3">
     <style>
         .dashboard-welcome {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            color: #fff;
+            background: linear-gradient(135deg, #2d2d2d 0%, #3a3a3a 40%, rgb(200,16,44) 100%);
+            color: #fff !important;
             border-radius: 14px;
             padding: 2rem;
             margin-bottom: 1.5rem;
         }
-        .dashboard-welcome h4 { font-weight: 700; margin-bottom: 0.3rem; }
-        .dashboard-welcome p { opacity: 0.8; margin-bottom: 0; font-size: 0.95rem; }
+        .dashboard-welcome h4 { font-weight: 700; margin-bottom: 0.3rem; color: #fff !important; }
+        .dashboard-welcome p { margin-bottom: 0; font-size: 0.95rem; color: rgba(255,255,255,0.85) !important; }
     </style>
 </head>
 <body>
@@ -39,7 +39,7 @@ require_once __DIR__ . '/auth_guard.php';
         <!-- Main content -->
         <div class="main-content">
             <!-- Top bar -->
-            <nav class="navbar navbar-light bg-white shadow-sm px-3">
+            <nav class="navbar navbar-dark px-3">
                 <button class="btn btn-outline-secondary me-2" id="toggleSidebar" aria-label="Abrir/cerrar menú">
                     <i class="bi bi-list"></i>
                 </button>

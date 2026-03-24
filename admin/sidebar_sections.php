@@ -102,7 +102,7 @@ function render_admin_sidebar(array $sidebar_groups, string $current_file): void
 <?php endforeach; ?>
     </ul>
     <div class="mt-auto p-3 border-top border-secondary">
-        <a href="logout.php" class="btn btn-outline-danger btn-sm w-100">
+        <a href="logout.php" class="btn btn-outline-light btn-sm w-100">
             <i class="bi bi-box-arrow-right me-1"></i> Cerrar sesión
         </a>
     </div>

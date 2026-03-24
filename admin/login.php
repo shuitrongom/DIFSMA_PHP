@@ -106,21 +106,65 @@ $csrf = csrf_token();
     <title>Administración — DIF</title>
     <link rel="icon" href="../img/favicon-32x32.png" sizes="35x35">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/admin.css?v=3">
     <style>
         body {
-            background-color: #f4f6f9;
+            margin: 0;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
+            background: #7a7777ff;
+            position: relative;
+            overflow: hidden;
+        }
+        /* Imagen institucional de fondo centrada y transparente */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: url('../img/institucion.png') center center / contain no-repeat;
+            opacity: 0.12;
+            z-index: 0;
+            pointer-events: none;
         }
         .login-card {
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
+            padding: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        .login-card .card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
         }
         .login-logo {
             max-height: 80px;
+        }
+        .login-card .card-title {
+            color: #2d2d2d;
+            font-weight: 700;
+        }
+        .login-card .form-control:focus {
+            border-color: rgb(200,16,44);
+            box-shadow: 0 0 0 3px rgba(200,16,44,0.15);
+        }
+        .login-card .btn-primary {
+            background: rgb(200,16,44) !important;
+            border-color: rgb(200,16,44) !important;
+            font-weight: 600;
+            padding: 0.6rem;
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+        .login-card .btn-primary:hover {
+            background: rgb(160,10,35) !important;
+            border-color: rgb(160,10,35) !important;
+            box-shadow: 0 4px 16px rgba(200,16,44,0.35);
         }
     </style>
 </head>
@@ -131,7 +175,7 @@ $csrf = csrf_token();
                 <div class="text-center mb-4">
                     <img src="../img/escudo.png" alt="DIF" class="login-logo mb-2">
                     <h5 class="card-title mb-0">Panel de Administración</h5>
-                    <small class="text-muted">DIF Municipal</small>
+                    <small class="text-muted">DIF SAN MATEO ATENCO</small>
                 </div>
 
                 <?php if ($error !== ''): ?>
