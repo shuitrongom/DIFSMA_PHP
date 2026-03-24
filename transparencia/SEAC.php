@@ -38,9 +38,9 @@ require_once __DIR__ . '/../includes/navbar.php';
     <div class="container-fluid service py-5">
         <div class="container py-5">
             <div class="mx-auto text-center wow fadeIn" data-wow-delay="0.1s" style="max-width: 700px;">
-                <h4 class="mb-1 d-inline-block" style="font-family:'Montserrat',sans-serif; font-weight:800; letter-spacing:2px; color:rgba(0,0,0,0.8);">
+                <h4 class="mb-1 d-inline-block" style="font-family:'Montserrat',sans-serif; font-weight:800; letter-spacing:2px; color:rgb(107,98,90);">
                     Sistema de Evaluaciones de la Armonización Contable</h4>
-                <div style="height:16px; background:rgb(200,16,44); border-radius:3px; width:23%; margin: 4px auto 24px;"></div>
+                <div style="height:16px; background:rgb(200,16,44); width:23%; margin: 4px auto 24px;"></div>
             </div>
 
 <?php if (empty($bloques)): ?>
@@ -130,46 +130,54 @@ require_once __DIR__ . '/../includes/navbar.php';
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>
 
     <style>
-    /* Grid de botones de año: 3 columnas */
+    /* Grid de botones de año: 3 columnas web, 2 tablet, 1 móvil */
     .seac-buttons-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
+        gap: 22px;
         margin-bottom: 20px;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
     }
     @media (max-width: 768px) {
-        .seac-buttons-grid { grid-template-columns: repeat(2, 1fr); }
+        .seac-buttons-grid { grid-template-columns: repeat(2, 1fr); max-width: 700px; }
+        .seac-year-btn { min-height: 70px; }
+        .seac-year-text { font-size: clamp(15px, 2.5vw, 22px); }
     }
-    @media (max-width: 480px) {
-        .seac-buttons-grid { grid-template-columns: 1fr; }
+    @media (max-width: 576px) {
+        .seac-buttons-grid { grid-template-columns: 1fr; max-width: 100%; padding: 0; }
+        .seac-btn-wrapper { width: 100%; margin: 0 auto; padding-left: 15%; }
+        .seac-year-btn { min-height: 55px; background-position: left center; }
+        .seac-year-text { font-size: clamp(16px, 5vw, 22px); width: 55%; padding-left: 0; }
+        .seac-panel .table { font-size: 11px; }
+        .seac-panel .table th p { margin: 0; font-size: 10px; }
+        .seac-panel .table .img-thumbnail { max-width: 30px; padding: 2px; }
+        .seac-panel .question-text-div { font-size: 13px; padding: 8px; }
     }
     .seac-year-btn {
         background: url(<?= $base_path ?>img/bloque_botone_dif.png) no-repeat left center;
         background-size: contain;
-        padding: 12px 0 12px 20px;
+        padding: 0;
         display: flex;
         align-items: center;
         justify-content: flex-start;
         cursor: pointer;
-        border-radius: 6px;
-        transition: transform 0.15s, box-shadow 0.15s;
-        min-height: 55px;
+        min-height: 100px;
         aspect-ratio: 4 / 1;
     }
-    .seac-year-btn:hover {
-        transform: scale(1.02);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
+    .seac-year-btn:hover,
     .seac-year-btn.active {
-        box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+        /* Sin hover ni sombra */
     }
     .seac-year-text {
         font-family: "Montserrat", sans-serif;
-        font-weight: 600;
-        font-size: 26px;
+        font-weight: 700;
+        font-size: clamp(18px, 2.2vw, 30px);
         color: #fff;
         text-align: center;
-        width: 45%;
+        width: 42%;
+        padding-left: 3%;
         text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
     }
     /* Panel expandible */

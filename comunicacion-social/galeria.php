@@ -55,9 +55,9 @@ require_once __DIR__ . '/../includes/navbar.php';
     <div class="container-fluid events py-5 bg-light">
         <div class="container py-5">
             <div class="mx-auto text-center wow fadeIn" data-wow-delay="0.1s" style="max-width: 700px;">
-                <h4 class="mb-1 d-inline-block" style="font-family:'Montserrat',sans-serif; font-weight:800; letter-spacing:2px; color:rgba(0,0,0,0.8);">
+                <h4 class="mb-1 d-inline-block" style="font-family:'Montserrat',sans-serif; font-weight:800; letter-spacing:2px; color:rgb(107,98,90);">
                     Galería de Fotos DIF</h4>
-                <div style="height:16px; background:rgb(200,16,44); border-radius:3px; width:23%; margin: 4px auto 24px;"></div>
+                <div style="height:16px; background:rgb(200,16,44); width:23%; margin: 4px auto 24px;"></div>
             </div>
 
             <?php if (!empty($albumes)): ?>

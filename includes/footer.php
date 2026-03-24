@@ -131,42 +131,41 @@ if (count($horario_parts) === 2) {
                 <!-- Columna derecha: roja con links de navegación y redes sociales -->
                 <div class="col-12 col-md-8" style="background:rgb(200,16,44); padding: 2rem 2.5rem;">
                     <div class="footer-item">
-                        <div class="row g-3">
-                            <div class="d-flex flex-column align-items-start p-4">
-                                <?php if (!empty($footer_links)): ?>
-                                    <?php foreach ($footer_links as $fl):
-                                        // __ubicacion__ = link especial a Google Maps con la dirección
-                                        if ($fl['url'] === '__ubicacion__') {
-                                            $fl_href = 'https://www.google.com/maps/search/?api=1&query=' . urlencode($footer['direccion']);
-                                            $fl_target = ' target="_blank" rel="noopener"';
-                                        } elseif (strpos($fl['url'], 'http') === 0) {
-                                            $fl_href = htmlspecialchars($fl['url']);
-                                            $fl_target = $fl['nueva_tab'] ? ' target="_blank" rel="noopener"' : '';
-                                        } else {
-                                            $fl_href = $base_path . htmlspecialchars($fl['url']);
-                                            $fl_target = $fl['nueva_tab'] ? ' target="_blank" rel="noopener"' : '';
-                                        }
-                                    ?>
-                                    <a class="mb-2 text-white ms-5" href="<?= $fl_href ?>"<?= $fl_target ?>><?= htmlspecialchars($fl['titulo']) ?></a>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <a class="mb-2 text-white ms-5" href="<?= $base_path ?>index.php">Inicio</a>
-                                <?php endif; ?>
-                            </div>
-                            <div class="footer-icon d-flex">
-                                <a href="<?= _fe($footer['url_twitter']) ?>"
-                                    class="text-start rounded-0 text-white mb-2 ms-5" target="_blank">@DIFSMA
-                                    <img src="<?= $base_path ?>img/icon_x.png" alt="X" style="width:32px;height:32px;border-radius:50%;object-fit:cover;margin-right:8px;vertical-align:middle;">
-                                </a>
-                                <a href="<?= _fe($footer['url_facebook']) ?>"
-                                    class="text-start rounded-0 text-white mb-2 ms-5" target="_blank">@DIF San Mateo Atenco
-                                    <img src="<?= $base_path ?>img/icon_facebook.png" alt="Facebook" style="width:32px;height:32px;border-radius:50%;object-fit:cover;margin-right:8px;vertical-align:middle;">
-                                </a>
-                                <a href="<?= _fe($footer['url_instagram']) ?>"
-                                    class="text-start rounded-0 text-white mb-2 ms-5" target="_blank">@difsma_
-                                    <img src="<?= $base_path ?>img/icon_instagram.png" alt="Instagram" style="width:32px;height:32px;border-radius:50%;object-fit:cover;margin-right:8px;vertical-align:middle;">
-                                </a>
-                            </div>
+                        <!-- Links de navegación -->
+                        <div class="footer-nav-links d-flex flex-column align-items-start ps-4 mb-4">
+                            <?php if (!empty($footer_links)): ?>
+                                <?php foreach ($footer_links as $fl):
+                                    if ($fl['url'] === '__ubicacion__') {
+                                        $fl_href = 'https://www.google.com/maps/search/?api=1&query=' . urlencode($footer['direccion']);
+                                        $fl_target = ' target="_blank" rel="noopener"';
+                                    } elseif (strpos($fl['url'], 'http') === 0) {
+                                        $fl_href = htmlspecialchars($fl['url']);
+                                        $fl_target = $fl['nueva_tab'] ? ' target="_blank" rel="noopener"' : '';
+                                    } else {
+                                        $fl_href = $base_path . htmlspecialchars($fl['url']);
+                                        $fl_target = $fl['nueva_tab'] ? ' target="_blank" rel="noopener"' : '';
+                                    }
+                                ?>
+                                <a class="text-white text-decoration-none mb-2" style="font-size:0.95rem;" href="<?= $fl_href ?>"<?= $fl_target ?>><?= htmlspecialchars($fl['titulo']) ?></a>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <a class="text-white text-decoration-none mb-2" href="<?= $base_path ?>index.php">Inicio</a>
+                            <?php endif; ?>
+                        </div>
+                        <!-- Redes sociales -->
+                        <div class="footer-social d-flex justify-content-start gap-4 ps-4 flex-wrap">
+                            <a href="<?= _fe($footer['url_twitter']) ?>" class="text-white text-decoration-none d-flex align-items-center gap-2" target="_blank">
+                                <img src="<?= $base_path ?>img/icon_x.png" alt="X" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
+                                <span style="color:#fff !important;">@DIFSMA</span>
+                            </a>
+                            <a href="<?= _fe($footer['url_facebook']) ?>" class="text-white text-decoration-none d-flex align-items-center gap-2" target="_blank">
+                                <img src="<?= $base_path ?>img/icon_facebook.png" alt="Facebook" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
+                                <span style="color:#fff !important;">@DIFSanMateoAtenco</span>
+                            </a>
+                            <a href="<?= _fe($footer['url_instagram']) ?>" class="text-white text-decoration-none d-flex align-items-center gap-2" target="_blank">
+                                <img src="<?= $base_path ?>img/icon_instagram.png" alt="Instagram" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
+                                <span style="color:#fff !important;">@difsma_</span>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -177,7 +176,7 @@ if (count($horario_parts) === 2) {
 
     <!-- Copyright Start -->
     <div class="copyright-bar">
-        <img src="<?= $base_path ?>img/logo_administracion.png" width="200" class="img-fluid d-block mx-auto mb-2 rounded shadow" alt="Administración">
+        <img src="<?= $base_path ?>img/logo_administracion.png" width="200" class="img-fluid d-block mx-auto mb-2" alt="Administración">
         <p class="mb-0" style="font-size:12px;">© <?= date('Y') ?> DIF San Mateo Atenco. Todos los derechos reservados.</p>
     </div>
     <!-- Copyright End -->

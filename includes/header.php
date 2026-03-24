@@ -48,7 +48,7 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
     <link href="<?= $base_path ?>css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="<?= $base_path ?>css/style.css?v=2" rel="stylesheet">
+    <link href="<?= $base_path ?>css/style.css?v=4" rel="stylesheet">
 
     <!-- Swiper CSS (bundle) -->
     <link rel="stylesheet" href="<?= $base_path ?>css/swiper-bundle.min.css" />
@@ -395,6 +395,25 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
             text-align: center;
             font-size: 13px;
         }
+
+        /* Mobile navbar dropdown fix — keep dropdowns inside collapsed menu */
+        @media (max-width: 1199.98px) {
+            #navbarCollapse .dropdown-menu {
+                position: static !important;
+                float: none;
+                width: 100%;
+                border: none;
+                box-shadow: none;
+                padding: 0;
+                margin: 0;
+            }
+            #navbarCollapse .dropdown-menu .dropdown-item {
+                padding: 8px 20px;
+                font-size: 14px;
+                white-space: normal;
+                word-wrap: break-word;
+            }
+        }
     </style>
 </head>
 
@@ -433,7 +452,7 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
             <!-- Logo centrado -->
             <img src="<?= $base_path ?>img/unidos con amor.png" class="img-fluid mx-auto" style="max-width:290px;" alt="Unidos con Amor">
             <!-- Buscador derecha -->
-            <form class="d-flex align-items-center" role="search" onsubmit="doSearch(event)" style="min-width:220px; max-width:320px;">
+            <form class="d-flex align-items-center ms-auto" role="search" onsubmit="doSearch(event)" style="min-width:220px; max-width:320px;">
                 <div class="input-group">
                     <input id="siteSearchInput" type="search" class="form-control form-control-sm" placeholder="Buscar en la página..." aria-label="Buscar">
                     <button class="btn btn-sm btn-dark" type="submit" aria-label="Buscar">

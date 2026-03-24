@@ -214,9 +214,9 @@ require_once 'includes/navbar.php';
     <div class="container-fluid service py-4">
         <div class="container">
             <div class="mx-auto text-center wow fadeIn" data-wow-delay="0.1s" style="max-width: 700px;">
-                <h4 class="mb-1 d-inline-block" style="font-family:'Montserrat',sans-serif; font-weight:800; letter-spacing:2px; color:rgba(0,0,0,0.8);">
+                <h4 class="mb-1 d-inline-block" style="font-family:'Montserrat',sans-serif; font-weight:800; letter-spacing:2px; color:rgb(107,98,90);">
                     DIF COMUNICA</h4>
-                <div style="height:16px; background:rgb(200, 16, 44); border-radius:3px; width:23%; margin: 4px auto 24px;"></div>
+                <div style="height:16px; background:rgb(200, 16, 44); width:23%; margin: 4px auto 24px;"></div>
             </div>
             <div class="wrap">
                 <div class="swiper">
@@ -243,9 +243,9 @@ require_once 'includes/navbar.php';
     <div class="container-fluid program py-4">
         <div class="container py-4">
             <div class="mx-auto text-center wow fadeIn" data-wow-delay="0.1s" style="max-width: 700px;">
-                <h4 class="mb-1 d-inline-block" style="font-family:'Montserrat',sans-serif; font-weight:800; letter-spacing:2px; color:rgba(0,0,0,0.8);">
+                <h4 class="mb-1 d-inline-block" style="font-family:'Montserrat',sans-serif; font-weight:800; letter-spacing:2px; color:rgb(107,98,90);">
                     TODOS NUESTROS PROGRAMAS</h4>
-                <div style="height:16px; background:rgb(200,16,44); border-radius:3px; width:23%; margin: 4px auto 24px;"></div>
+                <div style="height:16px; background:rgb(200,16,44); width:23%; margin: 4px auto 24px;"></div>
             </div>
 
             <?php if (!empty($programas)): ?>
@@ -258,11 +258,11 @@ require_once 'includes/navbar.php';
                                 <img src="<?= htmlspecialchars($programa['imagen_path'] ?? 'img/placeholder.jpg') ?>" class="img-fluid w-100" alt="<?= htmlspecialchars($programa['nombre']) ?>">
                             </div>
                         </div>
-                        <div class="events-text p-1 border border-black bg-gray border-top-0 rounded-bottom">
+                        <div class="events-text p-0 border-0 rounded-bottom" style="background:transparent;">
                             <div class="dropdown">
                                 <button class="btn p-0 w-100 dropdown-toggle btn-ver-programas" type="button"
                                     id="dropdownPrograma<?= $programa['id'] ?>" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="img/btn_ver_programas.png" alt="Ver Programas" class="img-fluid w-100" style="display:block; border-radius:0 0 4px 4px;">
+                                    <img src="img/btn_ver_programas.png" alt="Ver Programas" class="img-fluid w-100" style="display:block;">
                                 </button>
                                 <ul class="dropdown-menu p-3" aria-labelledby="dropdownPrograma<?= $programa['id'] ?>" style="width: 300px;">
                                     <?php if (!empty($programa['secciones'])): ?>
@@ -329,9 +329,9 @@ require_once 'includes/navbar.php';
     <div class="container-fluid service py-4">
         <div class="container py-4">
             <div class="mx-auto text-center wow fadeIn" style="max-width: 900px;">
-                <h4 class="mb-1 d-inline-block" style="font-family:'Montserrat',sans-serif; font-weight:700; letter-spacing:2px; color:rgba(0,0,0,0.8);">
+                <h4 class="mb-1 d-inline-block" style="font-family:'Montserrat',sans-serif; font-weight:700; letter-spacing:2px; color:rgb(107,98,90);">
                     ÚLTIMAS NOTICIAS INSTITUCIONALES</h4>
-                <div style="height:16px; background:rgb(200,16,44); border-radius:3px; width:23%; margin: 4px auto 24px;"></div>
+                <div style="height:16px; background:rgb(200,16,44); width:23%; margin: 4px auto 24px;"></div>
             </div>
 
             <?php if (!empty($noticias_images)): ?>
@@ -369,7 +369,7 @@ require_once 'includes/navbar.php';
     <div class="container-fluid program py-4">
         <div class="container py-4">
             <div class="mx-auto text-center wow fadeIn" data-wow-delay="0.1s" style="max-width: 700px;">
-                <h4 class="text-black mb-1 d-inline-block" style="font-family:'Montserrat',sans-serif; font-weight:700; letter-spacing:2px;">
+                <h4 class="mb-1 d-inline-block" style="font-family:'Montserrat',sans-serif; font-weight:700; letter-spacing:2px; color:rgb(107,98,90);">
                     TRANSPARENCIA</h4>
                 <div style="height:16px; background:rgb(200,16,44); width:23%; margin: 4px auto 24px;"></div>
             </div>
