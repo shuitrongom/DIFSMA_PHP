@@ -249,9 +249,9 @@ require_once 'includes/navbar.php';
             </div>
 
             <?php if (!empty($programas)): ?>
-            <div class="row g-3 g-md-4 justify-content-center">
+            <div class="row g-3 g-md-4 justify-content-center" style="max-width:960px;margin:0 auto;">
                 <?php foreach ($programas as $pIdx => $programa): ?>
-                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 wow fadeIn" data-wow-delay="<?= number_format(0.1 + ($pIdx % 3) * 0.2, 1) ?>s">
+                <div class="col-10 col-sm-6 col-lg-4 wow fadeIn" data-wow-delay="<?= number_format(0.1 + ($pIdx % 3) * 0.2, 1) ?>s">
                     <div class="events-item">
                         <div class="events-inner position-relative">
                             <div class="events-img overflow-hidden position-relative">
@@ -381,7 +381,12 @@ require_once 'includes/navbar.php';
                     <div class="program-item rounded">
                         <div class="program-img position-relative">
                             <div class="overflow-hidden img-border">
-                                <a href="<?= htmlspecialchars($tItem['url']) ?>" target="_blank" rel="noopener noreferrer">
+                                <?php
+                                $is_external = (strpos($tItem['url'], 'http') === 0);
+                                $href = $is_external ? htmlspecialchars($tItem['url']) : htmlspecialchars($tItem['url']);
+                                $target = $is_external ? ' target="_blank" rel="noopener noreferrer"' : '';
+                                ?>
+                                <a href="<?= $href ?>"<?= $target ?>>
                                     <img src="<?= htmlspecialchars($tItem['imagen_path'] ?? 'img/placeholder.jpg') ?>" class="img-fluid-traspa w-100" alt="<?= htmlspecialchars($tItem['titulo']) ?>">
                                 </a>
                             </div>

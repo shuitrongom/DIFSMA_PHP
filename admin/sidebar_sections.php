@@ -130,6 +130,17 @@ function render_admin_sidebar(array $sidebar_groups, string $current_file): void
         var items=document.getElementById(t.getAttribute('data-group'));
         if(items)items.style.maxHeight='none';
     });
+
+    // ── Auto-logout por inactividad (5 min) ──
+    var TIMEOUT=5*60*1000, timer;
+    function resetTimer(){
+        clearTimeout(timer);
+        timer=setTimeout(function(){ window.location.href='login.php?expired=1'; }, TIMEOUT);
+    }
+    ['mousemove','keydown','click','scroll','touchstart'].forEach(function(e){
+        document.addEventListener(e, resetTimer, {passive:true});
+    });
+    resetTimer();
 })();
 </script>
 <?php

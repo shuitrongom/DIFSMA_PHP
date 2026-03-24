@@ -20,3 +20,18 @@ if (($_SESSION['admin_logged'] ?? false) !== true) {
     header('Location: login.php');
     exit;
 }
+
+// ── Timeout por inactividad (5 minutos) ─────────────────────────────────────
+$SESSION_TIMEOUT = 300; // segundos
+
+if (isset($_SESSION['last_activity'])) {
+    if (time() - $_SESSION['last_activity'] > $SESSION_TIMEOUT) {
+        // Sesión expirada por inactividad
+        session_unset();
+        session_destroy();
+        header('Location: login.php?expired=1');
+        exit;
+    }
+}
+// Actualizar timestamp de última actividad
+$_SESSION['last_activity'] = time();

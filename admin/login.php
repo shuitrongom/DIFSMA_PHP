@@ -141,6 +141,13 @@ $csrf = csrf_token();
                     </div>
                 <?php endif; ?>
 
+                <?php if (isset($_GET['expired'])): ?>
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <i class="bi bi-clock-history me-1"></i> Tu sesión expiró por inactividad. Inicia sesión de nuevo.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                    </div>
+                <?php endif; ?>
+
                 <form method="POST" action="login.php" novalidate>
                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf) ?>">
 

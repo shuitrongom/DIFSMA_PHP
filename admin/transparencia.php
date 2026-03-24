@@ -12,6 +12,18 @@ require_once __DIR__ . '/../includes/db.php';
 
 $pdo = get_db();
 
+// ── Páginas internas de transparencia disponibles ──────────────────────────────
+$paginas_transparencia = [
+    'transparencia/SEAC.php'                 => 'SEAC',
+    'transparencia/cuenta_publica.php'       => 'Cuenta Pública',
+    'transparencia/presupuesto_anual.php'    => 'Presupuesto Anual',
+    'transparencia/pae.php'                  => 'PAE',
+    'transparencia/matrices_indicadores.php' => 'Matrices de Indicadores',
+    'transparencia/conac.php'                => 'CONAC',
+    'transparencia/financiero.php'           => 'Financiero',
+    'transparencia/avisos_privacidad.php'    => 'Avisos de Privacidad',
+];
+
 // ── Procesamiento POST ─────────────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
@@ -26,9 +38,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // ── CREATE: nueva entrada de transparencia ─────────────────────────────────
     if ($action === 'create') {
-        $titulo = trim($_POST['titulo'] ?? '');
-        $url    = trim($_POST['url'] ?? '');
-        $orden  = (int) ($_POST['orden'] ?? 0);
+        $titulo    = trim($_POST['titulo'] ?? '');
+        $pagina    = trim($_POST['pagina'] ?? '');
+        $url_ext   = trim($_POST['url_externa'] ?? '');
+        $orden     = (int) ($_POST['orden'] ?? 0);
+
+        // Determinar URL final
+        if ($pagina !== '' && $pagina !== '__externa__') {
+            $url = $pagina; // ruta relativa interna
+        } elseif ($url_ext !== '') {
+            $url = $url_ext;
+        } else {
+            $url = '';
+        }
 
         if (empty($titulo)) {
             $_SESSION['flash_message'] = 'El título es obligatorio.';
@@ -37,8 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        if (empty($url) || !filter_var($url, FILTER_VALIDATE_URL)) {
-            $_SESSION['flash_message'] = 'Debe proporcionar una URL válida (ej: https://ejemplo.com).';
+        if (empty($url)) {
+            $_SESSION['flash_message'] = 'Debe seleccionar una página de destino o ingresar una URL externa.';
             $_SESSION['flash_type']    = 'warning';
             header('Location: transparencia.php');
             exit;
@@ -84,10 +106,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // ── EDIT: modificar entrada de transparencia ───────────────────────────────
     if ($action === 'edit') {
-        $id     = (int) ($_POST['id'] ?? 0);
-        $titulo = trim($_POST['titulo'] ?? '');
-        $url    = trim($_POST['url'] ?? '');
-        $orden  = (int) ($_POST['orden'] ?? 0);
+        $id        = (int) ($_POST['id'] ?? 0);
+        $titulo    = trim($_POST['titulo'] ?? '');
+        $pagina    = trim($_POST['pagina'] ?? '');
+        $url_ext   = trim($_POST['url_externa'] ?? '');
+        $orden     = (int) ($_POST['orden'] ?? 0);
+
+        // Determinar URL final
+        if ($pagina !== '' && $pagina !== '__externa__') {
+            $url = $pagina;
+        } elseif ($url_ext !== '') {
+            $url = $url_ext;
+        } else {
+            $url = '';
+        }
 
         if ($id <= 0) {
             $_SESSION['flash_message'] = 'ID de entrada inválido.';
@@ -103,8 +135,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        if (empty($url) || !filter_var($url, FILTER_VALIDATE_URL)) {
-            $_SESSION['flash_message'] = 'Debe proporcionar una URL válida (ej: https://ejemplo.com).';
+        if (empty($url)) {
+            $_SESSION['flash_message'] = 'Debe seleccionar una página de destino o ingresar una URL externa.';
             $_SESSION['flash_type']    = 'warning';
             header('Location: transparencia.php');
             exit;
@@ -276,8 +308,18 @@ $token = csrf_token();
                                                placeholder="Ej: Cuenta Pública">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="url" class="form-label">URL de destino</label>
-                                        <input type="url" class="form-control" id="url" name="url" required
+                                        <label for="pagina" class="form-label">Página de destino</label>
+                                        <select class="form-select" id="pagina" name="pagina" required onchange="toggleUrlExterna(this, 'urlExternaCreate')">
+                                            <option value="" disabled selected>— Seleccionar página —</option>
+                                            <?php foreach ($paginas_transparencia as $ruta => $nombre): ?>
+                                            <option value="<?= htmlspecialchars($ruta) ?>"><?= htmlspecialchars($nombre) ?></option>
+                                            <?php endforeach; ?>
+                                            <option value="__externa__">🔗 URL externa...</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 d-none" id="urlExternaCreate">
+                                        <label for="url_externa" class="form-label">URL externa</label>
+                                        <input type="url" class="form-control" name="url_externa"
                                                placeholder="https://ejemplo.com/transparencia">
                                     </div>
                                     <div class="mb-3">
@@ -318,7 +360,7 @@ $token = csrf_token();
                                                 <tr>
                                                     <th style="width: 60px;">Orden</th>
                                                     <th>Título</th>
-                                                    <th>URL</th>
+                                                    <th>Destino</th>
                                                     <th style="width: 80px;">Imagen</th>
                                                     <th style="width: 60px;">Activo</th>
                                                     <th style="width: 180px;">Acciones</th>
@@ -329,11 +371,17 @@ $token = csrf_token();
                                                     <tr>
                                                         <td class="text-center"><?= (int) $item['orden'] ?></td>
                                                         <td><?= htmlspecialchars($item['titulo']) ?></td>
-                                                        <td class="text-truncate" style="max-width: 200px;">
-                                                            <a href="<?= htmlspecialchars($item['url']) ?>" target="_blank" rel="noopener" class="text-decoration-none">
-                                                                <small><?= htmlspecialchars($item['url']) ?></small>
-                                                                <i class="bi bi-box-arrow-up-right ms-1"></i>
-                                                            </a>
+                                                        <td>
+                                                            <?php
+                                                            $destino_label = $paginas_transparencia[$item['url']] ?? null;
+                                                            if ($destino_label): ?>
+                                                                <span class="badge bg-primary"><?= htmlspecialchars($destino_label) ?></span>
+                                                            <?php else: ?>
+                                                                <a href="<?= htmlspecialchars($item['url']) ?>" target="_blank" rel="noopener" class="text-decoration-none">
+                                                                    <small><?= htmlspecialchars($item['url']) ?></small>
+                                                                    <i class="bi bi-box-arrow-up-right ms-1"></i>
+                                                                </a>
+                                                            <?php endif; ?>
                                                         </td>
                                                         <td class="text-center">
                                                             <?php if (!empty($item['imagen_path'])): ?>
@@ -401,10 +449,25 @@ $token = csrf_token();
                                         <input type="text" class="form-control" id="editTitulo<?= (int) $item['id'] ?>" name="titulo"
                                                value="<?= htmlspecialchars($item['titulo']) ?>" required>
                                     </div>
+                                    <?php
+                                    $es_interna = array_key_exists($item['url'], $paginas_transparencia);
+                                    ?>
                                     <div class="mb-3">
-                                        <label for="editUrl<?= (int) $item['id'] ?>" class="form-label">URL de destino</label>
-                                        <input type="url" class="form-control" id="editUrl<?= (int) $item['id'] ?>" name="url"
-                                               value="<?= htmlspecialchars($item['url']) ?>" required>
+                                        <label for="editPagina<?= (int) $item['id'] ?>" class="form-label">Página de destino</label>
+                                        <select class="form-select" id="editPagina<?= (int) $item['id'] ?>" name="pagina" required
+                                                onchange="toggleUrlExterna(this, 'urlExternaEdit<?= (int) $item['id'] ?>')">
+                                            <option value="" disabled>— Seleccionar página —</option>
+                                            <?php foreach ($paginas_transparencia as $ruta => $nombre): ?>
+                                            <option value="<?= htmlspecialchars($ruta) ?>"<?= ($es_interna && $item['url'] === $ruta) ? ' selected' : '' ?>><?= htmlspecialchars($nombre) ?></option>
+                                            <?php endforeach; ?>
+                                            <option value="__externa__"<?= !$es_interna ? ' selected' : '' ?>>🔗 URL externa...</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3<?= $es_interna ? ' d-none' : '' ?>" id="urlExternaEdit<?= (int) $item['id'] ?>">
+                                        <label for="editUrlExt<?= (int) $item['id'] ?>" class="form-label">URL externa</label>
+                                        <input type="url" class="form-control" id="editUrlExt<?= (int) $item['id'] ?>" name="url_externa"
+                                               value="<?= !$es_interna ? htmlspecialchars($item['url']) : '' ?>"
+                                               placeholder="https://ejemplo.com">
                                     </div>
                                     <?php if (!empty($item['imagen_path'])): ?>
                                         <div class="mb-3 text-center">
@@ -478,6 +541,17 @@ $token = csrf_token();
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Toggle URL externa
+        function toggleUrlExterna(sel, targetId) {
+            var wrap = document.getElementById(targetId);
+            if (!wrap) return;
+            if (sel.value === '__externa__') {
+                wrap.classList.remove('d-none');
+            } else {
+                wrap.classList.add('d-none');
+            }
+        }
+
         const sidebar = document.getElementById('sidebar');
         if (window.innerWidth <= 768) sidebar.classList.add('collapsed');
         document.getElementById('toggleSidebar').addEventListener('click', function () {
