@@ -8,6 +8,11 @@
  *   $stmt->execute([$username]);
  */
 
+// Output buffering (reemplaza php_value en .htaccess para compatibilidad con hosting)
+if (!ob_get_level()) {
+    ob_start();
+}
+
 // Cargar configuración: busca config.php en el directorio padre (webroot)
 // En producción, ajustar esta ruta para apuntar fuera del webroot.
 $_config_path = __DIR__ . '/../config.php';

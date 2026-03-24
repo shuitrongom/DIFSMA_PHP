@@ -102,6 +102,11 @@ function handle_upload(array $file, string $type = 'image'): array
         return $result;
     }
 
+    // ── 9. Comprimir imagen (calidad alta, max 1920px ancho) ──────────────────
+    if ($type === 'image') {
+        _compress_image($destPath, $realMime);
+    }
+
     $result['success'] = true;
     $result['path']    = $relDir . $newName;
     return $result;
@@ -135,4 +140,80 @@ function _log_upload_error(string $message): void
 
     // Silenciar: si el log falla no queremos romper el flujo principal
     @file_put_contents($logFile, $line, FILE_APPEND | LOCK_EX);
+}
+
+/**
+ * Comprime y redimensiona una imagen manteniendo buena calidad.
+ * - Max ancho: 1920px (redimensiona proporcionalmente si es mayor)
+ * - JPEG: calidad 85%
+ * - PNG: compresión nivel 6
+ * - WEBP: calidad 85%
+ */
+function _compress_image(string $path, string $mime): void
+{
+    $maxWidth = 1920;
+    $jpegQuality = 85;
+    $webpQuality = 85;
+    $pngCompression = 6;
+
+    try {
+        switch ($mime) {
+            case 'image/jpeg':
+                $img = @imagecreatefromjpeg($path);
+                break;
+            case 'image/png':
+                $img = @imagecreatefrompng($path);
+                break;
+            case 'image/webp':
+                $img = @imagecreatefromwebp($path);
+                break;
+            default:
+                return;
+        }
+
+        if (!$img) return;
+
+        $origW = imagesx($img);
+        $origH = imagesy($img);
+
+        // Redimensionar solo si es más ancha que el máximo
+        if ($origW > $maxWidth) {
+            $newW = $maxWidth;
+            $newH = (int) round($origH * ($maxWidth / $origW));
+
+            $resized = imagecreatetruecolor($newW, $newH);
+
+            // Preservar transparencia para PNG y WEBP
+            if ($mime === 'image/png' || $mime === 'image/webp') {
+                imagealphablending($resized, false);
+                imagesavealpha($resized, true);
+                $transparent = imagecolorallocatealpha($resized, 0, 0, 0, 127);
+                imagefill($resized, 0, 0, $transparent);
+            }
+
+            imagecopyresampled($resized, $img, 0, 0, 0, 0, $newW, $newH, $origW, $origH);
+            imagedestroy($img);
+            $img = $resized;
+        }
+
+        // Guardar con compresión
+        switch ($mime) {
+            case 'image/jpeg':
+                imagejpeg($img, $path, $jpegQuality);
+                break;
+            case 'image/png':
+                imagealphablending($img, false);
+                imagesavealpha($img, true);
+                imagepng($img, $path, $pngCompression);
+                break;
+            case 'image/webp':
+                imagewebp($img, $path, $webpQuality);
+                break;
+        }
+
+        imagedestroy($img);
+    } catch (\Throwable $e) {
+        // Si falla la compresión, la imagen original queda intacta
+        _log_upload_error('Compresión falló: ' . $e->getMessage());
+    }
 }
