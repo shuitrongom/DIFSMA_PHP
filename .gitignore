@@ -1,0 +1,18 @@
+# Configuración local (credenciales de BD por entorno)
+config.php
+
+# Dependencias
+vendor/
+
+# Uploads del usuario
+uploads/
+
+# Logs
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
