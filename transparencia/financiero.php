@@ -42,11 +42,9 @@ require_once __DIR__ . '/../includes/navbar.php';
             <!-- Bloques como botones en grid de 3 columnas -->
             <div class="fin-buttons-grid">
     <?php foreach ($bloques as $bloque): ?>
-                <div class="fin-btn-wrapper">
                     <div class="fin-year-btn" data-target="finPanel<?= (int)$bloque['id'] ?>">
                         <span class="fin-year-text"><?= htmlspecialchars($bloque['anio'], ENT_QUOTES, 'UTF-8') ?></span>
                     </div>
-                </div>
     <?php endforeach; ?>
             </div>
 
@@ -76,7 +74,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                                 <td style="text-align:center;">
                 <?php if (!empty($concepto['pdf_path'])): ?>
                                     <img src="<?= $base_path ?>img/pdf-download2.jpg" alt="Ver PDF"
-                                        class="img-thumbnail pdf-trigger" style="cursor:pointer;"
+                                        class="img-thumbnail pdf-trigger" style="cursor:pointer;max-height:55px;"
                                         data-bs-toggle="modal"
                                         data-bs-target="#pdfModal"
                                         data-pdf="<?= htmlspecialchars("{$base_path}{$concepto['pdf_path']}", ENT_QUOTES, 'UTF-8') ?>">
@@ -117,24 +115,23 @@ require_once __DIR__ . '/../includes/navbar.php';
 
     <style>
     .fin-buttons-grid {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        justify-items: center;
         gap: 22px;
         margin-bottom: 20px;
-        max-width: 1200px;
+        max-width: 900px;
         margin-left: auto;
         margin-right: auto;
     }
-    .fin-btn-wrapper { width: calc(33.333% - 15px); }
+    .fin-year-btn:only-child { grid-column: 1 / span 2; justify-self: center; width: 45%; }
     @media (max-width: 768px) {
         .fin-btn-wrapper { width: calc(50% - 11px); }
         .fin-year-btn { min-height: 70px; }
         .fin-year-text { font-size: clamp(15px, 2.5vw, 22px); }
     }
     @media (max-width: 576px) {
-        .fin-buttons-grid { max-width: 100%; padding: 0; }
-        .fin-btn-wrapper { width: 100%; margin: 0 auto; padding-left: 15%; }
+        .fin-buttons-grid { grid-template-columns: 1fr; max-width: 100%; padding: 0; }
         .fin-year-btn { min-height: 55px; background-position: left center; }
         .fin-year-text { font-size: clamp(16px, 5vw, 22px); width: 55%; padding-left: 0; }
         .fin-panel .table { font-size: 11px; }
@@ -143,14 +140,16 @@ require_once __DIR__ . '/../includes/navbar.php';
         .fin-panel .question-text-div { font-size: 13px; padding: 8px; }
     }
     .fin-year-btn {
-        background: url(<?= $base_path ?>img/bloque_botone_dif.png) no-repeat left center;
+        background: url(<?= $base_path ?>img/bloque_botone_dif.png) no-repeat center center;
         background-size: contain;
         padding: 0;
         display: flex;
         align-items: center;
         justify-content: flex-start;
         cursor: pointer;
-        min-height: 100px;
+        min-height: 80px;
+        width: 100%;
+        max-width: 650px;
         aspect-ratio: 4 / 1;
     }
     .fin-year-btn:hover,
@@ -163,8 +162,8 @@ require_once __DIR__ . '/../includes/navbar.php';
         font-size: clamp(18px, 2.2vw, 30px);
         color: #fff;
         text-align: center;
-        width: 42%;
-        padding-left: 3%;
+        width: 75%;
+        padding-left: 8%;
         text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
     }
     .fin-panel { margin-bottom: 20px; }

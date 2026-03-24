@@ -61,7 +61,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                                             <td style="text-align:center;">
                                                 <?php if (!empty($r['pdf_path'])): ?>
                                                 <img src="<?= $base_path ?>img/pdf-download2.jpg" alt="PDF <?= htmlspecialchars($r['anio']) ?>"
-                                                    class="img-thumbnail pdf-trigger" style="cursor:pointer;max-height:30px;"
+                                                    class="img-thumbnail pdf-trigger" style="cursor:pointer;max-height:55px;"
                                                     data-bs-toggle="modal" data-bs-target="#pdfModal"
                                                     data-pdf="<?= htmlspecialchars("{$base_path}{$r['pdf_path']}", ENT_QUOTES, 'UTF-8') ?>">
                                                 <?php else: ?>

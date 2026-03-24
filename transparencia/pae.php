@@ -48,7 +48,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                         <div class="overflow-x:scroll">
 
                             <div class="question-text-div" style="background:#ccc;">
-                                <p class="mt-0 mb-1 text-dark text-center fw-bold py-2">&nbsp;&nbsp;PAE</p>
+                                <p class="mt-0 mb-1 text-center fw-bold py-2" style="color:rgb(107,98,90);">&nbsp;&nbsp;PAE</p>
                             </div>
                             <br>
 
@@ -68,12 +68,12 @@ require_once __DIR__ . '/../includes/navbar.php';
                                     <tbody>
                                     <?php foreach ($titulos as $i => $titulo): ?>
                                         <tr>
-                                            <td style="text-align:left;padding-left:0.5rem;"><?= htmlspecialchars(($i+1) . '.- ' . $titulo['nombre'], ENT_QUOTES, 'UTF-8') ?></td>
+                                            <td style="text-align:left;padding-left:0.5rem;color:rgb(107,98,90);"><?= htmlspecialchars(($i+1) . '.- ' . $titulo['nombre'], ENT_QUOTES, 'UTF-8') ?></td>
                                             <?php foreach ($year_keys as $yr): ?>
                                             <td style="text-align:center;">
                                                 <?php $tId = (int)$titulo['id']; if (isset($pdfs[$tId][$yr]) && !empty($pdfs[$tId][$yr]['pdf_path'])): ?>
                                                 <img src="<?= $base_path ?>img/pdf-download2.jpg" alt="PDF <?= $yr ?>"
-                                                    class="img-thumbnail pdf-trigger" style="cursor:pointer;max-height:30px;"
+                                                    class="img-thumbnail pdf-trigger" style="cursor:pointer;max-height:55px;"
                                                     data-bs-toggle="modal" data-bs-target="#pdfModal"
                                                     data-pdf="<?= htmlspecialchars("{$base_path}{$pdfs[$tId][$yr]['pdf_path']}", ENT_QUOTES, 'UTF-8') ?>">
                                                 <?php else: ?>
