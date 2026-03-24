@@ -369,3 +369,31 @@ body {
         margin-bottom: 0.25rem;
     }
 }
+
+/* ── Barra de progreso de subida ─────────────────────────────────────────────── */
+.upload-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+.upload-overlay.active { display: flex; }
+.upload-box {
+    background: #fff;
+    border-radius: 14px;
+    padding: 2rem 2.5rem;
+    text-align: center;
+    min-width: 320px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+.upload-box .progress { height: 22px; border-radius: 11px; margin-top: 1rem; }
+.upload-box .progress-bar {
+    background: rgb(200,16,44);
+    border-radius: 11px;
+    font-weight: 600;
+    font-size: 13px;
+    transition: width 0.2s;
+}
