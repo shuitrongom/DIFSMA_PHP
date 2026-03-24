@@ -28,9 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // ── EDIT: actualizar nombre, cargo e imagen de un departamento ─────────────
     if ($action === 'edit') {
-        $id     = (int) ($_POST['id'] ?? 0);
-        $nombre = trim($_POST['nombre'] ?? '');
-        $cargo  = trim($_POST['cargo'] ?? '');
+        $id           = (int) ($_POST['id'] ?? 0);
+        $departamento = trim($_POST['departamento'] ?? '');
+        $nombre       = trim($_POST['nombre'] ?? '');
+        $cargo        = trim($_POST['cargo'] ?? '');
 
         if ($id <= 0) {
             $_SESSION['flash_message'] = 'ID de departamento inválido.';
@@ -39,8 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        if (empty($nombre) || empty($cargo)) {
-            $_SESSION['flash_message'] = 'El nombre y el cargo son obligatorios.';
+        if (empty($departamento) || empty($nombre) || empty($cargo)) {
+            $_SESSION['flash_message'] = 'El departamento, nombre y cargo son obligatorios.';
             $_SESSION['flash_type']    = 'warning';
             header('Location: direcciones.php');
             exit;
@@ -84,9 +85,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         try {
             $stmt = $pdo->prepare(
-                'UPDATE direcciones SET nombre = ?, cargo = ?, imagen_path = ? WHERE id = ?'
+                'UPDATE direcciones SET departamento = ?, nombre = ?, cargo = ?, imagen_path = ? WHERE id = ?'
             );
-            $stmt->execute([$nombre, $cargo, $imagenPath, $id]);
+            $stmt->execute([$departamento, $nombre, $cargo, $imagenPath, $id]);
 
             $_SESSION['flash_message'] = 'Departamento actualizado correctamente.';
             $_SESSION['flash_type']    = 'success';
@@ -297,6 +298,13 @@ $token = csrf_token();
                                                                         </div>
                                                                         <p class="text-muted small mt-2 mb-0">Sin foto — sube una imagen</p>
                                                                     <?php endif; ?>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="departamento<?= (int) $dir['id'] ?>" class="form-label">Departamento</label>
+                                                                    <input type="text" class="form-control" id="departamento<?= (int) $dir['id'] ?>" name="departamento"
+                                                                           value="<?= htmlspecialchars($dir['departamento'], ENT_QUOTES, 'UTF-8') ?>"
+                                                                           required maxlength="300"
+                                                                           placeholder="Nombre del departamento">
                                                                 </div>
                                                                 <div class="mb-3">
                                                                     <label for="nombre<?= (int) $dir['id'] ?>" class="form-label">Nombre</label>

@@ -96,6 +96,7 @@ body {
 }
 
 .bg-primary { background-color: var(--admin-primary) !important; }
+.bg-warning { background-color: rgb(200,16,44) !important; color: #fff !important; }
 
 /* ── Sidebar ─────────────────────────────────────────────────────────────────── */
 .sidebar {
