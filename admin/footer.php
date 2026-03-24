@@ -37,6 +37,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    $post_action = $_POST['action'] ?? 'config';
+
+    // ── CRUD de Footer Links ───────────────────────────────────────────────────
+    if ($post_action === 'link_create') {
+        $titulo   = trim($_POST['link_titulo'] ?? '');
+        $url      = trim($_POST['link_url'] ?? '#');
+        $nueva_tab = isset($_POST['link_nueva_tab']) ? 1 : 0;
+        $orden    = (int) ($_POST['link_orden'] ?? 0);
+
+        if (empty($titulo)) {
+            $_SESSION['flash_message'] = 'El título del enlace es obligatorio.';
+            $_SESSION['flash_type']    = 'warning';
+        } else {
+            try {
+                if ($orden <= 0) {
+                    $stmt = $pdo->query('SELECT COALESCE(MAX(orden), 0) + 1 FROM footer_links');
+                    $orden = (int) $stmt->fetchColumn();
+                }
+                $stmt = $pdo->prepare('INSERT INTO footer_links (titulo, url, nueva_tab, orden) VALUES (?, ?, ?, ?)');
+                $stmt->execute([$titulo, $url, $nueva_tab, $orden]);
+                $_SESSION['flash_message'] = 'Enlace creado correctamente.';
+                $_SESSION['flash_type']    = 'success';
+            } catch (PDOException $e) {
+                $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al guardar.';
+                $_SESSION['flash_type']    = 'danger';
+            }
+        }
+        header('Location: footer.php');
+        exit;
+    }
+
+    if ($post_action === 'link_edit') {
+        $id       = (int) ($_POST['link_id'] ?? 0);
+        $titulo   = trim($_POST['link_titulo'] ?? '');
+        $url      = trim($_POST['link_url'] ?? '#');
+        $nueva_tab = isset($_POST['link_nueva_tab']) ? 1 : 0;
+        $orden    = (int) ($_POST['link_orden'] ?? 0);
+
+        if ($id > 0 && !empty($titulo)) {
+            try {
+                $stmt = $pdo->prepare('UPDATE footer_links SET titulo = ?, url = ?, nueva_tab = ?, orden = ? WHERE id = ?');
+                $stmt->execute([$titulo, $url, $nueva_tab, $orden, $id]);
+                $_SESSION['flash_message'] = 'Enlace actualizado.';
+                $_SESSION['flash_type']    = 'success';
+            } catch (PDOException $e) {
+                $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al actualizar.';
+                $_SESSION['flash_type']    = 'danger';
+            }
+        }
+        header('Location: footer.php');
+        exit;
+    }
+
+    if ($post_action === 'link_delete') {
+        $id = (int) ($_POST['link_id'] ?? 0);
+        if ($id > 0) {
+            try {
+                $stmt = $pdo->prepare('DELETE FROM footer_links WHERE id = ?');
+                $stmt->execute([$id]);
+                $_SESSION['flash_message'] = 'Enlace eliminado.';
+                $_SESSION['flash_type']    = 'success';
+            } catch (PDOException $e) {
+                $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al eliminar.';
+                $_SESSION['flash_type']    = 'danger';
+            }
+        }
+        header('Location: footer.php');
+        exit;
+    }
+
+    // ── Config del footer (acción por defecto) ─────────────────────────────────
     $data   = [];
     $errors = [];
 
@@ -116,6 +187,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $stmt = $pdo->prepare('SELECT * FROM footer_config WHERE id = 1 LIMIT 1');
 $stmt->execute();
 $footerData = $stmt->fetch();
+
+// ── Consultar footer_links ─────────────────────────────────────────────────────
+$footerLinks = [];
+try {
+    $stmt = $pdo->query('SELECT * FROM footer_links ORDER BY orden ASC, id ASC');
+    $footerLinks = $stmt->fetchAll();
+} catch (PDOException $e) {}
 
 // Si hay datos de formulario guardados por error de validación, usarlos
 $formData = $_SESSION['footer_form_data'] ?? null;
@@ -261,6 +339,160 @@ $token = csrf_token();
                         </div>
                     </div>
                 </div>
+
+                <!-- ═══════════════════════════════════════════════════════════ -->
+                <!-- ENLACES DE NAVEGACIÓN DEL FOOTER                           -->
+                <!-- ═══════════════════════════════════════════════════════════ -->
+                <div class="row g-4 mt-2">
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <i class="bi bi-link-45deg me-1"></i> Agregar enlace
+                            </div>
+                            <div class="card-body">
+                                <form method="POST" action="footer.php">
+                                    <input type="hidden" name="action" value="link_create">
+                                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+                                    <div class="mb-3">
+                                        <label class="form-label">Título</label>
+                                        <input type="text" class="form-control" name="link_titulo" required placeholder="Ej: Inicio">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">URL de destino</label>
+                                        <input type="text" class="form-control" name="link_url" value="#" placeholder="index.php o https://...">
+                                        <div class="form-text">Usa <code>__ubicacion__</code> para que abra Google Maps con la dirección del DIF.</div>
+                                    </div>
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" class="form-check-input" name="link_nueva_tab" id="linkNuevaTab">
+                                        <label class="form-check-label" for="linkNuevaTab">Abrir en nueva pestaña</label>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Orden</label>
+                                        <input type="number" class="form-control" name="link_orden" value="0" min="0">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100"><i class="bi bi-plus-circle me-1"></i> Crear enlace</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="bi bi-list-ul me-1"></i> Enlaces del footer
+                                <span class="badge bg-secondary ms-1"><?= count($footerLinks) ?></span>
+                            </div>
+                            <div class="card-body p-0">
+                                <?php if (empty($footerLinks)): ?>
+                                <div class="text-center text-muted py-4">
+                                    <i class="bi bi-link-45deg" style="font-size:2rem;"></i>
+                                    <p class="mt-2 mb-0">No hay enlaces. Use el formulario para agregar.</p>
+                                </div>
+                                <?php else: ?>
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle mb-0">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th style="width:50px;">Orden</th>
+                                                <th>Título</th>
+                                                <th>URL</th>
+                                                <th style="width:70px;">Nueva tab</th>
+                                                <th style="width:150px;">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php foreach ($footerLinks as $fl): ?>
+                                            <tr>
+                                                <td class="text-center"><?= (int) $fl['orden'] ?></td>
+                                                <td><?= htmlspecialchars($fl['titulo']) ?></td>
+                                                <td class="small">
+                                                    <?php if ($fl['url'] === '__ubicacion__'): ?>
+                                                        <span class="badge bg-info">📍 Ubicación Maps</span>
+                                                    <?php elseif ($fl['url'] === '#'): ?>
+                                                        <span class="badge bg-secondary">Sin enlace</span>
+                                                    <?php else: ?>
+                                                        <?= htmlspecialchars($fl['url']) ?>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td class="text-center"><?= $fl['nueva_tab'] ? '<span class="badge bg-success">Sí</span>' : 'No' ?></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editLink<?= (int)$fl['id'] ?>"><i class="bi bi-pencil"></i></button>
+                                                    <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delLink<?= (int)$fl['id'] ?>"><i class="bi bi-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modales de edición/eliminación de links -->
+                <?php foreach ($footerLinks as $fl): ?>
+                <div class="modal fade" id="editLink<?= (int)$fl['id'] ?>" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form method="POST" action="footer.php">
+                                <input type="hidden" name="action" value="link_edit">
+                                <input type="hidden" name="link_id" value="<?= (int)$fl['id'] ?>">
+                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+                                <div class="modal-header bg-warning">
+                                    <h5 class="modal-title"><i class="bi bi-pencil-square me-1"></i> Editar enlace</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Título</label>
+                                        <input type="text" class="form-control" name="link_titulo" value="<?= htmlspecialchars($fl['titulo']) ?>" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">URL</label>
+                                        <input type="text" class="form-control" name="link_url" value="<?= htmlspecialchars($fl['url']) ?>">
+                                        <div class="form-text">Usa <code>__ubicacion__</code> para Google Maps.</div>
+                                    </div>
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" class="form-check-input" name="link_nueva_tab" id="editNT<?= (int)$fl['id'] ?>"<?= $fl['nueva_tab'] ? ' checked' : '' ?>>
+                                        <label class="form-check-label" for="editNT<?= (int)$fl['id'] ?>">Abrir en nueva pestaña</label>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Orden</label>
+                                        <input type="number" class="form-control" name="link_orden" value="<?= (int)$fl['orden'] ?>" min="0">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-warning"><i class="bi bi-pencil me-1"></i> Guardar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="delLink<?= (int)$fl['id'] ?>" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form method="POST" action="footer.php">
+                                <input type="hidden" name="action" value="link_delete">
+                                <input type="hidden" name="link_id" value="<?= (int)$fl['id'] ?>">
+                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-danger"><i class="bi bi-exclamation-triangle me-1"></i> Eliminar enlace</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>¿Eliminar <strong><?= htmlspecialchars($fl['titulo']) ?></strong>?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1"></i> Eliminar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+
             </div>
         </div>
     </div>

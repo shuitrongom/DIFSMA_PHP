@@ -246,6 +246,19 @@ CREATE TABLE IF NOT EXISTS `footer_config` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -----------------------------------------------------------------------------
+-- Footer Links (enlaces de navegación de la columna derecha del footer)
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `footer_links` (
+    `id`         INT          NOT NULL AUTO_INCREMENT,
+    `titulo`     VARCHAR(200) NOT NULL,
+    `url`        VARCHAR(500) NOT NULL DEFAULT '#',
+    `nueva_tab`  TINYINT(1)   NOT NULL DEFAULT 0,
+    `orden`      INT          NOT NULL DEFAULT 0,
+    `activo`     TINYINT(1)   NOT NULL DEFAULT 1,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- -----------------------------------------------------------------------------
 -- Banner Institucional (Team section en index, registro único)
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `institucion_banner` (

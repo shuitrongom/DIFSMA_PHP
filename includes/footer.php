@@ -22,7 +22,7 @@ if (!isset($base_path)) $base_path = '';
 $footer = [
     'texto_inst'    => 'Sistema Municipal DIF San Mateo Atenco, comprometido con el bienestar de las familias.',
     'horario'       => 'Horario de lunes a viernes de 8:00 a 16:00 horas',
-    'direccion'     => 'Mariano Matamoros 310, Barrio de la Concepción, 52105 San Mateo Atenco, Méx.',
+    'direccion'     => "Mariano Matamoros 310,\nBarrio de la Concepción, 52105\nSan Mateo Atenco, Méx.",
     'telefono'      => '722 970 77 86',
     'email'         => 'presidencia@difsanmateoatenco.gob.mx',
     'url_facebook'  => 'https://facebook.com/DifSanMateoAtenco/',
@@ -55,6 +55,18 @@ try {
 // ── Helper: escapar para HTML ─────────────────────────────────────────────────
 function _fe(string $s): string {
     return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+}
+
+// ── Consultar footer_links activos ────────────────────────────────────────────
+$footer_links = [];
+try {
+    $stmt = $pdo->prepare('SELECT titulo, url, nueva_tab FROM footer_links WHERE activo = 1 ORDER BY orden ASC');
+    $stmt->execute();
+    $footer_links = $stmt->fetchAll();
+} catch (PDOException $e) {
+    if (defined('APP_DEBUG') && APP_DEBUG) {
+        error_log('footer.php footer_links PDOException: ' . $e->getMessage());
+    }
 }
 
 // Separar horario en dos líneas si contiene "de" como separador
@@ -121,15 +133,25 @@ if (count($horario_parts) === 2) {
                     <div class="footer-item">
                         <div class="row g-3">
                             <div class="d-flex flex-column align-items-start p-4">
-                                <a class="mb-2 text-white ms-5" href="<?= $base_path ?>index.php">Inicio</a>
-                                <a class="mb-2 text-white ms-5" href="<?= $base_path ?>acerca-del-dif/presidencia.php">Nosotros</a>
-                                <a class="mb-2 text-white ms-5" href="<?= $base_path ?>comunicacion-social/noticias.php">Noticias</a>
-                                <a class="mb-2 text-white ms-5" href="<?= $base_path ?>transparencia/SEAC.php">Transparencia</a>
-                                <a class="mb-2 text-white ms-5" href="https://www.ipomex.org.mx/ipo3/lgt/indice/DIFSANMATEO.web" target="_blank">Compras y adquisiciones</a>
-                                <a class="mb-2 text-white ms-5" href="https://difsanmateoatenco.gob.mx/plantilla/29" target="_blank">Declaraciones</a>
-                                <a class="mb-2 text-white ms-5" href="https://www.saimex.org.mx/saimex/ciudadano/login.page" target="_blank">Sistema de Gestión de Usuarios</a>
-                                <a class="mb-2 text-white ms-5" href="<?= $base_path ?>tramites/PMPNNA.php">Servicios en línea</a>
-                                <a class="mb-2 text-white ms-5" href="#">Ubícanos</a>
+                                <?php if (!empty($footer_links)): ?>
+                                    <?php foreach ($footer_links as $fl):
+                                        // __ubicacion__ = link especial a Google Maps con la dirección
+                                        if ($fl['url'] === '__ubicacion__') {
+                                            $fl_href = 'https://www.google.com/maps/search/?api=1&query=' . urlencode($footer['direccion']);
+                                            $fl_target = ' target="_blank" rel="noopener"';
+                                        } elseif (strpos($fl['url'], 'http') === 0) {
+                                            $fl_href = htmlspecialchars($fl['url']);
+                                            $fl_target = $fl['nueva_tab'] ? ' target="_blank" rel="noopener"' : '';
+                                        } else {
+                                            $fl_href = $base_path . htmlspecialchars($fl['url']);
+                                            $fl_target = $fl['nueva_tab'] ? ' target="_blank" rel="noopener"' : '';
+                                        }
+                                    ?>
+                                    <a class="mb-2 text-white ms-5" href="<?= $fl_href ?>"<?= $fl_target ?>><?= htmlspecialchars($fl['titulo']) ?></a>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <a class="mb-2 text-white ms-5" href="<?= $base_path ?>index.php">Inicio</a>
+                                <?php endif; ?>
                             </div>
                             <div class="footer-icon d-flex">
                                 <a href="<?= _fe($footer['url_twitter']) ?>"
