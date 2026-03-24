@@ -299,7 +299,7 @@ $token = csrf_token();
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/upload-progress.js?v=3"></script>
+    <script src="../js/upload-progress.js?v=4"></script>
 <script>
 var sidebar=document.getElementById('sidebar');
 if(window.innerWidth<=768)sidebar.classList.add('collapsed');

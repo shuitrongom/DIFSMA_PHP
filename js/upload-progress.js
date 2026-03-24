@@ -36,7 +36,7 @@
 		const file = fileInput.files[0];
 		if (file.size < 512 * 1024) {
 			return;
-		} // Solo para archivos > 512KB
+		}
 
 		e.preventDefault();
 
@@ -62,17 +62,10 @@
 			bar.style.width = '100%';
 			bar.textContent = '100%';
 			szEl.textContent = fmb(file.size) + ' / ' + fmb(file.size);
-			// Obtener URL de redirect del response o recargar
-			const loc = xhr.getResponseHeader('Location');
 			setTimeout(function () {
-				if (loc) {
-					window.location.href = loc;
-				} else {
-					// La respuesta ya siguió el redirect, recargar la página base
-					const base = form.action || window.location.pathname;
-					window.location.href = base.split('?')[0];
-				}
-			}, 400);
+				overlay.classList.remove('active');
+				window.location.reload();
+			}, 500);
 		});
 
 		xhr.addEventListener('error', function () {
@@ -87,7 +80,7 @@
 			);
 		});
 
-		xhr.timeout = 300000; // 5 minutos
+		xhr.timeout = 600000;
 		xhr.open('POST', form.action || window.location.href);
 		xhr.send(fd);
 	});
