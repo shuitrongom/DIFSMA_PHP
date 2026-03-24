@@ -53,6 +53,48 @@ body {
     color: #fff !important;
 }
 
+/* Warning → Rojo DIF (editar, guardar cambios) */
+.btn-warning {
+    background-color: rgb(200,16,44) !important;
+    border-color: rgb(200,16,44) !important;
+    color: #fff !important;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+.btn-warning:hover, .btn-warning:focus {
+    background-color: rgb(160,10,35) !important;
+    border-color: rgb(160,10,35) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(200,16,44,0.25);
+}
+.btn-outline-warning {
+    color: rgb(200,16,44) !important;
+    border-color: rgb(200,16,44) !important;
+    border-radius: 8px;
+    font-weight: 500;
+}
+.btn-outline-warning:hover, .btn-outline-warning:focus {
+    background-color: rgb(200,16,44) !important;
+    border-color: rgb(200,16,44) !important;
+    color: #fff !important;
+}
+
+/* Secondary → Gris títulos (cancelar, cerrar) */
+.btn-secondary {
+    background-color: rgb(107,98,90) !important;
+    border-color: rgb(107,98,90) !important;
+    color: #fff !important;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+.btn-secondary:hover, .btn-secondary:focus {
+    background-color: rgb(85,78,72) !important;
+    border-color: rgb(85,78,72) !important;
+    color: #fff !important;
+}
+
 .bg-primary { background-color: var(--admin-primary) !important; }
 
 /* ── Sidebar ─────────────────────────────────────────────────────────────────── */
