@@ -208,7 +208,7 @@ $token = csrf_token();
 <?php else: ?>
 <?php foreach ($titulos as $titulo): $tPdfs = $pdfsMap[(int)$titulo['id']] ?? []; ?>
 <div class="card mb-4">
-    <div class="card-header d-flex justify-content-between align-items-center" style="background-color:#333;color:#fff;">
+    <div class="card-header d-flex justify-content-between align-items-center" style="background-color:rgb(107,98,90);color:#fff;">
         <span><i class="bi bi-bookmark-fill me-1"></i> <?= htmlspecialchars($titulo['nombre']) ?></span>
         <div>
             <button type="button" class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#editT<?= (int)$titulo['id'] ?>"><i class="bi bi-pencil"></i></button>
@@ -299,7 +299,7 @@ $token = csrf_token();
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/upload-progress.js?v=8"></script>
+    <script src="../js/upload-progress.js?v=9"></script>
 <script>
 var sidebar=document.getElementById('sidebar');
 if(window.innerWidth<=768)sidebar.classList.add('collapsed');
