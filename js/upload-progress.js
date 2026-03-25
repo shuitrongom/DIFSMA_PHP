@@ -39,9 +39,6 @@
 		}
 
 		const file = fileInput.files[0];
-		if (file.size < 512 * 1024) {
-			return;
-		}
 
 		const totalMB = file.size / 1048576;
 		fnEl.textContent = file.name;

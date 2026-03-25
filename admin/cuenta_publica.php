@@ -170,13 +170,14 @@ $token=csrf_token();
 <div class="col-md-3"><button type="submit" class="btn btn-primary w-100"><i class="bi bi-plus-lg me-1"></i> Agregar</button></div>
 </form></div></div>
 <?php if(empty($titulos)):?><div class="text-center text-muted py-4"><i class="bi bi-folder2-open" style="font-size:2rem;"></i><p class="mt-2">No hay títulos/módulos aún.</p></div>
-<?php else: foreach($titulos as $titulo): $tC=$conceptosMap[(int)$titulo['id']]??[]; ?>
+<?php else: foreach($titulos as $tIdx => $titulo): $tC=$conceptosMap[(int)$titulo['id']]??[]; ?>
 <div class="card mb-4">
-<div class="card-header d-flex justify-content-between align-items-center" style="background-color:rgb(107,98,90);color:#fff;">
-<span><i class="bi bi-bookmark-fill me-1"></i> <?=htmlspecialchars($titulo['nombre'])?></span>
-<div><button type="button" class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#eTM<?=(int)$titulo['id']?>"><i class="bi bi-pencil"></i></button>
+<div class="card-header d-flex justify-content-between align-items-center" style="background-color:rgb(107,98,90);color:#fff;cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#tBody<?=(int)$titulo['id']?>">
+<span><i class="bi bi-bookmark-fill me-1"></i> <?=htmlspecialchars($titulo['nombre'])?> <i class="bi bi-chevron-down ms-2 small"></i></span>
+<div onclick="event.stopPropagation()"><button type="button" class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#eTM<?=(int)$titulo['id']?>"><i class="bi bi-pencil"></i></button>
 <button type="button" class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#dTM<?=(int)$titulo['id']?>"><i class="bi bi-trash"></i></button></div>
 </div>
+<div class="collapse" id="tBody<?=(int)$titulo['id']?>">
 <div class="card-body">
 <form method="POST" enctype="multipart/form-data" class="row g-2 align-items-end mb-3">
 <input type="hidden" name="action" value="add_concepto"><input type="hidden" name="bloque_id" value="<?=$bloqueId?>"><input type="hidden" name="titulo_id" value="<?=(int)$titulo['id']?>"><input type="hidden" name="csrf_token" value="<?=htmlspecialchars($token)?>">
@@ -201,7 +202,7 @@ $token=csrf_token();
 <div class="modal fade" id="eC<?=(int)$c['id']?>" tabindex="-1" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><form method="POST"><input type="hidden" name="action" value="edit_concepto"><input type="hidden" name="bloque_id" value="<?=$bloqueId?>"><input type="hidden" name="concepto_id" value="<?=(int)$c['id']?>"><input type="hidden" name="csrf_token" value="<?=htmlspecialchars($token)?>"><div class="modal-header"><h5 class="modal-title">Editar concepto</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><label class="form-label">Nombre</label><input type="text" name="nombre" class="form-control" value="<?=htmlspecialchars($c['nombre'])?>" required></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-warning">Guardar</button></div></form></div></div></div>
 <div class="modal fade" id="uP<?=(int)$c['id']?>" tabindex="-1" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><form method="POST" enctype="multipart/form-data"><input type="hidden" name="action" value="upload_pdf"><input type="hidden" name="bloque_id" value="<?=$bloqueId?>"><input type="hidden" name="concepto_id" value="<?=(int)$c['id']?>"><input type="hidden" name="csrf_token" value="<?=htmlspecialchars($token)?>"><div class="modal-header"><h5 class="modal-title"><?=empty($c['pdf_path'])?'Subir':'Reemplazar'?> PDF</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="file" name="pdf" class="form-control" accept=".pdf" required></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-success">Subir</button></div></form></div></div></div>
 <?php endforeach;?></tbody></table></div><?php endif;?>
-</div></div>
+</div></div></div>
 <div class="modal fade" id="eTM<?=(int)$titulo['id']?>" tabindex="-1" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><form method="POST"><input type="hidden" name="action" value="edit_titulo"><input type="hidden" name="bloque_id" value="<?=$bloqueId?>"><input type="hidden" name="titulo_id" value="<?=(int)$titulo['id']?>"><input type="hidden" name="csrf_token" value="<?=htmlspecialchars($token)?>"><div class="modal-header"><h5 class="modal-title">Editar título</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><label class="form-label">Nombre</label><input type="text" name="nombre" class="form-control" value="<?=htmlspecialchars($titulo['nombre'])?>" required></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-warning">Guardar</button></div></form></div></div></div>
 <div class="modal fade" id="dTM<?=(int)$titulo['id']?>" tabindex="-1" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><form method="POST"><input type="hidden" name="action" value="delete_titulo"><input type="hidden" name="bloque_id" value="<?=$bloqueId?>"><input type="hidden" name="titulo_id" value="<?=(int)$titulo['id']?>"><input type="hidden" name="csrf_token" value="<?=htmlspecialchars($token)?>"><div class="modal-header"><h5 class="modal-title text-danger">Eliminar título</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><p>¿Eliminar <strong><?=htmlspecialchars($titulo['nombre'])?></strong> y todos sus conceptos?</p></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-danger">Eliminar</button></div></form></div></div></div>
 <?php endforeach; endif;?>
@@ -235,7 +236,7 @@ $token=csrf_token();
 <?php endif;?>
 </div></div></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/upload-progress.js?v=10"></script>
+    <script src="../js/upload-progress.js?v=11"></script>
 <script>
 const sidebar=document.getElementById('sidebar');
 if(window.innerWidth<=768)sidebar.classList.add('collapsed');

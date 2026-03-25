@@ -208,13 +208,14 @@ $token = csrf_token();
 <?php else: ?>
 <?php foreach ($titulos as $titulo): $tPdfs = $pdfsMap[(int)$titulo['id']] ?? []; ?>
 <div class="card mb-4">
-    <div class="card-header d-flex justify-content-between align-items-center" style="background-color:rgb(107,98,90);color:#fff;">
-        <span><i class="bi bi-bookmark-fill me-1"></i> <?= htmlspecialchars($titulo['nombre']) ?></span>
-        <div>
+    <div class="card-header d-flex justify-content-between align-items-center" style="background-color:rgb(107,98,90);color:#fff;cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#pBody<?= (int)$titulo['id'] ?>">
+        <span><i class="bi bi-bookmark-fill me-1"></i> <?= htmlspecialchars($titulo['nombre']) ?> <i class="bi bi-chevron-down ms-2 small"></i></span>
+        <div onclick="event.stopPropagation()">
             <button type="button" class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#editT<?= (int)$titulo['id'] ?>"><i class="bi bi-pencil"></i></button>
             <button type="button" class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#delT<?= (int)$titulo['id'] ?>"><i class="bi bi-trash"></i></button>
         </div>
     </div>
+    <div class="collapse" id="pBody<?= (int)$titulo['id'] ?>">
     <div class="card-body">
         <!-- Agregar año -->
         <form method="POST" enctype="multipart/form-data" class="row g-2 align-items-end mb-3">
@@ -268,6 +269,7 @@ $token = csrf_token();
         </div>
         <?php endif; ?>
     </div>
+    </div>
 </div>
 
 <!-- Modal editar título -->
@@ -299,7 +301,7 @@ $token = csrf_token();
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/upload-progress.js?v=10"></script>
+    <script src="../js/upload-progress.js?v=11"></script>
 <script>
 var sidebar=document.getElementById('sidebar');
 if(window.innerWidth<=768)sidebar.classList.add('collapsed');
