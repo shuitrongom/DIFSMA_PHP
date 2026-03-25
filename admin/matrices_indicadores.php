@@ -49,6 +49,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: matrices_indicadores.php'); exit;
     }
 
+    // — Editar año (y opcionalmente reemplazar PDF)
+    if ($action === 'edit_anio') {
+        $pId = (int)($_POST['pdf_id'] ?? 0);
+        $anio = trim($_POST['anio'] ?? '');
+        if ($pId <= 0 || empty($anio) || !preg_match('/^\d{4}$/', $anio)) {
+            $_SESSION['flash_message'] = 'Datos inválidos.'; $_SESSION['flash_type'] = 'warning';
+            header('Location: matrices_indicadores.php'); exit;
+        }
+        // Verificar que no exista otro registro con el mismo año
+        $s = $pdo->prepare('SELECT id FROM mi_pdfs WHERE anio=? AND id!=?'); $s->execute([$anio, $pId]);
+        if ($s->fetch()) {
+            $_SESSION['flash_message'] = "Ya existe otro registro con el año {$anio}."; $_SESSION['flash_type'] = 'warning';
+            header('Location: matrices_indicadores.php'); exit;
+        }
+        $pdfPath = null;
+        if (isset($_FILES['pdf']) && $_FILES['pdf']['error'] !== UPLOAD_ERR_NO_FILE) {
+            $upload = handle_upload($_FILES['pdf'], 'pdf');
+            if (!$upload['success']) { $_SESSION['flash_message'] = $upload['error']; $_SESSION['flash_type'] = 'danger'; header('Location: matrices_indicadores.php'); exit; }
+            $s = $pdo->prepare('SELECT pdf_path FROM mi_pdfs WHERE id=?'); $s->execute([$pId]); $old = $s->fetchColumn();
+            if ($old && file_exists(BASE_PATH.'/'.$old)) unlink(BASE_PATH.'/'.$old);
+            $pdfPath = $upload['path'];
+        }
+        try {
+            if ($pdfPath) {
+                $pdo->prepare('UPDATE mi_pdfs SET anio=?, pdf_path=?, orden=? WHERE id=?')->execute([$anio, $pdfPath, (int)$anio, $pId]);
+            } else {
+                $pdo->prepare('UPDATE mi_pdfs SET anio=?, orden=? WHERE id=?')->execute([$anio, (int)$anio, $pId]);
+            }
+            $_SESSION['flash_message'] = 'Registro actualizado.'; $_SESSION['flash_type'] = 'success';
+        } catch (PDOException $e) {
+            $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error.'; $_SESSION['flash_type'] = 'danger';
+        }
+        header('Location: matrices_indicadores.php'); exit;
+    }
+
     // — Subir/reemplazar PDF
     if ($action === 'upload_pdf') {
         $pId = (int)($_POST['pdf_id'] ?? 0);
@@ -156,10 +191,11 @@ $token = csrf_token();
                             <td><strong><?= htmlspecialchars($r['anio']) ?></strong></td>
                             <td class="text-center"><?php if (!empty($r['pdf_path'])): ?><span class="badge bg-success">Sí</span><?php else: ?><span class="badge bg-secondary">No</span><?php endif; ?></td>
                             <td>
+                                <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editAnio<?= (int)$r['id'] ?>"><i class="bi bi-pencil"></i></button>
                                 <?php if (empty($r['pdf_path'])): ?>
-                                <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#upPdf<?= (int)$r['id'] ?>"><i class="bi bi-upload"></i></button>
+                                <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#upPdf<?= (int)$r['id'] ?>"><i class="bi bi-upload"></i> Subir PDF</button>
                                 <?php else: ?>
-                                <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#upPdf<?= (int)$r['id'] ?>"><i class="bi bi-arrow-repeat"></i></button>
+                                <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#upPdf<?= (int)$r['id'] ?>"><i class="bi bi-arrow-repeat"></i> Cambiar PDF</button>
                                 <?php endif; ?>
                                 <form method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar este año y su PDF?')">
                                     <input type="hidden" name="action" value="delete_anio">
@@ -177,6 +213,19 @@ $token = csrf_token();
                                 <div class="modal-header"><h5 class="modal-title">Subir PDF — <?= htmlspecialchars($r['anio']) ?></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
                                 <div class="modal-body"><input type="file" name="pdf" class="form-control" accept=".pdf" required></div>
                                 <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-success">Subir</button></div>
+                            </form>
+                        </div></div></div>
+                        <div class="modal fade" id="editAnio<?= (int)$r['id'] ?>" tabindex="-1" aria-hidden="true"><div class="modal-dialog"><div class="modal-content">
+                            <form method="POST" enctype="multipart/form-data">
+                                <input type="hidden" name="action" value="edit_anio">
+                                <input type="hidden" name="pdf_id" value="<?= (int)$r['id'] ?>">
+                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+                                <div class="modal-header"><h5 class="modal-title">Editar — <?= htmlspecialchars($r['anio']) ?></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                                <div class="modal-body">
+                                    <div class="mb-3"><label class="form-label">Año</label><input type="number" name="anio" class="form-control" min="2000" max="<?= date('Y') ?>" value="<?= htmlspecialchars($r['anio']) ?>" required></div>
+                                    <div class="mb-3"><label class="form-label">Reemplazar PDF (opcional)</label><input type="file" name="pdf" class="form-control" accept=".pdf"></div>
+                                </div>
+                                <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-warning"><i class="bi bi-pencil me-1"></i> Guardar</button></div>
                             </form>
                         </div></div></div>
                         <?php endforeach; ?>

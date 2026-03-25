@@ -39,7 +39,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                         <div class="overflow-x:scroll">
 
                             <div class="question-text-div" style="background:#ccc;">
-                                <p class="mt-0 mb-1 text-dark text-center fw-bold py-2">&nbsp;&nbsp;Matrices de Indicadores</p>
+                                <p class="mt-0 mb-1 text-center fw-bold py-2" style="color:rgb(107,98,90);">&nbsp;&nbsp;Matrices de Indicadores</p>
                             </div>
                             <br>
 
@@ -51,7 +51,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                                     <thead>
                                         <tr>
                                             <?php foreach ($registros as $r): ?>
-                                            <th scope="col" style="text-align:center;background:#ccc;color:#333;width:100px;"><?= htmlspecialchars($r['anio']) ?></th>
+                                            <th scope="col" style="text-align:center;background:#ccc;color:rgba(0,0,0,0.8);width:100px;"><?= htmlspecialchars($r['anio']) ?></th>
                                             <?php endforeach; ?>
                                         </tr>
                                     </thead>
