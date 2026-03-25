@@ -229,6 +229,6 @@ $csrf = csrf_token();
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/upload-progress.js?v=5"></script>
+    <script src="../js/upload-progress.js?v=6"></script>
 </body>
 </html>
