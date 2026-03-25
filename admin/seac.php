@@ -400,7 +400,7 @@ $token = csrf_token();
                             <form method="POST" action="seac.php">
                                 <input type="hidden" name="action" value="create_block">
                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
-                                <div class="mb-3"><label for="anio" class="form-label">Año</label><input type="number" class="form-control" id="anio" name="anio" min="2000" max="<?= date('Y') ?>" value="<?= date('Y') ?>" required></div>
+                                <div class="mb-3"><label for="anio" class="form-label">Año</label><input type="number" class="form-control" id="anio" name="anio" min="2000" max="<?= date('Y') ?>" placeholder="Ej: <?= date('Y') ?>" required></div>
                                 <button type="submit" class="btn btn-primary w-100"><i class="bi bi-folder-plus me-1"></i> Crear bloque</button>
                             </form>
                         </div>

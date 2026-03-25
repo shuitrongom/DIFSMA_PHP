@@ -178,9 +178,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $s=$pdo->prepare('SELECT id,anio FROM conac_bloques WHERE id=?'); $s->execute([$id]); $bl=$s->fetch();
         if (!$bl) { $_SESSION['flash_message']='Bloque no encontrado.'; $_SESSION['flash_type']='danger'; header('Location: conac.php'); exit; }
         try {
+            // Primero obtener y eliminar archivos PDF del servidor
             $sp=$pdo->prepare('SELECT pdf_path FROM conac_pdfs WHERE bloque_id=? AND pdf_path IS NOT NULL AND pdf_path!=""');
             $sp->execute([$id]); $pdfs=$sp->fetchAll();
+            // Eliminar PDFs de la BD
+            $pdo->prepare('DELETE FROM conac_pdfs WHERE bloque_id=?')->execute([$id]);
+            // Eliminar conceptos
+            $pdo->prepare('DELETE FROM conac_conceptos WHERE bloque_id=?')->execute([$id]);
+            // Eliminar bloque
             $pdo->prepare('DELETE FROM conac_bloques WHERE id=?')->execute([$id]);
+            // Eliminar archivos del servidor
             foreach ($pdfs as $p) { $f=BASE_PATH.'/'.$p['pdf_path']; if(file_exists($f)) unlink($f); }
             $_SESSION['flash_message']="Bloque {$bl['anio']} eliminado."; $_SESSION['flash_type']='success';
         } catch (PDOException $e) {
@@ -398,7 +405,7 @@ $token = csrf_token();
                             <form method="POST" action="conac.php">
                                 <input type="hidden" name="action" value="create_block">
                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
-                                <div class="mb-3"><label for="anio" class="form-label">Año</label><input type="number" class="form-control" id="anio" name="anio" min="2000" max="<?= date('Y') ?>" value="<?= date('Y') ?>" required></div>
+                                <div class="mb-3"><label for="anio" class="form-label">Año</label><input type="number" class="form-control" id="anio" name="anio" min="2000" max="<?= date('Y') ?>" placeholder="Ej: <?= date('Y') ?>" required></div>
                                 <button type="submit" class="btn btn-primary w-100"><i class="bi bi-folder-plus me-1"></i> Crear bloque</button>
                             </form>
                         </div>
