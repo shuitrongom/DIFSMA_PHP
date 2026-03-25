@@ -1,12 +1,26 @@
 # Archivo por defecto
 DirectoryIndex index.php
 
+# Ocultar extensión .php de las URLs
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Si la URL tiene .php, redirigir sin extensión (301)
+    RewriteCond %{THE_REQUEST} \s/([^.]+)\.php[\s?] [NC]
+    RewriteRule ^ /%1 [R=301,L]
+
+    # Si el archivo .php existe, servir sin extensión
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}.php -f
+    RewriteRule ^(.+)$ $1.php [L]
+</IfModule>
+
 # Compresión GZIP para acelerar carga
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml
 </IfModule>
 
-# Cache de archivos estáticos (imágenes, CSS, JS)
+# Cache de archivos estáticos
 <IfModule mod_expires.c>
     ExpiresActive On
     ExpiresByType image/jpeg "access plus 1 month"
