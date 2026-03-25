@@ -1,21 +1,25 @@
 # Archivo por defecto
 DirectoryIndex index.php
 
-# Ocultar extensión .php de las URLs
+# Ocultar extensión .php solo en el front (NO admin)
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Si la URL tiene .php, redirigir sin extensión (301)
-    RewriteCond %{THE_REQUEST} \s/([^.]+)\.php[\s?] [NC]
-    RewriteRule ^ /%1 [R=301,L]
+    # Excluir admin completamente
+    RewriteRule ^admin/ - [L]
+
+    # Si la URL tiene .php (fuera de admin), redirigir sin extensión (302 temporal)
+    RewriteCond %{THE_REQUEST} /([^.]+)\.php[\s?] [NC]
+    RewriteRule (.+)\.php$ $1 [R=302,L]
 
     # Si el archivo .php existe, servir sin extensión
+    RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME}.php -f
     RewriteRule ^(.+)$ $1.php [L]
 </IfModule>
 
-# Compresión GZIP para acelerar carga
+# Compresión GZIP
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml
 </IfModule>
@@ -30,5 +34,5 @@ DirectoryIndex index.php
     ExpiresByType application/javascript "access plus 1 week"
 </IfModule>
 
-# Seguridad: ocultar listado de directorios
+# Seguridad
 Options -Indexes
