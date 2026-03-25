@@ -384,9 +384,9 @@ require_once 'includes/navbar.php';
             </div>
 
             <?php if (!empty($transparencia_items)): ?>
-            <div class="row g-4 justify-content-center" style="max-width:800px;margin:0 auto;">
+            <div class="row g-4 justify-content-center" style="max-width:960px;margin:0 auto;">
                 <?php foreach ($transparencia_items as $tIdx => $tItem): ?>
-                <div class="col-10 col-sm-6 wow fadeIn" data-wow-delay="<?= number_format(0.1 + ($tIdx % 2) * 0.2, 1) ?>s">
+                <div class="col-10 col-sm-6 col-lg-4 wow fadeIn" data-wow-delay="<?= number_format(0.1 + ($tIdx % 3) * 0.2, 1) ?>s">
                     <div class="program-item rounded">
                         <div class="program-img position-relative">
                             <div class="overflow-hidden img-border">
