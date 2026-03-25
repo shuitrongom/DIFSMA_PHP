@@ -172,7 +172,7 @@ $token=csrf_token();
 <?php if(empty($titulos)):?><div class="text-center text-muted py-4"><i class="bi bi-folder2-open" style="font-size:2rem;"></i><p class="mt-2">No hay títulos/módulos aún.</p></div>
 <?php else: foreach($titulos as $titulo): $tC=$conceptosMap[(int)$titulo['id']]??[]; ?>
 <div class="card mb-4">
-<div class="card-header d-flex justify-content-between align-items-center" style="background-color:#7b2d8e;color:#fff;">
+<div class="card-header d-flex justify-content-between align-items-center" style="background-color:rgb(107,98,90);color:#fff;">
 <span><i class="bi bi-bookmark-fill me-1"></i> <?=htmlspecialchars($titulo['nombre'])?></span>
 <div><button type="button" class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#eTM<?=(int)$titulo['id']?>"><i class="bi bi-pencil"></i></button>
 <button type="button" class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#dTM<?=(int)$titulo['id']?>"><i class="bi bi-trash"></i></button></div>
@@ -235,7 +235,7 @@ $token=csrf_token();
 <?php endif;?>
 </div></div></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/upload-progress.js?v=7"></script>
+    <script src="../js/upload-progress.js?v=8"></script>
 <script>
 const sidebar=document.getElementById('sidebar');
 if(window.innerWidth<=768)sidebar.classList.add('collapsed');

@@ -275,7 +275,7 @@ $token = csrf_token();
     <?php endforeach; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/upload-progress.js?v=7"></script>
+    <script src="../js/upload-progress.js?v=8"></script>
     <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         // Sidebar toggle

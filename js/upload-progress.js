@@ -1,5 +1,6 @@
 /**
- * upload-progress.js — Barra de progreso real con % y MB
+ * upload-progress.js — Subida con iframe oculto + overlay visual
+ * El formulario se envía normalmente al iframe, garantizando que el archivo se suba.
  */
 (function () {
 	const overlay = document.createElement('div');
@@ -8,19 +9,24 @@
 		'<div class="upload-box">' +
 		'<p style="font-weight:600;font-size:1rem;margin-bottom:0.5rem;">Subiendo archivo...</p>' +
 		'<p class="upload-filename text-muted small mb-1"></p>' +
-		'<div class="progress"><div class="progress-bar" role="progressbar" style="width:0%">0%</div></div>' +
+		'<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:100%"></div></div>' +
 		'<p class="upload-size text-muted small mt-2"></p>' +
 		'<p class="text-muted small">Por favor espere, no cierre la página.</p>' +
 		'</div>';
 	document.body.appendChild(overlay);
 
-	const bar = overlay.querySelector('.progress-bar');
 	const fnEl = overlay.querySelector('.upload-filename');
 	const szEl = overlay.querySelector('.upload-size');
 
 	function fmb(b) {
 		return (b / 1048576).toFixed(1) + ' MB';
 	}
+
+	// Crear iframe oculto
+	const iframe = document.createElement('iframe');
+	iframe.name = 'uploadFrame';
+	iframe.style.display = 'none';
+	document.body.appendChild(iframe);
 
 	document.addEventListener('submit', function (e) {
 		const form = e.target;
@@ -38,40 +44,23 @@
 			return;
 		}
 
-		// Guardar la URL actual antes de enviar
-		const currentPage =
-			window.location.href.split('?')[0] + window.location.search;
-
-		e.preventDefault();
-
+		// Mostrar overlay
 		fnEl.textContent = file.name;
-		szEl.textContent = '0 MB / ' + fmb(file.size);
-		bar.style.width = '0%';
-		bar.textContent = '0%';
+		szEl.textContent = fmb(file.size);
 		overlay.classList.add('active');
 
-		const fd = new FormData(form);
-		const xhr = new XMLHttpRequest();
+		// Redirigir el formulario al iframe
+		const originalTarget = form.target;
+		form.target = 'uploadFrame';
 
-		xhr.upload.addEventListener('progress', function (ev) {
-			if (ev.lengthComputable) {
-				const pct = Math.round((ev.loaded / ev.total) * 100);
-				bar.style.width = pct + '%';
-				bar.textContent = pct + '%';
-				szEl.textContent = fmb(ev.loaded) + ' / ' + fmb(ev.total);
-			}
-		});
+		// Cuando el iframe cargue (servidor terminó de procesar), recargar la página
+		iframe.onload = function () {
+			form.target = originalTarget || '';
+			iframe.onload = null;
+			overlay.classList.remove('active');
+			window.location.reload();
+		};
 
-		xhr.addEventListener('loadend', function () {
-			bar.style.width = '100%';
-			bar.textContent = '100%';
-			setTimeout(function () {
-				window.location.href = currentPage;
-			}, 500);
-		});
-
-		xhr.timeout = 600000;
-		xhr.open('POST', form.action || window.location.href);
-		xhr.send(fd);
+		// NO hacemos preventDefault — el formulario se envía normalmente al iframe
 	});
 })();
