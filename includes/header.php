@@ -34,7 +34,7 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Montserrat:wght@200;400;500;600;800&display=swap" rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
-    <link rel="icon" href="<?= $base_path ?>img/favicon-32x32.png" sizes="35x35">
+    <link rel="icon" href="<?= $base_path ?>img/favicon-new.png" sizes="35x35">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
@@ -48,7 +48,7 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
     <link href="<?= $base_path ?>css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="<?= $base_path ?>css/style.css?v=5" rel="stylesheet">
+    <link href="<?= $base_path ?>css/style.css?v=17" rel="stylesheet">
 
     <!-- Swiper CSS (bundle) -->
     <link rel="stylesheet" href="<?= $base_path ?>css/swiper-bundle.min.css" />
@@ -159,7 +159,7 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
             width: 100%;
             height: auto;
             max-height: 80vh;
-            object-fit: contain;
+            object-fit: cover;
             display: block;
         }
 
@@ -389,7 +389,7 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
 
         /* Copyright bar */
         .copyright-bar {
-            background: #757575;
+            background:rgb(107,98,90);
             color: #fff;
             padding: 16px 0;
             text-align: center;
@@ -450,7 +450,9 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
                 </div>
             </div>
             <!-- Logo centrado -->
-            <img src="<?= $base_path ?>img/UNIDOS.png" class="img-fluid mx-auto" style="max-width:420px;width:100%;" alt="Unidos con Amor">
+            <div class="d-flex justify-content-center" style="flex:1;">
+                <img src="<?= $base_path ?>img/UNIDOS.png" class="img-fluid" style="max-width:420px;width:100%;" alt="Unidos con Amor">
+            </div>
             <!-- Buscador derecha -->
             <form class="d-flex align-items-center ms-auto" role="search" onsubmit="doSearch(event)" style="min-width:220px; max-width:320px;">
                 <div class="input-group">

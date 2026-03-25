@@ -575,11 +575,11 @@ h6,
 
 .program .program-item:hover .program-img img,
 .program .program-item:hover .program-teacher img {
-    transform: scale(1.2);
+    transform: none;
 }
 
 .program .program-item:hover .program-text-inner a.h4 {
-    color: var(--bs-primary) !important;
+    color: inherit !important;
 }
 
 /*** Programs End ***/
@@ -617,21 +617,11 @@ h6,
 }
 
 .events .events-item .events-img::after {
-    position: absolute;
-    content: "";
-    width: 100%;
-    height: 0;
-    top: 0;
-    left: 0;
-    bottom: auto;
-    background: rgba(77, 101, 249, .7);
-    border-radius: 10px;
-    transition: 0.5s;
+    display: none;
 }
 
 .events .events-item:hover .events-img::after {
-    height: 100%;
-    opacity: 1;
+    display: none;
 }
 
 .events .events-item .events-text a.h4,
@@ -644,7 +634,7 @@ h6,
 }
 
 .events .events-item:hover .events-img img {
-    transform: scale(1.3);
+    transform: none;
 }
 
 /*** Events End ***/
@@ -743,20 +733,19 @@ h6,
 }
 
 .team .team-item:hover .team-content {
-    background: var(--bs-primary) !important;
-    border-radius: 0 0 10px 10px;
+    background: transparent !important;
 }
 
 .team .team-item:hover .team-content h4 {
-    color: var(--bs-gray-dark) !important;
+    color: inherit !important;
 }
 
 .team .team-item:hover .team-content h5 {
-    color: var(--bs-white) !important;
+    color: inherit !important;
 
 
     .team .team-item:hover .team-content p {
-        color: var(--bs-dark) !important;
+        color: inherit !important;
     }
 
     /*** Team end ***/
@@ -926,3 +915,133 @@ h6,
 
 
     /*** Footer End ***/
+
+/* ── Swiper DIF Comunica: slides laterales más transparentes ─────────────── */
+.swiper .swiper-slide {
+    opacity: 0.35;
+    transition: opacity 0.4s ease;
+}
+.swiper .swiper-slide-active {
+    opacity: 1;
+}
+
+/* ── Programas: hover gris claro en botón Ver Programas ──────────────────── */
+.btn-ver-programas:hover,
+.btn-ver-programas:focus {
+    background: rgba(200,200,200,0.3) !important;
+    border-radius: 8px;
+}
+.events .events-item:hover .events-img::after {
+    height: 0 !important;
+    opacity: 0 !important;
+}
+.events .events-item:hover .events-img img {
+    transform: none !important;
+}
+.events .events-item:hover .events-text a.h4 {
+    color: inherit !important;
+}
+
+/* ── Quitar borde rosa del botón Ver Programas ───────────────────────────── */
+.btn-ver-programas,
+.btn-ver-programas:hover,
+.btn-ver-programas:focus,
+.btn-ver-programas:active,
+.btn-ver-programas.show {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: transparent !important;
+}
+
+/* ── Quitar borde rosa de tarjetas de programas ──────────────────────────── */
+.events .events-item,
+.events .events-item *,
+.events .events-item .events-inner,
+.events .events-item .events-text {
+    border-color: transparent !important;
+    outline: none !important;
+}
+.events .events-item .events-inner .events-img .event-overlay {
+    display: none !important;
+}
+
+/* ── FORZAR quitar rosa de programas dropdown ────────────────────────────── */
+.dropdown-toggle:focus,
+.dropdown-toggle:focus-visible,
+.dropdown-toggle:active,
+.dropdown-toggle.show,
+.btn:focus,
+.btn:focus-visible,
+.btn:active {
+    box-shadow: none !important;
+    outline: 0 !important;
+}
+.events-item,
+.events-item:hover,
+.events-item:focus-within {
+    box-shadow: none !important;
+    outline: 0 !important;
+    border: none !important;
+}
+
+/* ── Quitar hover de entradas de transparencia ───────────────────────────── */
+.program .program-item:hover .program-img img,
+.program .program-item:hover .program-teacher img {
+    transform: none !important;
+}
+.program .program-item:hover {
+    box-shadow: none !important;
+}
+.program .program-item .overflow-hidden img {
+    transition: none !important;
+}
+
+/* ── Eliminar TODOS los efectos hover/focus de tarjetas de programas ─────── */
+.events .events-item,
+.events .events-item *,
+.events .events-item .events-inner,
+.events .events-item .events-inner *,
+.events .events-item .events-text,
+.events .events-item .events-text * {
+    box-shadow: none !important;
+    outline: none !important;
+    border-color: transparent !important;
+    --bs-btn-focus-shadow-rgb: none !important;
+}
+.events .events-item .events-inner .events-img::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* ── Quitar sombra/resaltado hover en tarjetas de transparencia ──────────── */
+.program .program-item,
+.program .program-item:hover,
+.program .program-item.rounded,
+.program .program-item.rounded:hover {
+    box-shadow: none !important;
+    transform: none !important;
+    border: none !important;
+    transition: none !important;
+}
+.program .program-item .img-border,
+.program .program-item .img-border:hover {
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* ── Quitar box-shadow rosa de Bootstrap en botones ──────────────────────── */
+.btn-check:focus + .btn,
+.btn:focus,
+.btn:active:focus,
+.btn-check:checked + .btn:focus {
+    box-shadow: none !important;
+}
+
+/* ── Quitar box-shadow rosa de Bootstrap en botones ──────────────────────── */
+.btn-check:focus + .btn,
+.btn:focus,
+.btn:active:focus,
+.btn-check:checked + .btn:focus {
+    box-shadow: none !important;
+}

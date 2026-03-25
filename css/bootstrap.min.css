@@ -2295,7 +2295,7 @@ progress {
     background-color: #fff;
     border-color: #ffa4c0;
     outline: 0;
-    box-shadow: 0 0 0 .25rem rgba(255, 72, 128, .25)
+    box-shadow: 0 0 0 .25rem rgba(107, 98, 90, .15)
 }
 
 .form-control::-webkit-date-and-time-value {
@@ -2494,7 +2494,7 @@ textarea.form-control-lg {
 .form-select:focus {
     border-color: #ffa4c0;
     outline: 0;
-    box-shadow: 0 0 0 .25rem rgba(255, 72, 128, .25)
+    box-shadow: 0 0 0 .25rem rgba(107, 98, 90, .15)
 }
 
 .form-select[multiple],
@@ -2570,7 +2570,7 @@ textarea.form-control-lg {
 .form-check-input:focus {
     border-color: #ffa4c0;
     outline: 0;
-    box-shadow: 0 0 0 .25rem rgba(255, 72, 128, .25)
+    box-shadow: 0 0 0 .25rem rgba(107, 98, 90, .15)
 }
 
 .form-check-input:checked {
@@ -2664,11 +2664,11 @@ textarea.form-control-lg {
 }
 
 .form-range:focus::-webkit-slider-thumb {
-    box-shadow: 0 0 0 1px #fff, 0 0 0 .25rem rgba(255, 72, 128, .25)
+    box-shadow: 0 0 0 1px #fff, 0 0 0 .25rem rgba(107, 98, 90, .15)
 }
 
 .form-range:focus::-moz-range-thumb {
-    box-shadow: 0 0 0 1px #fff, 0 0 0 .25rem rgba(255, 72, 128, .25)
+    box-shadow: 0 0 0 1px #fff, 0 0 0 .25rem rgba(107, 98, 90, .15)
 }
 
 .form-range::-moz-focus-outer {
@@ -3171,7 +3171,7 @@ textarea.form-control.is-invalid {
 .btn-check:focus+.btn,
 .btn:focus {
     outline: 0;
-    box-shadow: 0 0 0 .25rem rgba(255, 72, 128, .25)
+    box-shadow: 0 0 0 .25rem rgba(107, 98, 90, .15)
 }
 
 .btn:disabled,
@@ -3554,7 +3554,7 @@ fieldset:disabled .btn {
 
 .btn-check:focus+.btn-outline-primary,
 .btn-outline-primary:focus {
-    box-shadow: 0 0 0 .25rem rgba(255, 72, 128, .5)
+    box-shadow: 0 0 0 .25rem rgba(107, 98, 90, .25)
 }
 
 .btn-check:checked+.btn-outline-primary,
@@ -3572,7 +3572,7 @@ fieldset:disabled .btn {
 .btn-outline-primary:active:focus,
 .btn-outline-primary.active:focus,
 .btn-outline-primary.dropdown-toggle.show:focus {
-    box-shadow: 0 0 0 .25rem rgba(255, 72, 128, .5)
+    box-shadow: 0 0 0 .25rem rgba(107, 98, 90, .25)
 }
 
 .btn-outline-primary:disabled,
@@ -5345,7 +5345,7 @@ fieldset:disabled .btn {
     color: #cc3a66;
     background-color: #e9ecef;
     outline: 0;
-    box-shadow: 0 0 0 .25rem rgba(255, 72, 128, .25)
+    box-shadow: 0 0 0 .25rem rgba(107, 98, 90, .15)
 }
 
 .page-item:not(:first-child) .page-link {
@@ -6013,7 +6013,7 @@ fieldset:disabled .btn {
 
 .btn-close:focus {
     outline: 0;
-    box-shadow: 0 0 0 .25rem rgba(255, 72, 128, .25);
+    box-shadow: 0 0 0 .25rem rgba(107, 98, 90, .15);
     opacity: 1
 }
 

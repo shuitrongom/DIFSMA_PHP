@@ -138,11 +138,13 @@ require_once 'includes/navbar.php';
 ?>
 
     <!-- Carousel Slaider 1 Start -->
-    <div class="container-fluid service px-0 py-0">
-        <section class="slider" aria-label="Galería de imágenes">
-            <div class="viewport" id="viewport"></div>
-            <div class="dots" id="dots" aria-hidden="false" style="margin-top: 12px;"></div>
-        </section>
+    <div class="container-fluid border-bottom bg-white px-0 py-0">
+        <div class="container px-0">
+            <section class="slider" aria-label="Galería de imágenes">
+                <div class="viewport" id="viewport"></div>
+                <div class="dots" id="dots" aria-hidden="false" style="margin-top: 12px;"></div>
+            </section>
+        </div>
     </div>
     <!-- Carousel Slaider 1 End -->
 
@@ -165,6 +167,9 @@ require_once 'includes/navbar.php';
                 img.src = src;
                 img.alt = 'Imagen del slider ' + (i + 1);
                 img.loading = i === 0 ? 'eager' : 'lazy';
+                img.style.width = '100%';
+                img.style.height = 'auto';
+                img.style.display = 'block';
                 slide.appendChild(img);
                 viewport.appendChild(slide);
 
@@ -197,7 +202,7 @@ require_once 'includes/navbar.php';
 
         // ── Auto-avance ───────────────────────────────────────────────────────
         let timer = null;
-        function startAuto()   { stopAuto(); timer = setInterval(next, 4000); }
+        function startAuto()   { stopAuto(); timer = setInterval(next, 7000); }
         function stopAuto()    { if (timer) { clearInterval(timer); timer = null; } }
         function restartAuto() { stopAuto(); startAuto(); }
 
@@ -387,19 +392,17 @@ require_once 'includes/navbar.php';
             <div class="row g-4 justify-content-center" style="max-width:960px;margin:0 auto;">
                 <?php foreach ($transparencia_items as $tIdx => $tItem): ?>
                 <div class="col-10 col-sm-6 col-lg-4 wow fadeIn" data-wow-delay="<?= number_format(0.1 + ($tIdx % 3) * 0.2, 1) ?>s">
-                    <div class="program-item rounded">
-                        <div class="program-img position-relative">
-                            <div class="overflow-hidden img-border">
+                    <div style="text-align:center;">
+                        <div>
                                 <?php
                                 $is_external = (strpos($tItem['url'], 'http') === 0);
                                 $href = $is_external ? htmlspecialchars($tItem['url']) : htmlspecialchars($tItem['url']);
                                 $target = $is_external ? ' target="_blank" rel="noopener noreferrer"' : '';
                                 ?>
                                 <a href="<?= $href ?>"<?= $target ?>>
-                                    <img src="<?= htmlspecialchars($tItem['imagen_path'] ?? 'img/placeholder.jpg') ?>" class="img-fluid-traspa w-100" alt="<?= htmlspecialchars($tItem['titulo']) ?>">
+                                    <img src="<?= htmlspecialchars($tItem['imagen_path'] ?? 'img/placeholder.jpg') ?>" class="img-fluid" style="max-width:220px;" alt="<?= htmlspecialchars($tItem['titulo']) ?>">
                                 </a>
-                            </div>
-                            <div class="team-content text-center py-3">
+                            <div class="text-center py-3">
                                 <h5 style="color:rgb(107,98,90);"><?= htmlspecialchars($tItem['titulo']) ?></h5>
                             </div>
                         </div>
