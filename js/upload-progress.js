@@ -1,5 +1,6 @@
 /**
- * upload-progress.js — Iframe + progreso simulado basado en tamaño
+ * upload-progress.js — Iframe + progreso simulado
+ * Funciona con formularios normales y dentro de modales Bootstrap
  */
 (function () {
 	const overlay = document.createElement('div');
@@ -40,20 +41,32 @@
 
 		const file = fileInput.files[0];
 
-		const totalMB = file.size / 1048576;
+		// Cerrar modal si el formulario está dentro de uno
+		const modal = form.closest('.modal');
+		if (modal) {
+			const bsModal = bootstrap.Modal.getInstance(modal);
+			if (bsModal) {
+				bsModal.hide();
+			}
+		}
+
 		fnEl.textContent = file.name;
 		szEl.textContent = '0 MB / ' + fmb(file.size);
 		bar.style.width = '0%';
 		bar.textContent = '0%';
-		overlay.classList.add('active');
 
-		// Enviar al iframe (funciona siempre)
+		// Mostrar overlay con z-index mayor que el modal backdrop
+		setTimeout(function () {
+			overlay.classList.add('active');
+		}, 300);
+
+		// Enviar al iframe
 		const originalTarget = form.target;
 		form.target = 'uploadFrame';
 
-		// Simular progreso: ~500KB/s estimado para hosting compartido
+		// Simular progreso: ~500KB/s
 		const speedBps = 500 * 1024;
-		const estimatedSec = file.size / speedBps;
+		const estimatedSec = Math.max(file.size / speedBps, 2);
 		const startTime = Date.now();
 		let done = false;
 
@@ -82,7 +95,5 @@
 				window.location.reload();
 			}, 500);
 		};
-
-		// NO preventDefault — el formulario se envía normalmente al iframe
 	});
 })();
