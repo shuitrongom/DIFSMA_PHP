@@ -8,11 +8,7 @@ DirectoryIndex index.php
     # Excluir admin completamente
     RewriteRule ^admin/ - [L]
 
-    # Si la URL tiene .php (fuera de admin), redirigir sin extensión (302 temporal)
-    RewriteCond %{THE_REQUEST} /([^.]+)\.php[\s?] [NC]
-    RewriteRule (.+)\.php$ $1 [R=302,L]
-
-    # Si el archivo .php existe, servir sin extensión
+    # Servir archivo .php si la URL no tiene extensión
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME}.php -f
