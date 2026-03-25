@@ -152,7 +152,7 @@ $token=csrf_token();
 <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#eC<?=(int)$c['id']?>"><i class="bi bi-pencil"></i></button>
 <?php if(empty($c['pdf_path'])):?><button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#uP<?=(int)$c['id']?>"><i class="bi bi-upload"></i></button>
 <?php else:?>
-<a href="../<?=htmlspecialchars($c['pdf_path'])?>" target="_blank" class="btn btn-sm btn-outline-info"><i class="bi bi-eye"></i></a>
+<button type="button" class="btn btn-sm btn-outline-info pdf-trigger" data-bs-toggle="modal" data-bs-target="#pdfModal" data-pdf="../<?=htmlspecialchars($c['pdf_path'])?>"><i class="bi bi-eye"></i></button>
 <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#uP<?=(int)$c['id']?>"><i class="bi bi-arrow-repeat"></i></button>
 <form method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar PDF?')"><input type="hidden" name="action" value="delete_pdf"><input type="hidden" name="bloque_id" value="<?=$bloqueId?>"><input type="hidden" name="concepto_id" value="<?=(int)$c['id']?>"><input type="hidden" name="csrf_token" value="<?=htmlspecialchars($token)?>"><button class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-earmark-x"></i></button></form>
 <?php endif;?>
@@ -197,6 +197,47 @@ $token=csrf_token();
 </div></div></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/upload-progress.js?v=13"></script>
+
+<!-- Modal PDF -->
+<div class="modal fade" id="pdfModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable" style="max-height:95vh;">
+        <div class="modal-content" style="height:90vh;">
+            <div class="modal-header">
+                <h5 class="modal-title">Documento PDF</h5>
+                <span id="pdfPageInfo" style="margin-left:auto;margin-right:1rem;font-size:.85rem;color:#888;"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body" id="pdfContainer" style="overflow-y:auto;padding:8px;background:#525659;text-align:center;"></div>
+        </div>
+    </div>
+</div>
+
+<script src="../lib/pdfjs/pdf.min.js"></script>
+<script>
+(function(){
+    pdfjsLib.GlobalWorkerOptions.workerSrc='../lib/pdfjs/pdf.worker.min.js';
+    var m=document.getElementById('pdfModal'); if(!m)return;
+    var container=document.getElementById('pdfContainer');
+    var pageInfo=document.getElementById('pdfPageInfo');
+    m.addEventListener('show.bs.modal',function(event){ m._pdfUrl=event.relatedTarget.getAttribute('data-pdf'); });
+    m.addEventListener('shown.bs.modal',function(){
+        var url=m._pdfUrl; if(!url)return;
+        container.innerHTML='<p style="color:#fff;padding:2rem;">Cargando PDF...</p>';
+        var loadingTask=pdfjsLib.getDocument(url); m._loadingTask=loadingTask;
+        loadingTask.promise.then(function(pdf){
+            container.innerHTML=''; pageInfo.textContent='Páginas: '+pdf.numPages;
+            var maxW=Math.min(container.clientWidth-16,900); var chain=Promise.resolve();
+            for(var i=1;i<=pdf.numPages;i++){(function(num){chain=chain.then(function(){
+                return pdf.getPage(num).then(function(page){
+                    var scale=maxW/page.getViewport({scale:1}).width; var vp=page.getViewport({scale:scale});
+                    var c=document.createElement('canvas'); c.width=Math.floor(vp.width); c.height=Math.floor(vp.height);
+                    container.appendChild(c); return page.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;
+                });});})(i);}
+        }).catch(function(err){ container.innerHTML='<p style="color:#fff;padding:2rem;">Error: '+err.message+'</p>'; });
+    });
+    m.addEventListener('hidden.bs.modal',function(){ container.innerHTML=''; pageInfo.textContent=''; if(m._loadingTask){m._loadingTask.destroy();m._loadingTask=null;} });
+})();
+</script>
 <script>
 const sidebar=document.getElementById('sidebar');
 if(window.innerWidth<=768)sidebar.classList.add('collapsed');
