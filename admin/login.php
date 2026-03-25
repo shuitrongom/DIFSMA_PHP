@@ -106,7 +106,7 @@ $csrf = csrf_token();
     <title>Administración — DIF</title>
     <link rel="icon" href="../img/favicon-32x32.png" sizes="35x35">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/admin.css?v=6">
+    <link rel="stylesheet" href="../css/admin.css?v=7">
     <style>
         body {
             margin: 0;

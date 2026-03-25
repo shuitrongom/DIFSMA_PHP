@@ -18,7 +18,7 @@ require_once __DIR__ . '/auth_guard.php';
     <link rel="icon" href="../img/favicon-32x32.png" sizes="35x35">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../css/admin.css?v=6">
+    <link rel="stylesheet" href="../css/admin.css?v=7">
     <style>
         .dashboard-welcome {
             background: linear-gradient(135deg, #2d2d2d 0%, #3a3a3a 40%, rgb(200,16,44) 100%);

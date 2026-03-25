@@ -400,7 +400,7 @@ require_once 'includes/navbar.php';
                                 </a>
                             </div>
                             <div class="team-content text-center py-3">
-                                <h5 class="text-black"><?= htmlspecialchars($tItem['titulo']) ?></h5>
+                                <h5 style="color:rgb(107,98,90);"><?= htmlspecialchars($tItem['titulo']) ?></h5>
                             </div>
                         </div>
                     </div>

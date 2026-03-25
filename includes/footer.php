@@ -117,7 +117,7 @@ if (count($horario_parts) === 2) {
                                 </p>
                             </div>
                             <div class="d-flex align-items-center mb-3" style="white-space:nowrap;">
-                                <i class="fas fa-envelope me-2" style="flex-shrink:0;color:rgba(0,0,0,0.8);"></i>
+                                <i class="fas fa-envelope me-2" style="flex-shrink:0;color:rgb(107, 98, 90);"></i>
                                 <a href="mailto:<?= _fe($footer['email']) ?>"
                                     class="text-body small text-decoration-none" target="_blank"><?= _fe($footer['email']) ?></a>
                             </div>

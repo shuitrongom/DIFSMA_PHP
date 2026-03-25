@@ -48,7 +48,7 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
     <link href="<?= $base_path ?>css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="<?= $base_path ?>css/style.css?v=4" rel="stylesheet">
+    <link href="<?= $base_path ?>css/style.css?v=5" rel="stylesheet">
 
     <!-- Swiper CSS (bundle) -->
     <link rel="stylesheet" href="<?= $base_path ?>css/swiper-bundle.min.css" />
@@ -443,14 +443,14 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
                 <div class="d-flex flex-column align-items-center gap-1">
                     <div class="d-flex align-items-center gap-2">
                         <span id="weather-icon" style="font-size:28px;">⏳</span>
-                        <div id="weather-temp" style="font-weight:600; font-size:16px; color:rgba(0,0,0,0.8);">--°C</div>
+                        <div id="weather-temp" style="font-weight:600; font-size:16px; color:rgb(107,98,90);">--°C</div>
                     </div>
                     <div id="weather-desc" style="color:rgba(0,0,0,0.8); font-size:12px;">Cargando...</div>
-                    <div style="color:rgba(0,0,0,0.8); font-size:12px;">San Mateo Atenco</div>
+                    <div style="color:rgb(107,98,90); font-size:12px; font-family:'Montserrat',sans-serif; font-weight:700;">San Mateo Atenco</div>
                 </div>
             </div>
             <!-- Logo centrado -->
-            <img src="<?= $base_path ?>img/unidos con amor.png" class="img-fluid mx-auto" style="max-width:420px;width:100%;" alt="Unidos con Amor">
+            <img src="<?= $base_path ?>img/UNIDOS.png" class="img-fluid mx-auto" style="max-width:420px;width:100%;" alt="Unidos con Amor">
             <!-- Buscador derecha -->
             <form class="d-flex align-items-center ms-auto" role="search" onsubmit="doSearch(event)" style="min-width:220px; max-width:320px;">
                 <div class="input-group">

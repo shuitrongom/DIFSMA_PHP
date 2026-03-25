@@ -260,7 +260,7 @@ $token = csrf_token();
     <link rel="icon" href="../img/favicon-32x32.png" sizes="35x35">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../css/admin.css?v=6">
+    <link rel="stylesheet" href="../css/admin.css?v=7">
 </head>
 <body>
     <div class="d-flex">
@@ -291,45 +291,49 @@ $token = csrf_token();
 
                 <div class="row g-4">
                     <!-- Formulario de alta -->
-                    <div class="col-lg-4">
-                        <div class="card">
-                            <div class="card-header bg-primary text-white">
-                                <i class="bi bi-plus-circle me-1"></i> Nuevo departamento
+                    <div class="col-12">
+                        <div class="card mb-3">
+                            <div class="card-header bg-primary text-white" style="cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#formNuevoDepto">
+                                <i class="bi bi-plus-circle me-1"></i> Nuevo departamento <i class="bi bi-chevron-down ms-2 small"></i>
                             </div>
+                            <div class="collapse" id="formNuevoDepto">
                             <div class="card-body">
-                                <form method="POST" enctype="multipart/form-data" action="direcciones.php">
+                                <form method="POST" enctype="multipart/form-data" action="direcciones.php" class="row g-3 align-items-end">
                                     <input type="hidden" name="action" value="add">
                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
-                                    <div class="mb-3">
+                                    <div class="col-md-3">
                                         <label class="form-label">Departamento</label>
                                         <input type="text" class="form-control" name="departamento" required maxlength="300" placeholder="Nombre del departamento">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="col-md-2">
                                         <label class="form-label">Nombre</label>
                                         <input type="text" class="form-control" name="nombre" required maxlength="200" placeholder="Nombre(s)">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="col-md-2">
                                         <label class="form-label">Apellidos</label>
                                         <input type="text" class="form-control" name="apellidos" maxlength="200" placeholder="Apellido(s)">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="col-md-2">
                                         <label class="form-label">Cargo</label>
                                         <input type="text" class="form-control" name="cargo" required maxlength="300" placeholder="Cargo o título">
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="col-md-2">
                                         <label class="form-label">Foto (opcional)</label>
                                         <input type="file" class="form-control" name="imagen" accept=".jpg,.jpeg,.png,.webp">
                                     </div>
-                                    <button type="submit" class="btn btn-primary w-100">
-                                        <i class="bi bi-plus-circle me-1"></i> Crear departamento
-                                    </button>
+                                    <div class="col-md-1">
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="bi bi-plus-circle"></i>
+                                        </button>
+                                    </div>
                                 </form>
+                            </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Listado -->
-                    <div class="col-lg-8">
+                    <div class="col-12">
                 <div class="card">
                     <div class="card-header">
                         <i class="bi bi-people me-1"></i> Departamentos
@@ -562,7 +566,7 @@ $token = csrf_token();
                         <?php endif; ?>
                     </div>
                 </div>
-                    </div><!-- col-lg-8 -->
+                    </div><!-- col-12 -->
                 </div><!-- row -->
             </div>
         </div>

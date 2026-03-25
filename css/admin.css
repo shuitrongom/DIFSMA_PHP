@@ -169,7 +169,7 @@ body {
 .sidebar-divider { border-top: 1px solid rgba(255,255,255,0.08); margin: 6px 16px; }
 
 /* ── Main Content ────────────────────────────────────────────────────────────── */
-.main-content { flex: 1; min-width: 0; transition: margin-left 0.3s; }
+.main-content { flex: 1; min-width: 0; transition: margin-left 0.3s; overflow-x: hidden; }
 
 /* ── Top Navbar ──────────────────────────────────────────────────────────────── */
 .main-content > .navbar {
