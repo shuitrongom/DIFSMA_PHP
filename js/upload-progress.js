@@ -38,6 +38,10 @@
 			return;
 		}
 
+		// Guardar la URL actual antes de enviar
+		const currentPage =
+			window.location.href.split('?')[0] + window.location.search;
+
 		e.preventDefault();
 
 		fnEl.textContent = file.name;
@@ -61,11 +65,9 @@
 		xhr.addEventListener('loadend', function () {
 			bar.style.width = '100%';
 			bar.textContent = '100%';
-			// XHR sigue redirects automáticamente — responseURL tiene la URL final
-			const dest = xhr.responseURL || form.action || window.location.href;
 			setTimeout(function () {
-				window.location.href = dest;
-			}, 400);
+				window.location.href = currentPage;
+			}, 500);
 		});
 
 		xhr.timeout = 600000;

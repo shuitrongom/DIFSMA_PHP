@@ -78,7 +78,7 @@ require_once __DIR__ . '/auth_guard.php';
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/upload-progress.js?v=6"></script>
+    <script src="../js/upload-progress.js?v=7"></script>
     <script>
         const sidebar = document.getElementById('sidebar');
         if (window.innerWidth <= 768) sidebar.classList.add('collapsed');
