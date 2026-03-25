@@ -150,7 +150,7 @@ $token=csrf_token();
 <input type="hidden" name="action" value="add_boton">
 <input type="hidden" name="csrf_token" value="<?=htmlspecialchars($token)?>">
 <div class="mb-3"><label class="form-label">Título del botón</label><input type="text" name="titulo" class="form-control" required placeholder="Ej: Aviso de Privacidad Integral..."></div>
-<div class="mb-3"><label class="form-label">PDF (máx. 20 MB, opcional)</label><input type="file" name="pdf" class="form-control" accept=".pdf"></div>
+<div class="mb-3"><label class="form-label">PDF (máx. 50 MB, opcional)</label><input type="file" name="pdf" class="form-control" accept=".pdf"></div>
 <button type="submit" class="btn btn-success w-100"><i class="bi bi-plus-lg me-1"></i> Agregar</button>
 </form>
 </div></div></div>

@@ -137,7 +137,7 @@ $token=csrf_token();
 <div class="card-body"><form method="POST" enctype="multipart/form-data" class="row g-2 align-items-end">
 <input type="hidden" name="action" value="add_concepto"><input type="hidden" name="bloque_id" value="<?=$bloqueId?>"><input type="hidden" name="csrf_token" value="<?=htmlspecialchars($token)?>">
 <div class="col-md-5"><label class="form-label">Nombre del concepto</label><input type="text" name="nombre" class="form-control" required placeholder="Ej: Clasificación económica por tipo de gasto"></div>
-<div class="col-md-4"><label class="form-label">PDF (máx. 20 MB, opcional)</label><input type="file" name="pdf" class="form-control" accept=".pdf"></div>
+<div class="col-md-4"><label class="form-label">PDF (máx. 50 MB, opcional)</label><input type="file" name="pdf" class="form-control" accept=".pdf"></div>
 <div class="col-md-3"><button type="submit" class="btn btn-success w-100"><i class="bi bi-plus-lg me-1"></i> Agregar</button></div>
 </form></div></div>
 <?php if(empty($conceptos)):?><div class="alert alert-info"><i class="bi bi-info-circle me-1"></i> Sin conceptos. Use el formulario para agregar.</div>
