@@ -1,7 +1,5 @@
 /**
- * upload-progress.js — Barra de progreso real con % y MB
- * Usa iframe para envío real + XHR duplicado solo para progreso visual.
- * El iframe garantiza que el archivo se suba; el XHR solo muestra el avance.
+ * upload-progress.js — Iframe + progreso simulado basado en tamaño
  */
 (function () {
 	const overlay = document.createElement('div');
@@ -24,7 +22,6 @@
 		return (b / 1048576).toFixed(1) + ' MB';
 	}
 
-	// Iframe oculto para envío real
 	const iframe = document.createElement('iframe');
 	iframe.name = 'uploadFrame';
 	iframe.style.display = 'none';
@@ -46,69 +43,49 @@
 			return;
 		}
 
-		e.preventDefault();
-
+		const totalMB = file.size / 1048576;
 		fnEl.textContent = file.name;
 		szEl.textContent = '0 MB / ' + fmb(file.size);
 		bar.style.width = '0%';
 		bar.textContent = '0%';
 		overlay.classList.add('active');
 
-		// Enviar via XHR para tener progreso
-		const fd = new FormData(form);
-		let action = form.action || window.location.href;
+		// Enviar al iframe (funciona siempre)
+		const originalTarget = form.target;
+		form.target = 'uploadFrame';
 
-		// Asegurar URL absoluta
-		if (action.indexOf('http') !== 0) {
-			const a = document.createElement('a');
-			a.href = action;
-			action = a.href;
-		}
+		// Simular progreso: ~500KB/s estimado para hosting compartido
+		const speedBps = 500 * 1024;
+		const estimatedSec = file.size / speedBps;
+		const startTime = Date.now();
+		let done = false;
 
-		const xhr = new XMLHttpRequest();
-
-		xhr.upload.addEventListener('progress', function (ev) {
-			if (ev.lengthComputable) {
-				const pct = Math.round((ev.loaded / ev.total) * 100);
-				bar.style.width = pct + '%';
-				bar.textContent = pct + '%';
-				szEl.textContent = fmb(ev.loaded) + ' / ' + fmb(ev.total);
+		const timer = setInterval(function () {
+			if (done) {
+				return;
 			}
-		});
+			const elapsed = (Date.now() - startTime) / 1000;
+			const pct = Math.min(Math.round((elapsed / estimatedSec) * 95), 95);
+			const uploaded = Math.min(file.size * (pct / 100), file.size);
+			bar.style.width = pct + '%';
+			bar.textContent = pct + '%';
+			szEl.textContent = fmb(uploaded) + ' / ' + fmb(file.size);
+		}, 300);
 
-		xhr.addEventListener('readystatechange', function () {
-			if (xhr.readyState === 4) {
-				bar.style.width = '100%';
-				bar.textContent = '100%';
-				szEl.textContent = fmb(file.size) + ' / ' + fmb(file.size);
-				setTimeout(function () {
-					overlay.classList.remove('active');
-					// Recargar la página actual (con query params si los hay)
-					window.location.href = window.location.href;
-				}, 600);
-			}
-		});
-
-		xhr.addEventListener('error', function () {
-			// Si XHR falla, enviar normalmente via iframe como fallback
-			overlay
-				.querySelector('.progress-bar')
-				.classList.add('progress-bar-striped', 'progress-bar-animated');
-			bar.textContent = 'Procesando...';
-
-			const originalTarget = form.target;
-			form.target = 'uploadFrame';
-			iframe.onload = function () {
-				form.target = originalTarget || '';
-				iframe.onload = null;
+		iframe.onload = function () {
+			done = true;
+			clearInterval(timer);
+			form.target = originalTarget || '';
+			iframe.onload = null;
+			bar.style.width = '100%';
+			bar.textContent = '100%';
+			szEl.textContent = fmb(file.size) + ' / ' + fmb(file.size);
+			setTimeout(function () {
 				overlay.classList.remove('active');
 				window.location.reload();
-			};
-			form.submit();
-		});
+			}, 500);
+		};
 
-		xhr.timeout = 600000;
-		xhr.open('POST', action);
-		xhr.send(fd);
+		// NO preventDefault — el formulario se envía normalmente al iframe
 	});
 })();
