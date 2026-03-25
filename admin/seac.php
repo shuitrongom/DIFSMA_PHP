@@ -305,7 +305,7 @@ $token = csrf_token();
                             <tbody>
 <?php foreach ($conceptos as $c): ?>
                                 <tr>
-                                    <td><?= htmlspecialchars($c['numero'].'.- '.$c['nombre']) ?></td>
+                                    <td class="text-start"><?= htmlspecialchars($c['numero'].'.- '.$c['nombre']) ?></td>
 <?php for ($t=1;$t<=4;$t++): $cell=$pdfsMap[(int)$c['id']][$t]??null; ?>
                                     <td class="seac-cell text-center">
 <?php if ($cell && !empty($cell['pdf_path'])): ?>

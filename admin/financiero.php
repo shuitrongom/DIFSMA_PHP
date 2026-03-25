@@ -144,9 +144,9 @@ $token=csrf_token();
 <?php else:?>
 <div class="card"><div class="card-header"><i class="bi bi-table me-1"></i> Conceptos</div>
 <div class="card-body p-0"><div class="table-responsive"><table class="table table-hover align-middle mb-0">
-<thead class="table-light"><tr><th style="width:50px">#</th><th>Concepto</th><th style="width:80px">PDF</th><th style="width:220px">Acciones</th></tr></thead><tbody>
+<thead class="table-light"><tr><th style="width:50px">#</th><th class="text-start">Concepto</th><th style="width:80px">PDF</th><th style="width:220px">Acciones</th></tr></thead><tbody>
 <?php foreach($conceptos as $c):?>
-<tr><td><?=(int)$c['numero']?></td><td><?=htmlspecialchars($c['nombre'])?></td>
+<tr><td><?=(int)$c['numero']?></td><td class="text-start"><?=htmlspecialchars($c['nombre'])?></td>
 <td><?php if(!empty($c['pdf_path'])):?><span class="badge bg-success">Sí</span><?php else:?><span class="badge bg-secondary">No</span><?php endif;?></td>
 <td>
 <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#eC<?=(int)$c['id']?>"><i class="bi bi-pencil"></i></button>
