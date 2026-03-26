@@ -46,7 +46,7 @@ require_once __DIR__ . '/../includes/navbar.php';
             <div class="swiper notice-swiper" id="swiperNoticias">
                 <div class="swiper-wrapper">
                     <?php foreach ($noticias_images as $i => $img): ?>
-                    <div class="swiper-slide"><img src="<?= htmlspecialchars($base_path . $img['imagen_path']) ?>" class="notice-img" alt="Noticia <?= $i + 1 ?>" loading="lazy"></div>
+                    <div class="swiper-slide"><img src="<?= htmlspecialchars($base_path . $img['imagen_path']) ?>" class="notice-img" alt="Noticia <?= $i + 1 ?>" loading="lazy" style="max-height:750px;object-fit:contain;"></div>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -76,21 +76,23 @@ require_once __DIR__ . '/../includes/navbar.php';
 <?php if (!empty($noticias_images)): ?>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        var totalSlides = <?= count($noticias_images) ?>;
+        var useLoop = totalSlides > 3;
+        var useAutoplay = totalSlides > 3 ? { delay: 10000, disableOnInteraction: false } : false;
+
         new Swiper('#swiperNoticias', {
-            loop: true,
+            loop: useLoop,
+            rewind: !useLoop,
             slidesPerView: 1,
-            spaceBetween: 16,
-            autoplay: {
-                delay: 15000,
-                disableOnInteraction: false
-            },
+            spaceBetween: 4,
+            autoplay: useAutoplay,
             navigation: {
                 nextEl: '.notice-swiper-next',
                 prevEl: '.notice-swiper-prev'
             },
             breakpoints: {
-                576: { slidesPerView: 2 },
-                992: { slidesPerView: 3 }
+                576: { slidesPerView: Math.min(2, totalSlides) },
+                992: { slidesPerView: Math.min(3, totalSlides) }
             }
         });
     });

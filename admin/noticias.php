@@ -230,6 +230,12 @@ $token = csrf_token();
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../css/admin.css?v=7">
+    <style>
+        #noticiasAccordion .accordion-collapse,
+        #noticiasAccordion .accordion-body,
+        #noticiasAccordion .card { overflow: visible !important; }
+        #noticiasAccordion .card-img-top { border-radius: 6px 6px 0 0; }
+    </style>
 </head>
 <body>
     <div class="d-flex">
@@ -285,147 +291,153 @@ $token = csrf_token();
                         </div>
                     </div>
 
-                    <!-- Listado de noticias -->
+                    <!-- Listado de noticias agrupadas por fecha -->
                     <div class="col-lg-8">
                         <div class="card">
                             <div class="card-header">
                                 <i class="bi bi-newspaper me-1"></i> Imágenes de Noticias
                                 <span class="badge bg-secondary ms-1"><?= count($noticias) ?></span>
                             </div>
-                            <div class="card-body p-0">
+                            <div class="card-body p-2" style="overflow:visible;">
                                 <?php if (empty($noticias)): ?>
                                     <div class="text-center text-muted py-4">
                                         <i class="bi bi-newspaper" style="font-size: 2rem;"></i>
                                         <p class="mt-2 mb-0">No hay imágenes de noticias registradas. Use el formulario para agregar una.</p>
                                     </div>
                                 <?php else: ?>
-                                    <div class="table-responsive">
-                                        <table class="table table-hover align-middle mb-0">
-                                            <thead class="table-light">
-                                                <tr>
-                                                    <th style="width: 100px;">Vista previa</th>
-                                                    <th style="width: 130px;">Fecha</th>
-                                                    <th>Ruta</th>
-                                                    <th style="width: 60px;">Activo</th>
-                                                    <th style="width: 180px;">Acciones</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php foreach ($noticias as $noticia): ?>
-                                                    <tr>
-                                                        <td>
-                                                            <img src="../<?= htmlspecialchars($noticia['imagen_path']) ?>"
-                                                                 alt="Noticia <?= htmlspecialchars($noticia['fecha_noticia']) ?>"
-                                                                 class="thumb-preview">
-                                                        </td>
-                                                        <td>
-                                                            <span class="badge bg-info text-dark">
-                                                                <i class="bi bi-calendar-event me-1"></i>
-                                                                <?= htmlspecialchars($noticia['fecha_noticia']) ?>
-                                                            </span>
-                                                        </td>
-                                                        <td class="text-truncate" style="max-width: 200px;">
-                                                            <small class="text-muted"><?= htmlspecialchars($noticia['imagen_path']) ?></small>
-                                                        </td>
-                                                        <td class="text-center">
-                                                            <?php if ($noticia['activo']): ?>
-                                                                <span class="badge bg-success">Sí</span>
-                                                            <?php else: ?>
-                                                                <span class="badge bg-secondary">No</span>
-                                                            <?php endif; ?>
-                                                        </td>
-                                                        <td>
-                                                            <button type="button" class="btn btn-sm btn-outline-warning"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#editModal<?= (int) $noticia['id'] ?>"
-                                                                    title="Editar">
-                                                                <i class="bi bi-pencil"></i> Editar
-                                                            </button>
-                                                            <button type="button" class="btn btn-sm btn-outline-danger"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#deleteModal<?= (int) $noticia['id'] ?>"
-                                                                    title="Eliminar">
-                                                                <i class="bi bi-trash"></i> Eliminar
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-
-                                                    <!-- Modal Editar -->
-                                                    <div class="modal fade" id="editModal<?= (int) $noticia['id'] ?>" tabindex="-1" aria-labelledby="editLabel<?= (int) $noticia['id'] ?>" aria-hidden="true">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <form method="POST" enctype="multipart/form-data" action="noticias.php">
-                                                                    <input type="hidden" name="action" value="edit">
-                                                                    <input type="hidden" name="id" value="<?= (int) $noticia['id'] ?>">
-                                                                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="editLabel<?= (int) $noticia['id'] ?>">
-                                                                            Editar noticia #<?= (int) $noticia['id'] ?>
-                                                                        </h5>
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <p>Imagen actual:</p>
-                                                                        <img src="../<?= htmlspecialchars($noticia['imagen_path']) ?>"
-                                                                             alt="Noticia actual"
-                                                                             class="img-fluid rounded mb-3" style="max-height: 200px;">
-                                                                        <div class="mb-3">
-                                                                            <label for="editFecha<?= (int) $noticia['id'] ?>" class="form-label">Fecha de la noticia</label>
-                                                                            <input type="date" class="form-control" id="editFecha<?= (int) $noticia['id'] ?>" name="fecha_noticia" value="<?= htmlspecialchars($noticia['fecha_noticia']) ?>" max="<?= date('Y-m-d') ?>" required>
-                                                                        </div>
-                                                                        <div class="mb-3">
-                                                                            <label for="editImagen<?= (int) $noticia['id'] ?>" class="form-label">Nueva imagen (opcional — dejar vacío para conservar la actual)</label>
-                                                                            <input type="file" class="form-control" id="editImagen<?= (int) $noticia['id'] ?>" name="imagen" accept=".jpg,.jpeg,.png,.webp">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                                        <button type="submit" class="btn btn-warning">
-                                                                            <i class="bi bi-pencil me-1"></i> Guardar cambios
+                                    <?php
+                                    // Agrupar noticias por fecha
+                                    $noticiasPorFecha = [];
+                                    foreach ($noticias as $noticia) {
+                                        $fecha = $noticia['fecha_noticia'];
+                                        if (!isset($noticiasPorFecha[$fecha])) {
+                                            $noticiasPorFecha[$fecha] = [];
+                                        }
+                                        $noticiasPorFecha[$fecha][] = $noticia;
+                                    }
+                                    ?>
+                                    <div class="accordion" id="noticiasAccordion">
+                                        <?php $accIdx = 0; foreach ($noticiasPorFecha as $fecha => $imagenes): $accIdx++; $collapseId = 'collapse' . $accIdx; ?>
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button <?= $accIdx > 1 ? 'collapsed' : '' ?>" type="button" data-bs-toggle="collapse" data-bs-target="#<?= $collapseId ?>" aria-expanded="<?= $accIdx === 1 ? 'true' : 'false' ?>">
+                                                    <i class="bi bi-calendar-event me-2"></i>
+                                                    <?= htmlspecialchars($fecha) ?>
+                                                    <span class="badge bg-primary ms-2"><?= count($imagenes) ?> imagen<?= count($imagenes) > 1 ? 'es' : '' ?></span>
+                                                </button>
+                                            </h2>
+                                            <div id="<?= $collapseId ?>" class="accordion-collapse collapse <?= $accIdx === 1 ? 'show' : '' ?>" data-bs-parent="#noticiasAccordion">
+                                                <div class="accordion-body p-3">
+                                                    <div class="row g-3">
+                                                        <?php foreach ($imagenes as $noticia): ?>
+                                                        <div class="col-6 col-md-4">
+                                                            <div class="card h-100 shadow-sm" style="overflow:visible;">
+                                                                <img src="../<?= htmlspecialchars($noticia['imagen_path']) ?>"
+                                                                     alt="Noticia <?= htmlspecialchars($noticia['fecha_noticia']) ?>"
+                                                                     class="card-img-top" style="height:120px;object-fit:contain;background:#f5f5f5;">
+                                                                <div class="card-body p-2 text-center" style="overflow:visible;">
+                                                                    <?php if ($noticia['activo']): ?>
+                                                                        <span class="badge bg-success mb-1">Activo</span>
+                                                                    <?php else: ?>
+                                                                        <span class="badge bg-secondary mb-1">Inactivo</span>
+                                                                    <?php endif; ?>
+                                                                    <div class="btn-group btn-group-sm w-100 mt-1">
+                                                                        <button type="button" class="btn btn-outline-warning"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#editModal<?= (int) $noticia['id'] ?>"
+                                                                                title="Editar">
+                                                                            <i class="bi bi-pencil"></i>
+                                                                        </button>
+                                                                        <button type="button" class="btn btn-outline-danger"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#deleteModal<?= (int) $noticia['id'] ?>"
+                                                                                title="Eliminar">
+                                                                            <i class="bi bi-trash"></i>
                                                                         </button>
                                                                     </div>
-                                                                </form>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                    <!-- Modal Eliminar -->
-                                                    <div class="modal fade" id="deleteModal<?= (int) $noticia['id'] ?>" tabindex="-1" aria-labelledby="deleteLabel<?= (int) $noticia['id'] ?>" aria-hidden="true">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <form method="POST" action="noticias.php">
-                                                                    <input type="hidden" name="action" value="delete">
-                                                                    <input type="hidden" name="id" value="<?= (int) $noticia['id'] ?>">
-                                                                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title text-danger" id="deleteLabel<?= (int) $noticia['id'] ?>">
-                                                                            <i class="bi bi-exclamation-triangle me-1"></i> Confirmar eliminación
-                                                                        </h5>
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <p>¿Está seguro de eliminar esta imagen de noticia?</p>
-                                                                        <img src="../<?= htmlspecialchars($noticia['imagen_path']) ?>"
-                                                                             alt="Noticia a eliminar"
-                                                                             class="img-fluid rounded" style="max-height: 150px;">
-                                                                        <p class="text-muted small mt-2">
-                                                                            Fecha: <?= htmlspecialchars($noticia['fecha_noticia']) ?><br>
-                                                                            Esta acción no se puede deshacer. El archivo será eliminado del servidor.
-                                                                        </p>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                                        <button type="submit" class="btn btn-danger">
-                                                                            <i class="bi bi-trash me-1"></i> Eliminar
-                                                                        </button>
-                                                                    </div>
-                                                                </form>
+                                                        <!-- Modal Editar -->
+                                                        <div class="modal fade" id="editModal<?= (int) $noticia['id'] ?>" tabindex="-1" aria-labelledby="editLabel<?= (int) $noticia['id'] ?>" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <form method="POST" enctype="multipart/form-data" action="noticias.php">
+                                                                        <input type="hidden" name="action" value="edit">
+                                                                        <input type="hidden" name="id" value="<?= (int) $noticia['id'] ?>">
+                                                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title" id="editLabel<?= (int) $noticia['id'] ?>">
+                                                                                Editar noticia #<?= (int) $noticia['id'] ?>
+                                                                            </h5>
+                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <p>Imagen actual:</p>
+                                                                            <img src="../<?= htmlspecialchars($noticia['imagen_path']) ?>"
+                                                                                 alt="Noticia actual"
+                                                                                 class="img-fluid rounded mb-3" style="max-height: 200px;">
+                                                                            <div class="mb-3">
+                                                                                <label for="editFecha<?= (int) $noticia['id'] ?>" class="form-label">Fecha de la noticia</label>
+                                                                                <input type="date" class="form-control" id="editFecha<?= (int) $noticia['id'] ?>" name="fecha_noticia" value="<?= htmlspecialchars($noticia['fecha_noticia']) ?>" max="<?= date('Y-m-d') ?>" required>
+                                                                            </div>
+                                                                            <div class="mb-3">
+                                                                                <label for="editImagen<?= (int) $noticia['id'] ?>" class="form-label">Nueva imagen (opcional)</label>
+                                                                                <input type="file" class="form-control" id="editImagen<?= (int) $noticia['id'] ?>" name="imagen" accept=".jpg,.jpeg,.png,.webp">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                            <button type="submit" class="btn btn-warning">
+                                                                                <i class="bi bi-pencil me-1"></i> Guardar cambios
+                                                                            </button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
                                                             </div>
                                                         </div>
+
+                                                        <!-- Modal Eliminar -->
+                                                        <div class="modal fade" id="deleteModal<?= (int) $noticia['id'] ?>" tabindex="-1" aria-labelledby="deleteLabel<?= (int) $noticia['id'] ?>" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <form method="POST" action="noticias.php">
+                                                                        <input type="hidden" name="action" value="delete">
+                                                                        <input type="hidden" name="id" value="<?= (int) $noticia['id'] ?>">
+                                                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title text-danger" id="deleteLabel<?= (int) $noticia['id'] ?>">
+                                                                                <i class="bi bi-exclamation-triangle me-1"></i> Confirmar eliminación
+                                                                            </h5>
+                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <p>¿Está seguro de eliminar esta imagen?</p>
+                                                                            <img src="../<?= htmlspecialchars($noticia['imagen_path']) ?>"
+                                                                                 alt="Noticia a eliminar"
+                                                                                 class="img-fluid rounded" style="max-height: 150px;">
+                                                                            <p class="text-muted small mt-2">
+                                                                                Fecha: <?= htmlspecialchars($noticia['fecha_noticia']) ?><br>
+                                                                                Esta acción no se puede deshacer.
+                                                                            </p>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                            <button type="submit" class="btn btn-danger">
+                                                                                <i class="bi bi-trash me-1"></i> Eliminar
+                                                                            </button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <?php endforeach; ?>
                                                     </div>
-                                                <?php endforeach; ?>
-                                            </tbody>
-                                        </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <?php endforeach; ?>
                                     </div>
                                 <?php endif; ?>
                             </div>
