@@ -34,7 +34,7 @@ require_once __DIR__ . '/../includes/navbar.php';
 ?>
 
     <!-- Notice Start -->
-    <div class="container-fluid service py-5">
+    <div class="container-fluid program py-5">
         <div class="container py-5">
             <div class="mx-auto text-center wow fadeIn" style="max-width: 900px;">
                 <h4 class="mb-1 d-inline-block" style="font-family:'Montserrat',sans-serif; font-weight:700; letter-spacing:2px; color:rgb(107,98,90);">
