@@ -37,9 +37,9 @@ require_once __DIR__ . '/../includes/navbar.php';
                 <div style="height:16px; background:rgb(200,16,44); width:23%; margin: 4px auto 24px;"></div>
             </div>
     <style>
-        .dir-card{display:flex;border-radius:0 16px 16px 16px;overflow:hidden;box-shadow:0 3px 15px rgba(0,0,0,.12);height:220px;}
-        .dir-card-photo{width:40%;min-width:130px;background:#111;flex-shrink:0;}
-        .dir-card-photo img{width:100%;height:100%;object-fit:cover;object-position:top center;}
+        .dir-card{display:flex;border-radius:0 16px 16px 16px;overflow:hidden;box-shadow:0 3px 15px rgba(0,0,0,.12);height:200px;}
+        .dir-card-photo{min-width:142px;background:#e8e8e8;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+        .dir-card-photo img{max-width:100%;max-height:100%;object-fit:contain;border-radius:4px;}
         .dir-card-panel{flex:1;background:rgb(200,16,44);padding:1rem 1.2rem;border-radius:0 16px 16px 0;display:flex;flex-direction:column;justify-content:center;}
         .dir-card-panel .cargo{font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.5rem;color:#fff;}
         .dir-card-panel .nombre{font-family:'Montserrat',sans-serif;font-weight:300;font-size:22px;margin-bottom:0;color:#fff;line-height:1.3;}
@@ -82,7 +82,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                             <?php if ($has_photo): ?>
                                 <img src="<?= $img ?>" alt="<?= $nombre_safe ?>">
                             <?php else: ?>
-                                <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="background:#1a1a1a;">
+                                <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="background:#e0e0e0;">
                                     <i class="bi bi-person-fill" style="font-size:4rem;color:#555;"></i>
                                 </div>
                             <?php endif; ?>
