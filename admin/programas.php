@@ -64,13 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        if (empty($secciones)) {
-            $_SESSION['flash_message'] = 'Debe agregar al menos una sección de acordeón con título y contenido.';
-            $_SESSION['flash_type']    = 'warning';
-            header('Location: programas.php');
-            exit;
-        }
-
         try {
             $pdo->beginTransaction();
 
@@ -163,13 +156,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($t !== '' && $c !== '') {
                 $secciones[] = ['titulo' => $t, 'contenido' => $c];
             }
-        }
-
-        if (empty($secciones)) {
-            $_SESSION['flash_message'] = 'Debe agregar al menos una sección de acordeón con título y contenido.';
-            $_SESSION['flash_type']    = 'warning';
-            header('Location: programas.php');
-            exit;
         }
 
         try {

@@ -48,7 +48,7 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
     <link href="<?= $base_path ?>css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="<?= $base_path ?>css/style.css?v=17" rel="stylesheet">
+    <link href="<?= $base_path ?>css/style.css?v=18" rel="stylesheet">
 
     <!-- Swiper CSS (bundle) -->
     <link rel="stylesheet" href="<?= $base_path ?>css/swiper-bundle.min.css" />

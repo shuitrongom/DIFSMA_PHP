@@ -273,13 +273,13 @@ require_once 'includes/navbar.php';
                             </div>
                         </div>
                         <div class="events-text p-0 border-0 rounded-bottom" style="background:transparent;">
+                            <?php if (!empty($programa['secciones'])): ?>
                             <div class="dropdown">
                                 <button class="btn p-0 w-100 dropdown-toggle btn-ver-programas" type="button"
                                     id="dropdownPrograma<?= $programa['id'] ?>" data-bs-toggle="dropdown" aria-expanded="false">
                                     <img src="img/btn_ver_programas.png" alt="Ver Programas" class="img-fluid w-100" style="display:block;">
                                 </button>
                                 <ul class="dropdown-menu p-3" aria-labelledby="dropdownPrograma<?= $programa['id'] ?>" style="width: 300px;">
-                                    <?php if (!empty($programa['secciones'])): ?>
                                     <div class="accordion" id="accordionPrograma<?= $programa['id'] ?>">
                                         <?php foreach ($programa['secciones'] as $sIdx => $seccion): ?>
                                         <div class="accordion-item">
@@ -303,11 +303,13 @@ require_once 'includes/navbar.php';
                                         </div>
                                         <?php endforeach; ?>
                                     </div>
-                                    <?php else: ?>
-                                    <li class="px-2 py-1" style="font-family:'Montserrat',sans-serif; font-size:14px; color:rgba(0,0,0,0.6);">Sin secciones disponibles</li>
-                                    <?php endif; ?>
                                 </ul>
                             </div>
+                            <?php else: ?>
+                            <div>
+                                <img src="img/btn_ver_programas.png" alt="Ver Programas" class="img-fluid w-100" style="display:block;opacity:0.5;cursor:default;">
+                            </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>

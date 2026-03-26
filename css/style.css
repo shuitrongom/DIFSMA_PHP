@@ -918,11 +918,11 @@ h6,
 
 /* ── Swiper DIF Comunica: slides laterales más transparentes ─────────────── */
 .swiper .swiper-slide {
-    opacity: 0.35;
+    opacity: 0.3 !important;
     transition: opacity 0.4s ease;
 }
 .swiper .swiper-slide-active {
-    opacity: 1;
+    opacity: 1 !important;
 }
 
 /* ── Programas: hover gris claro en botón Ver Programas ──────────────────── */
