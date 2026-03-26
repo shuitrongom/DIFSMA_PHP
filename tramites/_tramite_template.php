@@ -61,14 +61,15 @@ require_once __DIR__ . '/../includes/navbar.php';
             <div class="row g-5 justify-content-center">
                 <div class="col-md-6 col-lg-6 col-xl-10 wow fadeIn" data-wow-delay="0.5s">
                     <div class="blog-item rounded-bottom">
-                        <div class="overflow-hidden position-relative img-border-radius">
+                        <div class="overflow-hidden position-relative img-border-radius" style="background:#fff;">
                             <img src="<?= $imagen ?>" class="img-fluid w-100" alt="<?= htmlspecialchars($titulo, ENT_QUOTES, 'UTF-8') ?>">
                         </div>
-                        <div class="d-flex justify-content-between px-4 py-3 bg-light border-bottom border-primary blog-date-comments">
-                            <small class="text-dark"><i class="fas fa-calendar me-1 text-dark"></i> <?= date('Y') ?></small>
+                        <div class="d-flex justify-content-between px-4 py-3" style="background:#fff;border-bottom:3px solid rgba(0,0,0,0.7);">
+                            <small style="color:rgba(0,0,0,0.7);"><i class="fas fa-calendar me-1" style="color:rgba(0,0,0,0.7);"></i> <?= date('Y') ?></small>
                         </div>
-                        <div class="px-4 pb-4 bg-light rounded-bottom">
-                            <div class="blog-text-inner">
+                        <div class="px-4 pb-4 rounded-bottom" style="background:rgb(107,98,90);">
+                            <div class="blog-text-inner" style="padding-top:1rem;">
+                                <style>.blog-text-inner,.blog-text-inner *{color:#fff !important;}</style>
                                 <?= $contenido ?>
                             </div>
                         </div>

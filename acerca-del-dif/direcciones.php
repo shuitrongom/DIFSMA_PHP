@@ -53,7 +53,7 @@ require_once __DIR__ . '/../includes/navbar.php';
         }
         /* Móvil */
         @media(max-width:576px){
-            .dir-card-photo{height:150px;}
+            .dir-card-photo{height:150px;}|
             .dir-card-panel{padding:.7rem .8rem;}
             .dir-card-panel .cargo{font-size:10px;}
             .dir-card-panel .nombre{font-size:14px;}
