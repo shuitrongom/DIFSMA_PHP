@@ -34,7 +34,7 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Montserrat:wght@200;400;500;600;800&display=swap" rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
-    <link rel="icon" href="<?= $base_path ?>img/favicon-new.png" sizes="35x35">
+    <link rel="icon" href="<?= $base_path ?>img/favicon_new.png" sizes="35x35">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
