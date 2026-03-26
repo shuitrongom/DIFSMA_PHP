@@ -44,18 +44,20 @@ $active_page = $active_page ?? '';
                         <a href="#" class="nav-link-yellow dropdown-toggle<?= $active_page === 'servicios' ? ' active' : '' ?>"
                            data-bs-toggle="dropdown">SERVICIOS</a>
                         <div class="dropdown-menu m-0 rounded-0">
-                            <a href="<?= htmlspecialchars($base_path) ?>tramites/PMPNNA.php"
-                               class="dropdown-item" style="color:#fff!important">Procudaduría Municipal de Protección de Niñas, Niños Y Adolecentes</a>
-                            <a href="<?= htmlspecialchars($base_path) ?>tramites/DAAM.php"
-                               class="dropdown-item" style="color:#fff!important">Dirección de Atención a Adultos Mayores</a>
-                            <a href="<?= htmlspecialchars($base_path) ?>tramites/DANF.php"
-                               class="dropdown-item" style="color:#fff!important">Dirección de Alimentación y Nutrición Familiar</a>
-                            <a href="<?= htmlspecialchars($base_path) ?>tramites/DAD.php"
-                               class="dropdown-item" style="color:#fff!important">Dirección de Atención a la Discapacidad</a>
-                            <a href="<?= htmlspecialchars($base_path) ?>tramites/DPAF.php"
-                               class="dropdown-item" style="color:#fff!important">Dirección de Prevención y Bienestar Familiar</a>
-                            <a href="<?= htmlspecialchars($base_path) ?>tramites/DSJAIG.php"
-                               class="dropdown-item" style="color:#fff!important">Dirección de Servicios Jurídicos – Asistenciales e Igualdad de Género</a>
+                            <?php
+                            try {
+                                $_nav_pdo = function_exists('get_db') ? get_db() : null;
+                                if (!$_nav_pdo) {
+                                    require_once (isset($base_path) && $base_path !== '' ? rtrim($base_path, '/') . '/' : '') . 'includes/db.php';
+                                    $_nav_pdo = get_db();
+                                }
+                                $_nav_tramites = $_nav_pdo->query('SELECT slug, titulo FROM tramites ORDER BY id ASC')->fetchAll();
+                                foreach ($_nav_tramites as $_nt) {
+                                    $href = htmlspecialchars($base_path) . 'tramites/' . htmlspecialchars($_nt['slug']) . '.php';
+                                    echo '<a href="' . $href . '" class="dropdown-item" style="color:#fff!important">' . htmlspecialchars($_nt['titulo']) . '</a>';
+                                }
+                            } catch (Exception $e) { /* silenciar */ }
+                            ?>
                         </div>
                     </div>
 
