@@ -64,7 +64,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                         <div class="overflow-hidden position-relative img-border-radius" style="background:#fff;">
                             <img src="<?= $imagen ?>" class="img-fluid w-100" alt="<?= htmlspecialchars($titulo, ENT_QUOTES, 'UTF-8') ?>">
                         </div>
-                        <div class="px-4 pb-4 rounded-bottom" style="background:rgb(107,98,90);">
+                        <div class="px-4 pb-4 rounded-bottom" style="background:rgb(200,16,44);">
                             <div class="blog-text-inner" style="padding-top:1rem;">
                                 <style>.blog-text-inner,.blog-text-inner *{color:#fff !important;}</style>
                                 <?= $contenido ?>
