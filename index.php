@@ -307,7 +307,7 @@ require_once 'includes/navbar.php';
                             </div>
                             <?php else: ?>
                             <div>
-                                <img src="img/btn_ver_programas.png" alt="Ver Programas" class="img-fluid w-100" style="display:block;opacity:0.5;cursor:default;">
+                                <img src="img/btn_ver_programas.png" alt="Ver Programas" class="img-fluid w-100" style="display:block;cursor:default;">
                             </div>
                             <?php endif; ?>
                         </div>
