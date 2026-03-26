@@ -339,24 +339,9 @@ $token = csrf_token();
 
                                     <hr>
                                     <h6><i class="bi bi-list-ul me-1"></i> Secciones de acordeón</h6>
-                                    <p class="text-muted small">Agregue al menos una sección con título y contenido.</p>
+                                    <p class="text-muted small">Las secciones son opcionales.</p>
 
                                     <div id="createSections">
-                                        <div class="section-item">
-                                            <button type="button" class="btn btn-sm btn-outline-danger remove-section" title="Eliminar sección" style="display:none;">
-                                                <i class="bi bi-x-lg"></i>
-                                            </button>
-                                            <div class="mb-2">
-                                                <label class="form-label small fw-bold">Título de la sección</label>
-                                                <input type="text" class="form-control form-control-sm" name="sec_titulo[]" required
-                                                       placeholder="Ej: Objetivo">
-                                            </div>
-                                            <div>
-                                                <label class="form-label small fw-bold">Contenido</label>
-                                                <textarea class="form-control form-control-sm" name="sec_contenido[]" rows="3" required
-                                                          placeholder="Descripción de la sección..."></textarea>
-                                            </div>
-                                        </div>
                                     </div>
 
                                     <button type="button" class="btn btn-sm btn-outline-secondary mb-3" id="addCreateSection">
@@ -500,11 +485,11 @@ $token = csrf_token();
                                                         <div class="mb-2">
                                                             <label class="form-label small fw-bold">Título</label>
                                                             <input type="text" class="form-control form-control-sm" name="sec_titulo[]"
-                                                                   value="<?= htmlspecialchars($sec['titulo']) ?>" required>
+                                                                   value="<?= htmlspecialchars($sec['titulo']) ?>">
                                                         </div>
                                                         <div>
                                                             <label class="form-label small fw-bold">Contenido</label>
-                                                            <textarea class="form-control form-control-sm" name="sec_contenido[]" rows="3" required><?= htmlspecialchars($sec['contenido']) ?></textarea>
+                                                            <textarea class="form-control form-control-sm" name="sec_contenido[]" rows="3"><?= htmlspecialchars($sec['contenido']) ?></textarea>
                                                         </div>
                                                     </div>
                                                 <?php endforeach; ?>
@@ -590,12 +575,12 @@ $token = csrf_token();
                     </button>
                     <div class="mb-2">
                         <label class="form-label small fw-bold">Título de la sección</label>
-                        <input type="text" class="form-control form-control-sm" name="sec_titulo[]" required
+                        <input type="text" class="form-control form-control-sm" name="sec_titulo[]"
                                placeholder="Ej: Objetivo">
                     </div>
                     <div>
                         <label class="form-label small fw-bold">Contenido</label>
-                        <textarea class="form-control form-control-sm" name="sec_contenido[]" rows="3" required
+                        <textarea class="form-control form-control-sm" name="sec_contenido[]" rows="3"
                                   placeholder="Descripción de la sección..."></textarea>
                     </div>
                 </div>`;
@@ -624,20 +609,17 @@ $token = csrf_token();
             if (!btn) return;
             const item = btn.closest('.section-item');
             const container = item.parentElement;
-            // Don't remove if it's the last section
-            if (container.querySelectorAll('.section-item').length > 1) {
-                item.remove();
-                updateRemoveButtons(container);
-            }
+            item.remove();
+            updateRemoveButtons(container);
         });
 
-        // ── Show/hide remove buttons (hide if only 1 section) ──────────────────
+        // ── Show remove buttons always ─────────────────────────────────────────
         function updateRemoveButtons(container) {
             const items = container.querySelectorAll('.section-item');
             items.forEach(function (item) {
                 const btn = item.querySelector('.remove-section');
                 if (btn) {
-                    btn.style.display = items.length > 1 ? '' : 'none';
+                    btn.style.display = '';
                 }
             });
         }
