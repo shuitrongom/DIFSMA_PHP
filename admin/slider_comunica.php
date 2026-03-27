@@ -28,6 +28,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     $token  = $_POST['csrf_token'] ?? '';
 
+    // ── REORDER (AJAX) — antes de CSRF para evitar redirect ────────────────
+    if ($action === 'reorder') {
+        header('Content-Type: application/json');
+        $order = $_POST['order'] ?? '';
+        if (empty($order)) {
+            echo json_encode(['success' => false, 'error' => 'Sin datos']);
+            exit;
+        }
+        $ids = array_map('intval', explode(',', $order));
+        try {
+            $stmt = $pdo->prepare('UPDATE slider_comunica SET orden = ? WHERE id = ?');
+            foreach ($ids as $pos => $id) {
+                if ($id > 0) $stmt->execute([$pos + 1, $id]);
+            }
+            echo json_encode(['success' => true]);
+        } catch (PDOException $e) {
+            echo json_encode(['success' => false, 'error' => 'Error BD']);
+        }
+        exit;
+    }
+
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido. Intente de nuevo.';
         $_SESSION['flash_type']    = 'danger';
@@ -113,27 +134,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // ── REORDER (AJAX) ─────────────────────────────────────────────────────────
-    if ($action === 'reorder') {
-        header('Content-Type: application/json');
-        $order = $_POST['order'] ?? '';
-        if (empty($order)) {
-            echo json_encode(['success' => false, 'error' => 'Sin datos']);
-            exit;
-        }
-        $ids = explode(',', $order);
-        try {
-            $stmt = $pdo->prepare('UPDATE slider_comunica SET orden = ? WHERE id = ?');
-            foreach ($ids as $pos => $id) {
-                $stmt->execute([$pos + 1, (int) $id]);
-            }
-            echo json_encode(['success' => true]);
-        } catch (PDOException $e) {
-            echo json_encode(['success' => false, 'error' => 'Error BD']);
-        }
-        exit;
-    }
-
     // ── EDIT ───────────────────────────────────────────────────────────────────
     if ($action === 'edit') {
         $id = (int) ($_POST['id'] ?? 0);
@@ -211,6 +211,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $filePath = BASE_PATH . '/' . $row['imagen_path'];
             if (file_exists($filePath)) unlink($filePath);
             $_SESSION['flash_message'] = 'Imagen eliminada correctamente.';
+            $_SESSION['flash_type']    = 'success';
+        } catch (PDOException $e) {
+            $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al eliminar.';
+            $_SESSION['flash_type']    = 'danger';
+        }
+
+        header('Location: slider_comunica.php');
+        exit;
+    }
+
+    // ── DELETE ALL (por mes) ────────────────────────────────────────────────────
+    if ($action === 'delete_all') {
+        $del_mes  = (int) ($_POST['mes'] ?? 0);
+        $del_anio = (int) ($_POST['anio'] ?? 0);
+
+        if ($del_mes <= 0 || $del_anio <= 0) {
+            $_SESSION['flash_message'] = 'Datos de mes/año inválidos.';
+            $_SESSION['flash_type']    = 'danger';
+            header('Location: slider_comunica.php');
+            exit;
+        }
+
+        try {
+            // Obtener rutas para eliminar archivos
+            $stmt = $pdo->prepare('SELECT imagen_path FROM slider_comunica WHERE mes = ? AND anio = ?');
+            $stmt->execute([$del_mes, $del_anio]);
+            $paths = $stmt->fetchAll();
+
+            // Eliminar registros
+            $stmt = $pdo->prepare('DELETE FROM slider_comunica WHERE mes = ? AND anio = ?');
+            $stmt->execute([$del_mes, $del_anio]);
+
+            // Eliminar archivos del servidor
+            foreach ($paths as $p) {
+                $filePath = BASE_PATH . '/' . $p['imagen_path'];
+                if (file_exists($filePath)) unlink($filePath);
+            }
+
+            $_SESSION['flash_message'] = count($paths) . ' imagen(es) eliminada(s) de ' . ($meses_nombre[$del_mes] ?? $del_mes) . ' ' . $del_anio . '.';
             $_SESSION['flash_type']    = 'success';
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al eliminar.';
@@ -335,7 +374,14 @@ $token = csrf_token();
                             <strong><?= $meses_nombre[$g_mes] ?> <?= $g_anio ?></strong>
                             <span class="badge <?= $badge_class ?> ms-2"><?= $badge_text ?></span>
                         </div>
-                        <span class="badge bg-secondary"><?= count($slides) ?> imágenes</span>
+                        <div>
+                            <span class="badge bg-secondary"><?= count($slides) ?> imágenes</span>
+                            <?php if (!empty($slides)): ?>
+                            <button type="button" class="btn btn-sm btn-outline-danger ms-2" data-bs-toggle="modal" data-bs-target="#deleteAllModal<?= $g_mes ?>_<?= $g_anio ?>">
+                                <i class="bi bi-trash me-1"></i> Eliminar todas
+                            </button>
+                            <?php endif; ?>
+                        </div>
                     </div>
                     <div class="card-body p-2" style="overflow:visible;">
                         <?php if (empty($slides)): ?>
@@ -431,6 +477,35 @@ $token = csrf_token();
                         <?php endif; ?>
                     </div>
                 </div>
+
+                <!-- Modal Eliminar Todas -->
+                <?php if (!empty($slides)): ?>
+                <div class="modal fade" id="deleteAllModal<?= $g_mes ?>_<?= $g_anio ?>" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form method="POST" action="slider_comunica.php">
+                                <input type="hidden" name="action" value="delete_all">
+                                <input type="hidden" name="mes" value="<?= $g_mes ?>">
+                                <input type="hidden" name="anio" value="<?= $g_anio ?>">
+                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-danger"><i class="bi bi-exclamation-triangle me-1"></i> Eliminar todas las imágenes</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>¿Está seguro de eliminar <strong>todas las <?= count($slides) ?> imágenes</strong> de <strong><?= $meses_nombre[$g_mes] ?> <?= $g_anio ?></strong>?</p>
+                                    <p class="text-danger small">Esta acción no se puede deshacer. Todos los archivos serán eliminados del servidor.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1"></i> Eliminar todas</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
+
                 <?php endforeach; ?>
             </div>
         </div>
