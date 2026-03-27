@@ -24,11 +24,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $nombre      = trim($_POST['nombre'] ?? '');
+    $apellidos   = trim($_POST['apellidos'] ?? '');
     $cargo       = trim($_POST['cargo'] ?? '');
     $descripcion = trim($_POST['descripcion'] ?? '');
 
-    if (empty($nombre) || empty($cargo)) {
-        $_SESSION['flash_message'] = 'El nombre y el cargo son obligatorios.';
+    if (empty($nombre) || empty($apellidos) || empty($cargo)) {
+        $_SESSION['flash_message'] = 'El nombre, apellidos y cargo son obligatorios.';
         $_SESSION['flash_type']    = 'warning';
         header('Location: presidencia.php');
         exit;
@@ -65,14 +66,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         if ($current) {
             $stmt = $pdo->prepare(
-                'UPDATE presidencia SET nombre = ?, cargo = ?, descripcion = ?, imagen_path = ? WHERE id = ?'
+                'UPDATE presidencia SET nombre = ?, apellidos = ?, cargo = ?, descripcion = ?, imagen_path = ? WHERE id = ?'
             );
-            $stmt->execute([$nombre, $cargo, $descripcion, $imagenPath, $current['id']]);
+            $stmt->execute([$nombre, $apellidos, $cargo, $descripcion, $imagenPath, $current['id']]);
         } else {
             $stmt = $pdo->prepare(
-                'INSERT INTO presidencia (nombre, cargo, descripcion, imagen_path) VALUES (?, ?, ?, ?)'
+                'INSERT INTO presidencia (nombre, apellidos, cargo, descripcion, imagen_path) VALUES (?, ?, ?, ?, ?)'
             );
-            $stmt->execute([$nombre, $cargo, $descripcion, $imagenPath]);
+            $stmt->execute([$nombre, $apellidos, $cargo, $descripcion, $imagenPath]);
         }
 
         $_SESSION['flash_message'] = 'Datos de presidencia actualizados correctamente.';
@@ -158,7 +159,8 @@ $token = csrf_token();
                                     <img src="<?= $imgSrc ?>"
                                          alt="Imagen de presidencia"
                                          class="img-preview img-fluid mb-3">
-                                    <h5 class="mb-1"><?= htmlspecialchars($presidencia['nombre']) ?></h5>
+                                    <h5 class="mb-0"><?= htmlspecialchars($presidencia['nombre']) ?></h5>
+                                    <h5 class="mb-1"><?= htmlspecialchars($presidencia['apellidos'] ?? '') ?></h5>
                                     <p class="text-muted"><?= htmlspecialchars($presidencia['cargo']) ?></p>
                                     <?php if (!empty($presidencia['descripcion'])): ?>
                                         <p class="text-muted small"><?= nl2br(htmlspecialchars($presidencia['descripcion'])) ?></p>
@@ -190,11 +192,18 @@ $token = csrf_token();
                                 <form method="POST" enctype="multipart/form-data" action="presidencia.php">
                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                                     <div class="mb-3">
-                                        <label for="nombre" class="form-label">Nombre</label>
+                                        <label for="nombre" class="form-label">Nombre(s)</label>
                                         <input type="text" class="form-control" id="nombre" name="nombre"
                                                value="<?= $presidencia ? htmlspecialchars($presidencia['nombre']) : '' ?>"
                                                required maxlength="200"
-                                               placeholder="Nombre completo">
+                                               placeholder="Nombre(s)">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="apellidos" class="form-label">Apellidos</label>
+                                        <input type="text" class="form-control" id="apellidos" name="apellidos"
+                                               value="<?= $presidencia ? htmlspecialchars($presidencia['apellidos'] ?? '') : '' ?>"
+                                               required maxlength="200"
+                                               placeholder="Apellido paterno y materno">
                                     </div>
                                     <div class="mb-3">
                                         <label for="cargo" class="form-label">Cargo</label>

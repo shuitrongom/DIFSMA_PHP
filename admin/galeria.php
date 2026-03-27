@@ -20,6 +20,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     $token  = $_POST['csrf_token'] ?? '';
 
+    // ── REORDER IMAGES (AJAX) — antes de CSRF para evitar redirect ─────────
+    if ($action === 'reorder_images') {
+        header('Content-Type: application/json');
+        $order = $_POST['order'] ?? '';
+        if (empty($order)) {
+            echo json_encode(['success' => false, 'error' => 'Sin datos']);
+            exit;
+        }
+        $ids = array_map('intval', explode(',', $order));
+        try {
+            $stmt = $pdo->prepare('UPDATE galeria_imagenes SET orden = ? WHERE id = ?');
+            foreach ($ids as $pos => $id) {
+                if ($id > 0) $stmt->execute([$pos + 1, $id]);
+            }
+            echo json_encode(['success' => true]);
+        } catch (PDOException $e) {
+            echo json_encode(['success' => false, 'error' => 'Error BD']);
+        }
+        exit;
+    }
+
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido. Intente de nuevo.';
         $_SESSION['flash_type']    = 'danger';
@@ -174,7 +195,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // ── ADD IMAGE to album ─────────────────────────────────────────────────────
+    // ── ADD IMAGE to album (multi-upload) ──────────────────────────────────────
     if ($action === 'add_image') {
         $aId = (int) ($_POST['album_id'] ?? 0);
 
@@ -185,37 +206,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        if (!isset($_FILES['imagen']) || $_FILES['imagen']['error'] === UPLOAD_ERR_NO_FILE) {
-            $_SESSION['flash_message'] = 'Debe seleccionar una imagen.';
+        if (!isset($_FILES['imagenes']) || !is_array($_FILES['imagenes']['name'])) {
+            $_SESSION['flash_message'] = 'Debe seleccionar al menos una imagen.';
             $_SESSION['flash_type']    = 'warning';
             header("Location: galeria.php?album_id={$aId}");
             exit;
         }
 
-        $upload = handle_upload($_FILES['imagen'], 'image');
+        $fileCount = count($_FILES['imagenes']['name']);
+        $uploaded = 0;
+        $errors = [];
 
-        if (!$upload['success']) {
-            $_SESSION['flash_message'] = $upload['error'];
-            $_SESSION['flash_type']    = 'danger';
-            header("Location: galeria.php?album_id={$aId}");
-            exit;
+        $stmt = $pdo->prepare('SELECT COALESCE(MAX(orden), 0) FROM galeria_imagenes WHERE album_id = ?');
+        $stmt->execute([$aId]);
+        $nextOrden = (int) $stmt->fetchColumn() + 1;
+
+        for ($i = 0; $i < $fileCount; $i++) {
+            if ($_FILES['imagenes']['error'][$i] === UPLOAD_ERR_NO_FILE) continue;
+
+            $singleFile = [
+                'name'     => $_FILES['imagenes']['name'][$i],
+                'type'     => $_FILES['imagenes']['type'][$i],
+                'tmp_name' => $_FILES['imagenes']['tmp_name'][$i],
+                'error'    => $_FILES['imagenes']['error'][$i],
+                'size'     => $_FILES['imagenes']['size'][$i],
+            ];
+
+            $upload = handle_upload($singleFile, 'image');
+            if (!$upload['success']) {
+                $errors[] = $_FILES['imagenes']['name'][$i] . ': ' . $upload['error'];
+                continue;
+            }
+
+            try {
+                $stmt = $pdo->prepare(
+                    'INSERT INTO galeria_imagenes (album_id, imagen_path, orden) VALUES (?, ?, ?)'
+                );
+                $stmt->execute([$aId, $upload['path'], $nextOrden]);
+                $nextOrden++;
+                $uploaded++;
+            } catch (PDOException $e) {
+                $errors[] = $_FILES['imagenes']['name'][$i] . ': Error BD';
+            }
         }
 
-        try {
-            $stmt = $pdo->prepare('SELECT COALESCE(MAX(orden), 0) + 1 FROM galeria_imagenes WHERE album_id = ?');
-            $stmt->execute([$aId]);
-            $nextOrden = (int) $stmt->fetchColumn();
-
-            $stmt = $pdo->prepare(
-                'INSERT INTO galeria_imagenes (album_id, imagen_path, orden) VALUES (?, ?, ?)'
-            );
-            $stmt->execute([$aId, $upload['path'], $nextOrden]);
-
-            $_SESSION['flash_message'] = 'Imagen agregada al álbum correctamente.';
+        if ($uploaded > 0) {
+            $_SESSION['flash_message'] = $uploaded . ' imagen(es) agregada(s) al álbum.';
             $_SESSION['flash_type']    = 'success';
-        } catch (PDOException $e) {
-            $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al guardar en la base de datos.';
-            $_SESSION['flash_type']    = 'danger';
+        }
+        if (!empty($errors)) {
+            $_SESSION['flash_message'] = ($uploaded > 0 ? $_SESSION['flash_message'] . ' ' : '') . 'Errores: ' . implode(', ', $errors);
+            $_SESSION['flash_type']    = $uploaded > 0 ? 'warning' : 'danger';
+        }
+        if ($uploaded === 0 && empty($errors)) {
+            $_SESSION['flash_message'] = 'No se seleccionaron imágenes.';
+            $_SESSION['flash_type']    = 'warning';
         }
 
         header("Location: galeria.php?album_id={$aId}");
@@ -462,7 +507,7 @@ $token = csrf_token();
                         <!-- Formulario agregar imagen -->
                         <div class="card mb-4">
                             <div class="card-header bg-success text-white">
-                                <i class="bi bi-plus-circle me-1"></i> Agregar imagen al álbum
+                                <i class="bi bi-plus-circle me-1"></i> Agregar imágenes al álbum
                             </div>
                             <div class="card-body">
                                 <form method="POST" enctype="multipart/form-data" action="galeria.php?album_id=<?= (int) $currentAlbum['id'] ?>">
@@ -470,11 +515,12 @@ $token = csrf_token();
                                     <input type="hidden" name="album_id" value="<?= (int) $currentAlbum['id'] ?>">
                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                                     <div class="mb-3">
-                                        <label for="imagen" class="form-label">Imagen (JPG, PNG, WEBP — máx. 20 MB)</label>
-                                        <input type="file" class="form-control" id="imagen" name="imagen" accept=".jpg,.jpeg,.png,.webp" required>
+                                        <label for="imagenes" class="form-label">Imágenes (JPG, PNG, WEBP — máx. 20 MB c/u)</label>
+                                        <input type="file" class="form-control" id="imagenes" name="imagenes[]" accept=".jpg,.jpeg,.png,.webp" multiple required>
+                                        <small class="text-muted">Puede seleccionar varias imágenes a la vez</small>
                                     </div>
                                     <button type="submit" class="btn btn-success w-100">
-                                        <i class="bi bi-upload me-1"></i> Subir imagen
+                                        <i class="bi bi-upload me-1"></i> Subir imágenes
                                     </button>
                                 </form>
                             </div>
@@ -498,55 +544,61 @@ $token = csrf_token();
                                 <?php if (empty($albumImages)): ?>
                                     <div class="text-center text-muted py-4">
                                         <i class="bi bi-image" style="font-size: 2rem;"></i>
-                                        <p class="mt-2 mb-0">No hay imágenes en este álbum. Use el formulario para agregar una.</p>
+                                        <p class="mt-2 mb-0">No hay imágenes en este álbum. Use el formulario para agregar.</p>
                                     </div>
                                 <?php else: ?>
-                                    <div class="gallery-grid">
+                                    <p class="text-muted small mb-2"><i class="bi bi-arrows-move me-1"></i> Arrastra las imágenes para cambiar el orden</p>
+                                    <div class="row g-2 sortable-gallery" data-album="<?= (int) $currentAlbum['id'] ?>">
                                         <?php foreach ($albumImages as $img): ?>
-                                            <div class="gallery-item border">
-                                                <img src="../<?= htmlspecialchars($img['imagen_path']) ?>"
-                                                     alt="Imagen #<?= (int) $img['id'] ?>">
-                                                <div class="overlay">
-                                                    <button type="button" class="btn btn-sm btn-danger"
+                                        <div class="col-6 col-md-3 sortable-item" data-id="<?= (int) $img['id'] ?>">
+                                            <div class="card h-100 shadow-sm" style="cursor:grab;">
+                                                <div class="position-relative">
+                                                    <img src="../<?= htmlspecialchars($img['imagen_path']) ?>"
+                                                         alt="Imagen #<?= (int) $img['id'] ?>"
+                                                         class="card-img-top" style="height:100px;object-fit:contain;background:#f5f5f5;">
+                                                    <span class="position-absolute top-0 start-0 badge bg-dark m-1 orden-badge"><?= (int) $img['orden'] ?></span>
+                                                </div>
+                                                <div class="card-body p-1 text-center">
+                                                    <button type="button" class="btn btn-outline-danger btn-sm w-100"
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#deleteImgModal<?= (int) $img['id'] ?>"
-                                                            title="Eliminar imagen">
+                                                            data-bs-target="#deleteImgModal<?= (int) $img['id'] ?>">
                                                         <i class="bi bi-trash"></i>
                                                     </button>
                                                 </div>
                                             </div>
+                                        </div>
 
-                                            <!-- Modal eliminar imagen -->
-                                            <div class="modal fade" id="deleteImgModal<?= (int) $img['id'] ?>" tabindex="-1" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <form method="POST" action="galeria.php?album_id=<?= (int) $currentAlbum['id'] ?>">
-                                                            <input type="hidden" name="action" value="delete_image">
-                                                            <input type="hidden" name="image_id" value="<?= (int) $img['id'] ?>">
-                                                            <input type="hidden" name="album_id" value="<?= (int) $currentAlbum['id'] ?>">
-                                                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title text-danger">
-                                                                    <i class="bi bi-exclamation-triangle me-1"></i> Eliminar imagen
-                                                                </h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <p>¿Está seguro de eliminar esta imagen?</p>
-                                                                <img src="../<?= htmlspecialchars($img['imagen_path']) ?>"
-                                                                     alt="Imagen a eliminar" class="img-fluid rounded" style="max-height: 200px;">
-                                                                <p class="text-muted small mt-2">Esta acción no se puede deshacer.</p>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                                <button type="submit" class="btn btn-danger">
-                                                                    <i class="bi bi-trash me-1"></i> Eliminar
-                                                                </button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
+                                        <!-- Modal eliminar imagen -->
+                                        <div class="modal fade" id="deleteImgModal<?= (int) $img['id'] ?>" tabindex="-1" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <form method="POST" action="galeria.php?album_id=<?= (int) $currentAlbum['id'] ?>">
+                                                        <input type="hidden" name="action" value="delete_image">
+                                                        <input type="hidden" name="image_id" value="<?= (int) $img['id'] ?>">
+                                                        <input type="hidden" name="album_id" value="<?= (int) $currentAlbum['id'] ?>">
+                                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title text-danger">
+                                                                <i class="bi bi-exclamation-triangle me-1"></i> Eliminar imagen
+                                                            </h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>¿Está seguro de eliminar esta imagen?</p>
+                                                            <img src="../<?= htmlspecialchars($img['imagen_path']) ?>"
+                                                                 alt="Imagen a eliminar" class="img-fluid rounded" style="max-height: 200px;">
+                                                            <p class="text-muted small mt-2">Esta acción no se puede deshacer.</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                            <button type="submit" class="btn btn-danger">
+                                                                <i class="bi bi-trash me-1"></i> Eliminar
+                                                            </button>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                             </div>
+                                        </div>
                                         <?php endforeach; ?>
                                     </div>
                                 <?php endif; ?>
@@ -747,6 +799,7 @@ $token = csrf_token();
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script src="../js/upload-progress.js?v=13"></script>
     <script>
         const sidebar = document.getElementById('sidebar');
@@ -760,6 +813,40 @@ $token = csrf_token();
                 sidebar.classList.add('collapsed');
             });
         }
+
+        // Drag & drop reorder para imágenes del álbum
+        document.querySelectorAll('.sortable-gallery').forEach(function(grid) {
+            new Sortable(grid, {
+                animation: 200,
+                ghostClass: 'sortable-ghost',
+                handle: '.sortable-item',
+                draggable: '.sortable-item',
+                onEnd: function() {
+                    var items = grid.querySelectorAll('.sortable-item');
+                    var ids = [];
+                    items.forEach(function(item, idx) {
+                        ids.push(item.getAttribute('data-id'));
+                        var badge = item.querySelector('.orden-badge');
+                        if (badge) badge.textContent = idx + 1;
+                    });
+
+                    var formData = new FormData();
+                    formData.append('action', 'reorder_images');
+                    formData.append('order', ids.join(','));
+
+                    fetch(window.location.href, { method: 'POST', body: formData })
+                        .then(function(r) { return r.json(); })
+                        .then(function(data) {
+                            if (!data.success) alert('Error al guardar orden');
+                        })
+                        .catch(function() { alert('Error de conexión'); });
+                }
+            });
+        });
     </script>
+    <style>
+        .sortable-ghost { opacity: 0.4; }
+        .sortable-item { transition: transform 0.15s; }
+    </style>
 </body>
 </html>

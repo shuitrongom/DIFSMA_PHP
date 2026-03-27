@@ -16,7 +16,7 @@ $page_title  = 'Presidente DIF — DIF San Mateo Atenco';
 $presidente = null;
 try {
     $pdo  = get_db();
-    $stmt = $pdo->prepare('SELECT imagen_path, nombre, cargo, descripcion FROM presidencia LIMIT 1');
+    $stmt = $pdo->prepare('SELECT imagen_path, nombre, apellidos, cargo, descripcion FROM presidencia LIMIT 1');
     $stmt->execute();
     $presidente = $stmt->fetch();
 } catch (PDOException $e) {
@@ -27,7 +27,8 @@ try {
 
 // Determinar imagen, nombre, cargo y descripción con fallbacks
 $imagen      = $base_path . 'img/Presidente.png';
-$nombre      = 'Oscar Muñiz Maynez';
+$nombre      = 'Oscar';
+$apellidos   = 'Muñiz Maynez';
 $cargo       = 'PRESIDENTE HONORARIO';
 $descripcion = '';
 
@@ -37,6 +38,9 @@ if ($presidente) {
     }
     if (!empty($presidente['nombre'])) {
         $nombre = $presidente['nombre'];
+    }
+    if (!empty($presidente['apellidos'])) {
+        $apellidos = $presidente['apellidos'];
     }
     if (!empty($presidente['cargo'])) {
         $cargo = $presidente['cargo'];
@@ -65,7 +69,8 @@ require_once __DIR__ . '/../includes/navbar.php';
                 </div>
                 <!-- Panel rojo -->
                 <div class="col-md-6 d-flex flex-column justify-content-center align-items-center text-center text-white" style="background:rgb(200,16,44);padding:2.5rem 2rem;overflow:hidden;">
-                    <h3 style="font-family:'Montserrat',sans-serif;font-weight:700;margin-bottom:1rem;color:#fff;"><?= htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8') ?></h3>
+                    <h3 style="font-family:'Montserrat',sans-serif;font-weight:700;margin-bottom:0;color:#fff;"><?= htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8') ?></h3>
+                    <h3 style="font-family:'Montserrat',sans-serif;font-weight:700;margin-bottom:1rem;color:#fff;"><?= htmlspecialchars($apellidos, ENT_QUOTES, 'UTF-8') ?></h3>
                     <p style="font-family:'Montserrat',sans-serif;font-weight:600;font-size:15px;letter-spacing:1px;margin-bottom:1.5rem;"><?= htmlspecialchars($cargo, ENT_QUOTES, 'UTF-8') ?></p>
                     <?php if (!empty($descripcion)): ?>
                     <p style="font-family:'Montserrat',sans-serif;font-size:14px;line-height:1.7;opacity:0.95;margin-bottom:1.5rem;text-align:justify;word-wrap:break-word;overflow-wrap:break-word;max-width:100%;"><?= nl2br(htmlspecialchars($descripcion, ENT_QUOTES, 'UTF-8')) ?></p>
