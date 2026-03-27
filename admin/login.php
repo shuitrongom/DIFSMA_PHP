@@ -55,17 +55,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($pdo === null) {
                 $pdo = get_db();
             }
-            $stmt = $pdo->prepare('SELECT id, username, password FROM admin WHERE username = ? LIMIT 1');
+            $stmt = $pdo->prepare('SELECT id, username, password, rol, activo FROM admin WHERE username = ? LIMIT 1');
             $stmt->execute([$username]);
             $admin = $stmt->fetch();
 
             // 3. Verificar contraseña con password_verify()
             if ($admin && password_verify($password, $admin['password'])) {
-                // 4. Éxito: iniciar sesión y redirigir
-                session_regenerate_id(true);
-                $_SESSION['admin_logged'] = true;
-                header('Location: dashboard.php');
-                exit;
+                // Verificar que el usuario esté activo
+                if (isset($admin['activo']) && !$admin['activo']) {
+                    $error = 'Tu cuenta está desactivada. Contacta al administrador.';
+                } else {
+                    // Éxito: iniciar sesión y redirigir
+                    session_regenerate_id(true);
+                    $_SESSION['admin_logged'] = true;
+                    $_SESSION['admin_id'] = (int) $admin['id'];
+                    $_SESSION['admin_username'] = $admin['username'];
+                    $_SESSION['admin_rol'] = $admin['rol'] ?? 'admin';
+                    header('Location: dashboard.php');
+                    exit;
+                }
             } else {
                 // 5. Fallo: registrar intento
 

@@ -65,6 +65,13 @@ $sidebar_groups = [
             ['title' => 'Secciones Dinámicas', 'file' => 'transparencia_dinamica.php', 'icon' => 'bi-plus-square'],
         ],
     ],
+    [
+        'group' => 'Sistema',
+        'icon'  => 'bi-gear',
+        'items' => [
+            ['title' => 'Usuarios', 'file' => 'usuarios.php', 'icon' => 'bi-people'],
+        ],
+    ],
 ];
 
 // Determinar archivo actual para marcar como activo
@@ -72,6 +79,19 @@ $current_admin_file = basename($_SERVER['SCRIPT_FILENAME'] ?? '');
 
 // Función helper para renderizar el sidebar
 function render_admin_sidebar(array $sidebar_groups, string $current_file): void {
+    // Cargar permisos del usuario si no es admin
+    $is_admin = ($_SESSION['admin_rol'] ?? 'admin') === 'admin';
+    $allowed_files = [];
+    $always_allowed = ['dashboard.php', 'logout.php'];
+    if (!$is_admin) {
+        try {
+            require_once __DIR__ . '/../includes/db.php';
+            $pdo_sb = get_db();
+            $stmt_sb = $pdo_sb->prepare('SELECT seccion_file FROM admin_permisos WHERE user_id = ?');
+            $stmt_sb->execute([$_SESSION['admin_id'] ?? 0]);
+            while ($r = $stmt_sb->fetch()) { $allowed_files[] = $r['seccion_file']; }
+        } catch (PDOException $e) {}
+    }
 ?>
 <nav id="sidebar" class="sidebar d-flex flex-column">
     <div class="sidebar-header d-flex align-items-center justify-content-between">
@@ -85,9 +105,16 @@ function render_admin_sidebar(array $sidebar_groups, string $current_file): void
     <ul class="nav flex-column mt-2" style="overflow-y:auto;flex:1;">
 <?php foreach ($sidebar_groups as $gi => $group): ?>
 <?php
-    // Verificar si el archivo activo está en este grupo
-    $groupActive = false;
+    // Filtrar items por permisos
+    $visible_items = [];
     foreach ($group['items'] as $item) {
+        if ($is_admin || in_array($item['file'], $allowed_files) || in_array($item['file'], $always_allowed)) {
+            $visible_items[] = $item;
+        }
+    }
+    if (empty($visible_items)) continue; // Ocultar grupo si no tiene items visibles
+    $groupActive = false;
+    foreach ($visible_items as $item) {
         if ($item['file'] === $current_file) { $groupActive = true; break; }
     }
 ?>
@@ -97,7 +124,7 @@ function render_admin_sidebar(array $sidebar_groups, string $current_file): void
                 <i class="bi bi-chevron-down"></i>
             </div>
             <div class="sidebar-group-items" id="g<?= $gi ?>" style="<?= $groupActive ? '' : 'max-height:0;' ?>">
-<?php foreach ($group['items'] as $item): ?>
+<?php foreach ($visible_items as $item): ?>
                 <a class="nav-link<?= $item['file'] === $current_file ? ' active' : '' ?>" href="<?= htmlspecialchars($item['file']) ?>">
                     <i class="bi <?= htmlspecialchars($item['icon']) ?>"></i> <?= htmlspecialchars($item['title']) ?>
                 </a>

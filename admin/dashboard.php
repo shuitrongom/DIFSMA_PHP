@@ -56,8 +56,24 @@ require_once __DIR__ . '/auth_guard.php';
                     <p>Gestiona el contenido del sitio DIF San Mateo Atenco</p>
                 </div>
                 <div class="row g-4">
+                    <?php
+                    // Cargar permisos para usuarios no-admin
+                    $is_admin_dash = ($_SESSION['admin_rol'] ?? 'admin') === 'admin';
+                    $allowed_dash = [];
+                    if (!$is_admin_dash) {
+                        require_once __DIR__ . '/../includes/db.php';
+                        try {
+                            $pdo_d = get_db();
+                            $st_d = $pdo_d->prepare('SELECT seccion_file FROM admin_permisos WHERE user_id = ?');
+                            $st_d->execute([$_SESSION['admin_id'] ?? 0]);
+                            while ($r = $st_d->fetch()) { $allowed_dash[] = $r['seccion_file']; }
+                        } catch (PDOException $e) {}
+                    }
+                    ?>
                     <?php foreach ($sidebar_groups as $group): ?>
-                        <?php foreach ($group['items'] as $s): ?>
+                        <?php foreach ($group['items'] as $s):
+                            if (!$is_admin_dash && !in_array($s['file'], $allowed_dash)) continue;
+                        ?>
                         <div class="col-sm-6 col-md-4 col-lg-3">
                             <a href="<?= htmlspecialchars($s['file']) ?>" class="text-decoration-none">
                                 <div class="card card-section h-100 text-center p-3">
