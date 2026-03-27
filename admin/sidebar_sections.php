@@ -62,6 +62,7 @@ $sidebar_groups = [
             ['title' => 'CONAC',             'file' => 'conac.php',               'icon' => 'bi-bank'],
             ['title' => 'Financiero',        'file' => 'financiero.php',          'icon' => 'bi-currency-dollar'],
             ['title' => 'Avisos Privacidad', 'file' => 'avisos_privacidad.php',   'icon' => 'bi-shield-exclamation'],
+            ['title' => 'Secciones Dinámicas', 'file' => 'transparencia_dinamica.php', 'icon' => 'bi-plus-square'],
         ],
     ],
 ];
