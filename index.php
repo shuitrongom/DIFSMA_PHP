@@ -405,7 +405,7 @@ require_once 'includes/navbar.php';
                                     <img src="<?= htmlspecialchars($tItem['imagen_path'] ?? 'img/placeholder.jpg') ?>" class="img-fluid" style="max-width:180px;" alt="<?= htmlspecialchars($tItem['titulo']) ?>">
                                 </a>
                             <div class="text-center py-3">
-                                <h5 style="color:rgb(107,98,90);"><?= htmlspecialchars($tItem['titulo']) ?></h5>
+                                <h6 style="color:rgb(107,98,90);"><?= htmlspecialchars($tItem['titulo']) ?></h6>
                             </div>
                         </div>
                     </div>
