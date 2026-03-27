@@ -34,6 +34,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: voluntariado.php'); exit;
     }
 
+    // UPLOAD LOGO (dedicado)
+    if ($action === 'upload_logo') {
+        if (!isset($_FILES['logo']) || $_FILES['logo']['error'] === UPLOAD_ERR_NO_FILE) {
+            $_SESSION['flash_message'] = 'Debe seleccionar una imagen.';
+            $_SESSION['flash_type'] = 'warning';
+            header('Location: voluntariado.php'); exit;
+        }
+        $upload = handle_upload($_FILES['logo'], 'image');
+        if (!$upload['success']) {
+            $_SESSION['flash_message'] = $upload['error'];
+            $_SESSION['flash_type'] = 'danger';
+            header('Location: voluntariado.php'); exit;
+        }
+        $stmt = $pdo->query('SELECT * FROM voluntariado_config LIMIT 1');
+        $current = $stmt->fetch();
+        if ($current && !empty($current['logo_path'])) {
+            $old = BASE_PATH . '/' . $current['logo_path'];
+            if (file_exists($old)) unlink($old);
+        }
+        if ($current) {
+            $pdo->prepare('UPDATE voluntariado_config SET logo_path = ? WHERE id = ?')->execute([$upload['path'], $current['id']]);
+        } else {
+            $pdo->prepare('INSERT INTO voluntariado_config (logo_path) VALUES (?)')->execute([$upload['path']]);
+        }
+        $_SESSION['flash_message'] = 'Logo actualizado correctamente.';
+        $_SESSION['flash_type'] = 'success';
+        header('Location: voluntariado.php'); exit;
+    }
+
+    // DELETE LOGO
+    if ($action === 'delete_logo') {
+        $stmt = $pdo->query('SELECT * FROM voluntariado_config LIMIT 1');
+        $current = $stmt->fetch();
+        if ($current && !empty($current['logo_path'])) {
+            $old = BASE_PATH . '/' . $current['logo_path'];
+            if (file_exists($old)) unlink($old);
+            $pdo->prepare('UPDATE voluntariado_config SET logo_path = NULL WHERE id = ?')->execute([$current['id']]);
+        }
+        $_SESSION['flash_message'] = 'Logo eliminado. Se usará la imagen por defecto.';
+        $_SESSION['flash_type'] = 'success';
+        header('Location: voluntariado.php'); exit;
+    }
+
     // SAVE CONFIG
     if ($action === 'save_config') {
         $lema = trim($_POST['lema'] ?? '');
@@ -170,6 +213,37 @@ $token = csrf_token();
                 </div>
                 <?php endif; ?>
 
+                <!-- Logo del voluntariado -->
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white"><i class="bi bi-image me-1"></i> Logo del voluntariado</div>
+                    <div class="card-body">
+                        <?php if (!empty($config['logo_path'])): ?>
+                        <div class="d-flex align-items-center gap-3 mb-3 p-2 border rounded" style="background:#f8f9fa;">
+                            <img src="../<?= htmlspecialchars($config['logo_path']) ?>" class="img-fluid" style="max-height:100px;">
+                            <div>
+                                <span class="badge bg-success mb-1">Logo actual</span><br>
+                                <form method="POST" action="voluntariado.php" class="d-inline" onsubmit="return confirm('¿Eliminar el logo?')">
+                                    <input type="hidden" name="action" value="delete_logo">
+                                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger mt-1"><i class="bi bi-trash me-1"></i> Eliminar logo</button>
+                                </form>
+                            </div>
+                        </div>
+                        <?php else: ?>
+                        <div class="text-muted small mb-3"><i class="bi bi-image me-1"></i> Sin logo — se usa img/voluntariado.png por defecto</div>
+                        <?php endif; ?>
+                        <form method="POST" enctype="multipart/form-data" action="voluntariado.php" class="d-flex gap-2 align-items-end">
+                            <input type="hidden" name="action" value="upload_logo">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+                            <div class="flex-grow-1">
+                                <label class="form-label">Subir nuevo logo (JPG, PNG, WEBP)</label>
+                                <input type="file" class="form-control" name="logo" accept=".jpg,.jpeg,.png,.webp" required>
+                            </div>
+                            <button type="submit" class="btn btn-info text-white"><i class="bi bi-upload me-1"></i> Subir</button>
+                        </form>
+                    </div>
+                </div>
+
                 <!-- Configuración de contenido -->
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white"><i class="bi bi-gear me-1"></i> Contenido de la página</div>
@@ -178,20 +252,7 @@ $token = csrf_token();
                             <input type="hidden" name="action" value="save_config">
                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                             <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label">Logo del voluntariado</label>
-                                    <?php if (!empty($config['logo_path'])): ?>
-                                        <div class="mb-2 p-2 border rounded d-flex align-items-center gap-3" style="background:#f8f9fa;">
-                                            <img src="../<?= htmlspecialchars($config['logo_path']) ?>" class="img-fluid" style="max-height:80px;">
-                                            <span class="badge bg-success">Logo actual</span>
-                                        </div>
-                                    <?php else: ?>
-                                        <div class="mb-2 text-muted small"><i class="bi bi-image me-1"></i> Sin logo — se usa img/voluntariado.png por defecto</div>
-                                    <?php endif; ?>
-                                    <input type="file" class="form-control" name="logo" accept=".jpg,.jpeg,.png,.webp">
-                                    <small class="text-muted">Selecciona una imagen para reemplazar el logo actual</small>
-                                </div>
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label class="form-label">Lema principal</label>
                                     <input type="text" class="form-control" name="lema" value="<?= htmlspecialchars($config['lema'] ?? '') ?>" maxlength="300">
                                 </div>

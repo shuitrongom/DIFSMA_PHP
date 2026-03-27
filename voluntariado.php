@@ -38,23 +38,23 @@ require_once __DIR__ . '/includes/navbar.php';
     <div class="container-fluid py-5" style="background:#f5f5f5;">
         <div class="container py-4">
             <!-- Título -->
-            <div class="text-center mb-4">
+            <div class="text-center mb-4 wow fadeIn" data-wow-delay="0.1s">
                 <h4 style="font-family:'Montserrat',sans-serif;font-weight:800;letter-spacing:2px;color:rgb(107,98,90);">VOLUNTARIADO</h4>
                 <div style="height:16px;background:rgb(199,14,44);width:130px;margin:8px auto 0;"></div>
             </div>
 
             <!-- Logo centrado -->
-            <div class="text-center mb-3">
+            <div class="text-center mb-3 wow fadeIn" data-wow-delay="0.2s">
                 <img src="<?= $logo ?>" alt="Voluntariado San Mateo Atenco" class="img-fluid vol-logo" style="max-width:500px;width:100%;">
             </div>
 
             <!-- Lema -->
-            <h2 class="text-center mb-5 vol-lema" style="font-family:'Montserrat',sans-serif;font-weight:800;color:rgb(189,185,182);font-size:clamp(1.4rem,4vw,2.7rem);">
+            <h2 class="text-center mb-5 vol-lema wow fadeIn" data-wow-delay="0.3s" style="font-family:'Montserrat',sans-serif;font-weight:800;color:rgb(189,185,182);font-size:clamp(1.4rem,4vw,2.7rem);">
                 <?= htmlspecialchars($lema) ?>
             </h2>
 
             <!-- Misión -->
-            <div class="row align-items-start mb-4 pb-4" style="border-bottom:1px solid #ddd;">
+            <div class="row align-items-start mb-4 pb-4 wow fadeIn" data-wow-delay="0.1s" style="border-bottom:1px solid #ddd;">
                 <div class="col-md-4 mb-3 mb-md-0 vol-left" style="text-align:left;padding-left:clamp(12px,8vw,120px);">
                     <div class="d-flex align-items-center">
                         <span class="vol-subtitle" style="font-family:'Montserrat',sans-serif;font-weight:400;font-size:clamp(18px,2.2vw,27px);color:rgb(188,185,182);letter-spacing:1px;white-space:nowrap;">NUESTRA</span>
@@ -73,7 +73,7 @@ require_once __DIR__ . '/includes/navbar.php';
             </div>
 
             <!-- Visión -->
-            <div class="row align-items-start mb-4 pb-4" style="border-bottom:1px solid #ddd;">
+            <div class="row align-items-start mb-4 pb-4 wow fadeIn" data-wow-delay="0.1s" style="border-bottom:1px solid #ddd;">
                 <div class="col-md-4 mb-3 mb-md-0 vol-left" style="text-align:left;padding-left:clamp(12px,8vw,120px);">
                     <div class="d-flex align-items-center">
                         <span class="vol-subtitle" style="font-family:'Montserrat',sans-serif;font-weight:400;font-size:clamp(18px,2.2vw,27px);color:rgb(188,185,182);letter-spacing:1px;white-space:nowrap;">NUESTRA</span>
@@ -87,7 +87,7 @@ require_once __DIR__ . '/includes/navbar.php';
             </div>
 
             <!-- Valores -->
-            <div class="row align-items-start mb-5">
+            <div class="row align-items-start mb-5 wow fadeIn" data-wow-delay="0.1s">
                 <div class="col-md-4 mb-3 mb-md-0 vol-left" style="text-align:left;padding-left:clamp(12px,8vw,120px);">
                     <div class="d-flex align-items-center">
                         <span class="vol-subtitle" style="font-family:'Montserrat',sans-serif;font-weight:400;font-size:clamp(18px,2.2vw,27px);color:rgb(188,185,182);letter-spacing:1px;white-space:nowrap;">NUESTROS</span>
@@ -102,7 +102,7 @@ require_once __DIR__ . '/includes/navbar.php';
 
             <!-- Galería de fotos -->
             <?php if (!empty($imagenes)): ?>
-            <div class="d-flex" style="padding-left:clamp(12px,8vw,120px);gap:0;height:140px;">
+            <div class="d-flex wow fadeIn" data-wow-delay="0.1s" style="padding-left:clamp(12px,8vw,120px);gap:0;height:140px;">
                 <?php foreach ($imagenes as $idx => $img):
                     $isWide = ($idx === 2);
                     $flex = $isWide ? 'flex:0 0 28%;' : 'flex:0 0 18%;';

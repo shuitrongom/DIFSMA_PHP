@@ -437,9 +437,9 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
 
     <!-- Logo secundario Start -->
     <div class="container pb-2">
-        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 header-secondary">
             <!-- Widget del clima izquierda -->
-            <div id="weather-widget" style="min-width:240px; max-width:320px; font-family:'Montserrat',sans-serif; font-size:13px; text-align:center; color:rgba(0,0,0,0.8);">
+            <div id="weather-widget" class="header-weather" style="min-width:240px; max-width:320px; font-family:'Montserrat',sans-serif; font-size:13px; text-align:center; color:rgba(0,0,0,0.8);">
                 <div class="d-flex flex-column align-items-center gap-1">
                     <div class="d-flex align-items-center gap-2">
                         <span id="weather-icon" style="font-size:28px;">⏳</span>
@@ -450,11 +450,11 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
                 </div>
             </div>
             <!-- Logo centrado -->
-            <div class="d-flex justify-content-center" style="flex:1;">
+            <div class="d-flex justify-content-center header-unidos" style="flex:1;">
                 <img src="<?= $base_path ?>img/UNIDOS.png" class="img-fluid" style="max-width:420px;width:100%;" alt="Unidos con Amor">
             </div>
             <!-- Buscador derecha -->
-            <form class="d-flex align-items-center ms-auto" role="search" onsubmit="doSearch(event)" style="min-width:220px; max-width:320px;">
+            <form class="d-flex align-items-center ms-auto header-search" role="search" onsubmit="doSearch(event)" style="min-width:220px; max-width:320px;">
                 <div class="input-group">
                     <input id="siteSearchInput" type="search" class="form-control form-control-sm" placeholder="Buscar en la página..." aria-label="Buscar">
                     <button class="btn btn-sm btn-dark" type="submit" aria-label="Buscar">
@@ -464,4 +464,19 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
             </form>
         </div>
     </div>
+    <style>
+    @media (max-width: 767px) {
+        .header-secondary {
+            flex-direction: column !important;
+            align-items: center !important;
+        }
+        .header-unidos { order: 1 !important; flex: none !important; width: 100%; margin-bottom: 8px; }
+        .header-unidos img { max-width: 300px !important; }
+        .header-weather { order: 2 !important; min-width: auto !important; margin-bottom: 8px; }
+        .header-search { order: 3 !important; min-width: 100% !important; max-width: 100% !important; margin: 0 !important; }
+    }
+    @media (min-width: 768px) and (max-width: 991px) {
+        .header-unidos img { max-width: 280px !important; min-width: 200px !important; }
+    }
+    </style>
     <!-- Logo secundario End -->
