@@ -402,7 +402,7 @@ require_once 'includes/navbar.php';
                                 $target = $is_external ? ' target="_blank" rel="noopener noreferrer"' : '';
                                 ?>
                                 <a href="<?= $href ?>"<?= $target ?>>
-                                    <img src="<?= htmlspecialchars($tItem['imagen_path'] ?? 'img/placeholder.jpg') ?>" class="img-fluid" style="max-width:220px;" alt="<?= htmlspecialchars($tItem['titulo']) ?>">
+                                    <img src="<?= htmlspecialchars($tItem['imagen_path'] ?? 'img/placeholder.jpg') ?>" class="img-fluid" style="max-width:180px;" alt="<?= htmlspecialchars($tItem['titulo']) ?>">
                                 </a>
                             <div class="text-center py-3">
                                 <h5 style="color:rgb(107,98,90);"><?= htmlspecialchars($tItem['titulo']) ?></h5>
