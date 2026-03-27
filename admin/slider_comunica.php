@@ -50,39 +50,87 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        if (!isset($_FILES['imagen']) || $_FILES['imagen']['error'] === UPLOAD_ERR_NO_FILE) {
-            $_SESSION['flash_message'] = 'Debe seleccionar una imagen.';
+        if (!isset($_FILES['imagenes']) || !is_array($_FILES['imagenes']['name'])) {
+            $_SESSION['flash_message'] = 'Debe seleccionar al menos una imagen.';
             $_SESSION['flash_type']    = 'warning';
             header('Location: slider_comunica.php');
             exit;
         }
 
-        $upload = handle_upload($_FILES['imagen'], 'image');
-        if (!$upload['success']) {
-            $_SESSION['flash_message'] = $upload['error'];
-            $_SESSION['flash_type']    = 'danger';
-            header('Location: slider_comunica.php');
-            exit;
+        $fileCount = count($_FILES['imagenes']['name']);
+        $uploaded = 0;
+        $errors = [];
+
+        // Obtener siguiente orden
+        $stmt = $pdo->prepare('SELECT COALESCE(MAX(orden), 0) FROM slider_comunica WHERE mes = ? AND anio = ?');
+        $stmt->execute([$target_mes, $target_anio]);
+        $nextOrden = (int) $stmt->fetchColumn() + 1;
+
+        for ($i = 0; $i < $fileCount; $i++) {
+            if ($_FILES['imagenes']['error'][$i] === UPLOAD_ERR_NO_FILE) continue;
+
+            // Construir array individual para handle_upload
+            $singleFile = [
+                'name'     => $_FILES['imagenes']['name'][$i],
+                'type'     => $_FILES['imagenes']['type'][$i],
+                'tmp_name' => $_FILES['imagenes']['tmp_name'][$i],
+                'error'    => $_FILES['imagenes']['error'][$i],
+                'size'     => $_FILES['imagenes']['size'][$i],
+            ];
+
+            $upload = handle_upload($singleFile, 'image');
+            if (!$upload['success']) {
+                $errors[] = $_FILES['imagenes']['name'][$i] . ': ' . $upload['error'];
+                continue;
+            }
+
+            try {
+                $stmt = $pdo->prepare(
+                    'INSERT INTO slider_comunica (imagen_path, orden, activo, mes, anio) VALUES (?, ?, 1, ?, ?)'
+                );
+                $stmt->execute([$upload['path'], $nextOrden, $target_mes, $target_anio]);
+                $nextOrden++;
+                $uploaded++;
+            } catch (PDOException $e) {
+                $errors[] = $_FILES['imagenes']['name'][$i] . ': Error BD';
+            }
         }
 
-        try {
-            $stmt = $pdo->prepare('SELECT COALESCE(MAX(orden), 0) + 1 FROM slider_comunica WHERE mes = ? AND anio = ?');
-            $stmt->execute([$target_mes, $target_anio]);
-            $nextOrden = (int) $stmt->fetchColumn();
-
-            $stmt = $pdo->prepare(
-                'INSERT INTO slider_comunica (imagen_path, orden, activo, mes, anio) VALUES (?, ?, 1, ?, ?)'
-            );
-            $stmt->execute([$upload['path'], $nextOrden, $target_mes, $target_anio]);
-
-            $_SESSION['flash_message'] = 'Imagen agregada a ' . $meses_nombre[$target_mes] . ' ' . $target_anio . '.';
+        if ($uploaded > 0) {
+            $_SESSION['flash_message'] = $uploaded . ' imagen(es) agregada(s) a ' . $meses_nombre[$target_mes] . ' ' . $target_anio . '.';
             $_SESSION['flash_type']    = 'success';
-        } catch (PDOException $e) {
-            $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al guardar.';
-            $_SESSION['flash_type']    = 'danger';
+        }
+        if (!empty($errors)) {
+            $_SESSION['flash_message'] = ($uploaded > 0 ? $_SESSION['flash_message'] . ' ' : '') . 'Errores: ' . implode(', ', $errors);
+            $_SESSION['flash_type']    = $uploaded > 0 ? 'warning' : 'danger';
+        }
+        if ($uploaded === 0 && empty($errors)) {
+            $_SESSION['flash_message'] = 'No se seleccionaron imágenes.';
+            $_SESSION['flash_type']    = 'warning';
         }
 
         header('Location: slider_comunica.php');
+        exit;
+    }
+
+    // ── REORDER (AJAX) ─────────────────────────────────────────────────────────
+    if ($action === 'reorder') {
+        header('Content-Type: application/json');
+        $order = $_POST['order'] ?? '';
+        if (empty($order)) {
+            echo json_encode(['success' => false, 'error' => 'Sin datos']);
+            exit;
+        }
+        $ids = explode(',', $order);
+        try {
+            $stmt = $pdo->prepare('UPDATE slider_comunica SET orden = ? WHERE id = ?');
+            foreach ($ids as $pos => $id) {
+                $stmt->execute([$pos + 1, (int) $id]);
+            }
+            echo json_encode(['success' => true]);
+        } catch (PDOException $e) {
+            echo json_encode(['success' => false, 'error' => 'Error BD']);
+        }
         exit;
     }
 
@@ -258,8 +306,9 @@ $token = csrf_token();
                             </div>
                             <input type="hidden" name="anio" id="anio_hidden" value="<?= $anio_actual ?>">
                             <div class="col-md-5">
-                                <label for="imagen" class="form-label">Imagen (JPG, PNG, WEBP — máx. 20 MB)</label>
-                                <input type="file" class="form-control" id="imagen" name="imagen" accept=".jpg,.jpeg,.png,.webp" required>
+                                <label for="imagenes" class="form-label">Imágenes (JPG, PNG, WEBP — máx. 20 MB c/u)</label>
+                                <input type="file" class="form-control" id="imagenes" name="imagenes[]" accept=".jpg,.jpeg,.png,.webp" multiple required>
+                                <small class="text-muted">Puede seleccionar varias imágenes a la vez</small>
                             </div>
                             <div class="col-md-3">
                                 <button type="submit" class="btn btn-primary w-100">
@@ -288,111 +337,96 @@ $token = csrf_token();
                         </div>
                         <span class="badge bg-secondary"><?= count($slides) ?> imágenes</span>
                     </div>
-                    <div class="card-body p-0">
+                    <div class="card-body p-2" style="overflow:visible;">
                         <?php if (empty($slides)): ?>
                             <div class="text-center text-muted py-4">
                                 <i class="bi bi-image" style="font-size: 2rem;"></i>
                                 <p class="mt-2 mb-0">No hay imágenes para este mes.</p>
                             </div>
                         <?php else: ?>
-                            <div class="table-responsive">
-                                <table class="table table-hover align-middle mb-0">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th style="width:60px;">Orden</th>
-                                            <th style="width:100px;">Vista previa</th>
-                                            <th>Ruta</th>
-                                            <th style="width:60px;">Activo</th>
-                                            <th style="width:180px;">Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($slides as $slide): ?>
-                                        <tr>
-                                            <td class="text-center"><?= (int) $slide['orden'] ?></td>
-                                            <td>
-                                                <img src="../<?= htmlspecialchars($slide['imagen_path']) ?>"
-                                                     alt="Slide <?= (int) $slide['orden'] ?>"
-                                                     class="thumb-preview">
-                                            </td>
-                                            <td class="text-truncate" style="max-width:200px;">
-                                                <small class="text-muted"><?= htmlspecialchars($slide['imagen_path']) ?></small>
-                                            </td>
-                                            <td class="text-center">
-                                                <?php if ($slide['activo']): ?>
-                                                    <span class="badge bg-success">Sí</span>
-                                                <?php else: ?>
-                                                    <span class="badge bg-secondary">No</span>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-sm btn-outline-warning"
+                            <p class="text-muted small px-2 pt-2 mb-2"><i class="bi bi-arrows-move me-1"></i> Arrastra las imágenes para cambiar el orden</p>
+                            <div class="sortable-grid row g-2 px-2 pb-2" data-mes="<?= $g_mes ?>" data-anio="<?= $g_anio ?>">
+                                <?php foreach ($slides as $slide): ?>
+                                <div class="col-6 col-md-3 sortable-item" data-id="<?= (int) $slide['id'] ?>">
+                                    <div class="card h-100 shadow-sm" style="cursor:grab;">
+                                        <div class="position-relative">
+                                            <img src="../<?= htmlspecialchars($slide['imagen_path']) ?>"
+                                                 alt="Slide <?= (int) $slide['orden'] ?>"
+                                                 class="card-img-top" style="height:100px;object-fit:contain;background:#f5f5f5;">
+                                            <span class="position-absolute top-0 start-0 badge bg-dark m-1 orden-badge"><?= (int) $slide['orden'] ?></span>
+                                            <?php if ($slide['activo']): ?>
+                                                <span class="position-absolute top-0 end-0 badge bg-success m-1">Activo</span>
+                                            <?php endif; ?>
+                                        </div>
+                                        <div class="card-body p-1 text-center">
+                                            <div class="btn-group btn-group-sm w-100">
+                                                <button type="button" class="btn btn-outline-warning btn-sm"
                                                         data-bs-toggle="modal" data-bs-target="#editModal<?= (int) $slide['id'] ?>">
-                                                    <i class="bi bi-pencil"></i> Editar
+                                                    <i class="bi bi-pencil"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                                <button type="button" class="btn btn-outline-danger btn-sm"
                                                         data-bs-toggle="modal" data-bs-target="#deleteModal<?= (int) $slide['id'] ?>">
-                                                    <i class="bi bi-trash"></i> Eliminar
+                                                    <i class="bi bi-trash"></i>
                                                 </button>
-                                            </td>
-                                        </tr>
-
-                                        <!-- Modal Editar -->
-                                        <div class="modal fade" id="editModal<?= (int) $slide['id'] ?>" tabindex="-1" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <form method="POST" enctype="multipart/form-data" action="slider_comunica.php">
-                                                        <input type="hidden" name="action" value="edit">
-                                                        <input type="hidden" name="id" value="<?= (int) $slide['id'] ?>">
-                                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">Reemplazar imagen #<?= (int) $slide['id'] ?></h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <p>Imagen actual:</p>
-                                                            <img src="../<?= htmlspecialchars($slide['imagen_path']) ?>" class="img-fluid rounded mb-3" style="max-height:200px;">
-                                                            <div class="mb-3">
-                                                                <label class="form-label">Nueva imagen</label>
-                                                                <input type="file" class="form-control" name="imagen" accept=".jpg,.jpeg,.png,.webp" required>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                            <button type="submit" class="btn btn-warning"><i class="bi bi-pencil me-1"></i> Reemplazar</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
 
-                                        <!-- Modal Eliminar -->
-                                        <div class="modal fade" id="deleteModal<?= (int) $slide['id'] ?>" tabindex="-1" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <form method="POST" action="slider_comunica.php">
-                                                        <input type="hidden" name="action" value="delete">
-                                                        <input type="hidden" name="id" value="<?= (int) $slide['id'] ?>">
-                                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title text-danger"><i class="bi bi-exclamation-triangle me-1"></i> Confirmar eliminación</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <p>¿Eliminar esta imagen del slider?</p>
-                                                            <img src="../<?= htmlspecialchars($slide['imagen_path']) ?>" class="img-fluid rounded" style="max-height:150px;">
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                            <button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1"></i> Eliminar</button>
-                                                        </div>
-                                                    </form>
+                                <!-- Modal Editar -->
+                                <div class="modal fade" id="editModal<?= (int) $slide['id'] ?>" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form method="POST" enctype="multipart/form-data" action="slider_comunica.php">
+                                                <input type="hidden" name="action" value="edit">
+                                                <input type="hidden" name="id" value="<?= (int) $slide['id'] ?>">
+                                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Reemplazar imagen #<?= (int) $slide['id'] ?></h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                                                 </div>
-                                            </div>
+                                                <div class="modal-body">
+                                                    <p>Imagen actual:</p>
+                                                    <img src="../<?= htmlspecialchars($slide['imagen_path']) ?>" class="img-fluid rounded mb-3" style="max-height:200px;">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Nueva imagen</label>
+                                                        <input type="file" class="form-control" name="imagen" accept=".jpg,.jpeg,.png,.webp" required>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-warning"><i class="bi bi-pencil me-1"></i> Reemplazar</button>
+                                                </div>
+                                            </form>
                                         </div>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
+                                    </div>
+                                </div>
+
+                                <!-- Modal Eliminar -->
+                                <div class="modal fade" id="deleteModal<?= (int) $slide['id'] ?>" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form method="POST" action="slider_comunica.php">
+                                                <input type="hidden" name="action" value="delete">
+                                                <input type="hidden" name="id" value="<?= (int) $slide['id'] ?>">
+                                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title text-danger"><i class="bi bi-exclamation-triangle me-1"></i> Confirmar eliminación</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>¿Eliminar esta imagen del slider?</p>
+                                                    <img src="../<?= htmlspecialchars($slide['imagen_path']) ?>" class="img-fluid rounded" style="max-height:150px;">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1"></i> Eliminar</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php endforeach; ?>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -403,6 +437,7 @@ $token = csrf_token();
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script src="../js/upload-progress.js?v=13"></script>
     <script>
         const sidebar = document.getElementById('sidebar');
@@ -418,6 +453,41 @@ $token = csrf_token();
             var opt = this.options[this.selectedIndex];
             document.getElementById('anio_hidden').value = opt.getAttribute('data-anio');
         });
+
+        // Drag & drop reorder
+        document.querySelectorAll('.sortable-grid').forEach(function(grid) {
+            new Sortable(grid, {
+                animation: 200,
+                ghostClass: 'sortable-ghost',
+                handle: '.sortable-item',
+                draggable: '.sortable-item',
+                onEnd: function() {
+                    var items = grid.querySelectorAll('.sortable-item');
+                    var ids = [];
+                    items.forEach(function(item, idx) {
+                        ids.push(item.getAttribute('data-id'));
+                        item.querySelector('.orden-badge').textContent = idx + 1;
+                    });
+
+                    // Guardar orden vía AJAX
+                    var formData = new FormData();
+                    formData.append('action', 'reorder');
+                    formData.append('csrf_token', '<?= htmlspecialchars($token) ?>');
+                    formData.append('order', ids.join(','));
+
+                    fetch('slider_comunica.php', { method: 'POST', body: formData })
+                        .then(function(r) { return r.json(); })
+                        .then(function(data) {
+                            if (!data.success) alert('Error al guardar orden');
+                        })
+                        .catch(function() { alert('Error de conexión'); });
+                }
+            });
+        });
     </script>
+    <style>
+        .sortable-ghost { opacity: 0.4; }
+        .sortable-item { transition: transform 0.15s; }
+    </style>
 </body>
 </html>
