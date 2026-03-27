@@ -101,7 +101,7 @@ $active_page = $active_page ?? '';
                         </div>
                     </div>
 
-                    <a href="#" class="nav-item nav-link-blue<?= $active_page === 'voluntariado' ? ' active' : '' ?>">VOLUNTARIADO</a>
+                    <a href="<?= $base_path ?>voluntariado.php" class="nav-item nav-link-blue<?= $active_page === 'voluntariado' ? ' active' : '' ?>">VOLUNTARIADO</a>
 
                 </div>
             </div>

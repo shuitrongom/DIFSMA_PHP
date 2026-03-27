@@ -44,6 +44,13 @@ $sidebar_groups = [
         ],
     ],
     [
+        'group' => 'Voluntariado',
+        'icon'  => 'bi-heart',
+        'items' => [
+            ['title' => 'Voluntariado', 'file' => 'voluntariado.php', 'icon' => 'bi-heart'],
+        ],
+    ],
+    [
         'group' => 'Transparencia',
         'icon'  => 'bi-shield-check',
         'items' => [
