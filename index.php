@@ -280,21 +280,21 @@ require_once 'includes/navbar.php';
                                     data-bs-auto-close="outside">
                                     <img src="img/btn_ver_programas.png" alt="Ver Programas" class="img-fluid w-100" style="display:block;">
                                 </button>
-                                <div class="dropdown-menu p-0 shadow-lg border-0 prog-dropdown" aria-labelledby="dropdownPrograma<?= $programa['id'] ?>" style="width:320px;border-radius:10px;overflow:hidden;">
-                                    <div style="background:rgb(107,98,90);padding:10px 16px;">
-                                        <span style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:13px;color:#fff;letter-spacing:0.5px;">
+                                <div class="dropdown-menu p-0 shadow-lg border-0 prog-dropdown" aria-labelledby="dropdownPrograma<?= $programa['id'] ?>" style="width:320px;border-radius:14px;overflow:hidden;background:rgba(255,255,255,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.4);">
+                                    <div style="background:rgba(107,98,90,0.9);padding:12px 18px;backdrop-filter:blur(8px);">
+                                        <span style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;color:#fff;letter-spacing:1px;text-transform:uppercase;">
                                             <?= htmlspecialchars($programa['nombre']) ?>
                                         </span>
                                     </div>
                                     <?php foreach ($programa['secciones'] as $sIdx => $seccion): ?>
-                                    <div class="prog-seccion-item" style="border-bottom:1px solid #f0f0f0;">
+                                    <div class="prog-seccion-item" style="border-bottom:1px solid rgba(0,0,0,0.06);">
                                         <button class="prog-sec-btn w-100 text-start d-flex justify-content-between align-items-center"
                                             type="button" onclick="toggleProgSec(this)"
-                                            style="background:#fff;border:none;padding:10px 16px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:rgb(107,98,90);cursor:pointer;transition:background 0.2s;">
+                                            style="background:transparent;border:none;padding:11px 18px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:rgb(107,98,90);cursor:pointer;transition:background 0.2s;letter-spacing:0.3px;">
                                             <span><?= htmlspecialchars($seccion['titulo']) ?></span>
-                                            <i class="fas fa-chevron-down" style="font-size:11px;color:rgb(200,16,44);transition:transform 0.2s;"></i>
+                                            <i class="fas fa-chevron-down" style="font-size:10px;color:rgb(200,16,44);transition:transform 0.25s;flex-shrink:0;margin-left:8px;"></i>
                                         </button>
-                                        <div class="prog-sec-body" style="display:none;padding:10px 16px 12px;background:#fafafa;font-family:'Montserrat',sans-serif;font-size:12px;color:rgba(0,0,0,0.7);line-height:1.6;">
+                                        <div class="prog-sec-body" style="display:none;padding:10px 18px 14px;background:rgba(200,16,44,0.04);font-family:'Montserrat',sans-serif;font-size:12px;color:rgba(0,0,0,0.65);line-height:1.7;border-top:1px solid rgba(200,16,44,0.1);">
                                             <?= $seccion['contenido'] ?>
                                         </div>
                                     </div>
@@ -427,10 +427,12 @@ require_once 'includes/navbar.php';
 <?php require_once 'includes/footer.php'; ?>
 
 <style>
-.prog-sec-btn:hover { background: #f5f5f5 !important; }
-.prog-sec-btn.open { background: #fef6f7 !important; }
+.prog-sec-btn:hover { background: rgba(107,98,90,0.06) !important; }
+.prog-sec-btn.open { background: rgba(200,16,44,0.05) !important; }
 .prog-sec-btn.open i { transform: rotate(180deg); }
-.prog-dropdown { max-height: 400px; overflow-y: auto; }
+.prog-dropdown { max-height: 420px; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.15) !important; }
+.prog-dropdown::-webkit-scrollbar { width: 4px; }
+.prog-dropdown::-webkit-scrollbar-thumb { background: rgba(107,98,90,0.3); border-radius: 2px; }
 </style>
 <script>
 function toggleProgSec(btn) {
