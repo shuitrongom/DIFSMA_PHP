@@ -429,6 +429,18 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
         </div>
     </div>
     <!-- Spinner End -->
+    <script>
+    // Ocultar spinner cuando la pagina cargue (sin depender de jQuery)
+    window.addEventListener('load', function() {
+        var sp = document.getElementById('spinner');
+        if (sp) { sp.classList.remove('show'); sp.style.display = 'none'; }
+    });
+    // Fallback: ocultar despues de 3 segundos si load no dispara
+    setTimeout(function() {
+        var sp = document.getElementById('spinner');
+        if (sp) { sp.classList.remove('show'); sp.style.display = 'none'; }
+    }, 3000);
+    </script>
 
     <!-- Logo Principal Start -->
     <div class="container d-flex justify-content-center pt-4 pb-0">

@@ -18,6 +18,11 @@
 
 if (!isset($base_path)) $base_path = '';
 
+// Asegurar que db.php esté cargado
+if (!function_exists('get_db')) {
+    require_once __DIR__ . '/db.php';
+}
+
 // ── Valores predeterminados del diseño original ──────────────────────────────
 $footer = [
     'texto_inst'    => 'Sistema Municipal DIF San Mateo Atenco, comprometido con el bienestar de las familias.',
@@ -60,9 +65,11 @@ function _fe(string $s): string {
 // ── Consultar footer_links activos ────────────────────────────────────────────
 $footer_links = [];
 try {
-    $stmt = $pdo->prepare('SELECT titulo, url, nueva_tab FROM footer_links WHERE activo = 1 ORDER BY orden ASC');
-    $stmt->execute();
-    $footer_links = $stmt->fetchAll();
+    if (isset($pdo) && $pdo !== null) {
+        $stmt = $pdo->prepare('SELECT titulo, url, nueva_tab FROM footer_links WHERE activo = 1 ORDER BY orden ASC');
+        $stmt->execute();
+        $footer_links = $stmt->fetchAll();
+    }
 } catch (PDOException $e) {
     if (defined('APP_DEBUG') && APP_DEBUG) {
         error_log('footer.php footer_links PDOException: ' . $e->getMessage());
@@ -186,6 +193,9 @@ if (count($horario_parts) === 2) {
 
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script>if(typeof jQuery==='undefined'){document.write('<scr'+'ipt src="<?= $base_path ?>lib/jquery/jquery.min.js"><\/scr'+'ipt>');}</script>
+    <!-- Fallback: ocultar spinner si jQuery no carga -->
+    <script>setTimeout(function(){var s=document.getElementById('spinner');if(s){s.style.display='none';}},1500);</script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="<?= $base_path ?>lib/wow/wow.min.js"></script>
     <script src="<?= $base_path ?>lib/easing/easing.min.js"></script>
