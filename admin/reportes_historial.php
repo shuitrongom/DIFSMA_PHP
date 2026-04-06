@@ -173,7 +173,7 @@ function build_pdf_html(array $registros, array $stats, array $stats_dia, array 
     // -----------------------------------------------------------------------
     $escudo_tag = '';
     if (file_exists($escudo_path) && extension_loaded('gd')) {
-        $mime = str_ends_with($escudo_path, '.png') ? 'image/png' : 'image/jpeg';
+        $mime = (substr($escudo_path, -4) === '.png') ? 'image/png' : 'image/jpeg';
         $b64  = base64_encode(file_get_contents($escudo_path));
         $escudo_tag = '<img src="data:' . $mime . ';base64,' . $b64 . '" style="height:50px;vertical-align:middle;margin-right:10px;">';
     }
@@ -731,11 +731,11 @@ No hay registros para los filtros seleccionados. Ajusta el rango de fechas u otr
 <td style="color:rgb(107,98,90);font-weight:600;"><?= htmlspecialchars($r['seccion']) ?></td>
 <td class="text-muted small"><?= htmlspecialchars($r['descripcion'] ?? '—') ?></td>
 <td><small><?php
-    $di = match($r['dispositivo'] ?? 'pc') {
-        'celular' => '<i class="bi bi-phone"></i> Celular',
-        'tablet'  => '<i class="bi bi-tablet"></i> Tablet',
-        default   => '<i class="bi bi-laptop"></i> PC',
-    };
+    $di = ($r['dispositivo'] ?? 'pc') === 'celular'
+        ? '<i class="bi bi-phone"></i> Celular'
+        : (($r['dispositivo'] ?? 'pc') === 'tablet'
+            ? '<i class="bi bi-tablet"></i> Tablet'
+            : '<i class="bi bi-laptop"></i> PC');
     echo $di;
 ?></small></td>
 <td><small class="text-muted"><?= htmlspecialchars($r['ip'] ?? '—') ?><?php if (!empty($r['hostname'])): ?><br><span style="color:#aaa;font-size:11px;"><?= htmlspecialchars($r['hostname']) ?></span><?php endif; ?></small></td>

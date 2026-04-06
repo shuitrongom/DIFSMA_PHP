@@ -186,11 +186,11 @@ require_once __DIR__ . '/sidebar_sections.php';
 <td style="color:rgb(107,98,90);font-weight:600;"><?= htmlspecialchars($r['seccion']) ?></td>
 <td class="text-muted small"><?= htmlspecialchars($r['descripcion'] ?? '—') ?></td>
 <td><small class="text-muted"><?php
-    $disp_icon = match($r['dispositivo'] ?? 'pc') {
-        'celular' => '<i class="bi bi-phone" title="Celular"></i>',
-        'tablet'  => '<i class="bi bi-tablet" title="Tablet"></i>',
-        default   => '<i class="bi bi-laptop" title="PC/Laptop"></i>',
-    };
+    $disp_icon = ($r['dispositivo'] ?? 'pc') === 'celular'
+        ? '<i class="bi bi-phone" title="Celular"></i>'
+        : (($r['dispositivo'] ?? 'pc') === 'tablet'
+            ? '<i class="bi bi-tablet" title="Tablet"></i>'
+            : '<i class="bi bi-laptop" title="PC/Laptop"></i>');
     echo $disp_icon . ' ' . htmlspecialchars(ucfirst($r['dispositivo'] ?? 'pc'));
 ?></small></td>
 <td><small class="text-muted"><?= htmlspecialchars($r['ip'] ?? '—') ?><?php if (!empty($r['hostname'])): ?><br><span style="color:#aaa;font-size:11px;"><?= htmlspecialchars($r['hostname']) ?></span><?php endif; ?></small></td>
