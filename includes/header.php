@@ -415,6 +415,7 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
             }
         }
     </style>
+    <style>html, body { overflow-x: hidden; max-width: 100vw; }</style>
 </head>
 
 <body>

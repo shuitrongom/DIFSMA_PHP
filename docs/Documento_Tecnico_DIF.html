@@ -1,0 +1,434 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="UTF-8">
+<meta name="ProgId" content="Word.Document">
+<meta name="Generator" content="Microsoft Word 15">
+<style>
+body { font-family: 'Segoe UI', Calibri, Arial, sans-serif; font-size: 11pt; color: #333; margin: 2.5cm; line-height: 1.6; }
+h1 { font-size: 22pt; color: #C8102C; border-bottom: 3px solid #C8102C; padding-bottom: 8px; margin-top: 40px; page-break-before: always; }
+h1:first-of-type { page-break-before: avoid; }
+h2 { font-size: 16pt; color: #6B625A; border-bottom: 2px solid #6B625A; padding-bottom: 6px; margin-top: 30px; }
+h3 { font-size: 13pt; color: #C8102C; margin-top: 20px; }
+h4 { font-size: 11pt; color: #6B625A; margin-top: 15px; }
+.cover { text-align: center; margin-top: 100px; margin-bottom: 60px; }
+.cover h1 { font-size: 28pt; border: none; page-break-before: avoid; }
+.cover .subtitle { font-size: 16pt; color: #6B625A; margin-top: 10px; }
+.cover .author { font-size: 12pt; color: #333; margin-top: 40px; }
+.cover .date { font-size: 11pt; color: #999; margin-top: 10px; }
+table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+th { background: #C8102C; color: #fff; padding: 8px 12px; text-align: left; font-size: 10pt; }
+td { border: 1px solid #ddd; padding: 8px 12px; font-size: 10pt; vertical-align: top; }
+tr:nth-child(even) { background: #f8f8f8; }
+.note { background: #FFF3CD; border-left: 4px solid #FFC107; padding: 10px 15px; margin: 15px 0; font-size: 10pt; }
+.tech { background: #E8EAF6; border-left: 4px solid #3F51B5; padding: 10px 15px; margin: 15px 0; font-size: 10pt; }
+code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: Consolas, monospace; font-size: 10pt; }
+.footer { text-align: center; color: #999; font-size: 9pt; margin-top: 40px; border-top: 1px solid #ddd; padding-top: 10px; }
+.img-placeholder { border: 2px dashed #ccc; background: #f9f9f9; padding: 30px; text-align: center; color: #999; margin: 15px 0; font-style: italic; }
+.badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 9pt; font-weight: bold; }
+.badge-new { background: #D4EDDA; color: #155724; }
+.badge-mod { background: #FFF3CD; color: #856404; }
+.badge-db { background: #D1ECF1; color: #0C5460; }
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+<div class="img-placeholder">[Insertar logo DIF San Mateo Atenco]</div>
+<h1>Documento Tecnico de Entrega<br>Sitio Web DIF San Mateo Atenco</h1>
+<div class="subtitle">Sistema de Gestion de Contenido (CMS)<br>Desarrollo Integral del Sitio Web Institucional</div>
+<div class="author"><strong>Desarrollado por:</strong> Sergio Huitron Gomez</div>
+<div class="date">Marzo 2026 | Version 1.0</div>
+</div>
+
+<!-- INDICE -->
+<h1 style="page-break-before:always;">Indice General</h1>
+<ol style="font-size:11pt;line-height:2;">
+<li>Resumen Ejecutivo</li>
+<li>Arquitectura del Sistema</li>
+<li>Base de Datos</li>
+<li>Sitio Publico (Front-End)</li>
+<li>Panel de Administracion (Back-End)</li>
+<li>Sistema de Usuarios y Permisos</li>
+<li>Transparencia Dinamica</li>
+<li>Seguridad</li>
+<li>Responsividad y Compatibilidad</li>
+<li>Archivos del Proyecto</li>
+<li>Instrucciones de Despliegue</li>
+<li>Soporte y Mantenimiento</li>
+</ol>
+
+<!-- 1. RESUMEN EJECUTIVO -->
+<h1>1. Resumen Ejecutivo</h1>
+<p>Se desarrollo un sitio web institucional completo para el DIF San Mateo Atenco, que incluye un sistema de gestion de contenido (CMS) personalizado que permite al personal del DIF administrar todo el contenido del sitio sin necesidad de conocimientos tecnicos.</p>
+
+<h3>Alcance del Proyecto</h3>
+<table>
+<tr><th>Componente</th><th>Descripcion</th></tr>
+<tr><td>Sitio Publico</td><td>Pagina web institucional con multiples secciones, responsiva para web, tablet y movil</td></tr>
+<tr><td>Panel de Administracion</td><td>CMS completo con 25+ secciones administrables</td></tr>
+<tr><td>Base de Datos</td><td>30+ tablas MySQL con relaciones, indices y cascadas</td></tr>
+<tr><td>Sistema de Usuarios</td><td>Roles (admin/usuario) con permisos granulares por seccion</td></tr>
+<tr><td>Transparencia Dinamica</td><td>Motor de plantillas para crear secciones de transparencia ilimitadas</td></tr>
+</table>
+
+<h3>Tecnologias Utilizadas</h3>
+<table>
+<tr><th>Capa</th><th>Tecnologia</th><th>Version</th></tr>
+<tr><td>Backend</td><td>PHP</td><td>8.x</td></tr>
+<tr><td>Base de Datos</td><td>MySQL / MariaDB</td><td>8.0+</td></tr>
+<tr><td>Frontend</td><td>HTML5, CSS3, JavaScript</td><td>-</td></tr>
+<tr><td>Framework CSS</td><td>Bootstrap</td><td>5.3</td></tr>
+<tr><td>Slider</td><td>Swiper.js</td><td>Bundle</td></tr>
+<tr><td>Iconos</td><td>Font Awesome 5, Bootstrap Icons</td><td>5.15 / 1.11</td></tr>
+<tr><td>PDF Viewer</td><td>PDF.js (Mozilla)</td><td>Latest</td></tr>
+<tr><td>Drag & Drop</td><td>SortableJS</td><td>1.15</td></tr>
+<tr><td>Fuentes</td><td>Google Fonts (Montserrat, Fredoka)</td><td>-</td></tr>
+</table>
+
+<!-- 2. ARQUITECTURA -->
+<h1>2. Arquitectura del Sistema</h1>
+<h3>2.1 Estructura de Directorios</h3>
+<table>
+<tr><th>Directorio</th><th>Contenido</th></tr>
+<tr><td><code>/</code> (raiz)</td><td>Paginas principales: index.php, voluntariado.php, config.php</td></tr>
+<tr><td><code>/admin/</code></td><td>Panel de administracion (25+ archivos PHP)</td></tr>
+<tr><td><code>/includes/</code></td><td>Componentes compartidos: header.php, navbar.php, footer.php, db.php</td></tr>
+<tr><td><code>/acerca-del-dif/</code></td><td>Paginas de Presidencia, Direcciones, Organigrama</td></tr>
+<tr><td><code>/comunicacion-social/</code></td><td>Noticias y Galeria fotografica</td></tr>
+<tr><td><code>/transparencia/</code></td><td>SEAC, Cuenta Publica, PAE, Matrices, CONAC, Financiero, Avisos, Dinamicas</td></tr>
+<tr><td><code>/tramites/</code></td><td>Paginas de tramites por direccion</td></tr>
+<tr><td><code>/css/</code></td><td>Hojas de estilo: style.css, admin.css, acordeon.css, tablas.css, etc.</td></tr>
+<tr><td><code>/js/</code></td><td>Scripts: main.js, first-carousel.js, upload-progress.js</td></tr>
+<tr><td><code>/img/</code></td><td>Imagenes estaticas del sitio (logos, iconos, fondos)</td></tr>
+<tr><td><code>/uploads/</code></td><td>Archivos subidos por el admin (imagenes, PDFs)</td></tr>
+<tr><td><code>/database/</code></td><td>Scripts SQL de esquema, migraciones y datos iniciales</td></tr>
+<tr><td><code>/lib/</code></td><td>Librerias de terceros (Swiper, Lightbox, PDF.js, etc.)</td></tr>
+</table>
+
+<h3>2.2 Patron de Arquitectura</h3>
+<p>El sistema sigue un patron <strong>MVC simplificado</strong> donde:</p>
+<table>
+<tr><th>Capa</th><th>Implementacion</th></tr>
+<tr><td>Modelo</td><td>Consultas PDO directas con prepared statements en cada archivo PHP</td></tr>
+<tr><td>Vista</td><td>HTML embebido en PHP con includes compartidos (header, navbar, footer)</td></tr>
+<tr><td>Controlador</td><td>Logica POST al inicio de cada archivo admin, con redirect PRG</td></tr>
+</table>
+
+<!-- 3. BASE DE DATOS -->
+<h1>3. Base de Datos</h1>
+<p>La base de datos <code>difsanma_dif_cms</code> utiliza MySQL/MariaDB con charset <code>utf8mb4</code> para soporte completo de caracteres especiales.</p>
+
+<h3>3.1 Catalogo de Tablas</h3>
+<table>
+<tr><th>Tabla</th><th>Descripcion</th><th>Relaciones</th></tr>
+<tr><td><code>admin</code></td><td>Usuarios del sistema (admin y publicos)</td><td>-</td></tr>
+<tr><td><code>admin_permisos</code></td><td>Permisos por usuario y seccion</td><td>FK: admin.id</td></tr>
+<tr><td><code>login_attempts</code></td><td>Registro de intentos fallidos de login</td><td>-</td></tr>
+<tr><td><code>slider_principal</code></td><td>Imagenes del slider principal</td><td>-</td></tr>
+<tr><td><code>slider_comunica</code></td><td>Imagenes del slider DIF Comunica por mes</td><td>-</td></tr>
+<tr><td><code>programas</code></td><td>Programas sociales del DIF</td><td>-</td></tr>
+<tr><td><code>programas_secciones</code></td><td>Secciones dentro de cada programa</td><td>FK: programas.id</td></tr>
+<tr><td><code>noticias_imagenes</code></td><td>Imagenes de noticias por fecha</td><td>-</td></tr>
+<tr><td><code>galeria_albumes</code></td><td>Albumes de la galeria fotografica</td><td>-</td></tr>
+<tr><td><code>galeria_imagenes</code></td><td>Imagenes dentro de cada album</td><td>FK: galeria_albumes.id</td></tr>
+<tr><td><code>presidencia</code></td><td>Datos del presidente (nombre, apellidos, cargo, imagen)</td><td>-</td></tr>
+<tr><td><code>direcciones</code></td><td>Directorio de funcionarios</td><td>-</td></tr>
+<tr><td><code>organigrama</code></td><td>Imagen del organigrama</td><td>-</td></tr>
+<tr><td><code>institucion_banner</code></td><td>Banner de imagen institucional</td><td>-</td></tr>
+<tr><td><code>tramites</code></td><td>Tramites y servicios</td><td>-</td></tr>
+<tr><td><code>footer_config</code></td><td>Configuracion del pie de pagina</td><td>-</td></tr>
+<tr><td><code>footer_links</code></td><td>Links de navegacion del footer</td><td>-</td></tr>
+<tr><td><code>seac_bloques</code></td><td>Bloques SEAC por anio</td><td>-</td></tr>
+<tr><td><code>seac_conceptos</code></td><td>Conceptos dentro de bloques SEAC</td><td>FK: seac_bloques.id</td></tr>
+<tr><td><code>seac_pdfs</code></td><td>PDFs trimestrales de SEAC</td><td>FK: seac_bloques.id, seac_conceptos.id</td></tr>
+<tr><td><code>cp_bloques / cp_titulos / cp_conceptos</code></td><td>Cuenta Publica (bloques, titulos, conceptos)</td><td>Cascada</td></tr>
+<tr><td><code>pa_bloques / pa_conceptos / pa_pdfs</code></td><td>Presupuesto Anual</td><td>Cascada</td></tr>
+<tr><td><code>conac_bloques / conac_conceptos / conac_pdfs</code></td><td>CONAC</td><td>Cascada</td></tr>
+<tr><td><code>fin_bloques / fin_conceptos</code></td><td>Financiero</td><td>Cascada</td></tr>
+<tr><td><code>pae_titulos / pae_pdfs</code></td><td>PAE</td><td>FK: pae_titulos.id</td></tr>
+<tr><td><code>mi_pdfs</code></td><td>Matrices de Indicadores</td><td>-</td></tr>
+<tr><td><code>voluntariado_config</code></td><td>Configuracion de la pagina de voluntariado</td><td>-</td></tr>
+<tr><td><code>voluntariado_imagenes</code></td><td>Galeria de fotos del voluntariado</td><td>-</td></tr>
+<tr><td><code>trans_secciones</code></td><td>Secciones dinamicas de transparencia</td><td>-</td></tr>
+<tr><td><code>trans_bloques</code></td><td>Bloques por anio (dinamicos)</td><td>FK: trans_secciones.id</td></tr>
+<tr><td><code>trans_titulos</code></td><td>Titulos (dinamicos)</td><td>FK: trans_secciones.id</td></tr>
+<tr><td><code>trans_conceptos</code></td><td>Conceptos (dinamicos)</td><td>FK: trans_secciones.id, trans_bloques.id</td></tr>
+<tr><td><code>trans_pdfs</code></td><td>PDFs (dinamicos)</td><td>FK: trans_secciones.id, trans_conceptos.id</td></tr>
+</table>
+
+<h3>3.2 Scripts SQL de Migracion</h3>
+<table>
+<tr><th>Archivo</th><th>Descripcion</th></tr>
+<tr><td><code>database/schema.sql</code></td><td>Esquema completo inicial de la base de datos</td></tr>
+<tr><td><code>database/seed.sql</code></td><td>Datos iniciales (admin, footer, etc.)</td></tr>
+<tr><td><code>database/dif_cms_voluntariado.sql</code></td><td>Tablas de voluntariado</td></tr>
+<tr><td><code>database/dif_cms_transparencia_dinamica.sql</code></td><td>Tablas de transparencia dinamica</td></tr>
+<tr><td><code>database/dif_cms_usuarios.sql</code></td><td>Sistema de usuarios y permisos</td></tr>
+<tr><td><code>database/migrate_presidencia_apellidos.sql</code></td><td>Campo apellidos en presidencia</td></tr>
+</table>
+
+<!-- 4. SITIO PUBLICO -->
+<h1>4. Sitio Publico (Front-End)</h1>
+<p>El sitio publico es la cara visible del DIF San Mateo Atenco. Todo el contenido es dinamico y se administra desde el panel.</p>
+
+<h3>4.1 Paginas del Sitio</h3>
+<table>
+<tr><th>Pagina</th><th>Archivo</th><th>Descripcion</th></tr>
+<tr><td>Inicio</td><td><code>index.php</code></td><td>Slider principal, programas, slider DIF Comunica, noticias del dia</td></tr>
+<tr><td>Presidencia</td><td><code>acerca-del-dif/presidencia.php</code></td><td>Foto, nombre, apellidos, cargo y descripcion del presidente</td></tr>
+<tr><td>Direcciones</td><td><code>acerca-del-dif/direcciones.php</code></td><td>Directorio de funcionarios con foto y cargo</td></tr>
+<tr><td>Organigrama</td><td><code>acerca-del-dif/organigrama.php</code></td><td>Imagen del organigrama institucional</td></tr>
+<tr><td>Noticias</td><td><code>comunicacion-social/noticias.php</code></td><td>Slider de noticias del dia con autoplay inteligente</td></tr>
+<tr><td>Galeria</td><td><code>comunicacion-social/galeria.php</code></td><td>Albumes con slider premium (thumbnails, flechas, fondo oscuro)</td></tr>
+<tr><td>Voluntariado</td><td><code>voluntariado.php</code></td><td>Mision, vision, valores con diseno profesional y galeria</td></tr>
+<tr><td>Tramites</td><td><code>tramites/*.php</code></td><td>Paginas de tramites por direccion</td></tr>
+<tr><td>SEAC</td><td><code>transparencia/SEAC.php</code></td><td>Bloques por anio con tabla trimestral y visor PDF</td></tr>
+<tr><td>Cuenta Publica</td><td><code>transparencia/cuenta_publica.php</code></td><td>Bloques, titulos/modulos, conceptos con PDF</td></tr>
+<tr><td>Presupuesto Anual</td><td><code>transparencia/presupuesto_anual.php</code></td><td>Bloques con conceptos y sub-anios</td></tr>
+<tr><td>PAE</td><td><code>transparencia/pae.php</code></td><td>Tabla titulos x anios con PDFs</td></tr>
+<tr><td>Matrices</td><td><code>transparencia/matrices_indicadores.php</code></td><td>Tabla horizontal de anios con PDFs</td></tr>
+<tr><td>CONAC</td><td><code>transparencia/conac.php</code></td><td>Igual que SEAC (trimestral)</td></tr>
+<tr><td>Financiero</td><td><code>transparencia/financiero.php</code></td><td>Bloques con conceptos y PDF directo</td></tr>
+<tr><td>Avisos Privacidad</td><td><code>transparencia/avisos_privacidad.php</code></td><td>Avisos de privacidad</td></tr>
+<tr><td>Secciones Dinamicas</td><td><code>transparencia/seccion_dinamica.php</code></td><td>Renderiza cualquier seccion dinamica segun plantilla</td></tr>
+</table>
+
+<h3>4.2 Componentes Compartidos</h3>
+<table>
+<tr><th>Archivo</th><th>Funcion</th></tr>
+<tr><td><code>includes/header.php</code></td><td>Head HTML, estilos globales, Swiper CSS, spinner, logos, widget clima, buscador</td></tr>
+<tr><td><code>includes/navbar.php</code></td><td>Menu de navegacion con dropdowns (6 secciones principales)</td></tr>
+<tr><td><code>includes/footer.php</code></td><td>Pie de pagina con direccion, redes sociales, links, copyright</td></tr>
+<tr><td><code>includes/db.php</code></td><td>Conexion PDO a MySQL con singleton</td></tr>
+</table>
+
+<h3>4.3 Caracteristicas Visuales</h3>
+<ul>
+<li><strong>Responsivo:</strong> Adaptado para desktop, tablet y movil con media queries</li>
+<li><strong>Animaciones:</strong> Efecto fadeIn al hacer scroll (WOW.js + Animate.css)</li>
+<li><strong>Galeria Premium:</strong> Slider con thumbnails, flechas laterales, fondo oscuro, contador</li>
+<li><strong>Visor PDF:</strong> Modal con renderizado via PDF.js (sin descarga directa)</li>
+<li><strong>Slider Noticias:</strong> Autoplay inteligente (solo con 4+ imagenes), loop adaptativo</li>
+<li><strong>Tipografia:</strong> Montserrat como fuente principal en todo el sitio</li>
+</ul>
+
+<!-- 5. PANEL DE ADMINISTRACION -->
+<h1>5. Panel de Administracion (Back-End)</h1>
+<p>El panel permite gestionar todo el contenido del sitio desde una interfaz web intuitiva.</p>
+
+<h3>5.1 Secciones Administrables</h3>
+<table>
+<tr><th>Seccion</th><th>Archivo Admin</th><th>Funcionalidades</th></tr>
+<tr><td>Slider Principal</td><td><code>slider_principal.php</code></td><td>CRUD de imagenes del carrusel principal</td></tr>
+<tr><td>Slider DIF Comunica</td><td><code>slider_comunica.php</code></td><td>Multi-upload, drag & drop reorder, eliminar todas por mes</td></tr>
+<tr><td>Programas</td><td><code>programas.php</code></td><td>CRUD de programas con secciones internas</td></tr>
+<tr><td>Imagen Institucional</td><td><code>institucion.php</code></td><td>Banner institucional</td></tr>
+<tr><td>Noticias</td><td><code>noticias.php</code></td><td>Imagenes por fecha, acordeon agrupado por dia</td></tr>
+<tr><td>Galeria</td><td><code>galeria.php</code></td><td>Albumes, multi-upload, drag & drop reorder</td></tr>
+<tr><td>Presidencia</td><td><code>presidencia.php</code></td><td>Nombre, apellidos, cargo, descripcion, imagen</td></tr>
+<tr><td>Direcciones</td><td><code>direcciones.php</code></td><td>CRUD de funcionarios con foto</td></tr>
+<tr><td>Organigrama</td><td><code>organigrama.php</code></td><td>Imagen del organigrama</td></tr>
+<tr><td>Tramites</td><td><code>tramites.php</code></td><td>CRUD de tramites por direccion</td></tr>
+<tr><td>Voluntariado</td><td><code>voluntariado.php</code></td><td>Logo, lema, mision, vision, valores, galeria con drag & drop</td></tr>
+<tr><td>Footer</td><td><code>footer.php</code></td><td>Direccion, telefono, email, redes sociales, links</td></tr>
+<tr><td>Transparencia (7 secciones)</td><td><code>seac.php, cuenta_publica.php, etc.</code></td><td>Bloques, conceptos, PDFs trimestrales</td></tr>
+<tr><td>Secciones Dinamicas</td><td><code>transparencia_dinamica.php</code></td><td>Crear secciones con plantillas reutilizables</td></tr>
+<tr><td>Usuarios</td><td><code>usuarios.php</code></td><td>Crear, eliminar, permisos, reset password</td></tr>
+</table>
+
+<h3>5.2 Funcionalidades Transversales</h3>
+<ul>
+<li><strong>Multi-upload:</strong> Subir multiples imagenes simultaneamente (Slider Comunica, Galeria, Voluntariado)</li>
+<li><strong>Drag & Drop:</strong> Reordenar imagenes arrastrando tarjetas (SortableJS con AJAX)</li>
+<li><strong>Flash Messages:</strong> Notificaciones de exito/error despues de cada accion</li>
+<li><strong>Modales de Confirmacion:</strong> Confirmacion antes de eliminar registros</li>
+<li><strong>Upload Handler:</strong> Validacion de tipo, tamano (20MB max), renombrado seguro con hash MD5</li>
+</ul>
+
+<!-- 6. SISTEMA DE USUARIOS -->
+<h1>6. Sistema de Usuarios y Permisos</h1>
+
+<h3>6.1 Roles</h3>
+<table>
+<tr><th>Rol</th><th>Descripcion</th><th>Acceso</th></tr>
+<tr><td><strong>admin</strong></td><td>Administrador unico del sistema</td><td>Acceso total a todas las secciones + gestion de usuarios</td></tr>
+<tr><td><strong>usuario</strong></td><td>Usuario publico creado por el admin</td><td>Solo las secciones asignadas por el administrador</td></tr>
+</table>
+
+<h3>6.2 Funcionalidades</h3>
+<ul>
+<li>Crear usuarios con nombre, usuario y contrasena</li>
+<li>Asignar permisos granulares por seccion (checkboxes)</li>
+<li>Activar/desactivar usuarios sin eliminarlos</li>
+<li>Resetear contrasena de cualquier usuario</li>
+<li>Eliminar usuarios (cascada elimina permisos)</li>
+<li>El sidebar y dashboard se filtran automaticamente segun permisos</li>
+<li>El auth_guard bloquea acceso a secciones no permitidas</li>
+</ul>
+
+<h3>6.3 Flujo de Autenticacion</h3>
+<table>
+<tr><th>Paso</th><th>Descripcion</th></tr>
+<tr><td>1</td><td>Usuario ingresa credenciales en login.php</td></tr>
+<tr><td>2</td><td>Se verifica rate limiting (max 5 intentos en 15 min)</td></tr>
+<tr><td>3</td><td>Se consulta la tabla admin con prepared statement</td></tr>
+<tr><td>4</td><td>Se verifica password con password_verify() (bcrypt)</td></tr>
+<tr><td>5</td><td>Se verifica que el usuario este activo</td></tr>
+<tr><td>6</td><td>Se regenera session ID y se guardan rol, id, username en sesion</td></tr>
+<tr><td>7</td><td>auth_guard.php verifica permisos en cada pagina</td></tr>
+<tr><td>8</td><td>Sesion expira automaticamente a los 5 minutos de inactividad</td></tr>
+</table>
+
+<!-- 7. TRANSPARENCIA DINAMICA -->
+<h1>7. Transparencia Dinamica</h1>
+<p>Sistema que permite crear secciones de transparencia ilimitadas eligiendo una plantilla predefinida.</p>
+
+<h3>7.1 Plantillas Disponibles</h3>
+<table>
+<tr><th>Plantilla</th><th>Estructura</th><th>Ejemplo Original</th></tr>
+<tr><td>SEAC</td><td>Bloques (anio) &rarr; Conceptos &rarr; PDFs trimestrales (Q1-Q4)</td><td>SEAC</td></tr>
+<tr><td>CONAC</td><td>Bloques (anio) &rarr; Conceptos &rarr; PDFs trimestrales (Q1-Q4)</td><td>CONAC</td></tr>
+<tr><td>Cuenta Publica</td><td>Bloques (anio) &rarr; Conceptos con PDF directo</td><td>Cuenta Publica</td></tr>
+<tr><td>Financiero</td><td>Bloques (anio) &rarr; Conceptos con PDF directo</td><td>Financiero</td></tr>
+<tr><td>Presupuesto Anual</td><td>Bloques (anio) &rarr; Conceptos &rarr; Sub-anios con PDF</td><td>Presupuesto Anual</td></tr>
+<tr><td>PAE</td><td>Titulos globales &rarr; PDFs por anio</td><td>PAE</td></tr>
+<tr><td>Matrices</td><td>Anios con PDF directo (estructura simple)</td><td>Matrices de Indicadores</td></tr>
+</table>
+
+<h3>7.2 Funcionamiento</h3>
+<ul>
+<li>El admin crea una seccion con nombre y plantilla desde <code>transparencia_dinamica.php</code></li>
+<li>Se genera un slug unico automaticamente</li>
+<li>El contenido se gestiona desde <code>transparencia_seccion.php</code> con interfaz adaptada a la plantilla</li>
+<li>Las secciones activas aparecen automaticamente en el menu de Transparencia del sitio publico</li>
+<li>El front renderiza la seccion en <code>seccion_dinamica.php</code> con el estilo exacto de la plantilla original</li>
+</ul>
+
+<!-- 8. SEGURIDAD -->
+<h1>8. Seguridad</h1>
+<table>
+<tr><th>Medida</th><th>Implementacion</th></tr>
+<tr><td>Contrasenas</td><td>Hash bcrypt via <code>password_hash()</code> / <code>password_verify()</code></td></tr>
+<tr><td>SQL Injection</td><td>Prepared statements PDO en todas las consultas</td></tr>
+<tr><td>XSS</td><td><code>htmlspecialchars()</code> en toda salida de datos</td></tr>
+<tr><td>CSRF</td><td>Tokens CSRF en todos los formularios POST</td></tr>
+<tr><td>Rate Limiting</td><td>Max 5 intentos de login en 15 minutos por IP</td></tr>
+<tr><td>Session Timeout</td><td>Expiracion automatica a los 5 minutos de inactividad</td></tr>
+<tr><td>Session Fixation</td><td><code>session_regenerate_id(true)</code> al iniciar sesion</td></tr>
+<tr><td>Upload Validation</td><td>Validacion de tipo MIME, extension, tamano (20MB max), renombrado MD5</td></tr>
+<tr><td>PDF Anti-Copy</td><td>Renderizado via canvas (PDF.js), bloqueo de Ctrl+P/S/C, PrintScreen</td></tr>
+<tr><td>Directory Traversal</td><td>Rutas de upload controladas con <code>BASE_PATH</code></td></tr>
+</table>
+
+<!-- 9. RESPONSIVIDAD -->
+<h1>9. Responsividad y Compatibilidad</h1>
+
+<h3>9.1 Breakpoints</h3>
+<table>
+<tr><th>Dispositivo</th><th>Ancho</th><th>Adaptaciones</th></tr>
+<tr><td>Desktop</td><td>&gt; 992px</td><td>Layout completo, sidebar expandido, grids de 3-4 columnas</td></tr>
+<tr><td>Tablet</td><td>768px - 991px</td><td>Grids de 2 columnas, navbar colapsable, logo ajustado</td></tr>
+<tr><td>Movil</td><td>&lt; 768px</td><td>1 columna, sidebar oculto, logo centrado, controles reducidos</td></tr>
+</table>
+
+<h3>9.2 Elementos Responsivos</h3>
+<ul>
+<li>Header: Logo "Unidos con Amor" se reordena en movil (logo primero, clima despues)</li>
+<li>Navbar: Colapsa en hamburger menu en pantallas pequenas</li>
+<li>Galeria: Slider con thumbnails se adapta, flechas se reducen</li>
+<li>Voluntariado: Secciones mision/vision/valores se apilan verticalmente</li>
+<li>Admin: Sidebar colapsable, tablas con scroll horizontal</li>
+<li>Transparencia: Botones de anio se apilan en 1 columna en movil</li>
+</ul>
+
+<h3>9.3 Navegadores Soportados</h3>
+<table>
+<tr><th>Navegador</th><th>Version Minima</th></tr>
+<tr><td>Google Chrome</td><td>90+</td></tr>
+<tr><td>Mozilla Firefox</td><td>88+</td></tr>
+<tr><td>Microsoft Edge</td><td>90+</td></tr>
+<tr><td>Safari</td><td>14+</td></tr>
+</table>
+
+<!-- 10. ARCHIVOS DEL PROYECTO -->
+<h1>10. Inventario de Archivos</h1>
+
+<h3>10.1 Archivos PHP del Proyecto</h3>
+<table>
+<tr><th>Categoria</th><th>Cantidad</th><th>Ubicacion</th></tr>
+<tr><td>Paginas publicas</td><td>20+</td><td>Raiz, acerca-del-dif/, comunicacion-social/, transparencia/, tramites/</td></tr>
+<tr><td>Panel admin</td><td>25+</td><td>admin/</td></tr>
+<tr><td>Componentes compartidos</td><td>4</td><td>includes/</td></tr>
+<tr><td>Scripts SQL</td><td>30+</td><td>database/</td></tr>
+<tr><td>Hojas de estilo</td><td>10</td><td>css/</td></tr>
+<tr><td>Scripts JS</td><td>5</td><td>js/</td></tr>
+<tr><td>Imagenes estaticas</td><td>100+</td><td>img/</td></tr>
+</table>
+
+<h3>10.2 Copyright</h3>
+<p>Todos los archivos PHP del proyecto contienen el siguiente header de copyright:</p>
+<div class="tech">
+<code>
+@author &nbsp;&nbsp;Sergio Huitron Gomez<br>
+@copyright 2025-2026 Sergio Huitron Gomez. Todos los derechos reservados.<br>
+@project &nbsp;DIF San Mateo Atenco - Sistema de Gestion de Contenido
+</code>
+</div>
+
+<!-- 11. DESPLIEGUE -->
+<h1>11. Instrucciones de Despliegue</h1>
+
+<h3>11.1 Requisitos del Servidor</h3>
+<table>
+<tr><th>Requisito</th><th>Minimo</th></tr>
+<tr><td>PHP</td><td>8.0 o superior</td></tr>
+<tr><td>MySQL / MariaDB</td><td>8.0 / 10.4 o superior</td></tr>
+<tr><td>Extensiones PHP</td><td>PDO, pdo_mysql, mbstring, fileinfo</td></tr>
+<tr><td>Espacio en disco</td><td>500 MB minimo (sin uploads)</td></tr>
+<tr><td>Memoria PHP</td><td>128 MB minimo</td></tr>
+<tr><td>Upload max</td><td>20 MB (php.ini: upload_max_filesize, post_max_size)</td></tr>
+</table>
+
+<h3>11.2 Pasos de Instalacion</h3>
+<table>
+<tr><th>Paso</th><th>Accion</th></tr>
+<tr><td>1</td><td>Subir todos los archivos al servidor via FTP/SFTP</td></tr>
+<tr><td>2</td><td>Crear la base de datos MySQL y ejecutar <code>database/schema.sql</code></td></tr>
+<tr><td>3</td><td>Ejecutar <code>database/seed.sql</code> para datos iniciales</td></tr>
+<tr><td>4</td><td>Ejecutar migraciones adicionales (voluntariado, transparencia dinamica, usuarios)</td></tr>
+<tr><td>5</td><td>Configurar <code>config.php</code> con credenciales de BD del hosting</td></tr>
+<tr><td>6</td><td>Verificar permisos de escritura en <code>uploads/</code> (755 o 775)</td></tr>
+<tr><td>7</td><td>Acceder a <code>/admin/login.php</code> con usuario: admin</td></tr>
+</table>
+
+<!-- 12. SOPORTE -->
+<h1>12. Soporte y Mantenimiento</h1>
+
+<h3>12.1 Mantenimiento Recomendado</h3>
+<table>
+<tr><th>Tarea</th><th>Frecuencia</th></tr>
+<tr><td>Respaldo de base de datos</td><td>Semanal</td></tr>
+<tr><td>Respaldo de carpeta uploads/</td><td>Mensual</td></tr>
+<tr><td>Limpiar login_attempts antiguos</td><td>Mensual</td></tr>
+<tr><td>Verificar espacio en disco</td><td>Mensual</td></tr>
+<tr><td>Actualizar contrasena del admin</td><td>Trimestral</td></tr>
+</table>
+
+<h3>12.2 Contacto de Soporte</h3>
+<table>
+<tr><th>Dato</th><th>Informacion</th></tr>
+<tr><td>Desarrollador</td><td>Sergio Huitron Gomez</td></tr>
+<tr><td>Email</td><td>[email de contacto]</td></tr>
+<tr><td>Telefono</td><td>[telefono de contacto]</td></tr>
+</table>
+
+<div class="footer">
+<p><strong>Documento Tecnico de Entrega</strong><br>
+DIF San Mateo Atenco — Sistema de Gestion de Contenido<br>
+Desarrollado por Sergio Huitron Gomez | Marzo 2026<br>
+Todos los derechos reservados.</p>
+</div>
+
+</body>
+</html>
