@@ -276,34 +276,30 @@ require_once 'includes/navbar.php';
                             <?php if (!empty($programa['secciones'])): ?>
                             <div class="dropdown">
                                 <button class="btn p-0 w-100 dropdown-toggle btn-ver-programas" type="button"
-                                    id="dropdownPrograma<?= $programa['id'] ?>" data-bs-toggle="dropdown" aria-expanded="false">
+                                    id="dropdownPrograma<?= $programa['id'] ?>" data-bs-toggle="dropdown" aria-expanded="false"
+                                    data-bs-auto-close="outside">
                                     <img src="img/btn_ver_programas.png" alt="Ver Programas" class="img-fluid w-100" style="display:block;">
                                 </button>
-                                <ul class="dropdown-menu p-3" aria-labelledby="dropdownPrograma<?= $programa['id'] ?>" style="width: 300px;">
-                                    <div class="accordion" id="accordionPrograma<?= $programa['id'] ?>">
-                                        <?php foreach ($programa['secciones'] as $sIdx => $seccion): ?>
-                                        <div class="accordion-item">
-                                            <h2 class="accordion-header" id="headingP<?= $programa['id'] ?>S<?= $sIdx ?>">
-                                                <button class="accordion-button collapsed" type="button"
-                                                    data-bs-toggle="collapse"
-                                                    data-bs-target="#collapseP<?= $programa['id'] ?>S<?= $sIdx ?>"
-                                                    aria-expanded="false"
-                                                    aria-controls="collapseP<?= $programa['id'] ?>S<?= $sIdx ?>">
-                                                    <?= htmlspecialchars($seccion['titulo']) ?>
-                                                </button>
-                                            </h2>
-                                            <div id="collapseP<?= $programa['id'] ?>S<?= $sIdx ?>"
-                                                class="accordion-collapse collapse"
-                                                aria-labelledby="headingP<?= $programa['id'] ?>S<?= $sIdx ?>"
-                                                data-bs-parent="#accordionPrograma<?= $programa['id'] ?>">
-                                                <div class="accordion-body">
-                                                    <?= $seccion['contenido'] ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <?php endforeach; ?>
+                                <div class="dropdown-menu p-0 shadow-lg border-0 prog-dropdown" aria-labelledby="dropdownPrograma<?= $programa['id'] ?>" style="width:320px;border-radius:10px;overflow:hidden;">
+                                    <div style="background:rgb(107,98,90);padding:10px 16px;">
+                                        <span style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:13px;color:#fff;letter-spacing:0.5px;">
+                                            <?= htmlspecialchars($programa['nombre']) ?>
+                                        </span>
                                     </div>
-                                </ul>
+                                    <?php foreach ($programa['secciones'] as $sIdx => $seccion): ?>
+                                    <div class="prog-seccion-item" style="border-bottom:1px solid #f0f0f0;">
+                                        <button class="prog-sec-btn w-100 text-start d-flex justify-content-between align-items-center"
+                                            type="button" onclick="toggleProgSec(this)"
+                                            style="background:#fff;border:none;padding:10px 16px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:rgb(107,98,90);cursor:pointer;transition:background 0.2s;">
+                                            <span><?= htmlspecialchars($seccion['titulo']) ?></span>
+                                            <i class="fas fa-chevron-down" style="font-size:11px;color:rgb(200,16,44);transition:transform 0.2s;"></i>
+                                        </button>
+                                        <div class="prog-sec-body" style="display:none;padding:10px 16px 12px;background:#fafafa;font-family:'Montserrat',sans-serif;font-size:12px;color:rgba(0,0,0,0.7);line-height:1.6;">
+                                            <?= $seccion['contenido'] ?>
+                                        </div>
+                                    </div>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
                             <?php else: ?>
                             <div>
@@ -429,6 +425,29 @@ require_once 'includes/navbar.php';
     <!-- Pleca End -->
 
 <?php require_once 'includes/footer.php'; ?>
+
+<style>
+.prog-sec-btn:hover { background: #f5f5f5 !important; }
+.prog-sec-btn.open { background: #fef6f7 !important; }
+.prog-sec-btn.open i { transform: rotate(180deg); }
+.prog-dropdown { max-height: 400px; overflow-y: auto; }
+</style>
+<script>
+function toggleProgSec(btn) {
+    var body = btn.nextElementSibling;
+    var isOpen = btn.classList.contains('open');
+    // Cerrar todos en el mismo dropdown
+    var dropdown = btn.closest('.prog-dropdown');
+    dropdown.querySelectorAll('.prog-sec-btn').forEach(function(b) {
+        b.classList.remove('open');
+        b.nextElementSibling.style.display = 'none';
+    });
+    if (!isOpen) {
+        btn.classList.add('open');
+        body.style.display = 'block';
+    }
+}
+</script>
 
 <?php if (!empty($comunica_images)): ?>
 <script>
