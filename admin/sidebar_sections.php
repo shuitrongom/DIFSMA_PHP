@@ -70,6 +70,7 @@ $sidebar_groups = [
         'icon'  => 'bi-gear',
         'items' => [
             ['title' => 'Usuarios', 'file' => 'usuarios.php', 'icon' => 'bi-people'],
+            ['title' => 'Reportes', 'file' => 'reportes_historial.php', 'icon' => 'bi-file-earmark-bar-graph'],
         ],
     ],
 ];

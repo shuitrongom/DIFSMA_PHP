@@ -1,0 +1,1 @@
+PHP Warning:  Undefined array key "REQUEST_METHOD" in C:\xampp\htdocs\DIF-SMA-PHP\admin\auth_guard.php on line 47
