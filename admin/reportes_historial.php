@@ -77,7 +77,7 @@ function build_pdf_html(array $registros, array $stats, array $stats_dia, array 
     $fecha_ini  = htmlspecialchars($filtros['fecha_ini'] ?? '', ENT_QUOTES, 'UTF-8');
     $fecha_fin  = htmlspecialchars($filtros['fecha_fin'] ?? '', ENT_QUOTES, 'UTF-8');
     $total      = array_sum(array_column($stats, 'total'));
-    $escudo_path = dirname(__DIR__) . '/img/escudo.png';
+    $escudo_path = dirname(__DIR__) . '/img/logo_DIF.png';
     $now        = date('d/m/Y H:i');
 
     // -----------------------------------------------------------------------
@@ -146,12 +146,16 @@ function build_pdf_html(array $registros, array $stats, array $stats_dia, array 
     // -----------------------------------------------------------------------
     $rows = '';
     foreach ($registros as $i => $r) {
-        $bg       = ($i % 2 === 1) ? 'background:#F2F2F2;' : '';
-        $fecha    = htmlspecialchars($r['created_at']  ?? '', ENT_QUOTES, 'UTF-8');
-        $usuario  = htmlspecialchars($r['username']    ?? '', ENT_QUOTES, 'UTF-8');
-        $accion   = htmlspecialchars($r['accion']      ?? '', ENT_QUOTES, 'UTF-8');
-        $seccion  = htmlspecialchars($r['seccion']     ?? '', ENT_QUOTES, 'UTF-8');
-        $desc     = htmlspecialchars($r['descripcion'] ?? '', ENT_QUOTES, 'UTF-8');
+        $bg         = ($i % 2 === 1) ? 'background:#F2F2F2;' : '';
+        $fecha      = htmlspecialchars($r['created_at']  ?? '', ENT_QUOTES, 'UTF-8');
+        $usuario    = htmlspecialchars($r['username']    ?? '', ENT_QUOTES, 'UTF-8');
+        $accion     = htmlspecialchars($r['accion']      ?? '', ENT_QUOTES, 'UTF-8');
+        $seccion    = htmlspecialchars($r['seccion']     ?? '', ENT_QUOTES, 'UTF-8');
+        $desc       = htmlspecialchars($r['descripcion'] ?? '', ENT_QUOTES, 'UTF-8');
+        $disp       = htmlspecialchars(ucfirst($r['dispositivo'] ?? 'pc'), ENT_QUOTES, 'UTF-8');
+        $ip         = htmlspecialchars($r['ip']          ?? '', ENT_QUOTES, 'UTF-8');
+        $host       = htmlspecialchars($r['hostname']    ?? '', ENT_QUOTES, 'UTF-8');
+        $ip_host    = $host ? $ip . '<br><small>' . $host . '</small>' : $ip;
         $rows .= '
         <tr style="' . $bg . '">
           <td style="padding:3px 5px;border-bottom:1px solid #E0E0E0;">' . $fecha   . '</td>
@@ -159,6 +163,8 @@ function build_pdf_html(array $registros, array $stats, array $stats_dia, array 
           <td style="padding:3px 5px;border-bottom:1px solid #E0E0E0;">' . $accion  . '</td>
           <td style="padding:3px 5px;border-bottom:1px solid #E0E0E0;">' . $seccion . '</td>
           <td style="padding:3px 5px;border-bottom:1px solid #E0E0E0;">' . $desc    . '</td>
+          <td style="padding:3px 5px;border-bottom:1px solid #E0E0E0;">' . $disp    . '</td>
+          <td style="padding:3px 5px;border-bottom:1px solid #E0E0E0;">' . $ip_host . '</td>
         </tr>';
     }
 
@@ -166,8 +172,10 @@ function build_pdf_html(array $registros, array $stats, array $stats_dia, array 
     // Imagen del escudo (base64 para que dompdf la encuentre siempre)
     // -----------------------------------------------------------------------
     $escudo_tag = '';
-    if (file_exists($escudo_path)) {
-        $escudo_tag = '<img src="' . $escudo_path . '" style="height:50px;vertical-align:middle;margin-right:10px;">';
+    if (file_exists($escudo_path) && extension_loaded('gd')) {
+        $mime = str_ends_with($escudo_path, '.png') ? 'image/png' : 'image/jpeg';
+        $b64  = base64_encode(file_get_contents($escudo_path));
+        $escudo_tag = '<img src="data:' . $mime . ';base64,' . $b64 . '" style="height:50px;vertical-align:middle;margin-right:10px;">';
     }
 
     // -----------------------------------------------------------------------
@@ -297,11 +305,13 @@ function build_pdf_html(array $registros, array $stats, array $stats_dia, array 
 <table class="data-table">
   <thead>
     <tr>
-      <th style="width:18%;">Fecha/Hora</th>
-      <th style="width:14%;">Usuario</th>
-      <th style="width:10%;">Acción</th>
-      <th style="width:14%;">Sección</th>
-      <th style="width:44%;">Descripción</th>
+      <th style="width:15%;">Fecha/Hora</th>
+      <th style="width:11%;">Usuario</th>
+      <th style="width:9%;">Acción</th>
+      <th style="width:12%;">Sección</th>
+      <th style="width:33%;">Descripción</th>
+      <th style="width:9%;">Dispositivo</th>
+      <th style="width:11%;">IP / Host</th>
     </tr>
   </thead>
   <tbody>' . $rows . '</tbody>
@@ -338,7 +348,7 @@ function build_excel(array $registros, array $stats, array $stats_seccion, array
     // Fila 1: Título merged A1:H1
     $titulo = "DIF San Mateo Atenco \u{2014} Reporte de Historial de Actividad | Periodo: {$fecha_ini} al {$fecha_fin}";
     $sheet->setCellValue('A1', $titulo);
-    $sheet->mergeCells('A1:H1');
+    $sheet->mergeCells('A1:J1');
 
     $tituloStyle = $sheet->getStyle('A1');
     $tituloStyle->getFont()->setBold(true)->getColor()->setARGB('FFFFFFFF');
@@ -348,21 +358,21 @@ function build_excel(array $registros, array $stats, array $stats_seccion, array
     $tituloStyle->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 
     // Fila 2: Encabezados
-    $headers = ['ID', 'Fecha', 'Hora', 'Usuario', 'Acción', 'Sección', 'Descripción', 'IP'];
+    $headers = ['ID', 'Fecha', 'Hora', 'Usuario', 'Acción', 'Sección', 'Descripción', 'IP', 'Dispositivo', 'Hostname'];
     $col = 'A';
     foreach ($headers as $header) {
         $sheet->setCellValue($col . '2', $header);
         $col++;
     }
 
-    $headerStyle = $sheet->getStyle('A2:H2');
+    $headerStyle = $sheet->getStyle('A2:J2');
     $headerStyle->getFont()->setBold(true)->getColor()->setARGB('FFFFFFFF');
     $headerStyle->getFill()
         ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
         ->getStartColor()->setARGB('FFC8102E');
 
     // AutoFilter en fila 2
-    $sheet->setAutoFilter('A2:H2');
+    $sheet->setAutoFilter('A2:J2');
 
     // Filas 3+: Datos de registros
     foreach ($registros as $i => $r) {
@@ -376,18 +386,20 @@ function build_excel(array $registros, array $stats, array $stats_seccion, array
         $sheet->setCellValue('F' . $rowNum, $r['seccion']     ?? '');
         $sheet->setCellValue('G' . $rowNum, $r['descripcion'] ?? '');
         $sheet->setCellValue('H' . $rowNum, $r['ip']          ?? '');
+        $sheet->setCellValue('I' . $rowNum, ucfirst($r['dispositivo'] ?? 'pc'));
+        $sheet->setCellValue('J' . $rowNum, $r['hostname']    ?? '');
 
         // Filas alternas: índice par (0, 2, 4...) = filas 3, 5, 7... → fondo gris
         if ($i % 2 === 0) {
-            $sheet->getStyle("A{$rowNum}:H{$rowNum}")
+            $sheet->getStyle("A{$rowNum}:J{$rowNum}")
                 ->getFill()
                 ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
                 ->getStartColor()->setARGB('FFF2F2F2');
         }
     }
 
-    // Anchos de columna: A=6, B=12, C=10, D=15, E=12, F=20, G=40, H=15
-    $colWidths = ['A' => 6, 'B' => 12, 'C' => 10, 'D' => 15, 'E' => 12, 'F' => 20, 'G' => 40, 'H' => 15];
+    // Anchos de columna
+    $colWidths = ['A' => 6, 'B' => 12, 'C' => 10, 'D' => 15, 'E' => 12, 'F' => 20, 'G' => 40, 'H' => 15, 'I' => 12, 'J' => 25];
     foreach ($colWidths as $col => $width) {
         $sheet->getColumnDimension($col)->setWidth($width);
     }
@@ -505,10 +517,8 @@ if ($action === 'pdf') {
         echo $dompdf->output();
         exit;
         
-    } catch (\Exception $e) {
-        if (defined('APP_DEBUG') && APP_DEBUG) {
-            error_log('reportes_historial PDF error: ' . $e->getMessage());
-        }
+    } catch (\Throwable $e) {
+        error_log('reportes_historial PDF error: ' . $e->getMessage());
         http_response_code(500);
         echo '<!DOCTYPE html><html><body style="font-family:sans-serif;padding:20px;"><h2>Error al generar el PDF</h2><p>Ocurrió un error interno. Por favor intenta de nuevo.</p><a href="reportes_historial.php">Volver</a></body></html>';
         exit;
@@ -543,12 +553,22 @@ if ($action === 'excel') {
         registrar_historial($pdo, 'reporte', 'Reportes', "Excel descargado. Periodo: {$fecha_ini} al {$fecha_fin}");
         
         $filename = report_filename($fecha_ini, $fecha_fin, 'xlsx');
+
+        // Escribir a archivo temporal para evitar contaminación del buffer de salida
+        $tmpFile = tempnam(sys_get_temp_dir(), 'dif_excel_');
+        $writer  = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer->save($tmpFile);
+
+        // Limpiar todos los buffers antes de enviar el binario
+        while (ob_get_level() > 0) { ob_end_clean(); }
+
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Length: ' . filesize($tmpFile));
         header('Cache-Control: private, max-age=0, must-revalidate');
-        
-        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-        $writer->save('php://output');
+
+        readfile($tmpFile);
+        unlink($tmpFile);
         exit;
         
     } catch (\Exception $e) {
@@ -700,7 +720,7 @@ No hay registros para los filtros seleccionados. Ajusta el rango de fechas u otr
 <div class="table-responsive">
 <table class="table table-hover align-middle mb-0" style="font-size:13px;">
 <thead style="background:rgb(200,16,44);color:#fff;">
-<tr><th style="width:140px;">Fecha y Hora</th><th style="width:100px;">Usuario</th><th style="width:90px;">Acción</th><th style="width:160px;">Sección</th><th>Descripción</th><th style="width:110px;">IP</th></tr>
+<tr><th style="width:130px;">Fecha y Hora</th><th style="width:90px;">Usuario</th><th style="width:80px;">Acción</th><th style="width:130px;">Sección</th><th>Descripción</th><th style="width:80px;">Dispositivo</th><th style="width:130px;">IP / Host</th></tr>
 </thead>
 <tbody>
 <?php foreach ($preview as $r): ?>
@@ -710,7 +730,15 @@ No hay registros para los filtros seleccionados. Ajusta el rango de fechas u otr
 <td><?= historial_badge($r['accion']) ?></td>
 <td style="color:rgb(107,98,90);font-weight:600;"><?= htmlspecialchars($r['seccion']) ?></td>
 <td class="text-muted small"><?= htmlspecialchars($r['descripcion'] ?? '—') ?></td>
-<td><small class="text-muted"><?= htmlspecialchars($r['ip'] ?? '—') ?></small></td>
+<td><small><?php
+    $di = match($r['dispositivo'] ?? 'pc') {
+        'celular' => '<i class="bi bi-phone"></i> Celular',
+        'tablet'  => '<i class="bi bi-tablet"></i> Tablet',
+        default   => '<i class="bi bi-laptop"></i> PC',
+    };
+    echo $di;
+?></small></td>
+<td><small class="text-muted"><?= htmlspecialchars($r['ip'] ?? '—') ?><?php if (!empty($r['hostname'])): ?><br><span style="color:#aaa;font-size:11px;"><?= htmlspecialchars($r['hostname']) ?></span><?php endif; ?></small></td>
 </tr>
 <?php endforeach; ?>
 </tbody>

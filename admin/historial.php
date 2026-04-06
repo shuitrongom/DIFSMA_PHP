@@ -175,7 +175,7 @@ require_once __DIR__ . '/sidebar_sections.php';
 <div class="table-responsive">
 <table class="table table-hover align-middle mb-0" style="font-size:13px;">
 <thead style="background:rgb(200,16,44);color:#fff;">
-<tr><th style="width:140px;">Fecha y Hora</th><th style="width:100px;">Usuario</th><th style="width:90px;">Accion</th><th style="width:160px;">Seccion</th><th>Descripcion</th><th style="width:110px;">IP</th><th style="width:50px;" class="no-print"></th></tr>
+<tr><th style="width:140px;">Fecha y Hora</th><th style="width:100px;">Usuario</th><th style="width:90px;">Accion</th><th style="width:160px;">Seccion</th><th>Descripcion</th><th style="width:80px;">Dispositivo</th><th style="width:110px;">IP / SO</th><th style="width:50px;" class="no-print"></th></tr>
 </thead>
 <tbody>
 <?php foreach ($registros as $r): ?>
@@ -185,7 +185,15 @@ require_once __DIR__ . '/sidebar_sections.php';
 <td><?= historial_badge($r['accion']) ?></td>
 <td style="color:rgb(107,98,90);font-weight:600;"><?= htmlspecialchars($r['seccion']) ?></td>
 <td class="text-muted small"><?= htmlspecialchars($r['descripcion'] ?? '—') ?></td>
-<td><small class="text-muted"><?= htmlspecialchars($r['ip'] ?? '—') ?></small></td>
+<td><small class="text-muted"><?php
+    $disp_icon = match($r['dispositivo'] ?? 'pc') {
+        'celular' => '<i class="bi bi-phone" title="Celular"></i>',
+        'tablet'  => '<i class="bi bi-tablet" title="Tablet"></i>',
+        default   => '<i class="bi bi-laptop" title="PC/Laptop"></i>',
+    };
+    echo $disp_icon . ' ' . htmlspecialchars(ucfirst($r['dispositivo'] ?? 'pc'));
+?></small></td>
+<td><small class="text-muted"><?= htmlspecialchars($r['ip'] ?? '—') ?><?php if (!empty($r['hostname'])): ?><br><span style="color:#aaa;font-size:11px;"><?= htmlspecialchars($r['hostname']) ?></span><?php endif; ?></small></td>
 <td class="no-print">
 <?php if (($_SESSION['admin_rol'] ?? '') === 'admin'): ?>
 <form method="POST" action="historial.php?<?= http_build_query($_GET) ?>" class="d-inline" onsubmit="return confirm('Eliminar?')">

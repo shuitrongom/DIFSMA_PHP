@@ -7,6 +7,8 @@ CREATE TABLE IF NOT EXISTS `admin_historial` (
   `seccion` VARCHAR(200) NOT NULL,
   `descripcion` TEXT DEFAULT NULL,
   `ip` VARCHAR(45) DEFAULT NULL,
+  `dispositivo` VARCHAR(20) DEFAULT NULL COMMENT 'pc, celular, tablet',
+  `hostname` VARCHAR(255) DEFAULT NULL COMMENT 'Nombre del equipo resuelto por DNS',
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `idx_created_at` (`created_at`),
