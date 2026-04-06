@@ -40,6 +40,24 @@ $_SESSION['last_activity'] = time();
 $current_admin_file_guard = basename($_SERVER['SCRIPT_FILENAME'] ?? '');
 $is_admin_role = ($_SESSION['admin_rol'] ?? 'admin') === 'admin';
 
+// Cargar helper de historial
+require_once __DIR__ . '/historial_helper.php';
+
+// Registrar actividad POST automaticamente
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
+    try {
+        require_once __DIR__ . '/../includes/db.php';
+        $pdo_hist = get_db();
+        $accion_hist = $_POST['action'] ?? 'accion';
+        $seccion_hist = str_replace(['.php', '_', '-'], ['',' ',' '], $current_admin_file_guard);
+        $desc_hist = '';
+        if (!empty($_POST['titulo'])) $desc_hist = 'Titulo: ' . substr($_POST['titulo'], 0, 100);
+        elseif (!empty($_POST['nombre'])) $desc_hist = 'Nombre: ' . substr($_POST['nombre'], 0, 100);
+        elseif (!empty($_POST['anio'])) $desc_hist = 'Anio: ' . $_POST['anio'];
+        registrar_historial($pdo_hist, $accion_hist, ucwords($seccion_hist), $desc_hist);
+    } catch (Exception $e) {}
+}
+
 // Páginas que todos pueden ver (dashboard, logout, su perfil)
 $public_pages = ['dashboard.php', 'logout.php'];
 

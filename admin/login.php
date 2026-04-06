@@ -71,6 +71,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['admin_id'] = (int) $admin['id'];
                     $_SESSION['admin_username'] = $admin['username'];
                     $_SESSION['admin_rol'] = $admin['rol'] ?? 'admin';
+                    // Registrar login en historial
+                    try {
+                        require_once __DIR__ . '/../includes/db.php';
+                        require_once __DIR__ . '/historial_helper.php';
+                        registrar_historial(get_db(), 'login', 'Sistema', 'Inicio de sesion: ' . $admin['username']);
+                    } catch (Exception $e) {}
                     header('Location: dashboard.php');
                     exit;
                 }
