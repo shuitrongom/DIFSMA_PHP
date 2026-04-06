@@ -359,8 +359,34 @@ $token = csrf_token();
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">URL de destino</label>
-                                        <input type="text" class="form-control" name="link_url" value="#" placeholder="index.php o https://...">
-                                        <div class="form-text">Usa <code>__ubicacion__</code> para que abra Google Maps con la dirección del DIF.</div>
+                                        <select class="form-select mb-2" onchange="if(this.value!=='__custom__'){document.getElementById('link_url_new').value=this.value;}else{document.getElementById('link_url_new').value='';}">
+                                            <option value="__custom__">-- Escribir URL manualmente --</option>
+                                            <optgroup label="Paginas del sitio">
+                                                <option value="index.php">Inicio</option>
+                                                <option value="acerca-del-dif/presidencia.php">Presidencia</option>
+                                                <option value="acerca-del-dif/direcciones.php">Direcciones</option>
+                                                <option value="acerca-del-dif/organigrama.php">Organigrama</option>
+                                                <option value="comunicacion-social/noticias.php">Noticias</option>
+                                                <option value="comunicacion-social/galeria.php">Galeria</option>
+                                                <option value="voluntariado.php">Voluntariado</option>
+                                            </optgroup>
+                                            <optgroup label="Transparencia">
+                                                <option value="transparencia/SEAC.php">SEAC</option>
+                                                <option value="transparencia/cuenta_publica.php">Cuenta Publica</option>
+                                                <option value="transparencia/presupuesto_anual.php">Presupuesto Anual</option>
+                                                <option value="transparencia/pae.php">PAE</option>
+                                                <option value="transparencia/matrices_indicadores.php">Matrices de Indicadores</option>
+                                                <option value="transparencia/conac.php">CONAC</option>
+                                                <option value="transparencia/financiero.php">Financiero</option>
+                                                <option value="transparencia/avisos_privacidad.php">Avisos de Privacidad</option>
+                                            </optgroup>
+                                            <optgroup label="Especiales">
+                                                <option value="__ubicacion__">Ubicacion en Google Maps</option>
+                                                <option value="#">Sin enlace (#)</option>
+                                            </optgroup>
+                                        </select>
+                                        <input type="text" class="form-control" id="link_url_new" name="link_url" value="#" placeholder="index.php o https://...">
+                                        <div class="form-text">Selecciona una seccion del sitio o escribe la URL manualmente.</div>
                                     </div>
                                     <div class="mb-3 form-check">
                                         <input type="checkbox" class="form-check-input" name="link_nueva_tab" id="linkNuevaTab">
@@ -449,8 +475,34 @@ $token = csrf_token();
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">URL</label>
-                                        <input type="text" class="form-control" name="link_url" value="<?= htmlspecialchars($fl['url']) ?>">
-                                        <div class="form-text">Usa <code>__ubicacion__</code> para Google Maps.</div>
+                                        <select class="form-select mb-2" onchange="if(this.value!=='__custom__'){document.getElementById('link_url_<?= (int)$fl['id'] ?>').value=this.value;}else{document.getElementById('link_url_<?= (int)$fl['id'] ?>').value='';}">
+                                            <option value="__custom__">-- Escribir URL manualmente --</option>
+                                            <optgroup label="Paginas del sitio">
+                                                <option value="index.php" <?= $fl['url']==='index.php'?'selected':'' ?>>Inicio</option>
+                                                <option value="acerca-del-dif/presidencia.php" <?= $fl['url']==='acerca-del-dif/presidencia.php'?'selected':'' ?>>Presidencia</option>
+                                                <option value="acerca-del-dif/direcciones.php" <?= $fl['url']==='acerca-del-dif/direcciones.php'?'selected':'' ?>>Direcciones</option>
+                                                <option value="acerca-del-dif/organigrama.php" <?= $fl['url']==='acerca-del-dif/organigrama.php'?'selected':'' ?>>Organigrama</option>
+                                                <option value="comunicacion-social/noticias.php" <?= $fl['url']==='comunicacion-social/noticias.php'?'selected':'' ?>>Noticias</option>
+                                                <option value="comunicacion-social/galeria.php" <?= $fl['url']==='comunicacion-social/galeria.php'?'selected':'' ?>>Galeria</option>
+                                                <option value="voluntariado.php" <?= $fl['url']==='voluntariado.php'?'selected':'' ?>>Voluntariado</option>
+                                            </optgroup>
+                                            <optgroup label="Transparencia">
+                                                <option value="transparencia/SEAC.php" <?= $fl['url']==='transparencia/SEAC.php'?'selected':'' ?>>SEAC</option>
+                                                <option value="transparencia/cuenta_publica.php" <?= $fl['url']==='transparencia/cuenta_publica.php'?'selected':'' ?>>Cuenta Publica</option>
+                                                <option value="transparencia/presupuesto_anual.php" <?= $fl['url']==='transparencia/presupuesto_anual.php'?'selected':'' ?>>Presupuesto Anual</option>
+                                                <option value="transparencia/pae.php" <?= $fl['url']==='transparencia/pae.php'?'selected':'' ?>>PAE</option>
+                                                <option value="transparencia/matrices_indicadores.php" <?= $fl['url']==='transparencia/matrices_indicadores.php'?'selected':'' ?>>Matrices de Indicadores</option>
+                                                <option value="transparencia/conac.php" <?= $fl['url']==='transparencia/conac.php'?'selected':'' ?>>CONAC</option>
+                                                <option value="transparencia/financiero.php" <?= $fl['url']==='transparencia/financiero.php'?'selected':'' ?>>Financiero</option>
+                                                <option value="transparencia/avisos_privacidad.php" <?= $fl['url']==='transparencia/avisos_privacidad.php'?'selected':'' ?>>Avisos de Privacidad</option>
+                                            </optgroup>
+                                            <optgroup label="Especiales">
+                                                <option value="__ubicacion__" <?= $fl['url']==='__ubicacion__'?'selected':'' ?>>Ubicacion en Google Maps</option>
+                                                <option value="#" <?= $fl['url']==='#'?'selected':'' ?>>Sin enlace (#)</option>
+                                            </optgroup>
+                                        </select>
+                                        <input type="text" class="form-control" id="link_url_<?= (int)$fl['id'] ?>" name="link_url" value="<?= htmlspecialchars($fl['url']) ?>" placeholder="index.php o https://...">
+                                        <div class="form-text">Selecciona una seccion del sitio o escribe la URL manualmente.</div>
                                     </div>
                                     <div class="mb-3 form-check">
                                         <input type="checkbox" class="form-check-input" name="link_nueva_tab" id="editNT<?= (int)$fl['id'] ?>"<?= $fl['nueva_tab'] ? ' checked' : '' ?>>
