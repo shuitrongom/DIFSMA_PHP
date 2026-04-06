@@ -102,24 +102,130 @@ require_once __DIR__ . '/includes/navbar.php';
 
             <!-- Galería de fotos -->
             <?php if (!empty($imagenes)): ?>
-            <div class="d-flex wow fadeIn" data-wow-delay="0.1s" style="padding-left:clamp(12px,8vw,120px);gap:0;height:140px;">
+            <div class="vol-gallery wow fadeIn" data-wow-delay="0.1s">
                 <?php foreach ($imagenes as $idx => $img):
                     $isWide = ($idx === 2);
-                    $flex = $isWide ? 'flex:0 0 28%;' : 'flex:0 0 18%;';
+                    $extraClass = $isWide ? ' vol-gallery-wide' : '';
                 ?>
-                <div style="<?= $flex ?>overflow:hidden;">
-                    <img src="<?= htmlspecialchars($img['imagen_path']) ?>" alt="Voluntariado" style="width:100%;height:140px;object-fit:cover;display:block;">
+                <div class="vol-gallery-item<?= $extraClass ?>">
+                    <img src="<?= htmlspecialchars($img['imagen_path']) ?>"
+                         alt="Voluntariado"
+                         class="vol-gallery-img"
+                         data-src="<?= htmlspecialchars($img['imagen_path']) ?>"
+                         loading="lazy">
                 </div>
                 <?php endforeach; ?>
             </div>
             <?php endif; ?>
+
+            <!-- Lightbox -->
+            <div id="vol-lightbox" role="dialog" aria-modal="true" aria-label="Imagen ampliada">
+                <button id="vol-lb-close" aria-label="Cerrar">&times;</button>
+                <button id="vol-lb-prev" aria-label="Anterior">&#8249;</button>
+                <button id="vol-lb-next" aria-label="Siguiente">&#8250;</button>
+                <div id="vol-lb-inner">
+                    <img id="vol-lb-img" src="" alt="Imagen ampliada">
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="pleca"><img src="<?= $base_path ?>img/pleca.png" alt="pleca"></div>
 
     <style>
-    /* Voluntariado responsive */
+    /* ── Galería ─────────────────────────────────────────────────── */
+    .vol-gallery {
+        display: flex;
+        gap: 4px;
+        padding-left: clamp(12px, 8vw, 120px);
+        height: 160px;
+    }
+    .vol-gallery-item {
+        flex: 0 0 18%;
+        overflow: hidden;
+        cursor: pointer;
+        border-radius: 4px;
+        position: relative;
+    }
+    .vol-gallery-item.vol-gallery-wide { flex: 0 0 28%; }
+    .vol-gallery-img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.3s ease, filter 0.3s ease;
+    }
+    .vol-gallery-item:hover .vol-gallery-img {
+        transform: scale(1.07);
+        filter: brightness(1.12);
+    }
+    .vol-gallery-item::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(200,16,44,0);
+        transition: background 0.3s ease;
+        pointer-events: none;
+        border-radius: 4px;
+    }
+    .vol-gallery-item:hover::after {
+        background: rgba(200,16,44,0.15);
+    }
+
+    /* ── Lightbox ────────────────────────────────────────────────── */
+    #vol-lightbox {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.88);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+    }
+    #vol-lightbox.active { display: flex; }
+    #vol-lb-inner {
+        max-width: 90vw;
+        max-height: 88vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    #vol-lb-img {
+        max-width: 90vw;
+        max-height: 85vh;
+        object-fit: contain;
+        border-radius: 6px;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+        animation: vol-lb-in 0.2s ease;
+    }
+    @keyframes vol-lb-in {
+        from { opacity: 0; transform: scale(0.93); }
+        to   { opacity: 1; transform: scale(1); }
+    }
+    #vol-lb-close {
+        position: fixed;
+        top: 16px; right: 20px;
+        background: none; border: none;
+        color: #fff; font-size: 2.4rem;
+        cursor: pointer; line-height: 1;
+        opacity: 0.8; transition: opacity 0.2s;
+    }
+    #vol-lb-close:hover { opacity: 1; }
+    #vol-lb-prev, #vol-lb-next {
+        position: fixed;
+        top: 50%; transform: translateY(-50%);
+        background: rgba(255,255,255,0.12);
+        border: none; color: #fff;
+        font-size: 2.5rem; cursor: pointer;
+        padding: 8px 16px; border-radius: 4px;
+        transition: background 0.2s;
+        line-height: 1;
+    }
+    #vol-lb-prev { left: 12px; }
+    #vol-lb-next { right: 12px; }
+    #vol-lb-prev:hover, #vol-lb-next:hover { background: rgba(200,16,44,0.7); }
+
+    /* ── Responsive ──────────────────────────────────────────────── */
     @media (max-width: 767px) {
         .vol-left { padding-left: 12px !important; }
         .vol-left .vol-subtitle { font-size: 16px !important; }
@@ -127,13 +233,72 @@ require_once __DIR__ . '/includes/navbar.php';
         .vol-left .vol-line { width: 50px !important; margin-left: 10px !important; }
         .vol-logo { max-width: 280px !important; }
         .vol-lema { font-size: 1.1rem !important; }
-        .vol-gallery-img { aspect-ratio: 3/2 !important; }
+        .vol-gallery {
+            flex-wrap: wrap;
+            height: auto !important;
+            padding-left: 0 !important;
+            gap: 6px;
+        }
+        .vol-gallery-item,
+        .vol-gallery-item.vol-gallery-wide {
+            flex: 0 0 calc(50% - 3px) !important;
+        }
+        .vol-gallery-img { height: 120px !important; }
+        #vol-lb-prev { left: 4px; }
+        #vol-lb-next { right: 4px; }
     }
     @media (min-width: 768px) and (max-width: 991px) {
         .vol-left { padding-left: 20px !important; }
         .vol-left .vol-line { width: 80px !important; margin-left: 20px !important; }
         .vol-logo { max-width: 380px !important; }
+        .vol-gallery { height: 140px; }
+        .vol-gallery-img { height: 140px !important; }
     }
     </style>
+
+    <script>
+    (function () {
+        const imgs   = Array.from(document.querySelectorAll('.vol-gallery-img'));
+        const lb     = document.getElementById('vol-lightbox');
+        const lbImg  = document.getElementById('vol-lb-img');
+        const close  = document.getElementById('vol-lb-close');
+        const prev   = document.getElementById('vol-lb-prev');
+        const next   = document.getElementById('vol-lb-next');
+        let current  = 0;
+
+        function open(idx) {
+            current = idx;
+            lbImg.src = imgs[idx].dataset.src;
+            lb.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            prev.style.display = imgs.length > 1 ? '' : 'none';
+            next.style.display = imgs.length > 1 ? '' : 'none';
+        }
+        function closeLb() {
+            lb.classList.remove('active');
+            document.body.style.overflow = '';
+            lbImg.src = '';
+        }
+        function go(dir) {
+            current = (current + dir + imgs.length) % imgs.length;
+            lbImg.style.animation = 'none';
+            lbImg.offsetHeight; // reflow
+            lbImg.style.animation = '';
+            lbImg.src = imgs[current].dataset.src;
+        }
+
+        imgs.forEach((img, i) => img.parentElement.addEventListener('click', () => open(i)));
+        close.addEventListener('click', closeLb);
+        prev.addEventListener('click', () => go(-1));
+        next.addEventListener('click', () => go(1));
+        lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+        document.addEventListener('keydown', e => {
+            if (!lb.classList.contains('active')) return;
+            if (e.key === 'Escape')      closeLb();
+            if (e.key === 'ArrowLeft')   go(-1);
+            if (e.key === 'ArrowRight')  go(1);
+        });
+    })();
+    </script>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
