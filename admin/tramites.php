@@ -332,7 +332,15 @@ $token = csrf_token();
                         </div>
                         <div class="col-md-8">
                             <label class="form-label">Contenido HTML</label>
-                            <textarea class="form-control tinymce-editor" id="contenido<?= (int)$tramite['id'] ?>" name="contenido" rows="15"><?= htmlspecialchars($tramite['contenido'] ?? '') ?></textarea>
+                            <div class="row g-2">
+                                <div class="col-12">
+                                    <textarea class="form-control tinymce-editor" id="contenido<?= (int)$tramite['id'] ?>" name="contenido" rows="15"><?= htmlspecialchars($tramite['contenido'] ?? '') ?></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label text-muted small"><i class="bi bi-eye me-1"></i> Vista previa</label>
+                                    <iframe id="preview_contenido<?= (int)$tramite['id'] ?>" style="width:100%;height:250px;border:1px solid #dee2e6;border-radius:6px;background:#fff;" sandbox="allow-same-origin"></iframe>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -387,11 +395,49 @@ $token = csrf_token();
             if (ta && !tinymce.get(ta.id)) {
                 tinymce.init({
                     selector: '#' + ta.id,
-                    plugins: 'lists link image table code',
-                    toolbar: 'undo redo | blocks | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image table | code | removeformat',
-                    menubar: false, height: 400, branding: false, promotion: false, language: 'es',
-                    content_style: 'body { font-family: sans-serif; font-size: 14px; }',
-                    setup: function (ed) { ed.on('change', function () { ed.save(); }); }
+                    plugins: 'lists link image table code fullscreen preview wordcount charmap hr pagebreak emoticons',
+                    toolbar1: 'undo redo | cut copy paste | selectall | searchreplace | fullscreen preview',
+                    toolbar2: 'fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor | removeformat',
+                    toolbar3: 'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | blockquote hr',
+                    toolbar4: 'link image table charmap emoticons | code | h1 h2 h3 h4 p',
+                    menubar: 'file edit view insert format tools table',
+                    height: 420,
+                    branding: false,
+                    promotion: false,
+                    language: 'es',
+                    font_family_formats:
+                        'Montserrat=Montserrat,sans-serif;' +
+                        'Arial=arial,helvetica,sans-serif;' +
+                        'Georgia=georgia,palatino;' +
+                        'Tahoma=tahoma,arial,helvetica,sans-serif;' +
+                        'Times New Roman=times new roman,times;' +
+                        'Verdana=verdana,geneva;' +
+                        'Courier New=courier new,courier,monospace;',
+                    font_size_formats: '8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 24pt 28pt 32pt 36pt 48pt',
+                    content_style: 'body { font-family: Montserrat, sans-serif; font-size: 14px; line-height: 1.6; color: #333; padding: 12px; }',
+                    content_css: false,
+                    resize: true,
+                    statusbar: true,
+                    setup: function (ed) {
+                        ed.on('change input keyup', function () {
+                            ed.save();
+                            // Actualizar vista previa
+                            var previewId = 'preview_' + ta.id;
+                            var preview = document.getElementById(previewId);
+                            if (preview) {
+                                preview.contentDocument.body.innerHTML = ed.getContent();
+                            }
+                        });
+                        ed.on('init', function () {
+                            // Inicializar vista previa
+                            var previewId = 'preview_' + ta.id;
+                            var preview = document.getElementById(previewId);
+                            if (preview) {
+                                preview.contentDocument.body.innerHTML = ed.getContent();
+                                preview.contentDocument.head.innerHTML = '<style>body{font-family:Montserrat,sans-serif;font-size:14px;line-height:1.6;color:#333;padding:12px;margin:0;}</style>';
+                            }
+                        });
+                    }
                 });
             }
         });
