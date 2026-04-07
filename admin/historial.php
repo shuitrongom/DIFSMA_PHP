@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * @author  Sergio Huitron Gomez
  * @copyright 2025-2026 Sergio Huitron Gomez. Todos los derechos reservados.

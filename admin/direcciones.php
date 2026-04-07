@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/direcciones.php — Gestión de Direcciones por departamento
  *

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/organigrama.php — Gestión del PDF de Organigrama
  *

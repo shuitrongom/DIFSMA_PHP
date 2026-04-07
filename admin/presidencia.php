@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/presidencia.php — Gestión de datos de Presidencia
  *

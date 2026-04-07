@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/programas.php — CRUD para "Nuestros Programas" (imagen + acordeón dinámico)
  *

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/footer.php — Gestión de configuración del Footer
  *

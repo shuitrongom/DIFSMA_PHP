@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/institucion.php — Gestión de la Imagen Institucional
  *

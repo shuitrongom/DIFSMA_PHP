@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/presupuesto_anual.php — CRUD para Presupuesto Anual
  * Estructura: Bloques (año) → Conceptos → Sub-años con PDF

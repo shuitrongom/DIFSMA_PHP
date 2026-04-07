@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/usuarios.php - Gestion de usuarios (solo admin)
  */

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/voluntariado.php — Gestión de la página de Voluntariado
  */
