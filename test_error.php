@@ -2,7 +2,6 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// Simular sesión de admin para probar sin login
 session_start();
 $_SESSION['admin_logged']   = true;
 $_SESSION['admin_rol']      = 'admin';
@@ -10,34 +9,40 @@ $_SESSION['admin_id']       = 1;
 $_SESSION['admin_username'] = 'test';
 $_SESSION['last_activity']  = time();
 
-echo "Sesión OK<br>";
-
-// Probar cargar cada dependencia del admin en orden
 require_once __DIR__ . '/config.php';
-echo "config OK<br>";
-
 require_once __DIR__ . '/includes/db.php';
-echo "db OK<br>";
-
 $pdo = get_db();
-echo "PDO OK<br>";
 
-require_once __DIR__ . '/admin/historial_helper.php';
-echo "historial_helper OK<br>";
+// Verificar tablas que usan las secciones
+$tablas = [
+    'slider_principal',
+    'admin_historial',
+    'admin',
+    'admin_permisos',
+];
 
-require_once __DIR__ . '/admin/sidebar_sections.php';
-echo "sidebar_sections OK<br>";
+foreach ($tablas as $tabla) {
+    try {
+        $pdo->query("SELECT 1 FROM `{$tabla}` LIMIT 1");
+        echo "Tabla <strong>{$tabla}</strong>: OK<br>";
+    } catch (PDOException $e) {
+        echo "Tabla <strong style='color:red'>{$tabla}</strong>: FALTA — " . htmlspecialchars($e->getMessage()) . "<br>";
+    }
+}
 
-// Probar vendor
-require_once __DIR__ . '/vendor/autoload.php';
-echo "autoload OK<br>";
+// Verificar columnas nuevas en admin_historial
+try {
+    $cols = $pdo->query("SHOW COLUMNS FROM admin_historial")->fetchAll(PDO::FETCH_COLUMN);
+    echo "<br>Columnas de admin_historial: " . implode(', ', $cols) . "<br>";
+    
+    if (!in_array('dispositivo', $cols)) {
+        echo "<strong style='color:red'>FALTA columna 'dispositivo' en admin_historial</strong><br>";
+        echo "Ejecuta: ALTER TABLE admin_historial ADD COLUMN dispositivo VARCHAR(20) DEFAULT NULL AFTER ip, ADD COLUMN hostname VARCHAR(255) DEFAULT NULL AFTER dispositivo;<br>";
+    } else {
+        echo "Columna 'dispositivo': OK<br>";
+    }
+} catch (PDOException $e) {
+    echo "Error: " . htmlspecialchars($e->getMessage()) . "<br>";
+}
 
-// Probar dompdf
-$d = new \Dompdf\Dompdf();
-echo "dompdf OK<br>";
-
-// Probar PhpSpreadsheet
-$s = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
-echo "PhpSpreadsheet OK<br>";
-
-echo "<strong style='color:green'>Todo OK</strong>";
+echo "Test completo.";
