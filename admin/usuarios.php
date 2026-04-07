@@ -143,15 +143,17 @@ $token = csrf_token();
 <div class="container-fluid p-4">
 <?php if ($flashMessage): ?><div class="alert alert-<?= htmlspecialchars($flashType) ?> alert-dismissible fade show"><?= htmlspecialchars($flashMessage) ?><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div><?php endif; ?>
 
-<!-- Modal advertencia contraseña débil -->
+<!-- Modal advertencia campos obligatorios -->
 <div class="modal fade" id="modalPassWeak" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-sm">
     <div class="modal-content border-0 shadow">
       <div class="modal-body text-center p-4">
-        <div style="font-size:3rem;color:#dc3545;"><i class="bi bi-shield-exclamation"></i></div>
-        <h5 class="mt-2 mb-1">Contraseña insegura</h5>
-        <p class="text-muted small mb-3">La contraseña no cumple todos los requisitos de seguridad. Por favor revisa los puntos marcados en rojo.</p>
-        <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal"><i class="bi bi-arrow-left me-1"></i> Corregir contraseña</button>
+        <div id="modalWarnIcon" style="font-size:3rem;color:#dc3545;"><i class="bi bi-exclamation-circle"></i></div>
+        <h5 class="mt-2 mb-1" id="modalWarnTitle">Campo requerido</h5>
+        <p class="text-muted small mb-3" id="modalWarnMsg">Por favor completa este campo antes de continuar.</p>
+        <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal" id="modalWarnBtn">
+          <i class="bi bi-arrow-left me-1"></i> Corregir
+        </button>
       </div>
     </div>
   </div>
@@ -261,11 +263,29 @@ $token = csrf_token();
 <?php if (!empty($usr['nombre'])): ?><small class="text-muted"><?= htmlspecialchars($usr['nombre']) ?></small><br><?php endif; ?>
 <small class="text-muted"><?= count($uPerms) ?> secciones asignadas</small>
 </div>
-<div class="btn-group btn-group-sm">
-<button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#permsModal<?= (int)$usr['id'] ?>" title="Permisos"><i class="bi bi-shield-check"></i></button>
-<button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#passModal<?= (int)$usr['id'] ?>" title="Reset password"><i class="bi bi-key"></i></button>
-<form method="POST" action="usuarios.php" class="d-inline"><input type="hidden" name="action" value="toggle"><input type="hidden" name="user_id" value="<?= (int)$usr['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>"><button type="submit" class="btn btn-outline-<?= $usr['activo'] ? 'secondary' : 'success' ?>" title="<?= $usr['activo'] ? 'Desactivar' : 'Activar' ?>"><i class="bi bi-<?= $usr['activo'] ? 'pause' : 'play' ?>"></i></button></form>
-<form method="POST" action="usuarios.php" class="d-inline" onsubmit="return confirm('Eliminar usuario?')"><input type="hidden" name="action" value="delete"><input type="hidden" name="user_id" value="<?= (int)$usr['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>"><button type="submit" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button></form>
+<div class="d-flex gap-1 flex-wrap justify-content-end">
+<button class="btn btn-sm btn-action-edit" data-bs-toggle="modal" data-bs-target="#permsModal<?= (int)$usr['id'] ?>" title="Gestionar permisos">
+  <i class="bi bi-shield-check"></i> Permisos
+</button>
+<button class="btn btn-sm btn-action-key" data-bs-toggle="modal" data-bs-target="#passModal<?= (int)$usr['id'] ?>" title="Cambiar contraseña">
+  <i class="bi bi-key"></i> Contraseña
+</button>
+<form method="POST" action="usuarios.php" class="d-inline">
+  <input type="hidden" name="action" value="toggle">
+  <input type="hidden" name="user_id" value="<?= (int)$usr['id'] ?>">
+  <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+  <button type="submit" class="btn btn-sm <?= $usr['activo'] ? 'btn-action-pause' : 'btn-action-play' ?>" title="<?= $usr['activo'] ? 'Desactivar usuario' : 'Activar usuario' ?>">
+    <i class="bi bi-<?= $usr['activo'] ? 'pause-circle' : 'play-circle' ?>"></i> <?= $usr['activo'] ? 'Desactivar' : 'Activar' ?>
+  </button>
+</form>
+<form method="POST" action="usuarios.php" class="d-inline" onsubmit="return confirm('¿Eliminar usuario <?= htmlspecialchars($usr['username']) ?>? Esta acción no se puede deshacer.')">
+  <input type="hidden" name="action" value="delete">
+  <input type="hidden" name="user_id" value="<?= (int)$usr['id'] ?>">
+  <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+  <button type="submit" class="btn btn-sm btn-action-delete" title="Eliminar usuario">
+    <i class="bi bi-trash3"></i> Eliminar
+  </button>
+</form>
 </div></div></div>
 
 <!-- Modal Permisos -->
@@ -369,13 +389,24 @@ function toggleVer(inp, btn) {
     btn.querySelector('i').className = inp.type==='text' ? 'bi bi-eye-slash' : 'bi bi-eye';
 }
 
-// Quitar is-invalid al escribir
+// Mostrar modal de advertencia con mensaje dinámico
+function showWarn(icon, title, msg, focusEl) {
+    document.getElementById('modalWarnIcon').innerHTML = '<i class="bi bi-'+icon+'"></i>';
+    document.getElementById('modalWarnTitle').textContent = title;
+    document.getElementById('modalWarnMsg').textContent   = msg;
+    var m = new bootstrap.Modal(document.getElementById('modalPassWeak'));
+    document.getElementById('modalPassWeak').addEventListener('hidden.bs.modal', function handler() {
+        if (focusEl) focusEl.focus();
+        document.getElementById('modalPassWeak').removeEventListener('hidden.bs.modal', handler);
+    });
+    m.show();
+}
+
+// Quitar is-invalid al corregir
 document.addEventListener('input', function(e) {
-    if (e.target.name === 'password') e.target.classList.remove('is-invalid');
-    if (e.target.classList.contains('pass-input')) {
-        e.target.classList.remove('is-invalid');
-        checkReqs(e.target, null, null);
-    }
+    if (e.target.classList.contains('is-invalid')) e.target.classList.remove('is-invalid');
+    if (e.target.name === 'password') checkReqs(e.target, 'new_reqs', 'new_strength');
+    if (e.target.classList.contains('pass-input')) checkReqs(e.target, null, null);
 });
 
 // Botón generar en modales
@@ -392,15 +423,43 @@ document.addEventListener('click', function(e) {
 });
 
 // Validar antes de submit — formulario crear
-document.querySelector('form [name="password"]') && document.querySelector('form [name="password"]').closest('form').addEventListener('submit', function(e) {
-    var inp = this.querySelector('[name="password"]');
-    if (inp && !allReqsMet(inp)) {
-        e.preventDefault();
-        inp.focus();
-        inp.classList.add('is-invalid');
-        var modal = new bootstrap.Modal(document.getElementById('modalPassWeak'));
-        modal.show();
-    }
-});
+var formCrear = document.getElementById('formCrearUsuario');
+if (formCrear) {
+    formCrear.addEventListener('submit', function(e) {
+        var username = this.querySelector('[name="username"]');
+        var nombre   = this.querySelector('[name="nombre"]');
+        var password = this.querySelector('[name="password"]');
+
+        if (!username.value.trim()) {
+            e.preventDefault();
+            username.classList.add('is-invalid');
+            showWarn('person-x', 'Usuario requerido',
+                'El campo "Usuario" es obligatorio. Ingresa un nombre de usuario único.', username);
+            return;
+        }
+        if (!nombre.value.trim()) {
+            e.preventDefault();
+            nombre.classList.add('is-invalid');
+            showWarn('card-text', 'Nombre requerido',
+                'El campo "Nombre completo" es obligatorio. Ingresa el nombre del usuario.', nombre);
+            return;
+        }
+        if (!password.value) {
+            e.preventDefault();
+            password.classList.add('is-invalid');
+            showWarn('lock', 'Contraseña requerida',
+                'Debes ingresar una contraseña para el nuevo usuario.', password);
+            return;
+        }
+        if (!allReqsMet(password)) {
+            e.preventDefault();
+            password.classList.add('is-invalid');
+            checkReqs(password, 'new_reqs', 'new_strength');
+            showWarn('shield-exclamation', 'Contraseña insegura',
+                'La contraseña no cumple todos los requisitos de seguridad. Revisa los puntos marcados en rojo.', password);
+            return;
+        }
+    });
+}
 </script>
 </body></html>
