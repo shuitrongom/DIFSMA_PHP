@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$upload['path']]);
 
         // Borrar archivo anterior si era un upload
-        if ($old && !empty($old['imagen_path']) && str_starts_with($old['imagen_path'], 'uploads/')) {
+        if ($old && !empty($old['imagen_path']) && strpos($old['imagen_path'], 'uploads/') === 0) {
             $oldFile = BASE_PATH . '/' . $old['imagen_path'];
             if (file_exists($oldFile)) {
                 unlink($oldFile);
