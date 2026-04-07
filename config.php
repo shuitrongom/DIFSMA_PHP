@@ -1,13 +1,12 @@
 <?php
 /**
  * config.php — Configuración global de la aplicación DIF CMS
- *
- * PRODUCCIÓN: mover este archivo FUERA del webroot (e.g. /etc/dif-cms/config.php)
- * y ajustar la ruta en includes/db.php.
- *
- * Las credenciales de DB se leen primero de variables de entorno;
- * si no existen, se usan los valores definidos aquí como fallback.
  */
+
+// ── Mostrar errores temporalmente para diagnóstico ─────────────────────────────
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 // ── Base de datos ──────────────────────────────────────────────────────────────
 define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
