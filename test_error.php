@@ -2,35 +2,40 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 echo "PHP version: " . PHP_VERSION . "<br>";
-require_once 'config.php';
-echo "Config OK<br>";
-require_once 'includes/db.php';
-echo "DB OK<br>";
 
-// Probar cada archivo del admin
-$files = [
-    'admin/auth_guard.php',
-    'admin/historial_helper.php',
-    'admin/sidebar_sections.php',
-];
-foreach ($files as $f) {
-    try {
-        // Solo verificar sintaxis sin ejecutar
-        $out = shell_exec('php -l ' . escapeshellarg(__DIR__ . '/' . $f) . ' 2>&1');
-        echo htmlspecialchars($f) . ': ' . htmlspecialchars($out) . '<br>';
-    } catch (Exception $e) {
-        echo $f . ': ERROR - ' . $e->getMessage() . '<br>';
+// Verificar sintaxis de TODOS los archivos admin
+$adminFiles = glob(__DIR__ . '/admin/*.php');
+sort($adminFiles);
+$errors = [];
+foreach ($adminFiles as $f) {
+    $out = shell_exec('php -l ' . escapeshellarg($f) . ' 2>&1');
+    $name = basename($f);
+    if (strpos($out, 'No syntax errors') === false) {
+        echo "<strong style='color:red'>ERROR: $name</strong>: " . htmlspecialchars($out) . "<br>";
+        $errors[] = $name;
+    }
+}
+if (empty($errors)) {
+    echo "<strong style='color:green'>Todos los archivos admin OK</strong><br>";
+}
+
+// Verificar archivos raíz
+$rootFiles = glob(__DIR__ . '/*.php');
+foreach ($rootFiles as $f) {
+    $out = shell_exec('php -l ' . escapeshellarg($f) . ' 2>&1');
+    $name = basename($f);
+    if (strpos($out, 'No syntax errors') === false && $name !== 'test_error.php') {
+        echo "<strong style='color:red'>ROOT ERROR: $name</strong>: " . htmlspecialchars($out) . "<br>";
     }
 }
 
-// Probar vendor/autoload
-if (file_exists('vendor/autoload.php')) {
-    echo "vendor/autoload.php: EXISTS<br>";
-} else {
-    echo "vendor/autoload.php: MISSING - ejecuta composer install<br>";
+// Verificar includes
+$incFiles = glob(__DIR__ . '/includes/*.php');
+foreach ($incFiles as $f) {
+    $out = shell_exec('php -l ' . escapeshellarg($f) . ' 2>&1');
+    $name = basename($f);
+    if (strpos($out, 'No syntax errors') === false) {
+        echo "<strong style='color:red'>INCLUDES ERROR: $name</strong>: " . htmlspecialchars($out) . "<br>";
+    }
 }
-
-// Verificar extension zip (necesaria para PhpSpreadsheet)
-echo "zip extension: " . (extension_loaded('zip') ? 'OK' : 'MISSING') . '<br>';
-echo "gd extension: " . (extension_loaded('gd') ? 'OK' : 'MISSING') . '<br>';
-echo "mbstring extension: " . (extension_loaded('mbstring') ? 'OK' : 'MISSING') . '<br>';
+echo "Verificación completa.";
