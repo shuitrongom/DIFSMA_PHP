@@ -327,7 +327,7 @@ require_once 'includes/navbar.php';
             <div class="row g-3 g-md-4 justify-content-center">
                 <div class="col-md-6 col-lg-4 col-xl-12 wow fadeIn" data-wow-delay="0.3s">
                     <div>
-                        <a href="#">
+                        <a>
                             <img src="<?= htmlspecialchars($banner_path) ?>" class="img-fluid" alt="Institución DIF">
                         </a>
                     </div>
