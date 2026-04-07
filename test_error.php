@@ -1,30 +1,26 @@
 <?php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-
 session_start();
-$_SESSION['admin_logged']   = true;
-$_SESSION['admin_rol']      = 'admin';
-$_SESSION['admin_id']       = 1;
-$_SESSION['admin_username'] = 'test';
-$_SESSION['last_activity']  = time();
 
-// Capturar toda la salida de slider_principal.php
-ob_start();
-try {
-    include __DIR__ . '/admin/slider_principal.php';
-    $output = ob_get_clean();
-    echo "Longitud de salida: " . strlen($output) . " bytes<br>";
-    if (strlen($output) < 100) {
-        echo "Salida (muy corta): " . htmlspecialchars($output) . "<br>";
+echo "session_id: " . session_id() . "<br>";
+echo "session_save_path: " . session_save_path() . "<br>";
+echo "admin_logged: " . var_export($_SESSION['admin_logged'] ?? 'NO EXISTE', true) . "<br>";
+echo "last_activity: " . var_export($_SESSION['last_activity'] ?? 'NO EXISTE', true) . "<br>";
+echo "Tiempo actual: " . time() . "<br>";
+
+if (isset($_SESSION['last_activity'])) {
+    $diff = time() - $_SESSION['last_activity'];
+    echo "Segundos desde última actividad: {$diff}<br>";
+    echo "Timeout configurado: 300 segundos<br>";
+    if ($diff > 300) {
+        echo "<strong style='color:red'>SESIÓN EXPIRADA — esto causa la página en blanco</strong><br>";
     } else {
-        echo "Primeros 500 chars: " . htmlspecialchars(substr($output, 0, 500)) . "<br>";
-        echo "<strong style='color:green'>slider_principal.php cargó correctamente</strong>";
+        echo "<strong style='color:green'>Sesión activa</strong><br>";
     }
-} catch (Throwable $e) {
-    ob_end_clean();
-    echo "<strong style='color:red'>ERROR: " . htmlspecialchars($e->getMessage()) . "</strong><br>";
-    echo "Archivo: " . htmlspecialchars($e->getFile()) . "<br>";
-    echo "Línea: " . $e->getLine() . "<br>";
-    echo "<pre>" . htmlspecialchars($e->getTraceAsString()) . "</pre>";
 }
+
+// Verificar si el directorio de sesiones es escribible
+$savePath = session_save_path() ?: sys_get_temp_dir();
+echo "Directorio sesiones escribible: " . (is_writable($savePath) ? 'SÍ' : 'NO') . "<br>";
+echo "Directorio: {$savePath}<br>";
