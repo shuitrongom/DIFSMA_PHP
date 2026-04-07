@@ -651,6 +651,7 @@ $filtros_qs = http_build_query([
 </nav>
 
 <div class="container-fluid p-4">
+<?php require_once __DIR__ . '/page_help.php'; page_help('reportes_historial'); ?>
 
 <!-- Tarjetas de estadísticas -->
 <div class="row g-3 mb-4">

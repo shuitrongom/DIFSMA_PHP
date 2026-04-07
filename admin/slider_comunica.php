@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/slider_comunica.php — CRUD para imágenes del Slider DIF Comunica
  * Organizado por mes: permite subir imágenes al mes actual y al siguiente.
@@ -302,7 +302,8 @@ $token = csrf_token();
 </head>
 <body>
     <div class="d-flex">
-        <?php require_once __DIR__ . '/sidebar_sections.php'; render_admin_sidebar($sidebar_groups, $current_admin_file); ?>
+        <?php require_once __DIR__ . '/sidebar_sections.php';
+require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $current_admin_file); ?>
 
         <div class="main-content">
             <nav class="navbar navbar-light bg-white shadow-sm px-3">
@@ -316,6 +317,7 @@ $token = csrf_token();
             </nav>
 
             <div class="container-fluid p-4">
+                <?php page_help('slider_comunica'); ?>
                 <?php if ($flashMessage): ?>
                     <div class="alert alert-<?= htmlspecialchars($flashType) ?> alert-dismissible fade show" role="alert">
                         <?= htmlspecialchars($flashMessage) ?>
@@ -566,5 +568,6 @@ $token = csrf_token();
     </style>
 </body>
 </html>
+
 
 

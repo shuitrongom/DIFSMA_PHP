@@ -998,3 +998,35 @@ input[type="file"].form-control.file-selected::file-selector-button {
     background: transparent !important;
     box-shadow: none !important;
 }
+
+/* ── Banner de ayuda contextual por sección ──────────────────────────────────*/
+.admin-page-help {
+    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+    border: 1px solid #e9ecef;
+    border-left: 4px solid rgb(200,16,44);
+    border-radius: 10px;
+    padding: 14px 18px;
+}
+.admin-help-icon {
+    width: 38px;
+    height: 38px;
+    background: rgba(200,16,44,0.08);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(200,16,44);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+.admin-help-title {
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: #1f2937;
+    margin-bottom: 3px;
+}
+.admin-help-desc {
+    font-size: 0.82rem;
+    color: #6b7280;
+    line-height: 1.55;
+}

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/usuarios.php - Gestion de usuarios (solo admin)
  */
@@ -15,6 +15,7 @@ $pdo = get_db();
 
 // Obtener todas las secciones del sidebar para asignar permisos
 require_once __DIR__ . '/sidebar_sections.php';
+require_once __DIR__ . '/page_help.php';
 $all_sections = [];
 foreach ($sidebar_groups as $group) {
     foreach ($group['items'] as $item) {
@@ -141,6 +142,7 @@ $token = csrf_token();
 <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
 </nav>
 <div class="container-fluid p-4">
+                <?php page_help('usuarios'); ?>
 <?php if ($flashMessage): ?><div class="alert alert-<?= htmlspecialchars($flashType) ?> alert-dismissible fade show"><?= htmlspecialchars($flashMessage) ?><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div><?php endif; ?>
 
 <!-- Modal advertencia campos obligatorios -->
@@ -468,3 +470,4 @@ if (formCrear) {
 }
 </script>
 </body></html>
+

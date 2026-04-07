@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/avisos_privacidad.php — CRUD para Avisos de Privacidad
  * Gestiona: texto del aviso + botones con PDF
@@ -115,7 +115,8 @@ $token=csrf_token();
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="../css/admin.css?v=7">
 </head><body><div class="d-flex">
-<?php require_once __DIR__ . '/sidebar_sections.php'; render_admin_sidebar($sidebar_groups, $current_admin_file); ?>
+<?php require_once __DIR__ . '/sidebar_sections.php';
+require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $current_admin_file); ?>
 <div class="main-content">
 <nav class="navbar navbar-light bg-white shadow-sm px-3">
 <button class="btn btn-outline-secondary me-2" id="toggleSidebar"><i class="bi bi-list"></i></button>
@@ -123,6 +124,7 @@ $token=csrf_token();
 <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
 </nav>
 <div class="container-fluid p-4">
+                <?php page_help('avisos_privacidad'); ?>
 <?php if($flashMessage):?><div class="alert alert-<?=htmlspecialchars($flashType)?> alert-dismissible fade show"><?=htmlspecialchars($flashMessage)?><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div><?php endif;?>
 
 <div class="row g-4">
@@ -196,6 +198,7 @@ if(window.innerWidth<=768)sidebar.classList.add('collapsed');
 document.getElementById('toggleSidebar').addEventListener('click',function(){sidebar.classList.toggle('collapsed');});
 var cb=document.getElementById('closeSidebar');if(cb)cb.addEventListener('click',function(){sidebar.classList.add('collapsed');});
 </script></body></html>
+
 
 
 

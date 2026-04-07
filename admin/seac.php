@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/seac.php — CRUD para SEAC (Bloques por año, Conceptos por bloque, PDFs)
  */
@@ -234,7 +234,8 @@ $token = csrf_token();
 </head>
 <body>
 <div class="d-flex">
-    <?php require_once __DIR__ . '/sidebar_sections.php'; render_admin_sidebar($sidebar_groups, $current_admin_file); ?>
+    <?php require_once __DIR__ . '/sidebar_sections.php';
+require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $current_admin_file); ?>
 
     <div class="main-content">
         <nav class="navbar navbar-light bg-white shadow-sm px-3">
@@ -251,6 +252,7 @@ $token = csrf_token();
         </nav>
 
         <div class="container-fluid p-4">
+                <?php page_help('seac'); ?>
             <?php if ($flashMessage): ?>
             <div class="alert alert-<?= htmlspecialchars($flashType) ?> alert-dismissible fade show" role="alert">
                 <?= htmlspecialchars($flashMessage) ?>
@@ -462,6 +464,7 @@ if(cb) cb.addEventListener('click',()=>sidebar.classList.add('collapsed'));
 </script>
 </body>
 </html>
+
 
 
 

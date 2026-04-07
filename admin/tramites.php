@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/tramites.php — Gestión de Trámites y Servicios
  * Permite crear, editar y eliminar trámites dinámicamente.
@@ -198,7 +198,8 @@ $token = csrf_token();
 </head>
 <body>
 <div class="d-flex">
-    <?php require_once __DIR__ . '/sidebar_sections.php'; render_admin_sidebar($sidebar_groups, $current_admin_file); ?>
+    <?php require_once __DIR__ . '/sidebar_sections.php';
+require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $current_admin_file); ?>
     <div class="main-content">
         <nav class="navbar navbar-light bg-white shadow-sm px-3">
             <button class="btn btn-outline-secondary me-2" id="toggleSidebar" aria-label="Menú"><i class="bi bi-list"></i></button>
@@ -206,6 +207,7 @@ $token = csrf_token();
             <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
         </nav>
         <div class="container-fluid p-4">
+                <?php page_help('tramites'); ?>
             <?php if ($flashMessage): ?>
             <div class="alert alert-<?= htmlspecialchars($flashType) ?> alert-dismissible fade show" role="alert">
                 <?= htmlspecialchars($flashMessage) ?>
@@ -452,3 +454,4 @@ $token = csrf_token();
 </script>
 </body>
 </html>
+

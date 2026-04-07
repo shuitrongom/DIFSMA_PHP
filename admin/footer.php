@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/footer.php — Gestión de configuración del Footer
  *
@@ -223,7 +223,8 @@ $token = csrf_token();
 <body>
     <div class="d-flex">
         <!-- Sidebar -->
-        <?php require_once __DIR__ . '/sidebar_sections.php'; render_admin_sidebar($sidebar_groups, $current_admin_file); ?>
+        <?php require_once __DIR__ . '/sidebar_sections.php';
+require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $current_admin_file); ?>
 
         <!-- Main content -->
         <div class="main-content">
@@ -239,6 +240,7 @@ $token = csrf_token();
             </nav>
 
             <div class="container-fluid p-4">
+                <?php page_help('footer'); ?>
                 <!-- Flash message -->
                 <?php if ($flashMessage): ?>
                     <div class="alert alert-<?= htmlspecialchars($flashType) ?> alert-dismissible fade show" role="alert">
@@ -572,3 +574,4 @@ $token = csrf_token();
     </script>
 </body>
 </html>
+

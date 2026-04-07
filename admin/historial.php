@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * @author  Sergio Huitron Gomez
  * @copyright 2025-2026 Sergio Huitron Gomez. Todos los derechos reservados.
@@ -68,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'clear
 
 $token = csrf_token();
 require_once __DIR__ . '/sidebar_sections.php';
+require_once __DIR__ . '/page_help.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -119,6 +120,7 @@ require_once __DIR__ . '/sidebar_sections.php';
 </div>
 
 <div class="container-fluid p-4">
+                <?php page_help('historial'); ?>
 
 <!-- Estadisticas -->
 <div class="row g-3 mb-4">
@@ -231,4 +233,5 @@ require_once __DIR__ . '/sidebar_sections.php';
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>var sb=document.getElementById('sidebar');if(window.innerWidth<=768)sb.classList.add('collapsed');document.getElementById('toggleSidebar').addEventListener('click',function(){sb.classList.toggle('collapsed');});var cb=document.getElementById('closeSidebar');if(cb)cb.addEventListener('click',function(){sb.classList.add('collapsed');});</script>
 </body></html>
+
 
