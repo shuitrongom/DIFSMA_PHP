@@ -122,87 +122,215 @@ $csrf = csrf_token();
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/admin.css?v=7">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        * { box-sizing: border-box; }
+
         body {
             margin: 0;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #7a7777ff;
+            font-family: 'Inter', sans-serif;
+            background: #626268ff;
             position: relative;
             overflow: hidden;
         }
-        /* Imagen institucional de fondo centrada y transparente */
+
+        /* Fondo con gradiente y patrón sutil */
         body::before {
             content: '';
             position: fixed;
             inset: 0;
-            background: url('../img/institucion.png') center center / contain no-repeat;
-            opacity: 0.12;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(200,16,44,0.15) 0%, transparent 40%),
+                radial-gradient(ellipse at 80% 20%, rgba(45,45,45,0.8) 0%, transparent 40%),
+                linear-gradient(135deg, #1a1a2e 0%, #2d2d2d 50%, #1a1a2e 100%);
+            z-index: 0;
+        }
+
+        /* Imagen institucional de fondo */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: url('../img/institucion.png') center center / cover no-repeat;
+            opacity: 0.04;
             z-index: 0;
             pointer-events: none;
         }
-        .login-card {
+
+        .login-wrapper {
             width: 100%;
-            max-width: 420px;
-            padding: 1rem;
+            max-width: 440px;
+            padding: 1.5rem;
             position: relative;
             z-index: 1;
         }
-        .login-card .card {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+
+        /* Card principal */
+        .login-card {
+            background: rgba(255,255,255,0.97);
+            border-radius: 20px;
+            box-shadow:
+                0 25px 60px rgba(0,0,0,0.4),
+                0 0 0 1px rgba(255,255,255,0.1);
+            overflow: hidden;
         }
+
+        /* Banda roja superior */
+        .login-header {
+            background: linear-gradient(135deg, rgb(200,16,44) 0%, rgb(160,10,35) 100%);
+            padding: 2rem 2rem 3.5rem;
+            text-align: center;
+            position: relative;
+        }
+        .login-header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: rgba(255,255,255,0.97);
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+        }
+
+        /* Logo circular */
+        .login-logo-wrap {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            margin-bottom: 1rem;
+            box-shadow:
+                0 8px 32px rgba(0,0,0,0.2),
+                inset 0 1px 0 rgba(255,255,255,0.2);
+            transition: transform 0.3s ease;
+        }
+        .login-logo-wrap:hover { transform: scale(1.05); }
         .login-logo {
-            max-height: 80px;
+            max-height: 72px;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3)) brightness(1.1);
         }
-        .login-card .card-title {
-            color: #2d2d2d;
+        .login-header h1 {
+            color: #fff;
+            font-size: 1.1rem;
             font-weight: 700;
+            margin: 0 0 4px;
+            letter-spacing: 0.3px;
         }
-        .login-card .form-control:focus {
-            border-color: rgb(200,16,44);
-            box-shadow: 0 0 0 3px rgba(200,16,44,0.15);
+        .login-header p {
+            color: rgba(255,255,255,0.75);
+            font-size: 0.78rem;
+            margin: 0;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
         }
-        .login-card .btn-primary {
-            background: rgb(200,16,44) !important;
-            border-color: rgb(200,16,44) !important;
+
+        /* Cuerpo del formulario */
+        .login-body {
+            padding: 1.5rem 2rem 2rem;
+        }
+
+        .login-body .form-label {
+            font-size: 0.82rem;
             font-weight: 600;
-            padding: 0.6rem;
+            color: #374151;
+            margin-bottom: 6px;
+            letter-spacing: 0.2px;
+        }
+        .login-body .form-control {
+            border: 1.5px solid #e5e7eb;
             border-radius: 10px;
+            padding: 0.6rem 0.85rem;
+            font-size: 0.9rem;
+            color: #111827;
+            background: #f9fafb;
             transition: all 0.2s;
         }
-        .login-card .btn-primary:hover {
-            background: rgb(160,10,35) !important;
-            border-color: rgb(160,10,35) !important;
-            box-shadow: 0 4px 16px rgba(200,16,44,0.35);
+        .login-body .form-control:focus {
+            border-color: rgb(200,16,44);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(200,16,44,0.12);
+            outline: none;
+        }
+        .login-body .form-control::placeholder {
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+        /* Botón */
+        .btn-login {
+            background: linear-gradient(135deg, rgb(200,16,44) 0%, rgb(160,10,35) 100%);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 0.7rem;
+            width: 100%;
+            letter-spacing: 0.3px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(200,16,44,0.3);
+            cursor: pointer;
+        }
+        .btn-login:hover {
+            background: linear-gradient(135deg, rgb(180,14,40) 0%, rgb(140,8,30) 100%);
+            box-shadow: 0 6px 20px rgba(200,16,44,0.45);
+            transform: translateY(-1px);
+        }
+        .btn-login:active { transform: translateY(0); }
+
+        /* Footer del login */
+        .login-footer {
+            text-align: center;
+            padding: 0 2rem 1.5rem;
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-wrapper { padding: 1rem; }
+            .login-body { padding: 1.25rem 1.25rem 1.5rem; }
+            .login-header { padding: 1.5rem 1.5rem 3rem; }
         }
     </style>
 </head>
 <body>
-    <div class="login-card">
-        <div class="card shadow-sm">
-            <div class="card-body p-4">
-                <div class="text-center mb-4">
-                    <img src="../img/escudo.png" alt="DIF" class="login-logo mb-2">
-                    <h5 class="card-title mb-0">Panel de Administración</h5>
-                    <small class="text-muted">DIF SAN MATEO ATENCO</small>
+    <div class="login-wrapper">
+        <div class="login-card">
+
+            <!-- Header rojo con logo -->
+            <div class="login-header">
+                <div class="login-logo-wrap mx-auto">
+                    <img src="../img/escudo.png" alt="DIF San Mateo Atenco" class="login-logo">
                 </div>
+                <h1>Panel de Administración</h1>
+                <p>DIF San Mateo Atenco</p>
+            </div>
+
+            <!-- Formulario -->
+            <div class="login-body">
 
                 <?php if ($error !== ''): ?>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <?= htmlspecialchars($error) ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                    <div class="alert alert-danger alert-dismissible fade show py-2 mb-3" role="alert" style="font-size:0.85rem;border-radius:10px;">
+                        <i class="bi bi-exclamation-circle me-1"></i><?= htmlspecialchars($error) ?>
+                        <button type="button" class="btn-close btn-close-sm" data-bs-dismiss="alert"></button>
                     </div>
                 <?php endif; ?>
 
                 <?php if (isset($_GET['expired'])): ?>
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <i class="bi bi-clock-history me-1"></i> Tu sesión expiró por inactividad. Inicia sesión de nuevo.
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                    <div class="alert alert-warning alert-dismissible fade show py-2 mb-3" role="alert" style="font-size:0.85rem;border-radius:10px;">
+                        <i class="bi bi-clock-history me-1"></i> Sesión expirada por inactividad.
+                        <button type="button" class="btn-close btn-close-sm" data-bs-dismiss="alert"></button>
                     </div>
                 <?php endif; ?>
 
@@ -211,37 +339,33 @@ $csrf = csrf_token();
 
                     <div class="mb-3">
                         <label for="username" class="form-label">Usuario</label>
-                        <input
-                            type="text"
-                            class="form-control"
-                            id="username"
-                            name="username"
-                            autocomplete="username"
-                            required
-                            autofocus
-                        >
+                        <input type="text" class="form-control" id="username" name="username"
+                               placeholder="Ingresa tu usuario"
+                               autocomplete="username" required autofocus>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-4">
                         <label for="password" class="form-label">Contraseña</label>
-                        <input
-                            type="password"
-                            class="form-control"
-                            id="password"
-                            name="password"
-                            autocomplete="current-password"
-                            required
-                        >
+                        <input type="password" class="form-control" id="password" name="password"
+                               placeholder="Ingresa tu contraseña"
+                               autocomplete="current-password" required>
                     </div>
 
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Iniciar sesión</button>
-                    </div>
+                    <button type="submit" class="btn-login">
+                        Iniciar sesión
+                    </button>
                 </form>
             </div>
+
+            <!-- Footer -->
+            <div class="login-footer">
+                &copy; <?= date('Y') ?> DIF San Mateo Atenco &mdash; Sistema de Gestión de Contenido
+            </div>
+
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </body>
 </html>
