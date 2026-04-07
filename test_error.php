@@ -13,36 +13,28 @@ require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/includes/db.php';
 $pdo = get_db();
 
-// Verificar tablas que usan las secciones
-$tablas = [
-    'slider_principal',
-    'admin_historial',
-    'admin',
-    'admin_permisos',
-];
+// Simular lo que hace slider_principal.php paso a paso
+echo "1. Iniciando...<br>";
 
-foreach ($tablas as $tabla) {
-    try {
-        $pdo->query("SELECT 1 FROM `{$tabla}` LIMIT 1");
-        echo "Tabla <strong>{$tabla}</strong>: OK<br>";
-    } catch (PDOException $e) {
-        echo "Tabla <strong style='color:red'>{$tabla}</strong>: FALTA — " . htmlspecialchars($e->getMessage()) . "<br>";
-    }
-}
+require_once __DIR__ . '/admin/upload_handler.php';
+echo "2. upload_handler OK<br>";
 
-// Verificar columnas nuevas en admin_historial
-try {
-    $cols = $pdo->query("SHOW COLUMNS FROM admin_historial")->fetchAll(PDO::FETCH_COLUMN);
-    echo "<br>Columnas de admin_historial: " . implode(', ', $cols) . "<br>";
-    
-    if (!in_array('dispositivo', $cols)) {
-        echo "<strong style='color:red'>FALTA columna 'dispositivo' en admin_historial</strong><br>";
-        echo "Ejecuta: ALTER TABLE admin_historial ADD COLUMN dispositivo VARCHAR(20) DEFAULT NULL AFTER ip, ADD COLUMN hostname VARCHAR(255) DEFAULT NULL AFTER dispositivo;<br>";
-    } else {
-        echo "Columna 'dispositivo': OK<br>";
-    }
-} catch (PDOException $e) {
-    echo "Error: " . htmlspecialchars($e->getMessage()) . "<br>";
+// Consultar slides
+$stmt = $pdo->query('SELECT * FROM slider_principal ORDER BY orden ASC');
+$slides = $stmt->fetchAll();
+echo "3. Slides encontrados: " . count($slides) . "<br>";
+
+require_once __DIR__ . '/admin/sidebar_sections.php';
+echo "4. sidebar_sections OK<br>";
+
+echo "<strong style='color:green'>slider_principal cargará OK</strong><br>";
+echo "El problema puede ser el upload_handler o una función que no existe.<br>";
+
+// Verificar función handle_upload
+if (function_exists('handle_upload')) {
+    echo "5. handle_upload() existe: OK<br>";
+} else {
+    echo "5. <strong style='color:red'>handle_upload() NO EXISTE</strong><br>";
 }
 
 echo "Test completo.";
