@@ -50,11 +50,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
         $pdo_hist = get_db();
         $accion_hist = $_POST['action'] ?? 'accion';
         $seccion_hist = str_replace(['.php', '_', '-'], ['',' ',' '], $current_admin_file_guard);
-        $desc_hist = '';
-        if (!empty($_POST['titulo'])) $desc_hist = 'Titulo: ' . substr($_POST['titulo'], 0, 100);
-        elseif (!empty($_POST['nombre'])) $desc_hist = 'Nombre: ' . substr($_POST['nombre'], 0, 100);
-        elseif (!empty($_POST['anio'])) $desc_hist = 'Anio: ' . $_POST['anio'];
-        registrar_historial($pdo_hist, $accion_hist, ucwords($seccion_hist), $desc_hist);
+        $seccion_label = ucwords(trim($seccion_hist));
+
+        // Obtener el valor más descriptivo disponible en el POST
+        $valor = '';
+        foreach (['titulo','nombre','username','link_titulo','departamento','concepto','descripcion','fecha_noticia','fecha_album','anio'] as $c) {
+            if (!empty($_POST[$c])) { $valor = substr(trim($_POST[$c]), 0, 80); break; }
+        }
+        $id_ref = '';
+        if (!empty($_POST['id']))        $id_ref = ' (ID ' . (int)$_POST['id'] . ')';
+        elseif (!empty($_POST['user_id'])) $id_ref = ' (Usuario ID ' . (int)$_POST['user_id'] . ')';
+
+        // Mapeo de acción → frase descriptiva completa
+        $action_raw = $_POST['action'] ?? '';
+        $frases = [
+            'add'             => "Se agregó un nuevo elemento en {$seccion_label}" . ($valor ? ": \"{$valor}\"" : ''),
+            'create'          => "Se creó un nuevo registro en {$seccion_label}" . ($valor ? ": \"{$valor}\"" : ''),
+            'create_album'    => "Se creó el álbum \"{$valor}\" en Galería",
+            'edit'            => "Se modificó el registro{$id_ref} en {$seccion_label}" . ($valor ? ": \"{$valor}\"" : ''),
+            'edit_album'      => "Se editó el álbum \"{$valor}\" en Galería",
+            'update'          => "Se actualizó la información en {$seccion_label}" . ($valor ? ": \"{$valor}\"" : ''),
+            'delete'          => "Se eliminó el registro{$id_ref} en {$seccion_label}" . ($valor ? ": \"{$valor}\"" : ''),
+            'delete_album'    => "Se eliminó el álbum{$id_ref} en Galería",
+            'upload'          => "Se subió una imagen en {$seccion_label}",
+            'upload_pdf'      => "Se subió un PDF en {$seccion_label}" . ($valor ? ": \"{$valor}\"" : ''),
+            'delete_pdf'      => "Se eliminó un PDF en {$seccion_label}" . ($id_ref ? $id_ref : ''),
+            'delete_image'    => "Se eliminó la imagen{$id_ref} en {$seccion_label}",
+            'add_image'       => "Se agregó una imagen al álbum en Galería",
+            'delete_boton'    => "Se eliminó un botón{$id_ref} en {$seccion_label}",
+            'edit_boton'      => "Se editó el botón \"{$valor}\" en {$seccion_label}",
+            'link_create'     => "Se creó el enlace \"{$valor}\" en Footer",
+            'link_edit'       => "Se editó el enlace \"{$valor}\" en Footer",
+            'link_delete'     => "Se eliminó un enlace{$id_ref} en Footer",
+            'toggle'          => "Se cambió el estado del registro{$id_ref} en {$seccion_label}",
+            'reorder'         => "Se reordenaron los elementos en {$seccion_label}",
+            'reset_password'  => "Se restableció la contraseña del usuario{$id_ref}",
+            'update_permisos' => "Se actualizaron los permisos del usuario{$id_ref}",
+            'clear_all'       => "Se limpió todo el historial de actividad",
+            'delete_log'      => "Se eliminó un registro del historial{$id_ref}",
+        ];
+
+        $desc_hist = $frases[$action_raw]
+            ?? "Se realizó la acción \"{$action_raw}\" en {$seccion_label}" . ($valor ? ": \"{$valor}\"" : $id_ref);
+
+        registrar_historial($pdo_hist, $accion_hist, $seccion_label, $desc_hist);
     } catch (Exception $e) {}
 }
 
