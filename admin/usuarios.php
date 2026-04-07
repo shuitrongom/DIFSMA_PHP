@@ -152,14 +152,22 @@ $token = csrf_token();
 <input type="hidden" name="action" value="create"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
 <div class="mb-3"><label class="form-label">Usuario</label><input type="text" class="form-control" name="username" required placeholder="Ej: juan.perez" autocomplete="off"></div>
 <div class="mb-3"><label class="form-label">Nombre completo</label><input type="text" class="form-control" name="nombre" placeholder="Ej: Juan Perez Lopez"></div>
-<div class="mb-3"><label class="form-label">Contrasena</label>
-<div class="input-group">
-<input type="password" class="form-control" name="password" id="new_password" required minlength="8" placeholder="Minimo 8 caracteres" autocomplete="new-password">
-<button type="button" class="btn btn-outline-secondary" onclick="toggleVer('new_password',this)" tabindex="-1"><i class="bi bi-eye"></i></button>
-<button type="button" class="btn btn-outline-primary" onclick="generarPassword('new_password','new_strength')" tabindex="-1" title="Generar contraseña segura"><i class="bi bi-magic"></i> Generar</button>
+<div class="mb-3"><label class="form-label">Contraseña</label>
+<div style="position:relative;">
+    <input type="password" class="form-control pe-5" name="password" id="new_password" required minlength="8" placeholder="Mínimo 8 caracteres" autocomplete="new-password" oninput="checkReqs(this,'new_reqs')">
+    <button type="button" tabindex="-1" onclick="toggleVer('new_password',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:#6c757d;padding:0;line-height:1;"><i class="bi bi-eye"></i></button>
 </div>
 <div id="new_strength" class="mt-1"></div>
-<small class="text-muted">Mín. 8 caracteres · 1 mayúscula · 1 minúscula · 1 número · 1 símbolo</small>
+<ul id="new_reqs" class="list-unstyled mt-2 mb-1" style="font-size:12px;">
+    <li data-req="len"  style="color:#adb5bd;"><i class="bi bi-x-circle-fill me-1"></i>Mínimo 8 caracteres</li>
+    <li data-req="up"   style="color:#adb5bd;"><i class="bi bi-x-circle-fill me-1"></i>Al menos 1 mayúscula</li>
+    <li data-req="low"  style="color:#adb5bd;"><i class="bi bi-x-circle-fill me-1"></i>Al menos 1 minúscula</li>
+    <li data-req="num"  style="color:#adb5bd;"><i class="bi bi-x-circle-fill me-1"></i>Al menos 1 número</li>
+    <li data-req="sym"  style="color:#adb5bd;"><i class="bi bi-x-circle-fill me-1"></i>Al menos 1 símbolo (!@#$...)</li>
+</ul>
+<button type="button" class="btn btn-sm btn-outline-secondary w-100" onclick="generarPassword('new_password','new_strength','new_reqs')">
+    <i class="bi bi-magic me-1"></i> Generar contraseña segura
+</button>
 </div>
 <div class="mb-3"><label class="form-label">Secciones permitidas</label>
 <div style="max-height:250px;overflow-y:auto;border:1px solid #dee2e6;border-radius:6px;padding:8px;">
@@ -215,14 +223,22 @@ $token = csrf_token();
 <form method="POST" action="usuarios.php"><input type="hidden" name="action" value="reset_password"><input type="hidden" name="user_id" value="<?= (int)$usr['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
 <div class="modal-header"><h5 class="modal-title"><i class="bi bi-key me-1"></i> Nueva contrasena: <?= htmlspecialchars($usr['username']) ?></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
 <div class="modal-body">
-<div class="mb-3"><label class="form-label">Nueva contrasena</label>
-<div class="input-group">
-<input type="password" class="form-control pass-input" name="new_password" required minlength="8" placeholder="Minimo 8 caracteres" autocomplete="new-password">
-<button type="button" class="btn btn-outline-secondary" onclick="toggleVer(this.previousElementSibling,this)" tabindex="-1"><i class="bi bi-eye"></i></button>
-<button type="button" class="btn btn-outline-primary" onclick="generarPasswordModal(this)" tabindex="-1" title="Generar contraseña segura"><i class="bi bi-magic"></i> Generar</button>
+<div class="mb-3"><label class="form-label">Nueva contraseña</label>
+<div style="position:relative;">
+    <input type="password" class="form-control pe-5 pass-input" name="new_password" required minlength="8" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+    <button type="button" tabindex="-1" onclick="toggleVer(this.previousElementSibling,this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:#6c757d;padding:0;line-height:1;"><i class="bi bi-eye"></i></button>
 </div>
 <div class="strength-bar mt-1"></div>
-<small class="text-muted">Mín. 8 caracteres · 1 mayúscula · 1 minúscula · 1 número · 1 símbolo</small>
+<ul class="pass-reqs list-unstyled mt-2 mb-1" style="font-size:12px;">
+    <li data-req="len"  style="color:#adb5bd;"><i class="bi bi-x-circle-fill me-1"></i>Mínimo 8 caracteres</li>
+    <li data-req="up"   style="color:#adb5bd;"><i class="bi bi-x-circle-fill me-1"></i>Al menos 1 mayúscula</li>
+    <li data-req="low"  style="color:#adb5bd;"><i class="bi bi-x-circle-fill me-1"></i>Al menos 1 minúscula</li>
+    <li data-req="num"  style="color:#adb5bd;"><i class="bi bi-x-circle-fill me-1"></i>Al menos 1 número</li>
+    <li data-req="sym"  style="color:#adb5bd;"><i class="bi bi-x-circle-fill me-1"></i>Al menos 1 símbolo (!@#$...)</li>
+</ul>
+<button type="button" class="btn btn-sm btn-outline-secondary w-100 btn-gen-modal">
+    <i class="bi bi-magic me-1"></i> Generar contraseña segura
+</button>
 </div></div>
 <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-info text-white"><i class="bi bi-check-lg me-1"></i> Cambiar</button></div>
 </form></div></div></div>
@@ -234,92 +250,90 @@ $token = csrf_token();
 <script>
 var sb=document.getElementById('sidebar');if(window.innerWidth<=768)sb.classList.add('collapsed');document.getElementById('toggleSidebar').addEventListener('click',function(){sb.classList.toggle('collapsed');});var cb=document.getElementById('closeSidebar');if(cb)cb.addEventListener('click',function(){sb.classList.add('collapsed');});
 
-// ── Generador de contraseña fuerte ────────────────────────────────────────
 function generarPasswordFuerte() {
-    var upper  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    var lower  = 'abcdefghijklmnopqrstuvwxyz';
-    var digits = '0123456789';
-    var syms   = '!@#$%^&*()-_=+[]{}|;:,.<>?';
-    var all    = upper + lower + digits + syms;
-    var pwd    = [
-        upper[Math.floor(Math.random()*upper.length)],
-        upper[Math.floor(Math.random()*upper.length)],
-        lower[Math.floor(Math.random()*lower.length)],
-        lower[Math.floor(Math.random()*lower.length)],
-        digits[Math.floor(Math.random()*digits.length)],
-        digits[Math.floor(Math.random()*digits.length)],
-        syms[Math.floor(Math.random()*syms.length)],
-        syms[Math.floor(Math.random()*syms.length)],
-    ];
-    for (var i = 0; i < 4; i++) pwd.push(all[Math.floor(Math.random()*all.length)]);
-    // Mezclar
-    pwd = pwd.sort(function(){ return Math.random()-0.5; });
-    return pwd.join('');
+    var u='ABCDEFGHIJKLMNOPQRSTUVWXYZ', l='abcdefghijklmnopqrstuvwxyz', d='0123456789', s='!@#$%^&*()-_=+[]{}|;:,.<>?';
+    var all=u+l+d+s;
+    var pwd=[u[r(u.length)],u[r(u.length)],l[r(l.length)],l[r(l.length)],d[r(d.length)],d[r(d.length)],s[r(s.length)],s[r(s.length)]];
+    for(var i=0;i<4;i++) pwd.push(all[r(all.length)]);
+    return pwd.sort(function(){return Math.random()-.5;}).join('');
 }
+function r(n){return Math.floor(Math.random()*n);}
 
-// Medidor de fortaleza
-function medirFortaleza(pwd) {
-    var score = 0;
-    if (pwd.length >= 8)  score++;
-    if (pwd.length >= 12) score++;
-    if (/[A-Z]/.test(pwd)) score++;
-    if (/[a-z]/.test(pwd)) score++;
-    if (/[0-9]/.test(pwd)) score++;
-    if (/[\W_]/.test(pwd)) score++;
-    return score;
-}
-
-function renderStrength(score, container) {
-    var labels = ['','Muy débil','Débil','Regular','Buena','Fuerte','Muy fuerte'];
-    var colors = ['','#dc3545','#fd7e14','#ffc107','#20c997','#198754','#0d6efd'];
-    var pct    = Math.round((score/6)*100);
-    container.innerHTML =
-        '<div style="height:6px;background:#e9ecef;border-radius:3px;overflow:hidden;">' +
-        '<div style="width:'+pct+'%;height:100%;background:'+colors[score]+';transition:width .3s;border-radius:3px;"></div></div>' +
-        '<small style="color:'+colors[score]+';">'+labels[score]+'</small>';
-}
-
-// Para el formulario de crear usuario
-var newPassInput = document.getElementById('new_password');
-var newStrength  = document.getElementById('new_strength');
-if (newPassInput) {
-    newPassInput.addEventListener('input', function() {
-        renderStrength(medirFortaleza(this.value), newStrength);
+function checkReqs(inp, reqsId) {
+    var v = inp.value;
+    var rules = {
+        len: v.length >= 8,
+        up:  /[A-Z]/.test(v),
+        low: /[a-z]/.test(v),
+        num: /[0-9]/.test(v),
+        sym: /[\W_]/.test(v)
+    };
+    var list = document.getElementById(reqsId) || inp.closest('.mb-3').querySelector('.pass-reqs');
+    if (!list) return;
+    list.querySelectorAll('li').forEach(function(li) {
+        var ok = rules[li.dataset.req];
+        li.style.color = ok ? '#198754' : '#adb5bd';
+        li.querySelector('i').className = ok ? 'bi bi-check-circle-fill me-1' : 'bi bi-x-circle-fill me-1';
     });
+    // barra de fortaleza
+    var score = Object.values(rules).filter(Boolean).length;
+    var colors = ['#dc3545','#fd7e14','#ffc107','#20c997','#198754'];
+    var labels = ['Muy débil','Débil','Regular','Fuerte','Muy fuerte'];
+    var bar = inp.closest('.mb-3').querySelector('.strength-bar') || document.getElementById(reqsId.replace('reqs','strength'));
+    if (bar) {
+        if (v.length === 0) { bar.innerHTML=''; return; }
+        var idx = Math.max(0, score-1);
+        bar.innerHTML = '<div style="height:5px;background:#e9ecef;border-radius:3px;overflow:hidden;"><div style="width:'+Math.round(score/5*100)+'%;height:100%;background:'+colors[idx]+';transition:width .3s;border-radius:3px;"></div></div><small style="color:'+colors[idx]+';font-size:11px;">'+labels[idx]+'</small>';
+    }
 }
 
-function generarPassword(inputId, strengthId) {
+function allReqsMet(inp) {
+    var v = inp.value;
+    return v.length>=8 && /[A-Z]/.test(v) && /[a-z]/.test(v) && /[0-9]/.test(v) && /[\W_]/.test(v);
+}
+
+function generarPassword(inputId, strengthId, reqsId) {
     var pwd = generarPasswordFuerte();
     var inp = document.getElementById(inputId);
     inp.value = pwd;
-    inp.type  = 'text';
-    renderStrength(medirFortaleza(pwd), document.getElementById(strengthId));
-    setTimeout(function(){ inp.type = 'password'; }, 3000);
-}
-
-// Para los modales de reset password
-function generarPasswordModal(btn) {
-    var pwd      = generarPasswordFuerte();
-    var modal    = btn.closest('.modal-body');
-    var inp      = modal.querySelector('.pass-input');
-    var bar      = modal.querySelector('.strength-bar');
-    inp.value    = pwd;
-    inp.type     = 'text';
-    renderStrength(medirFortaleza(pwd), bar);
-    setTimeout(function(){ inp.type = 'password'; }, 3000);
+    inp.type = 'text';
+    checkReqs(inp, reqsId);
+    setTimeout(function(){ inp.type='password'; }, 3000);
 }
 
 function toggleVer(inp, btn) {
     if (typeof inp === 'string') inp = document.getElementById(inp);
-    inp.type = inp.type === 'password' ? 'text' : 'password';
-    btn.querySelector('i').className = inp.type === 'text' ? 'bi bi-eye-slash' : 'bi bi-eye';
+    inp.type = inp.type==='password' ? 'text' : 'password';
+    btn.querySelector('i').className = inp.type==='text' ? 'bi bi-eye-slash' : 'bi bi-eye';
 }
 
 // Medidor en tiempo real para modales
 document.addEventListener('input', function(e) {
     if (e.target.classList.contains('pass-input')) {
-        var bar = e.target.closest('.modal-body').querySelector('.strength-bar');
-        renderStrength(medirFortaleza(e.target.value), bar);
+        checkReqs(e.target, null);
+    }
+});
+
+// Botón generar en modales
+document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.btn-gen-modal');
+    if (!btn) return;
+    var body = btn.closest('.modal-body');
+    var inp  = body.querySelector('.pass-input');
+    var pwd  = generarPasswordFuerte();
+    inp.value = pwd;
+    inp.type  = 'text';
+    checkReqs(inp, null);
+    setTimeout(function(){ inp.type='password'; }, 3000);
+});
+
+// Validar antes de submit — formulario crear
+document.querySelector('form [name="password"]') && document.querySelector('form [name="password"]').closest('form').addEventListener('submit', function(e) {
+    var inp = this.querySelector('[name="password"]');
+    if (inp && !allReqsMet(inp)) {
+        e.preventDefault();
+        inp.focus();
+        inp.classList.add('is-invalid');
     }
 });
 </script>
