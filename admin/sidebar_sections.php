@@ -180,5 +180,63 @@ function render_admin_sidebar(array $sidebar_groups, string $current_file): void
 })();
 </script>
 <script src="../js/admin-tooltips.js"></script>
+<script>
+// Mostrar nombre de archivo seleccionado en inputs file
+document.addEventListener('change', function(e) {
+    if (e.target.type !== 'file') return;
+    var inp = e.target;
+    if (inp.files && inp.files.length > 0) {
+        inp.classList.add('file-selected');
+        var names = Array.from(inp.files).map(function(f) { return f.name; }).join(', ');
+        inp.title = names;
+    } else {
+        inp.classList.remove('file-selected');
+        inp.title = '';
+    }
+});
+
+// ── Modal visor de PDF ────────────────────────────────────────────────────────
+(function() {
+    var modal = document.createElement('div');
+    modal.id = 'pdfViewerModal';
+    modal.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;flex-direction:column;align-items:center;justify-content:center;';
+    modal.innerHTML = '<div style="width:90vw;height:90vh;background:#fff;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.5);"><div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#2d2d2d;color:#fff;flex-shrink:0;"><span id="pdfViewerTitle" style="font-size:0.9rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:70%;"></span><div style="display:flex;gap:8px;"><a id="pdfViewerDownload" href="#" download style="color:#fff;text-decoration:none;font-size:0.8rem;padding:4px 10px;border:1px solid rgba(255,255,255,0.3);border-radius:5px;"><i class="bi bi-download me-1"></i>Descargar</a><button id="pdfViewerClose" style="background:rgb(200,16,44);border:none;color:#fff;border-radius:5px;padding:4px 12px;cursor:pointer;font-size:0.85rem;">&#x2715; Cerrar</button></div></div><iframe id="pdfViewerFrame" src="" style="flex:1;border:none;width:100%;"></iframe></div>';
+    document.body.appendChild(modal);
+
+    var frame = document.getElementById('pdfViewerFrame');
+    var titleEl = document.getElementById('pdfViewerTitle');
+    var dlBtn = document.getElementById('pdfViewerDownload');
+    var closeBtn = document.getElementById('pdfViewerClose');
+
+    function openPdf(url, name) {
+        frame.src = url;
+        titleEl.textContent = name || 'Documento PDF';
+        dlBtn.href = url;
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    function closePdf() {
+        modal.style.display = 'none';
+        frame.src = '';
+        document.body.style.overflow = '';
+    }
+
+    closeBtn.addEventListener('click', closePdf);
+    modal.addEventListener('click', function(e) { if (e.target === modal) closePdf(); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closePdf(); });
+
+    document.addEventListener('click', function(e) {
+        var a = e.target.closest('a[target="_blank"]');
+        if (!a) return;
+        var href = a.getAttribute('href') || '';
+        if (/\.pdf(\?|$)/i.test(href) || a.querySelector('.bi-file-earmark-pdf,.bi-file-pdf,.bi-eye')) {
+            e.preventDefault();
+            var row = a.closest('tr');
+            var name = row ? (row.querySelector('td')?.textContent?.trim() || 'Documento') : 'Documento PDF';
+            openPdf(href, name);
+        }
+    });
+})();
+</script>
 <?php
 }

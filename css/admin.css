@@ -962,3 +962,39 @@ td .btn-action-edit + .mt-1 {
 .input-group-text {
     background: transparent !important;
 }
+
+/* ── Input file — mostrar nombre del archivo seleccionado ────────────────────*/
+input[type="file"].form-control {
+    color: #6b7280;
+}
+input[type="file"].form-control.file-selected {
+    color: #111827;
+    border-color: #198754;
+    border-style: solid;
+}
+input[type="file"].form-control.file-selected::file-selector-button {
+    background: #198754;
+    color: #fff;
+    border-right-color: #198754;
+}
+
+/* ── Botón ojo (ver/ocultar contraseña) — sin borde azul, integrado ──────────*/
+.input-group .btn-outline-secondary:focus,
+.input-group .btn-outline-secondary:active,
+.input-group .btn-outline-secondary:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: #dee2e6 !important;
+    background: transparent !important;
+    color: #9ca3af !important;
+}
+.input-group:focus-within .btn-outline-secondary {
+    border-color: rgb(200,16,44) !important;
+    color: rgb(200,16,44) !important;
+}
+.input-group .btn-outline-secondary {
+    border-left: none !important;
+    border-radius: 0 8px 8px 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
