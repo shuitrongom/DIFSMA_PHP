@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/footer.php — Gestión de configuración del Footer
  *
@@ -414,35 +414,41 @@ $token = csrf_token();
                                     <p class="mt-2 mb-0">No hay enlaces. Use el formulario para agregar.</p>
                                 </div>
                                 <?php else: ?>
-                                <div class="table-responsive">
-                                    <table class="table table-hover align-middle mb-0">
+                                <div class="footer-links-wrapper">
+                                    <table class="table table-hover align-middle mb-0 footer-links-table">
                                         <thead class="table-light">
                                             <tr>
                                                 <th style="width:50px;">Orden</th>
                                                 <th>Título</th>
                                                 <th>URL</th>
                                                 <th style="width:70px;">Nueva tab</th>
-                                                <th style="width:150px;">Acciones</th>
+                                                <th style="width:160px;">Acciones</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                         <?php foreach ($footerLinks as $fl): ?>
                                             <tr>
-                                                <td class="text-center"><?= (int) $fl['orden'] ?></td>
-                                                <td><?= htmlspecialchars($fl['titulo']) ?></td>
-                                                <td class="small">
+                                                <td data-label="Orden" class="text-center"><?= (int) $fl['orden'] ?></td>
+                                                <td data-label="Título"><strong><?= htmlspecialchars($fl['titulo']) ?></strong></td>
+                                                <td data-label="URL" class="small text-muted">
                                                     <?php if ($fl['url'] === '__ubicacion__'): ?>
-                                                        <span class="badge bg-info">📍 Ubicación Maps</span>
+                                                        <span class="badge bg-info text-dark">📍 Ubicación Maps</span>
                                                     <?php elseif ($fl['url'] === '#'): ?>
                                                         <span class="badge bg-secondary">Sin enlace</span>
                                                     <?php else: ?>
-                                                        <?= htmlspecialchars($fl['url']) ?>
+                                                        <span class="d-block text-truncate" style="max-width:180px;" title="<?= htmlspecialchars($fl['url']) ?>"><?= htmlspecialchars($fl['url']) ?></span>
                                                     <?php endif; ?>
                                                 </td>
-                                                <td class="text-center"><?= $fl['nueva_tab'] ? '<span class="badge bg-success">Sí</span>' : 'No' ?></td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editLink<?= (int)$fl['id'] ?>"><i class="bi bi-pencil"></i></button>
-                                                    <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delLink<?= (int)$fl['id'] ?>"><i class="bi bi-trash"></i></button>
+                                                <td data-label="Nueva tab" class="text-center"><?= $fl['nueva_tab'] ? '<span class="badge bg-success">Sí</span>' : '<span class="text-muted small">No</span>' ?></td>
+                                                <td data-label="Acciones">
+                                                    <div class="d-flex gap-1 flex-wrap">
+                                                        <button class="btn btn-sm btn-action-edit" data-bs-toggle="modal" data-bs-target="#editLink<?= (int)$fl['id'] ?>">
+                                                            <i class="bi bi-pencil"></i> Editar
+                                                        </button>
+                                                        <button class="btn btn-sm btn-action-delete" data-bs-toggle="modal" data-bs-target="#delLink<?= (int)$fl['id'] ?>">
+                                                            <i class="bi bi-trash3"></i> Eliminar
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -537,7 +543,7 @@ $token = csrf_token();
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1"></i> Eliminar</button>
+                                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash3 me-1"></i> Eliminar</button>
                                 </div>
                             </form>
                         </div>

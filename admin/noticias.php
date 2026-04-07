@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/noticias.php — CRUD para imágenes de Noticias por Día
  *
@@ -342,17 +342,17 @@ $token = csrf_token();
                                                                         <span class="badge bg-secondary mb-1">Inactivo</span>
                                                                     <?php endif; ?>
                                                                     <div class="btn-group btn-group-sm w-100 mt-1">
-                                                                        <button type="button" class="btn btn-outline-warning"
+                                                                        <button type="button" class="btn btn-action-edit"
                                                                                 data-bs-toggle="modal"
                                                                                 data-bs-target="#editModal<?= (int) $noticia['id'] ?>"
                                                                                 title="Editar">
                                                                             <i class="bi bi-pencil"></i>
                                                                         </button>
-                                                                        <button type="button" class="btn btn-outline-danger"
+                                                                        <button type="button" class="btn btn-action-delete"
                                                                                 data-bs-toggle="modal"
                                                                                 data-bs-target="#deleteModal<?= (int) $noticia['id'] ?>"
                                                                                 title="Eliminar">
-                                                                            <i class="bi bi-trash"></i>
+                                                                            <i class="bi bi-trash3"></i>
                                                                         </button>
                                                                     </div>
                                                                 </div>
@@ -425,7 +425,7 @@ $token = csrf_token();
                                                                         <div class="modal-footer">
                                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                                                             <button type="submit" class="btn btn-danger">
-                                                                                <i class="bi bi-trash me-1"></i> Eliminar
+                                                                                <i class="bi bi-trash3 me-1"></i> Eliminar
                                                                             </button>
                                                                         </div>
                                                                     </form>
@@ -465,3 +465,4 @@ $token = csrf_token();
     </script>
 </body>
 </html>
+

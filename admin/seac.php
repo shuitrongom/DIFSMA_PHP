@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/seac.php — CRUD para SEAC (Bloques por año, Conceptos por bloque, PDFs)
  */
@@ -262,7 +262,7 @@ $token = csrf_token();
             <!-- ══════ DETALLE BLOQUE ══════ -->
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="mb-0"><i class="bi bi-calendar-event me-1"></i> Bloque SEAC <?= htmlspecialchars($currentBloque['anio']) ?></h5>
-                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteBlockModal"><i class="bi bi-trash me-1"></i> Eliminar bloque</button>
+                <button type="button" class="btn btn-sm btn-action-delete" data-bs-toggle="modal" data-bs-target="#deleteBlockModal"><i class="bi bi-trash3 me-1"></i> Eliminar bloque</button>
             </div>
 
             <!-- Formulario agregar concepto -->
@@ -323,7 +323,7 @@ $token = csrf_token();
                                             <input type="hidden" name="pdf_id" value="<?= (int)$cell['id'] ?>">
                                             <input type="hidden" name="bloque_id" value="<?= (int)$currentBloque['id'] ?>">
                                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                            <button type="submit" class="btn btn-sm btn-action-delete"><i class="bi bi-file-earmark-x"></i></button>
                                         </form>
 <?php else: ?>
                                         <form method="POST" enctype="multipart/form-data" action="seac.php?bloque_id=<?= (int)$currentBloque['id'] ?>">
@@ -344,7 +344,7 @@ $token = csrf_token();
                                             <input type="hidden" name="bloque_id" value="<?= (int)$currentBloque['id'] ?>">
                                             <input type="hidden" name="concepto_id" value="<?= (int)$c['id'] ?>">
                                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                            <button type="submit" class="btn btn-sm btn-action-delete"><i class="bi bi-trash3"></i></button>
                                         </form>
                                     </td>
                                 </tr>
@@ -382,7 +382,7 @@ $token = csrf_token();
                             <p>¿Eliminar bloque <strong>SEAC <?= htmlspecialchars($currentBloque['anio']) ?></strong>?</p>
                             <p class="text-danger small"><i class="bi bi-exclamation-circle me-1"></i> Se eliminarán todos los conceptos y PDFs. No se puede deshacer.</p>
                         </div>
-                        <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1"></i> Eliminar</button></div>
+                        <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-danger"><i class="bi bi-trash3 me-1"></i> Eliminar</button></div>
                     </form>
                 </div></div>
             </div>
@@ -423,7 +423,7 @@ $token = csrf_token();
                                             <td class="text-center"><span class="badge bg-primary"><?= (int)$bl['num_pdfs'] ?></span></td>
                                             <td>
                                                 <a href="seac.php?bloque_id=<?= (int)$bl['id'] ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i> Ver</a>
-                                                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delBL<?= (int)$bl['id'] ?>"><i class="bi bi-trash"></i> Eliminar</button>
+                                                <button type="button" class="btn btn-sm btn-action-delete" data-bs-toggle="modal" data-bs-target="#delBL<?= (int)$bl['id'] ?>"><i class="bi bi-trash3"></i> Eliminar</button>
                                             </td>
                                         </tr>
                                         <div class="modal fade" id="delBL<?= (int)$bl['id'] ?>" tabindex="-1" aria-hidden="true">
@@ -434,7 +434,7 @@ $token = csrf_token();
                                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                                                     <div class="modal-header"><h5 class="modal-title text-danger"><i class="bi bi-exclamation-triangle me-1"></i> Eliminar bloque</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button></div>
                                                     <div class="modal-body"><p>¿Eliminar <strong>SEAC <?= htmlspecialchars($bl['anio']) ?></strong>?</p><p class="text-danger small"><?= (int)$bl['num_pdfs'] ?> PDFs serán eliminados.</p></div>
-                                                    <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1"></i> Eliminar</button></div>
+                                                    <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-danger"><i class="bi bi-trash3 me-1"></i> Eliminar</button></div>
                                                 </form>
                                             </div></div>
                                         </div>
@@ -462,3 +462,7 @@ if(cb) cb.addEventListener('click',()=>sidebar.classList.add('collapsed'));
 </script>
 </body>
 </html>
+
+
+
+

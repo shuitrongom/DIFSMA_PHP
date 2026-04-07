@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/presupuesto_anual.php — CRUD para Presupuesto Anual
  * Estructura: Bloques (año) → Conceptos → Sub-años con PDF
@@ -258,7 +258,7 @@ $token = csrf_token();
 <?php if($bloqueId > 0 && $currentBloque): ?>
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h5 class="mb-0"><i class="bi bi-calendar-event me-1"></i> Presupuesto Anual <?= htmlspecialchars($currentBloque['anio']) ?></h5>
-    <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteBlockModal"><i class="bi bi-trash me-1"></i> Eliminar bloque</button>
+    <button type="button" class="btn btn-sm btn-action-delete" data-bs-toggle="modal" data-bs-target="#deleteBlockModal"><i class="bi bi-trash3 me-1"></i> Eliminar bloque</button>
 </div>
 
 <!-- Agregar concepto -->
@@ -284,7 +284,7 @@ $token = csrf_token();
         <span><i class="bi bi-bookmark-fill me-1"></i> <?= htmlspecialchars($concepto['nombre']) ?> <i class="bi bi-chevron-down ms-2 small"></i></span>
         <div onclick="event.stopPropagation()">
             <button type="button" class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#editC<?= (int)$concepto['id'] ?>"><i class="bi bi-pencil"></i></button>
-            <button type="button" class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#delC<?= (int)$concepto['id'] ?>"><i class="bi bi-trash"></i></button>
+            <button type="button" class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#delC<?= (int)$concepto['id'] ?>"><i class="bi bi-trash3"></i></button>
         </div>
     </div>
     <div class="collapse" id="cBody<?= (int)$concepto['id'] ?>">
@@ -315,14 +315,14 @@ $token = csrf_token();
                         <?php if (empty($pdf['pdf_path'])): ?>
                         <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#upPdf<?= (int)$pdf['id'] ?>"><i class="bi bi-upload"></i></button>
                         <?php else: ?>
-                        <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#upPdf<?= (int)$pdf['id'] ?>"><i class="bi bi-arrow-repeat"></i></button>
+                        <button class="btn btn-sm btn-action-key" data-bs-toggle="modal" data-bs-target="#upPdf<?= (int)$pdf['id'] ?>"><i class="bi bi-arrow-repeat"></i></button>
                         <?php endif; ?>
                         <form method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar este año y su PDF?')">
                             <input type="hidden" name="action" value="delete_subanio">
                             <input type="hidden" name="bloque_id" value="<?= $bloqueId ?>">
                             <input type="hidden" name="pdf_id" value="<?= (int)$pdf['id'] ?>">
                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
-                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                            <button class="btn btn-sm btn-action-delete"><i class="bi bi-trash3"></i></button>
                         </form>
                     </td>
                 </tr>
@@ -443,3 +443,7 @@ var cb=document.getElementById('closeSidebar');if(cb)cb.addEventListener('click'
 </script>
 </body>
 </html>
+
+
+
+

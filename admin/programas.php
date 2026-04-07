@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/programas.php — CRUD para "Nuestros Programas" (imagen + acordeón dinámico)
  *
@@ -405,17 +405,17 @@ $token = csrf_token();
                                                             <?php endif; ?>
                                                         </td>
                                                         <td>
-                                                            <button type="button" class="btn btn-sm btn-outline-warning"
+                                                            <button type="button" class="btn btn-sm btn-action-edit"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#editModal<?= (int) $prog['id'] ?>"
                                                                     title="Editar">
                                                                 <i class="bi bi-pencil"></i> Editar
                                                             </button>
-                                                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                                            <button type="button" class="btn btn-sm btn-action-delete"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#deleteModal<?= (int) $prog['id'] ?>"
                                                                     title="Eliminar">
-                                                                <i class="bi bi-trash"></i>
+                                                                <i class="bi bi-trash3"></i>
                                                             </button>
                                                         </td>
                                                     </tr>
@@ -479,7 +479,7 @@ $token = csrf_token();
                                             <div class="edit-sections" data-prog-id="<?= (int) $prog['id'] ?>">
                                                 <?php foreach ($progSecciones as $sec): ?>
                                                     <div class="section-item">
-                                                        <button type="button" class="btn btn-sm btn-outline-danger remove-section" title="Eliminar sección">
+                                                        <button type="button" class="btn btn-sm btn-action-delete remove-section" title="Eliminar sección">
                                                             <i class="bi bi-x-lg"></i>
                                                         </button>
                                                         <div class="mb-2">
@@ -536,7 +536,7 @@ $token = csrf_token();
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                     <button type="submit" class="btn btn-danger">
-                                        <i class="bi bi-trash me-1"></i> Eliminar
+                                        <i class="bi bi-trash3 me-1"></i> Eliminar
                                     </button>
                                 </div>
                             </form>
@@ -570,7 +570,7 @@ $token = csrf_token();
         function createSectionHTML() {
             return `
                 <div class="section-item">
-                    <button type="button" class="btn btn-sm btn-outline-danger remove-section" title="Eliminar sección">
+                    <button type="button" class="btn btn-sm btn-action-delete remove-section" title="Eliminar sección">
                         <i class="bi bi-x-lg"></i>
                     </button>
                     <div class="mb-2">
@@ -631,3 +631,5 @@ $token = csrf_token();
     </script>
 </body>
 </html>
+
+

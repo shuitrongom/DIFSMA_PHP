@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/galeria.php — CRUD para Galería Fotográfica (Álbumes e Imágenes)
  *
@@ -527,9 +527,9 @@ $token = csrf_token();
                         </div>
 
                         <!-- Botón eliminar álbum -->
-                        <button type="button" class="btn btn-outline-danger w-100"
+                        <button type="button" class="btn btn-action-delete w-100"
                                 data-bs-toggle="modal" data-bs-target="#deleteAlbumModal">
-                            <i class="bi bi-trash me-1"></i> Eliminar álbum completo
+                            <i class="bi bi-trash3 me-1"></i> Eliminar álbum completo
                         </button>
                     </div>
 
@@ -559,10 +559,10 @@ $token = csrf_token();
                                                     <span class="position-absolute top-0 start-0 badge bg-dark m-1 orden-badge"><?= (int) $img['orden'] ?></span>
                                                 </div>
                                                 <div class="card-body p-1 text-center">
-                                                    <button type="button" class="btn btn-outline-danger btn-sm w-100"
+                                                    <button type="button" class="btn btn-sm btn-action-delete w-100"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#deleteImgModal<?= (int) $img['id'] ?>">
-                                                        <i class="bi bi-trash"></i>
+                                                        <i class="bi bi-trash3"></i>
                                                     </button>
                                                 </div>
                                             </div>
@@ -592,7 +592,7 @@ $token = csrf_token();
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                                             <button type="submit" class="btn btn-danger">
-                                                                <i class="bi bi-trash me-1"></i> Eliminar
+                                                                <i class="bi bi-trash3 me-1"></i> Eliminar
                                                             </button>
                                                         </div>
                                                     </form>
@@ -631,7 +631,7 @@ $token = csrf_token();
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                     <button type="submit" class="btn btn-danger">
-                                        <i class="bi bi-trash me-1"></i> Eliminar álbum
+                                        <i class="bi bi-trash3 me-1"></i> Eliminar álbum
                                     </button>
                                 </div>
                             </form>
@@ -743,11 +743,11 @@ $token = csrf_token();
                                                                class="btn btn-sm btn-outline-primary" title="Ver álbum">
                                                                 <i class="bi bi-eye"></i> Ver
                                                             </a>
-                                                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                                            <button type="button" class="btn btn-sm btn-action-delete"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#deleteAlbumListModal<?= (int) $album['id'] ?>"
                                                                     title="Eliminar">
-                                                                <i class="bi bi-trash"></i> Eliminar
+                                                                <i class="bi bi-trash3"></i> Eliminar
                                                             </button>
                                                         </td>
                                                     </tr>
@@ -776,7 +776,7 @@ $token = csrf_token();
                                                                     <div class="modal-footer">
                                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                                                         <button type="submit" class="btn btn-danger">
-                                                                            <i class="bi bi-trash me-1"></i> Eliminar
+                                                                            <i class="bi bi-trash3 me-1"></i> Eliminar
                                                                         </button>
                                                                     </div>
                                                                 </form>
@@ -850,3 +850,5 @@ $token = csrf_token();
     </style>
 </body>
 </html>
+
+

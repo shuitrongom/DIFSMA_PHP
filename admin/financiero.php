@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/financiero.php — CRUD para Financiero
  * Estructura: Bloques (año) → Conceptos con PDF directo
@@ -131,7 +131,7 @@ $token=csrf_token();
 <?php if($bloqueId>0 && $currentBloque): ?>
 <div class="d-flex justify-content-between align-items-center mb-3">
 <h5 class="mb-0"><i class="bi bi-calendar-event me-1"></i> Financiero <?=htmlspecialchars($currentBloque['anio'])?></h5>
-<button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteBlockModal"><i class="bi bi-trash me-1"></i> Eliminar bloque</button>
+<button type="button" class="btn btn-sm btn-action-delete" data-bs-toggle="modal" data-bs-target="#deleteBlockModal"><i class="bi bi-trash3 me-1"></i> Eliminar bloque</button>
 </div>
 <div class="card mb-4"><div class="card-header bg-success text-white"><i class="bi bi-plus-circle me-1"></i> Agregar concepto</div>
 <div class="card-body"><form method="POST" enctype="multipart/form-data" class="row g-2 align-items-end">
@@ -149,14 +149,14 @@ $token=csrf_token();
 <tr><td><?=(int)$c['numero']?></td><td class="text-start"><?=htmlspecialchars($c['nombre'])?></td>
 <td><?php if(!empty($c['pdf_path'])):?><span class="badge bg-success">Sí</span><?php else:?><span class="badge bg-secondary">No</span><?php endif;?></td>
 <td>
-<button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#eC<?=(int)$c['id']?>"><i class="bi bi-pencil"></i></button>
+<button class="btn btn-sm btn-action-edit" data-bs-toggle="modal" data-bs-target="#eC<?=(int)$c['id']?>"><i class="bi bi-pencil"></i></button>
 <?php if(empty($c['pdf_path'])):?><button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#uP<?=(int)$c['id']?>"><i class="bi bi-upload"></i></button>
 <?php else:?>
-<button type="button" class="btn btn-sm btn-outline-info pdf-trigger" data-bs-toggle="modal" data-bs-target="#pdfModal" data-pdf="../<?=htmlspecialchars($c['pdf_path'])?>"><i class="bi bi-eye"></i></button>
-<button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#uP<?=(int)$c['id']?>"><i class="bi bi-arrow-repeat"></i></button>
-<form method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar PDF?')"><input type="hidden" name="action" value="delete_pdf"><input type="hidden" name="bloque_id" value="<?=$bloqueId?>"><input type="hidden" name="concepto_id" value="<?=(int)$c['id']?>"><input type="hidden" name="csrf_token" value="<?=htmlspecialchars($token)?>"><button class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-earmark-x"></i></button></form>
+<button type="button" class="btn btn-sm btn-action-key pdf-trigger" data-bs-toggle="modal" data-bs-target="#pdfModal" data-pdf="../<?=htmlspecialchars($c['pdf_path'])?>"><i class="bi bi-eye"></i></button>
+<button class="btn btn-sm btn-action-edit" data-bs-toggle="modal" data-bs-target="#uP<?=(int)$c['id']?>"><i class="bi bi-arrow-repeat"></i></button>
+<form method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar PDF?')"><input type="hidden" name="action" value="delete_pdf"><input type="hidden" name="bloque_id" value="<?=$bloqueId?>"><input type="hidden" name="concepto_id" value="<?=(int)$c['id']?>"><input type="hidden" name="csrf_token" value="<?=htmlspecialchars($token)?>"><button class="btn btn-sm btn-action-pdf-delete"><i class="bi bi-file-earmark-x"></i> Eliminar PDF</button></form>
 <?php endif;?>
-<form method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar concepto?')"><input type="hidden" name="action" value="delete_concepto"><input type="hidden" name="bloque_id" value="<?=$bloqueId?>"><input type="hidden" name="concepto_id" value="<?=(int)$c['id']?>"><input type="hidden" name="csrf_token" value="<?=htmlspecialchars($token)?>"><button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button></form>
+<form method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar concepto?')"><input type="hidden" name="action" value="delete_concepto"><input type="hidden" name="bloque_id" value="<?=$bloqueId?>"><input type="hidden" name="concepto_id" value="<?=(int)$c['id']?>"><input type="hidden" name="csrf_token" value="<?=htmlspecialchars($token)?>"><button class="btn btn-sm btn-action-delete"><i class="bi bi-file-earmark-x"></i></button></form>
 </td></tr>
 <!-- Modal editar concepto -->
 <div class="modal fade" id="eC<?=(int)$c['id']?>" tabindex="-1" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><form method="POST"><input type="hidden" name="action" value="edit_concepto"><input type="hidden" name="bloque_id" value="<?=$bloqueId?>"><input type="hidden" name="concepto_id" value="<?=(int)$c['id']?>"><input type="hidden" name="csrf_token" value="<?=htmlspecialchars($token)?>"><div class="modal-header"><h5 class="modal-title">Editar concepto</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><label class="form-label">Nombre</label><input type="text" name="nombre" class="form-control" value="<?=htmlspecialchars($c['nombre'])?>" required></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-warning">Guardar</button></div></form></div></div></div>
@@ -244,3 +244,7 @@ if(window.innerWidth<=768)sidebar.classList.add('collapsed');
 document.getElementById('toggleSidebar').addEventListener('click',function(){sidebar.classList.toggle('collapsed');});
 var cb=document.getElementById('closeSidebar');if(cb)cb.addEventListener('click',function(){sidebar.classList.add('collapsed');});
 </script></body></html>
+
+
+
+

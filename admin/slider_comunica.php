@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/slider_comunica.php — CRUD para imágenes del Slider DIF Comunica
  * Organizado por mes: permite subir imágenes al mes actual y al siguiente.
@@ -377,8 +377,8 @@ $token = csrf_token();
                         <div>
                             <span class="badge bg-secondary"><?= count($slides) ?> imágenes</span>
                             <?php if (!empty($slides)): ?>
-                            <button type="button" class="btn btn-sm btn-outline-danger ms-2" data-bs-toggle="modal" data-bs-target="#deleteAllModal<?= $g_mes ?>_<?= $g_anio ?>">
-                                <i class="bi bi-trash me-1"></i> Eliminar todas
+                            <button type="button" class="btn btn-sm btn-action-delete ms-2" data-bs-toggle="modal" data-bs-target="#deleteAllModal<?= $g_mes ?>_<?= $g_anio ?>">
+                                <i class="bi bi-trash3 me-1"></i> Eliminar todas
                             </button>
                             <?php endif; ?>
                         </div>
@@ -406,13 +406,13 @@ $token = csrf_token();
                                         </div>
                                         <div class="card-body p-1 text-center">
                                             <div class="btn-group btn-group-sm w-100">
-                                                <button type="button" class="btn btn-outline-warning btn-sm"
+                                                <button type="button" class="btn btn-sm btn-action-edit"
                                                         data-bs-toggle="modal" data-bs-target="#editModal<?= (int) $slide['id'] ?>">
                                                     <i class="bi bi-pencil"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-outline-danger btn-sm"
+                                                <button type="button" class="btn btn-sm btn-action-delete"
                                                         data-bs-toggle="modal" data-bs-target="#deleteModal<?= (int) $slide['id'] ?>">
-                                                    <i class="bi bi-trash"></i>
+                                                    <i class="bi bi-trash3"></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -466,7 +466,7 @@ $token = csrf_token();
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1"></i> Eliminar</button>
+                                                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash3 me-1"></i> Eliminar</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -498,7 +498,7 @@ $token = csrf_token();
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1"></i> Eliminar todas</button>
+                                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash3 me-1"></i> Eliminar todas</button>
                                 </div>
                             </form>
                         </div>
@@ -566,3 +566,5 @@ $token = csrf_token();
     </style>
 </body>
 </html>
+
+

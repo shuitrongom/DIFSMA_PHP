@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * @author  Sergio Huitron Gomez
  * @project DIF San Mateo Atenco - Sistema de Gestion de Contenido
@@ -646,7 +646,7 @@ $filtros_qs = http_build_query([
 <button class="btn btn-outline-secondary me-2" id="toggleSidebar"><i class="bi bi-list"></i></button>
 <span class="navbar-brand mb-0 h6"><i class="bi bi-file-earmark-bar-graph me-1"></i> Reportes de Historial</span>
 <div class="ms-auto d-flex gap-2">
-<a href="logout.php" class="btn btn-sm btn-outline-danger"><i class="bi bi-box-arrow-right"></i> Salir</a>
+<a href="logout.php" class="btn btn-sm btn-action-delete"><i class="bi bi-box-arrow-right"></i> Salir</a>
 </div>
 </nav>
 

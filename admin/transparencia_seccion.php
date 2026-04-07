@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once __DIR__ . '/auth_guard.php';
 require_once __DIR__ . '/csrf.php';
 require_once __DIR__ . '/upload_handler.php';
@@ -76,7 +76,7 @@ $plN=['seac'=>'SEAC','cuenta_publica'=>'Cuenta Publica','presupuesto_anual'=>'Pr
         <span><i class="bi bi-bookmark-fill me-1"></i> <?= htmlspecialchars($titulo['nombre']) ?> <i class="bi bi-chevron-down ms-2 small"></i></span>
         <div onclick="event.stopPropagation()">
             <button type="button" class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#editT<?= (int)$titulo['id'] ?>"><i class="bi bi-pencil"></i></button>
-            <button type="button" class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#delT<?= (int)$titulo['id'] ?>"><i class="bi bi-trash"></i></button>
+            <button type="button" class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#delT<?= (int)$titulo['id'] ?>"><i class="bi bi-trash3"></i></button>
         </div>
     </div>
     <div class="collapse" id="pBody<?= (int)$titulo['id'] ?>"><div class="card-body">
@@ -93,8 +93,8 @@ $plN=['seac'=>'SEAC','cuenta_publica'=>'Cuenta Publica','presupuesto_anual'=>'Pr
             <td class="text-center"><?php if(!empty($pdf['pdf_path'])): ?><span class="badge bg-success">Si</span><?php else: ?><span class="badge bg-secondary">No</span><?php endif; ?></td>
             <td>
                 <?php if(empty($pdf['pdf_path'])): ?><form method="POST" enctype="multipart/form-data" action="<?= $baseUrl ?>" class="d-inline"><input type="hidden" name="action" value="upload_pdf"><input type="hidden" name="titulo_id" value="<?= (int)$titulo['id'] ?>"><input type="hidden" name="anio" value="<?= htmlspecialchars($pdf['anio']) ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>"><input type="file" name="pdf" accept=".pdf" required style="display:inline;width:auto;max-width:150px;" class="form-control-sm"><button class="btn btn-sm btn-outline-success"><i class="bi bi-upload"></i></button></form>
-                <?php else: ?><form method="POST" enctype="multipart/form-data" action="<?= $baseUrl ?>" class="d-inline"><input type="hidden" name="action" value="upload_pdf"><input type="hidden" name="titulo_id" value="<?= (int)$titulo['id'] ?>"><input type="hidden" name="anio" value="<?= htmlspecialchars($pdf['anio']) ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>"><input type="file" name="pdf" accept=".pdf" required style="display:inline;width:auto;max-width:150px;" class="form-control-sm"><button class="btn btn-sm btn-outline-info"><i class="bi bi-arrow-repeat"></i></button></form><?php endif; ?>
-                <form method="POST" action="<?= $baseUrl ?>" class="d-inline" onsubmit="return confirm('Eliminar?')"><input type="hidden" name="action" value="delete_anio"><input type="hidden" name="pdf_id" value="<?= (int)$pdf['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>"><button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button></form>
+                <?php else: ?><form method="POST" enctype="multipart/form-data" action="<?= $baseUrl ?>" class="d-inline"><input type="hidden" name="action" value="upload_pdf"><input type="hidden" name="titulo_id" value="<?= (int)$titulo['id'] ?>"><input type="hidden" name="anio" value="<?= htmlspecialchars($pdf['anio']) ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>"><input type="file" name="pdf" accept=".pdf" required style="display:inline;width:auto;max-width:150px;" class="form-control-sm"><button class="btn btn-sm btn-action-key"><i class="bi bi-arrow-repeat"></i></button></form><?php endif; ?>
+                <form method="POST" action="<?= $baseUrl ?>" class="d-inline" onsubmit="return confirm('Eliminar?')"><input type="hidden" name="action" value="delete_anio"><input type="hidden" name="pdf_id" value="<?= (int)$pdf['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>"><button class="btn btn-sm btn-action-delete"><i class="bi bi-trash3"></i></button></form>
             </td>
         </tr><?php endforeach; ?></tbody></table></div><?php endif; ?>
     </div></div>
@@ -125,7 +125,7 @@ $plN=['seac'=>'SEAC','cuenta_publica'=>'Cuenta Publica','presupuesto_anual'=>'Pr
 <?php foreach($mP as $p): ?><tr>
 <td><strong><?= $p['anio'] ?></strong></td>
 <td class="text-center"><?php if(!empty($p['pdf_path'])): ?><span class="badge bg-success">Si</span><?php else: ?><span class="badge bg-secondary">No</span><?php endif; ?></td>
-<td><form method="POST" action="<?= $baseUrl ?>" class="d-inline" onsubmit="return confirm('Eliminar?')"><input type="hidden" name="action" value="delete_pdf"><input type="hidden" name="pdf_id" value="<?= (int)$p['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>"><button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> Eliminar</button></form></td>
+<td><form method="POST" action="<?= $baseUrl ?>" class="d-inline" onsubmit="return confirm('Eliminar?')"><input type="hidden" name="action" value="delete_pdf"><input type="hidden" name="pdf_id" value="<?= (int)$p['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>"><button type="submit" class="btn btn-sm btn-action-pdf-delete"><i class="bi bi-file-earmark-x"></i> Eliminar</button></form></td>
 </tr><?php endforeach; ?></tbody></table><?php endif; ?></div></div></div></div>
 
 <?php elseif (in_array($plantilla, ['seac','conac','cuenta_publica','presupuesto_anual','financiero'])):
@@ -137,7 +137,7 @@ $plN=['seac'=>'SEAC','cuenta_publica'=>'Cuenta Publica','presupuesto_anual'=>'Pr
 <div class="d-flex justify-content-between align-items-center mb-3">
 <h5 class="mb-0"><i class="bi bi-calendar-event me-1"></i> Bloque <?= (int)$currentBloque['anio'] ?></h5>
 <div><a href="<?= $baseUrl ?>" class="btn btn-outline-secondary btn-sm me-1"><i class="bi bi-arrow-left me-1"></i> Volver</a>
-<form method="POST" action="<?= $baseUrl ?>" class="d-inline" onsubmit="return confirm('Eliminar bloque?')"><input type="hidden" name="action" value="delete_block"><input type="hidden" name="block_id" value="<?= (int)$currentBloque['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>"><button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash me-1"></i> Eliminar bloque</button></form></div></div>
+<form method="POST" action="<?= $baseUrl ?>" class="d-inline" onsubmit="return confirm('Eliminar bloque?')"><input type="hidden" name="action" value="delete_block"><input type="hidden" name="block_id" value="<?= (int)$currentBloque['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>"><button type="submit" class="btn btn-sm btn-action-delete"><i class="bi bi-trash3 me-1"></i> Eliminar bloque</button></form></div></div>
 <div class="card mb-3"><div class="card-header bg-success text-white"><i class="bi bi-plus-circle me-1"></i> Agregar concepto</div><div class="card-body">
 <form method="POST" <?= in_array($plantilla,['financiero','cuenta_publica'])?'enctype="multipart/form-data"':'' ?> action="<?= $baseUrl ?>&bloque_id=<?= $bloqueId ?>" class="row g-2 align-items-end">
 <input type="hidden" name="action" value="add_concepto"><input type="hidden" name="bloque_id" value="<?= $bloqueId ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
@@ -155,7 +155,7 @@ $plN=['seac'=>'SEAC','cuenta_publica'=>'Cuenta Publica','presupuesto_anual'=>'Pr
 <?php if(in_array($plantilla,['seac','conac'])):
     for($t=1;$t<=4;$t++):$cl=$bPM[(int)$c['id']][$t]??null; ?><td class="text-center">
 <?php if($cl&&!empty($cl['pdf_path'])): ?><a href="../<?= htmlspecialchars($cl['pdf_path']) ?>" target="_blank" class="btn btn-sm btn-outline-primary mb-1"><i class="bi bi-file-earmark-pdf me-1"></i>Ver</a>
-<form method="POST" action="<?= $baseUrl ?>&bloque_id=<?= $bloqueId ?>" class="d-inline" onsubmit="return confirm('Eliminar PDF?')"><input type="hidden" name="action" value="delete_pdf"><input type="hidden" name="pdf_id" value="<?= (int)$cl['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>"><button type="submit" class="btn btn-sm btn-outline-danger mb-1"><i class="bi bi-trash"></i></button></form><br><?php endif; ?>
+<form method="POST" action="<?= $baseUrl ?>&bloque_id=<?= $bloqueId ?>" class="d-inline" onsubmit="return confirm('Eliminar PDF?')"><input type="hidden" name="action" value="delete_pdf"><input type="hidden" name="pdf_id" value="<?= (int)$cl['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>"><button type="submit" class="btn btn-sm btn-action-pdf-delete mb-1"><i class="bi bi-file-earmark-x"></i> Eliminar PDF</button></form><br><?php endif; ?>
 <form method="POST" enctype="multipart/form-data" action="<?= $baseUrl ?>&bloque_id=<?= $bloqueId ?>"><input type="hidden" name="action" value="upload_pdf"><input type="hidden" name="concepto_id" value="<?= (int)$c['id'] ?>"><input type="hidden" name="trimestre" value="<?= $t ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
 <div class="input-group input-group-sm"><input type="file" class="form-control form-control-sm" name="pdf" accept=".pdf" required><button type="submit" class="btn btn-sm btn-success"><i class="bi bi-upload"></i></button></div></form></td>
 <?php endfor; ?>
@@ -164,11 +164,11 @@ $plN=['seac'=>'SEAC','cuenta_publica'=>'Cuenta Publica','presupuesto_anual'=>'Pr
 <form method="POST" enctype="multipart/form-data" action="<?= $baseUrl ?>&bloque_id=<?= $bloqueId ?>" class="row g-1 align-items-end mb-2"><input type="hidden" name="action" value="upload_pdf"><input type="hidden" name="concepto_id" value="<?= (int)$c['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
 <div class="col-4"><input type="number" class="form-control form-control-sm" name="anio" min="2000" max="<?= date('Y') ?>" placeholder="Anio" required></div><div class="col-5"><input type="file" class="form-control form-control-sm" name="pdf" accept=".pdf" required></div><div class="col-3"><button type="submit" class="btn btn-sm btn-success w-100"><i class="bi bi-upload"></i></button></div></form>
 <?php foreach(($bPC[(int)$c['id']]??[]) as $p): ?><div class="d-flex align-items-center gap-2 mb-1"><span class="badge bg-secondary"><?= $p['anio'] ?></span><a href="../<?= htmlspecialchars($p['pdf_path']) ?>" target="_blank" class="btn btn-sm btn-outline-success py-0"><i class="bi bi-file-pdf"></i></a>
-<form method="POST" action="<?= $baseUrl ?>&bloque_id=<?= $bloqueId ?>" class="d-inline" onsubmit="return confirm('Eliminar?')"><input type="hidden" name="action" value="delete_pdf"><input type="hidden" name="pdf_id" value="<?= (int)$p['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>"><button type="submit" class="btn btn-sm btn-outline-danger py-0"><i class="bi bi-trash"></i></button></form></div><?php endforeach; ?></td>
+<form method="POST" action="<?= $baseUrl ?>&bloque_id=<?= $bloqueId ?>" class="d-inline" onsubmit="return confirm('Eliminar?')"><input type="hidden" name="action" value="delete_pdf"><input type="hidden" name="pdf_id" value="<?= (int)$p['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>"><button type="submit" class="btn btn-sm btn-action-pdf-delete py-0"><i class="bi bi-file-earmark-x"></i> Eliminar PDF</button></form></div><?php endforeach; ?></td>
 <?php endif; ?>
 <td class="text-center">
 <button type="button" class="btn btn-sm btn-outline-primary mb-1" data-bs-toggle="modal" data-bs-target="#editC<?= (int)$c['id'] ?>"><i class="bi bi-pencil"></i></button>
-<form method="POST" action="<?= $baseUrl ?>&bloque_id=<?= $bloqueId ?>" class="d-inline" onsubmit="return confirm('Eliminar concepto y PDFs?')"><input type="hidden" name="action" value="delete_concepto"><input type="hidden" name="concepto_id" value="<?= (int)$c['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>"><button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button></form>
+<form method="POST" action="<?= $baseUrl ?>&bloque_id=<?= $bloqueId ?>" class="d-inline" onsubmit="return confirm('Eliminar concepto y PDFs?')"><input type="hidden" name="action" value="delete_concepto"><input type="hidden" name="concepto_id" value="<?= (int)$c['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>"><button type="submit" class="btn btn-sm btn-action-delete"><i class="bi bi-trash3"></i></button></form>
 </td></tr>
 <!-- Modal editar concepto -->
 <div class="modal fade" id="editC<?= (int)$c['id'] ?>" tabindex="-1" aria-hidden="true"><div class="modal-dialog"><div class="modal-content">
@@ -191,7 +191,7 @@ $plN=['seac'=>'SEAC','cuenta_publica'=>'Cuenta Publica','presupuesto_anual'=>'Pr
 <td><strong><?= (int)$bl['anio'] ?></strong></td>
 <td class="text-center"><span class="badge bg-secondary"><?= $cCount ?></span></td>
 <td><a href="<?= $baseUrl ?>&bloque_id=<?= (int)$bl['id'] ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye me-1"></i>Ver</a>
-<form method="POST" action="<?= $baseUrl ?>" class="d-inline" onsubmit="return confirm('Eliminar bloque y todo su contenido?')"><input type="hidden" name="action" value="delete_block"><input type="hidden" name="block_id" value="<?= (int)$bl['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>"><button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button></form></td>
+<form method="POST" action="<?= $baseUrl ?>" class="d-inline" onsubmit="return confirm('Eliminar bloque y todo su contenido?')"><input type="hidden" name="action" value="delete_block"><input type="hidden" name="block_id" value="<?= (int)$bl['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>"><button type="submit" class="btn btn-sm btn-action-delete"><i class="bi bi-trash3"></i></button></form></td>
 </tr><?php endforeach; ?></tbody></table><?php endif; ?></div></div></div></div>
 <?php endif; ?>
 <?php else: ?><div class="alert alert-warning">Plantilla no implementada.</div><?php endif; ?>
@@ -201,3 +201,7 @@ $plN=['seac'=>'SEAC','cuenta_publica'=>'Cuenta Publica','presupuesto_anual'=>'Pr
 <script>var sb=document.getElementById('sidebar');if(window.innerWidth<=768)sb.classList.add('collapsed');document.getElementById('toggleSidebar').addEventListener('click',function(){sb.classList.toggle('collapsed');});var cb=document.getElementById('closeSidebar');if(cb)cb.addEventListener('click',function(){sb.classList.add('collapsed');});</script>
 <style>@media(max-width:768px){.navbar-brand{font-size:12px!important;white-space:normal!important;word-break:break-word;line-height:1.4;}.navbar-brand .bi-chevron-right{display:none;}.navbar-brand small{display:block;margin-left:0!important;margin-top:4px;}}</style>
 </body></html>
+
+
+
+

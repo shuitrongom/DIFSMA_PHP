@@ -176,8 +176,7 @@ $token = csrf_token();
   <div class="input-group">
     <span class="input-group-text bg-white"><i class="bi bi-person text-secondary"></i></span>
     <input type="text" class="form-control" name="username" required placeholder="Ej: juan.perez" autocomplete="off">
-  </div>
-</div>
+  </div></div>
 
 <div class="mb-3">
   <label class="form-label fw-semibold">Nombre completo</label>
@@ -195,7 +194,7 @@ $token = csrf_token();
            placeholder="Crea una contraseña segura" autocomplete="new-password"
            oninput="checkReqs(this,'new_reqs','new_strength')">
     <button type="button" class="btn btn-outline-secondary" tabindex="-1"
-            onclick="toggleVer('new_password',this)" title="Mostrar/ocultar">
+            onclick="toggleVer('new_password',this)">
       <i class="bi bi-eye"></i>
     </button>
   </div>
@@ -308,7 +307,7 @@ $token = csrf_token();
 <div class="mb-3"><label class="form-label">Nueva contraseña</label>
 <div style="position:relative;">
     <input type="password" class="form-control pe-5 pass-input" name="new_password" required minlength="8" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
-    <button type="button" tabindex="-1" onclick="toggleVer(this.previousElementSibling,this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:#6c757d;padding:0;line-height:1;"><i class="bi bi-eye"></i></button>
+    <button type="button" tabindex="-1" onclick="toggleVer(this.previousElementSibling,this)" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;color:#9ca3af;padding:0;line-height:1;font-size:0.85rem;"><i class="bi bi-eye"></i></button>
 </div>
 <div class="strength-bar mt-1"></div>
 <ul class="pass-reqs list-unstyled mt-2 mb-1" style="font-size:12px;">

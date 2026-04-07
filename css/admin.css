@@ -479,16 +479,15 @@ body {
 }
 
 /* ── Card headers uniformes ───────────────────────────────────────────────────
-   Todos los card-header del admin usan fondo blanco con borde inferior rojo
-   en lugar de colores Bootstrap inconsistentes
+   Solo aplica a card-headers sin clase de color explícita
    ─────────────────────────────────────────────────────────────────────────── */
-.card-header {
-    background: #fff !important;
-    color: #2d2d2d !important;
-    border-bottom: 2px solid #f0f0f0 !important;
+.card-header:not([class*="bg-"]) {
+    background: #fff;
+    color: #2d2d2d;
+    border-bottom: 1px solid #f0f0f0;
     font-size: 0.9rem;
 }
-.card-header i { color: rgb(200,16,44); }
+.card-header:not([class*="bg-"]) i { color: rgb(200,16,44); }
 
 /* Card headers con acento rojo explícito (formularios de alta) */
 .card-header.card-header-accent {
@@ -516,19 +515,18 @@ body {
 }
 
 /* ── Normalizar card-header bg-primary en todo el admin ──────────────────────
-   En lugar de azul Bootstrap, usa el estilo limpio con acento rojo izquierdo
+   Mantiene el fondo rojo institucional, solo corrige el color de Bootstrap
    ─────────────────────────────────────────────────────────────────────────── */
 .card-header.bg-primary,
 .card-header.bg-primary.text-white {
-    background: #fff !important;
-    color: #2d2d2d !important;
-    border-bottom: 2px solid #f0f0f0 !important;
-    border-left: 3px solid rgb(200,16,44) !important;
+    background: rgb(200,16,44) !important;
+    color: #fff !important;
+    border-bottom: none !important;
     border-radius: 12px 12px 0 0 !important;
 }
 .card-header.bg-primary i,
 .card-header.bg-primary.text-white i {
-    color: rgb(200,16,44) !important;
+    color: #fff !important;
 }
 
 /* ── Normalizar btn-outline-info (usado para acciones secundarias) ────────────
@@ -597,6 +595,8 @@ body {
     background: #9f1239 !important;
     border-color: #9f1239 !important;
 }
+
+/* btn-outline-danger en tablas/cards: fondo rosa suave */
 .btn-outline-danger {
     color: #be123c !important;
     border-color: #fecdd3 !important;
@@ -608,4 +608,357 @@ body {
     background: #be123c !important;
     border-color: #be123c !important;
     color: #fff !important;
+}
+
+/* btn-outline-danger en el navbar oscuro: texto blanco, borde blanco semitransparente */
+.main-content > .navbar .btn-outline-danger {
+    color: #fff !important;
+    border-color: rgba(255,255,255,0.35) !important;
+    background: transparent !important;
+}
+.main-content > .navbar .btn-outline-danger:hover {
+    background: rgb(200,16,44) !important;
+    border-color: rgb(200,16,44) !important;
+    color: #fff !important;
+}
+
+/* Cerrar sesión en el sidebar: igual que navbar */
+.sidebar .btn-outline-light {
+    color: rgba(255,255,255,0.85) !important;
+    border-color: rgba(255,255,255,0.25) !important;
+    background: transparent !important;
+}
+.sidebar .btn-outline-light:hover {
+    background: rgba(255,255,255,0.1) !important;
+    color: #fff !important;
+}
+
+/* ── Input file personalizado ─────────────────────────────────────────────────
+   Reemplaza el input nativo feo por un área de carga limpia y profesional
+   ─────────────────────────────────────────────────────────────────────────── */
+input[type="file"].form-control {
+    padding: 0;
+    border: 1.5px dashed #d1d5db;
+    border-radius: 8px;
+    background: #fafafa;
+    cursor: pointer;
+    overflow: hidden;
+    font-size: 0.875rem;
+    color: #6b7280;
+    transition: border-color 0.2s, background 0.2s;
+}
+input[type="file"].form-control:hover {
+    border-color: rgb(200,16,44);
+    background: #fff5f5;
+}
+input[type="file"].form-control:focus {
+    border-color: rgb(200,16,44);
+    box-shadow: 0 0 0 3px rgba(200,16,44,0.1);
+    outline: none;
+}
+input[type="file"].form-control::file-selector-button {
+    padding: 0.45rem 1rem;
+    margin: 0;
+    background: #f3f4f6;
+    border: none;
+    border-right: 1.5px solid #d1d5db;
+    color: #374151;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    height: 100%;
+}
+input[type="file"].form-control::file-selector-button:hover {
+    background: rgb(200,16,44);
+    color: #fff;
+    border-right-color: rgb(200,16,44);
+}
+
+/* ── Botones de acción en tablas — tamaño uniforme ────────────────────────────
+   Todos los botones de acción tienen el mismo ancho mínimo para verse iguales
+   ─────────────────────────────────────────────────────────────────────────── */
+.btn-action-edit,
+.btn-action-key,
+.btn-action-pause,
+.btn-action-play,
+.btn-action-delete {
+    min-width: 90px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+/* Columna de acciones en tablas — flex vertical para apilar botones */
+td .btn-action-edit + .btn-action-delete,
+td .btn-action-edit + .btn-action-key,
+td .btn-action-edit + .mt-1 {
+    margin-top: 4px;
+}
+
+/* ── Footer links table — responsiva sin scroll horizontal ───────────────────*/
+.footer-links-wrapper {
+    width: 100%;
+    overflow: hidden;
+}
+.footer-links-table {
+    width: 100%;
+    table-layout: fixed;
+}
+.footer-links-table th:nth-child(1),
+.footer-links-table td:nth-child(1) { width: 52px; }
+.footer-links-table th:nth-child(2),
+.footer-links-table td:nth-child(2) { width: 22%; }
+.footer-links-table th:nth-child(3),
+.footer-links-table td:nth-child(3) { width: auto; overflow: hidden; }
+.footer-links-table th:nth-child(4),
+.footer-links-table td:nth-child(4) { width: 72px; }
+.footer-links-table th:nth-child(5),
+.footer-links-table td:nth-child(5) { width: 170px; }
+
+/* En tablet: ocultar columna URL, mostrar solo lo esencial */
+@media (max-width: 991px) {
+    .footer-links-table th:nth-child(3),
+    .footer-links-table td:nth-child(3) { display: none; }
+    .footer-links-table th:nth-child(5),
+    .footer-links-table td:nth-child(5) { width: 140px; }
+}
+
+/* En móvil: convertir tabla en cards apiladas */
+@media (max-width: 640px) {
+    .footer-links-table thead { display: none; }
+    .footer-links-table,
+    .footer-links-table tbody,
+    .footer-links-table tr,
+    .footer-links-table td { display: block; width: 100%; }
+    .footer-links-table tr {
+        border-bottom: 1px solid #f0f0f0;
+        padding: 10px 16px;
+    }
+    .footer-links-table td {
+        padding: 3px 0;
+        border: none;
+        font-size: 0.85rem;
+    }
+    .footer-links-table td::before {
+        content: attr(data-label) ": ";
+        font-weight: 600;
+        color: #6b7280;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        margin-right: 4px;
+    }
+    .footer-links-table td:nth-child(3) { display: block; }
+    .footer-links-table td[data-label="Acciones"]::before { display: none; }
+    .footer-links-table td[data-label="Acciones"] { padding-top: 8px; }
+}
+
+/* ── Tooltips en botones de acción ───────────────────────────────────────────*/
+.btn-action-edit,
+.btn-action-key,
+.btn-action-pause,
+.btn-action-play,
+.btn-action-delete {
+    position: relative;
+}
+.btn-action-edit::after,
+.btn-action-key::after,
+.btn-action-pause::after,
+.btn-action-play::after,
+.btn-action-delete::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1f2937;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 5px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+    z-index: 9999;
+    letter-spacing: 0.2px;
+}
+.btn-action-edit::before,
+.btn-action-key::before,
+.btn-action-pause::before,
+.btn-action-play::before,
+.btn-action-delete::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 1px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #1f2937;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+    z-index: 9999;
+}
+.btn-action-edit:hover::after,
+.btn-action-edit:hover::before,
+.btn-action-key:hover::after,
+.btn-action-key:hover::before,
+.btn-action-pause:hover::after,
+.btn-action-pause:hover::before,
+.btn-action-play:hover::after,
+.btn-action-play:hover::before,
+.btn-action-delete:hover::after,
+.btn-action-delete:hover::before {
+    opacity: 1;
+}
+
+/* ── Botón eliminar PDF — naranja discreto ────────────────────────────────────*/
+.btn-action-pdf-delete {
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 0.3rem 0.7rem;
+    border-radius: 6px;
+    border: 1px solid #fed7aa;
+    background: #fff7ed;
+    color: #c2410c;
+    transition: all 0.18s ease;
+    white-space: nowrap;
+    line-height: 1.4;
+    min-width: 90px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    position: relative;
+}
+.btn-action-pdf-delete:hover {
+    background: #c2410c;
+    color: #fff;
+    border-color: #c2410c;
+}
+
+/* ── Input groups en formularios — iconos discretos ──────────────────────────*/
+.input-group .input-group-text {
+    background: #f8f9fa;
+    border-color: #dee2e6;
+    color: #9ca3af;
+    font-size: 0.85rem;
+    padding: 0.375rem 0.65rem;
+    min-width: unset;
+    width: auto;
+}
+.input-group .input-group-text i {
+    font-size: 0.85rem;
+    color: #9ca3af !important;
+}
+
+/* Botón ojo (ver/ocultar contraseña) — pequeño y discreto */
+.input-group .btn.btn-outline-secondary {
+    padding: 0.375rem 0.65rem;
+    font-size: 0.85rem;
+    border-color: #dee2e6;
+    background: #f8f9fa;
+    color: #9ca3af;
+    min-width: unset;
+    width: auto;
+    flex: 0 0 auto;
+}
+.input-group .btn.btn-outline-secondary:hover {
+    background: #e9ecef;
+    color: #495057;
+    border-color: #dee2e6;
+}
+.input-group .btn.btn-outline-secondary i {
+    font-size: 0.85rem;
+}
+
+/* ── Input con ícono integrado — estilo profesional ──────────────────────────
+   El input-group-text queda sin borde propio, fusionado visualmente con el input
+   ─────────────────────────────────────────────────────────────────────────── */
+.input-group:not(.input-group-file) {
+    position: relative;
+    flex-wrap: nowrap;
+}
+
+/* Quitar borde derecho del input-group-text para que se fusione con el input */
+.input-group:not(.input-group-file) > .input-group-text {
+    background: transparent;
+    border: 1.5px solid #dee2e6;
+    border-right: none;
+    border-radius: 8px 0 0 8px;
+    padding: 0.45rem 0.7rem;
+    color: #9ca3af;
+    font-size: 0.88rem;
+    transition: border-color 0.2s;
+}
+
+/* Quitar borde izquierdo del input para que se fusione con el ícono */
+.input-group:not(.input-group-file) > .form-control:not(:first-child),
+.input-group:not(.input-group-file) > .form-select:not(:first-child) {
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+    padding-left: 0.5rem;
+}
+
+/* Cuando el input tiene foco, colorear también el ícono */
+.input-group:not(.input-group-file):focus-within > .input-group-text {
+    border-color: rgb(200,16,44);
+    color: rgb(200,16,44);
+}
+.input-group:not(.input-group-file):focus-within > .form-control,
+.input-group:not(.input-group-file):focus-within > .form-select {
+    border-color: rgb(200,16,44);
+    box-shadow: none;
+}
+
+/* Input con ícono + botón al final (contraseña) */
+.input-group:not(.input-group-file) > .form-control:not(:first-child):not(:last-child) {
+    border-radius: 0;
+}
+.input-group:not(.input-group-file) > .btn:last-child {
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+    border: 1.5px solid #dee2e6;
+    border-left: none;
+    background: transparent;
+    color: #9ca3af;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.85rem;
+    transition: color 0.2s, border-color 0.2s;
+}
+.input-group:not(.input-group-file) > .btn:last-child:hover {
+    color: rgb(200,16,44);
+    background: transparent;
+    border-color: rgb(200,16,44);
+}
+.input-group:not(.input-group-file):focus-within > .btn:last-child {
+    border-color: rgb(200,16,44);
+}
+
+/* Estado inválido */
+.input-group:not(.input-group-file):has(.is-invalid) > .input-group-text {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+/* ── Altura y padding uniforme para todos los inputs del admin ───────────────*/
+.form-control,
+.form-select {
+    padding: 0.45rem 0.75rem;
+    font-size: 0.9rem;
+    height: auto;
+    min-height: 42px;
+}
+.form-control::placeholder {
+    color: #c0c5cc;
+    font-style: italic;
+}
+
+/* Quitar fondo gris del input-group-text — siempre transparente */
+.input-group-text {
+    background: transparent !important;
 }

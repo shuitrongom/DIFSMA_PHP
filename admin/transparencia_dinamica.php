@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/transparencia_dinamica.php — Gestión de secciones dinámicas de Transparencia
  * Permite crear nuevas secciones eligiendo una plantilla (SEAC, Cuenta Pública, etc.)
@@ -178,12 +178,12 @@ $token = csrf_token();
                                             </form>
                                         </td>
                                         <td>
-                                            <a href="transparencia_seccion.php?id=<?= (int)$sec['id'] ?>" class="btn btn-sm btn-outline-danger"><i class="bi bi-pencil"></i> Gestionar</a>
+                                            <a href="transparencia_seccion.php?id=<?= (int)$sec['id'] ?>" class="btn btn-sm btn-action-delete"><i class="bi bi-pencil"></i> Gestionar</a>
                                             <form method="POST" action="transparencia_dinamica.php" class="d-inline" onsubmit="return confirm('¿Eliminar esta sección y todo su contenido?')">
                                                 <input type="hidden" name="action" value="delete">
                                                 <input type="hidden" name="id" value="<?= (int)$sec['id'] ?>">
                                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
-                                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                                <button type="submit" class="btn btn-sm btn-action-delete"><i class="bi bi-trash3"></i></button>
                                             </form>
                                         </td>
                                     </tr>
@@ -209,3 +209,5 @@ $token = csrf_token();
 </script>
 </body>
 </html>
+
+

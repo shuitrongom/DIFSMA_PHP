@@ -179,5 +179,6 @@ function render_admin_sidebar(array $sidebar_groups, string $current_file): void
     resetTimer();
 })();
 </script>
+<script src="../js/admin-tooltips.js"></script>
 <?php
 }

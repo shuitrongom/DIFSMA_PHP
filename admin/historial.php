@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * @author  Sergio Huitron Gomez
  * @copyright 2025-2026 Sergio Huitron Gomez. Todos los derechos reservados.
@@ -101,7 +101,7 @@ require_once __DIR__ . '/sidebar_sections.php';
 <span class="navbar-brand mb-0 h6"><i class="bi bi-clock-history me-1"></i> Historial de Actividad</span>
 <div class="ms-auto d-flex gap-2">
 <button onclick="window.print()" class="btn btn-sm btn-outline-secondary"><i class="bi bi-printer me-1"></i> Imprimir Reporte</button>
-<a href="logout.php" class="btn btn-sm btn-outline-danger"><i class="bi bi-box-arrow-right"></i> Salir</a>
+<a href="logout.php" class="btn btn-sm btn-action-delete"><i class="bi bi-box-arrow-right"></i> Salir</a>
 </div>
 </nav>
 
@@ -164,7 +164,7 @@ require_once __DIR__ . '/sidebar_sections.php';
 <?php if (($_SESSION['admin_rol'] ?? '') === 'admin'): ?>
 <form method="POST" action="historial.php" class="d-inline no-print" onsubmit="return confirm('Eliminar TODO el historial?')">
 <input type="hidden" name="action" value="clear_all"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
-<button type="submit" class="btn btn-sm btn-outline-light"><i class="bi bi-trash me-1"></i> Limpiar todo</button>
+<button type="submit" class="btn btn-sm btn-outline-light"><i class="bi bi-trash3 me-1"></i> Limpiar todo</button>
 </form>
 <?php endif; ?>
 </div>
@@ -198,7 +198,7 @@ require_once __DIR__ . '/sidebar_sections.php';
 <?php if (($_SESSION['admin_rol'] ?? '') === 'admin'): ?>
 <form method="POST" action="historial.php?<?= http_build_query($_GET) ?>" class="d-inline" onsubmit="return confirm('Eliminar?')">
 <input type="hidden" name="action" value="delete_log"><input type="hidden" name="log_id" value="<?= (int)$r['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
-<button type="submit" class="btn btn-sm btn-outline-danger py-0"><i class="bi bi-trash"></i></button>
+<button type="submit" class="btn btn-sm btn-action-delete py-0"><i class="bi bi-trash3"></i></button>
 </form>
 <?php endif; ?>
 </td>
@@ -231,3 +231,4 @@ require_once __DIR__ . '/sidebar_sections.php';
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>var sb=document.getElementById('sidebar');if(window.innerWidth<=768)sb.classList.add('collapsed');document.getElementById('toggleSidebar').addEventListener('click',function(){sb.classList.toggle('collapsed');});var cb=document.getElementById('closeSidebar');if(cb)cb.addEventListener('click',function(){sb.classList.add('collapsed');});</script>
 </body></html>
+

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/direcciones.php — Gestión de Direcciones por departamento
  *
@@ -391,26 +391,25 @@ $token = csrf_token();
                                                 <td><?= htmlspecialchars($dir['cargo'], ENT_QUOTES, 'UTF-8') ?></td>
                                                 <td class="text-center"><?= (int) $dir['orden'] ?></td>
                                                 <td>
-                                                    <button type="button" class="btn btn-sm btn-outline-warning"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#editModal<?= (int) $dir['id'] ?>"
-                                                            title="Editar">
-                                                        <i class="bi bi-pencil"></i> Editar
-                                                    </button>
-                                                    <?php if ($hasCustomImage): ?>
-                                                        <button type="button" class="btn btn-sm btn-outline-danger"
+                                                    <div class="d-flex flex-column gap-1" style="min-width:110px;">
+                                                        <button type="button" class="btn btn-sm btn-action-edit"
                                                                 data-bs-toggle="modal"
-                                                                data-bs-target="#deleteImgModal<?= (int) $dir['id'] ?>"
-                                                                title="Eliminar imagen">
-                                                            <i class="bi bi-trash"></i> Quitar imagen
+                                                                data-bs-target="#editModal<?= (int) $dir['id'] ?>">
+                                                            <i class="bi bi-pencil"></i> Editar
                                                         </button>
-                                                    <?php endif; ?>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#deleteModal<?= (int) $dir['id'] ?>"
-                                                            title="Eliminar departamento">
-                                                        <i class="bi bi-x-circle"></i> Eliminar
-                                                    </button>
+                                                        <?php if ($hasCustomImage): ?>
+                                                        <button type="button" class="btn btn-sm btn-action-key"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#deleteImgModal<?= (int) $dir['id'] ?>">
+                                                            <i class="bi bi-image-x"></i> Quitar imagen
+                                                        </button>
+                                                        <?php endif; ?>
+                                                        <button type="button" class="btn btn-sm btn-action-delete"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#deleteModal<?= (int) $dir['id'] ?>">
+                                                            <i class="bi bi-trash3"></i> Eliminar
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
 
@@ -520,7 +519,7 @@ $token = csrf_token();
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                                                 <button type="submit" class="btn btn-danger">
-                                                                    <i class="bi bi-trash me-1"></i> Eliminar imagen
+                                                                    <i class="bi bi-trash3 me-1"></i> Eliminar imagen
                                                                 </button>
                                                             </div>
                                                         </form>

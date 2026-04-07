@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/tramites.php — Gestión de Trámites y Servicios
  * Permite crear, editar y eliminar trámites dinámicamente.
@@ -284,8 +284,10 @@ $token = csrf_token();
                                     <td class="text-start"><?= htmlspecialchars($tramite['titulo']) ?></td>
                                     <td><small class="text-muted"><?= htmlspecialchars($tramite['updated_at'] ?? '—') ?></small></td>
                                     <td>
-                                        <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editM<?= (int)$tramite['id'] ?>"><i class="bi bi-pencil"></i> Editar</button>
-                                        <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delM<?= (int)$tramite['id'] ?>"><i class="bi bi-trash"></i></button>
+                                        <div class="d-flex flex-column gap-1" style="min-width:100px;">
+                                            <button class="btn btn-sm btn-action-edit" data-bs-toggle="modal" data-bs-target="#editM<?= (int)$tramite['id'] ?>"><i class="bi bi-pencil"></i> Editar</button>
+                                            <button class="btn btn-sm btn-action-delete" data-bs-toggle="modal" data-bs-target="#delM<?= (int)$tramite['id'] ?>"><i class="bi bi-trash3"></i> Eliminar</button>
+                                        </div>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -370,7 +372,7 @@ $token = csrf_token();
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1"></i> Eliminar</button>
+                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash3 me-1"></i> Eliminar</button>
                 </div>
             </form>
         </div>

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/slider_principal.php — CRUD para imágenes del Slider Principal
  *
@@ -287,19 +287,15 @@ $token = csrf_token();
                                                             <?php endif; ?>
                                                         </td>
                                                         <td>
-                                                            <!-- Botón Editar (abre modal) -->
-                                                            <button type="button" class="btn btn-sm btn-outline-warning"
+                                                            <button type="button" class="btn btn-sm btn-action-edit"
                                                                     data-bs-toggle="modal"
-                                                                    data-bs-target="#editModal<?= (int) $slide['id'] ?>"
-                                                                    title="Editar">
+                                                                    data-bs-target="#editModal<?= (int) $slide['id'] ?>">
                                                                 <i class="bi bi-pencil"></i> Editar
                                                             </button>
-                                                            <!-- Botón Eliminar (abre modal de confirmación) -->
-                                                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                                            <button type="button" class="btn btn-sm btn-action-delete mt-1"
                                                                     data-bs-toggle="modal"
-                                                                    data-bs-target="#deleteModal<?= (int) $slide['id'] ?>"
-                                                                    title="Eliminar">
-                                                                <i class="bi bi-trash"></i> Eliminar
+                                                                    data-bs-target="#deleteModal<?= (int) $slide['id'] ?>">
+                                                                <i class="bi bi-trash3"></i> Eliminar
                                                             </button>
                                                         </td>
                                                     </tr>
@@ -363,7 +359,7 @@ $token = csrf_token();
                                                                     <div class="modal-footer">
                                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                                                         <button type="submit" class="btn btn-danger">
-                                                                            <i class="bi bi-trash me-1"></i> Eliminar
+                                                                            <i class="bi bi-trash3 me-1"></i> Eliminar
                                                                         </button>
                                                                     </div>
                                                                 </form>

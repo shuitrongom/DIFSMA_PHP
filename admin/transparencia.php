@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/transparencia.php — CRUD para entradas de Transparencia del index
  *
@@ -408,17 +408,17 @@ $token = csrf_token();
                                                             <?php endif; ?>
                                                         </td>
                                                         <td>
-                                                            <button type="button" class="btn btn-sm btn-outline-warning"
+                                                            <button type="button" class="btn btn-sm btn-action-edit"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#editModal<?= (int) $item['id'] ?>"
                                                                     title="Editar">
                                                                 <i class="bi bi-pencil"></i> Editar
                                                             </button>
-                                                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                                            <button type="button" class="btn btn-sm btn-action-delete"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#deleteModal<?= (int) $item['id'] ?>"
                                                                     title="Eliminar">
-                                                                <i class="bi bi-trash"></i>
+                                                                <i class="bi bi-trash3"></i>
                                                             </button>
                                                         </td>
                                                     </tr>
@@ -535,7 +535,7 @@ $token = csrf_token();
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                     <button type="submit" class="btn btn-danger">
-                                        <i class="bi bi-trash me-1"></i> Eliminar
+                                        <i class="bi bi-trash3 me-1"></i> Eliminar
                                     </button>
                                 </div>
                             </form>
@@ -577,3 +577,5 @@ $token = csrf_token();
     </script>
 </body>
 </html>
+
+

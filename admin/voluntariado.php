@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/voluntariado.php — Gestión de la página de Voluntariado
  */
@@ -225,7 +225,7 @@ $token = csrf_token();
                                 <form method="POST" action="voluntariado.php" class="d-inline" onsubmit="return confirm('¿Eliminar el logo?')">
                                     <input type="hidden" name="action" value="delete_logo">
                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger mt-1"><i class="bi bi-trash me-1"></i> Eliminar logo</button>
+                                    <button type="submit" class="btn btn-sm btn-action-delete mt-1"><i class="bi bi-trash3 me-1"></i> Eliminar logo</button>
                                 </form>
                             </div>
                         </div>
@@ -294,7 +294,7 @@ $token = csrf_token();
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <div><i class="bi bi-images me-1"></i> Galería de fotos <span class="badge bg-secondary ms-1"><?= count($imagenes) ?></span></div>
                         <?php if (!empty($imagenes)): ?>
-                        <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteAllModal"><i class="bi bi-trash me-1"></i> Eliminar todas</button>
+                        <button type="button" class="btn btn-sm btn-action-delete" data-bs-toggle="modal" data-bs-target="#deleteAllModal"><i class="bi bi-trash3 me-1"></i> Eliminar todas</button>
                         <?php endif; ?>
                     </div>
                     <div class="card-body">
@@ -328,7 +328,7 @@ $token = csrf_token();
                                             <input type="hidden" name="action" value="delete_image">
                                             <input type="hidden" name="image_id" value="<?= (int)$img['id'] ?>">
                                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
-                                            <button type="submit" class="btn btn-outline-danger btn-sm w-100"><i class="bi bi-trash"></i></button>
+                                            <button type="submit" class="btn btn-sm btn-action-delete w-100"><i class="bi bi-trash3"></i></button>
                                         </form>
                                     </div>
                                 </div>
@@ -349,7 +349,7 @@ $token = csrf_token();
                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                                 <div class="modal-header"><h5 class="modal-title text-danger"><i class="bi bi-exclamation-triangle me-1"></i> Eliminar todas</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
                                 <div class="modal-body"><p>¿Eliminar las <strong><?= count($imagenes) ?></strong> imágenes? Esta acción no se puede deshacer.</p></div>
-                                <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1"></i> Eliminar todas</button></div>
+                                <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-danger"><i class="bi bi-trash3 me-1"></i> Eliminar todas</button></div>
                             </form>
                         </div>
                     </div>
@@ -393,3 +393,5 @@ $token = csrf_token();
     <style>.sortable-ghost{opacity:.4;}.sortable-item{transition:transform .15s;}</style>
 </body>
 </html>
+
+

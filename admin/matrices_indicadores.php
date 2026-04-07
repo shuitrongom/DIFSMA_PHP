@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/matrices_indicadores.php — CRUD Matrices de Indicadores
  * Años con PDFs
@@ -191,17 +191,17 @@ $token = csrf_token();
                             <td><strong><?= htmlspecialchars($r['anio']) ?></strong></td>
                             <td class="text-center"><?php if (!empty($r['pdf_path'])): ?><span class="badge bg-success">Sí</span><?php else: ?><span class="badge bg-secondary">No</span><?php endif; ?></td>
                             <td>
-                                <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editAnio<?= (int)$r['id'] ?>"><i class="bi bi-pencil"></i></button>
+                                <button class="btn btn-sm btn-action-edit" data-bs-toggle="modal" data-bs-target="#editAnio<?= (int)$r['id'] ?>"><i class="bi bi-pencil"></i></button>
                                 <?php if (empty($r['pdf_path'])): ?>
                                 <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#upPdf<?= (int)$r['id'] ?>"><i class="bi bi-upload"></i> Subir PDF</button>
                                 <?php else: ?>
-                                <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#upPdf<?= (int)$r['id'] ?>"><i class="bi bi-arrow-repeat"></i> Cambiar PDF</button>
+                                <button class="btn btn-sm btn-action-key" data-bs-toggle="modal" data-bs-target="#upPdf<?= (int)$r['id'] ?>"><i class="bi bi-arrow-repeat"></i> Cambiar PDF</button>
                                 <?php endif; ?>
                                 <form method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar este año y su PDF?')">
                                     <input type="hidden" name="action" value="delete_anio">
                                     <input type="hidden" name="pdf_id" value="<?= (int)$r['id'] ?>">
                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
-                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                    <button class="btn btn-sm btn-action-delete"><i class="bi bi-trash3"></i></button>
                                 </form>
                             </td>
                         </tr>
@@ -251,3 +251,7 @@ var cb=document.getElementById('closeSidebar');if(cb)cb.addEventListener('click'
 </script>
 </body>
 </html>
+
+
+
+
