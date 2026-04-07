@@ -572,11 +572,9 @@ if ($action === 'excel') {
         exit;
         
     } catch (\Exception $e) {
-        if (defined('APP_DEBUG') && APP_DEBUG) {
-            error_log('reportes_historial Excel error: ' . $e->getMessage());
-        }
+        error_log('reportes_historial Excel error: ' . $e->getMessage());
         http_response_code(500);
-        echo '<!DOCTYPE html><html><body style="font-family:sans-serif;padding:20px;"><h2>Error al generar el Excel</h2><p>Ocurrió un error interno. Por favor intenta de nuevo.</p><a href="reportes_historial.php">Volver</a></body></html>';
+        echo '<!DOCTYPE html><html><body style="font-family:sans-serif;padding:20px;"><h2>Error al generar el Excel</h2><p><strong>' . htmlspecialchars($e->getMessage()) . '</strong></p><a href="reportes_historial.php">Volver</a></body></html>';
         exit;
     }
 }
