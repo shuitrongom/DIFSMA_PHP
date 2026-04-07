@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/slider_principal.php — CRUD para imágenes del Slider Principal
  *

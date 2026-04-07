@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * @author  Sergio Huitron Gomez
  * @project DIF San Mateo Atenco - Sistema de Gestion de Contenido

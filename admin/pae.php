@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/pae.php — CRUD para PAE (Programa Anual de Evaluación)
  * Títulos dinámicos × años con PDFs

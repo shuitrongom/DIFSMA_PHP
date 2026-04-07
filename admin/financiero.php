@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/financiero.php — CRUD para Financiero
  * Estructura: Bloques (año) → Conceptos con PDF directo

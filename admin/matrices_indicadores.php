@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/matrices_indicadores.php — CRUD Matrices de Indicadores
  * Años con PDFs

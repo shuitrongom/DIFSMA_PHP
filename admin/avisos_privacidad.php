@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/avisos_privacidad.php — CRUD para Avisos de Privacidad
  * Gestiona: texto del aviso + botones con PDF

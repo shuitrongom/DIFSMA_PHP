@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/seac.php — CRUD para SEAC (Bloques por año, Conceptos por bloque, PDFs)
  */

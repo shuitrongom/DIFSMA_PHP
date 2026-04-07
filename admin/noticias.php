@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/noticias.php — CRUD para imágenes de Noticias por Día
  *

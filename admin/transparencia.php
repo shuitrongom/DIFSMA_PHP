@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/transparencia.php — CRUD para entradas de Transparencia del index
  *

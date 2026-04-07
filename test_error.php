@@ -1,26 +1,31 @@
 <?php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-session_start();
 
-echo "session_id: " . session_id() . "<br>";
-echo "session_save_path: " . session_save_path() . "<br>";
-echo "admin_logged: " . var_export($_SESSION['admin_logged'] ?? 'NO EXISTE', true) . "<br>";
-echo "last_activity: " . var_export($_SESSION['last_activity'] ?? 'NO EXISTE', true) . "<br>";
-echo "Tiempo actual: " . time() . "<br>";
+// Mostrar fecha de modificación de archivos clave
+$files = [
+    'admin/slider_principal.php',
+    'admin/noticias.php', 
+    'admin/galeria.php',
+    'css/admin.css',
+    'js/admin-tooltips.js',
+];
 
-if (isset($_SESSION['last_activity'])) {
-    $diff = time() - $_SESSION['last_activity'];
-    echo "Segundos desde última actividad: {$diff}<br>";
-    echo "Timeout configurado: 300 segundos<br>";
-    if ($diff > 300) {
-        echo "<strong style='color:red'>SESIÓN EXPIRADA — esto causa la página en blanco</strong><br>";
+foreach ($files as $f) {
+    $path = __DIR__ . '/' . $f;
+    if (file_exists($path)) {
+        $mtime = date('Y-m-d H:i:s', filemtime($path));
+        $size  = filesize($path);
+        // Verificar BOM
+        $fh    = fopen($path, 'rb');
+        $first3 = fread($fh, 3);
+        fclose($fh);
+        $hasBom = ($first3 === "\xEF\xBB\xBF");
+        echo "$f — Modificado: $mtime — Tamaño: {$size}b — BOM: " . ($hasBom ? '<strong style="color:red">SÍ</strong>' : 'No') . "<br>";
     } else {
-        echo "<strong style='color:green'>Sesión activa</strong><br>";
+        echo "<strong style='color:red'>NO EXISTE: $f</strong><br>";
     }
 }
 
-// Verificar si el directorio de sesiones es escribible
-$savePath = session_save_path() ?: sys_get_temp_dir();
-echo "Directorio sesiones escribible: " . (is_writable($savePath) ? 'SÍ' : 'NO') . "<br>";
-echo "Directorio: {$savePath}<br>";
+// Verificar si admin-tooltips.js existe
+echo "<br>js/admin-tooltips.js: " . (file_exists(__DIR__ . '/js/admin-tooltips.js') ? 'EXISTS' : '<strong style="color:red">MISSING</strong>') . "<br>";
