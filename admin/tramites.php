@@ -133,6 +133,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    // ── DELETE IMAGE ────────────────────────────────────────────────────────
+    if ($action === 'delete_image') {
+        $id = (int) ($_POST['id'] ?? 0);
+        $stmt = $pdo->prepare('SELECT imagen_path FROM tramites WHERE id = ?');
+        $stmt->execute([$id]);
+        $current = $stmt->fetch();
+        if ($current && !empty($current['imagen_path'])) {
+            $f = BASE_PATH . '/' . $current['imagen_path'];
+            if (file_exists($f)) unlink($f);
+        }
+        $pdo->prepare('UPDATE tramites SET imagen_path = NULL WHERE id = ?')->execute([$id]);
+
+        // Si es AJAX devolver JSON con nuevo token
+        $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) || str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json');
+        if ($isAjax || !empty($_POST['ajax'])) {
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'new_csrf_token' => csrf_token()]);
+            exit;
+        }
+        $_SESSION['flash_message'] = 'Imagen eliminada.';
+        $_SESSION['flash_type']    = 'success';
+        header('Location: tramites');
+        exit;
+    }
+
+    // ── UPLOAD IMAGE (AJAX) ─────────────────────────────────────────────────
+    if ($action === 'upload_image_ajax') {
+        header('Content-Type: application/json');
+        $id = (int) ($_POST['id'] ?? 0);
+        if ($id <= 0 || !isset($_FILES['imagen']) || $_FILES['imagen']['error'] === UPLOAD_ERR_NO_FILE) {
+            echo json_encode(['success' => false, 'error' => 'Datos inválidos.']);
+            exit;
+        }
+        $upload = handle_upload($_FILES['imagen'], 'image');
+        if (!$upload['success']) {
+            echo json_encode(['success' => false, 'error' => $upload['error']]);
+            exit;
+        }
+        // Eliminar imagen anterior
+        $stmt = $pdo->prepare('SELECT imagen_path FROM tramites WHERE id = ?');
+        $stmt->execute([$id]);
+        $current = $stmt->fetch();
+        if ($current && !empty($current['imagen_path'])) {
+            $old = BASE_PATH . '/' . $current['imagen_path'];
+            if (file_exists($old)) unlink($old);
+        }
+        $pdo->prepare('UPDATE tramites SET imagen_path = ? WHERE id = ?')->execute([$upload['path'], $id]);
+        // Generar nuevo token para la siguiente petición AJAX
+        $newToken = csrf_token();
+        echo json_encode(['success' => true, 'path' => $upload['path'], 'new_csrf_token' => $newToken]);
+        exit;
+    }
+
     // ── DELETE ──────────────────────────────────────────────────────────────
     if ($action === 'delete') {
         $id = (int) ($_POST['id'] ?? 0);
@@ -324,14 +377,28 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                 <label class="form-label">Título</label>
                                 <input type="text" class="form-control" name="titulo" value="<?= htmlspecialchars($tramite['titulo']) ?>" required>
                             </div>
-                            <?php if (!empty($tramite['imagen_path'])): ?>
-                            <div class="mb-2">
-                                <img src="../<?= htmlspecialchars($tramite['imagen_path']) ?>" class="img-fluid rounded" style="max-height:200px;">
+                            <div class="mb-2" id="imgPreviewWrap<?= (int)$tramite['id'] ?>"<?= empty($tramite['imagen_path']) ? ' style="display:none;"' : '' ?>>
+                                <img src="<?= !empty($tramite['imagen_path']) ? '../' . htmlspecialchars($tramite['imagen_path']) : '' ?>"
+                                     class="img-fluid rounded mb-2" style="max-height:200px;" id="imgPreview<?= (int)$tramite['id'] ?>">
+                                <br>
+                                <button type="button" class="btn btn-sm btn-action-pdf-delete"
+                                        id="btnEliminarImg<?= (int)$tramite['id'] ?>"
+                                        onclick="eliminarImagenAjax(<?= (int)$tramite['id'] ?>, '<?= htmlspecialchars($token) ?>')">
+                                    <i class="bi bi-image-x"></i> Eliminar imagen
+                                </button>
                             </div>
-                            <?php endif; ?>
                             <div class="mb-3">
-                                <label class="form-label">Nueva imagen (opcional)</label>
-                                <input type="file" class="form-control" name="imagen" accept=".jpg,.jpeg,.png,.webp">
+                                <label class="form-label">Nueva imagen</label>
+                                <input type="file" class="form-control" id="fileImagen<?= (int)$tramite['id'] ?>" name="imagen" accept=".jpg,.jpeg,.png,.webp"
+                                       onchange="previewImagen(this, <?= (int)$tramite['id'] ?>)">
+                                <button type="button" class="btn btn-sm btn-action-key w-100 mt-2"
+                                        onclick="subirImagenAjax(<?= (int)$tramite['id'] ?>, '<?= htmlspecialchars($token) ?>', this)">
+                                    <i class="bi bi-upload"></i> Subir imagen ahora
+                                </button>
+                                <div id="uploadProgress<?= (int)$tramite['id'] ?>" class="progress mt-2" style="display:none;height:8px;">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width:100%"></div>
+                                </div>
+                                <small class="text-muted d-block mt-1">Puedes subir la imagen de inmediato o al guardar el formulario.</small>
                             </div>
                         </div>
                         <div class="col-md-8">
@@ -451,7 +518,121 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
         });
     });
     document.querySelectorAll('form').forEach(function (f) { f.addEventListener('submit', function () { tinymce.triggerSave(); }); });
-</script>
-</body>
+
+    // Token CSRF activo (se actualiza tras cada petición AJAX)
+    var csrfTokenActivo = {};
+
+    // Vista previa de imagen al seleccionar
+    function previewImagen(input, id) {
+        var wrap = document.getElementById('imgPreviewWrap' + id);
+        var img  = document.getElementById('imgPreview' + id);
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+                wrap.style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // Eliminar imagen vía AJAX sin salir del modal
+    function eliminarImagenAjax(id, token) {
+        if (!confirm('¿Eliminar imagen?')) return;
+        var t = csrfTokenActivo[id] || token;
+        var formData = new FormData();
+        formData.append('action', 'delete_image');
+        formData.append('id', id);
+        formData.append('csrf_token', t);
+        formData.append('ajax', '1');
+
+        fetch('tramites', { method: 'POST', body: formData })
+            .then(function(r) {
+                return r.text().then(function(text) {
+                    try { return JSON.parse(text); } catch(e) { return { success: true }; }
+                });
+            })
+            .then(function(data) {
+                // Actualizar token en el formulario del modal para que "Guardar" funcione
+                if (data.new_csrf_token) {
+                    csrfTokenActivo[id] = data.new_csrf_token;
+                    var modalForm = document.querySelector('#editM' + id + ' input[name="csrf_token"]');
+                    if (modalForm) modalForm.value = data.new_csrf_token;
+                }
+                var wrap = document.getElementById('imgPreviewWrap' + id);
+                if (wrap) wrap.style.display = 'none';
+                var img = document.getElementById('imgPreview' + id);
+                if (img) img.src = '';
+            })
+            .catch(function() { alert('Error de red al eliminar la imagen.'); });
+    }
+
+    // Subir imagen vía AJAX sin recargar
+    function subirImagenAjax(id, token, btn) {
+        var fileInput = document.getElementById('fileImagen' + id);
+        if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+            alert('Selecciona una imagen primero.');
+            return;
+        }
+        var t = csrfTokenActivo[id] || token;
+        var formData = new FormData();
+        formData.append('action', 'upload_image_ajax');
+        formData.append('id', id);
+        formData.append('csrf_token', t);
+        formData.append('imagen', fileInput.files[0]);
+
+        var progressBar = document.getElementById('uploadProgress' + id);
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Subiendo...';
+        if (progressBar) progressBar.style.display = 'flex';
+
+        fetch('tramites', { method: 'POST', body: formData })
+            .then(function(r) {
+                return r.text().then(function(text) {
+                    try {
+                        return JSON.parse(text);
+                    } catch(e) {
+                        throw new Error('Respuesta inesperada del servidor: ' + text.substring(0, 300));
+                    }
+                });
+            })
+            .then(function(data) {
+                if (progressBar) progressBar.style.display = 'none';
+                if (data.new_csrf_token) {
+                    csrfTokenActivo[id] = data.new_csrf_token;
+                    var modalForm = document.querySelector('#editM' + id + ' input[name="csrf_token"]');
+                    if (modalForm) modalForm.value = data.new_csrf_token;
+                }
+                if (data.success) {
+                    btn.innerHTML = '<i class="bi bi-check-circle"></i> Imagen subida';
+                    btn.classList.remove('btn-action-key');
+                    btn.classList.add('btn-action-play');
+                    var img = document.getElementById('imgPreview' + id);
+                    img.src = '../' + data.path + '?t=' + Date.now();
+                    var wrap = document.getElementById('imgPreviewWrap' + id);
+                    wrap.style.display = 'block';
+                    // Limpiar el input de archivo
+                    fileInput.value = '';
+                    setTimeout(function() {
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="bi bi-upload"></i> Subir imagen ahora';
+                        btn.classList.remove('btn-action-play');
+                        btn.classList.add('btn-action-key');
+                    }, 3000);
+                } else {
+                    alert('Error: ' + (data.error || 'No se pudo subir la imagen.'));
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="bi bi-upload"></i> Subir imagen ahora';
+                }
+            })
+            .catch(function(err) {
+                if (progressBar) progressBar.style.display = 'none';
+                alert(err.message || 'Error de conexión al subir la imagen.');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-upload"></i> Subir imagen ahora';
+            });
+    }
+</script></body>
 </html>
 
