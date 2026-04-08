@@ -364,23 +364,23 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                         <select class="form-select mb-2" onchange="if(this.value!=='__custom__'){document.getElementById('link_url_new').value=this.value;}else{document.getElementById('link_url_new').value='';}">
                                             <option value="__custom__">-- Escribir URL manualmente --</option>
                                             <optgroup label="Paginas del sitio">
-                                                <option value="index.php">Inicio</option>
-                                                <option value="acerca-del-dif/presidencia.php">Presidencia</option>
-                                                <option value="acerca-del-dif/direcciones.php">Direcciones</option>
-                                                <option value="acerca-del-dif/organigrama.php">Organigrama</option>
-                                                <option value="comunicacion-social/noticias.php">Noticias</option>
-                                                <option value="comunicacion-social/galeria.php">Galeria</option>
-                                                <option value="voluntariado.php">Voluntariado</option>
+                                                <option value="index">Inicio</option>
+                                                <option value="acerca-del-dif/presidencia">Presidencia</option>
+                                                <option value="acerca-del-dif/direcciones">Direcciones</option>
+                                                <option value="acerca-del-dif/organigrama">Organigrama</option>
+                                                <option value="comunicacion-social/noticias">Noticias</option>
+                                                <option value="comunicacion-social/galeria">Galeria</option>
+                                                <option value="voluntariado">Voluntariado</option>
                                             </optgroup>
                                             <optgroup label="Transparencia">
-                                                <option value="transparencia/SEAC.php">SEAC</option>
-                                                <option value="transparencia/cuenta_publica.php">Cuenta Publica</option>
-                                                <option value="transparencia/presupuesto_anual.php">Presupuesto Anual</option>
-                                                <option value="transparencia/pae.php">PAE</option>
-                                                <option value="transparencia/matrices_indicadores.php">Matrices de Indicadores</option>
-                                                <option value="transparencia/conac.php">CONAC</option>
-                                                <option value="transparencia/financiero.php">Financiero</option>
-                                                <option value="transparencia/avisos_privacidad.php">Avisos de Privacidad</option>
+                                                <option value="transparencia/SEAC">SEAC</option>
+                                                <option value="transparencia/cuenta_publica">Cuenta Publica</option>
+                                                <option value="transparencia/presupuesto_anual">Presupuesto Anual</option>
+                                                <option value="transparencia/pae">PAE</option>
+                                                <option value="transparencia/matrices_indicadores">Matrices de Indicadores</option>
+                                                <option value="transparencia/conac">CONAC</option>
+                                                <option value="transparencia/financiero">Financiero</option>
+                                                <option value="transparencia/avisos_privacidad">Avisos de Privacidad</option>
                                             </optgroup>
                                             <optgroup label="Especiales">
                                                 <option value="__ubicacion__">Ubicacion en Google Maps</option>
@@ -486,23 +486,23 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                         <select class="form-select mb-2" onchange="if(this.value!=='__custom__'){document.getElementById('link_url_<?= (int)$fl['id'] ?>').value=this.value;}else{document.getElementById('link_url_<?= (int)$fl['id'] ?>').value='';}">
                                             <option value="__custom__">-- Escribir URL manualmente --</option>
                                             <optgroup label="Paginas del sitio">
-                                                <option value="index.php" <?= $fl['url']==='index.php'?'selected':'' ?>>Inicio</option>
-                                                <option value="acerca-del-dif/presidencia.php" <?= $fl['url']==='acerca-del-dif/presidencia.php'?'selected':'' ?>>Presidencia</option>
-                                                <option value="acerca-del-dif/direcciones.php" <?= $fl['url']==='acerca-del-dif/direcciones.php'?'selected':'' ?>>Direcciones</option>
-                                                <option value="acerca-del-dif/organigrama.php" <?= $fl['url']==='acerca-del-dif/organigrama.php'?'selected':'' ?>>Organigrama</option>
-                                                <option value="comunicacion-social/noticias.php" <?= $fl['url']==='comunicacion-social/noticias.php'?'selected':'' ?>>Noticias</option>
-                                                <option value="comunicacion-social/galeria.php" <?= $fl['url']==='comunicacion-social/galeria.php'?'selected':'' ?>>Galeria</option>
-                                                <option value="voluntariado.php" <?= $fl['url']==='voluntariado.php'?'selected':'' ?>>Voluntariado</option>
+                                                <option value="index" <?= $fl['url']==='index.php'?'selected':'' ?>>Inicio</option>
+                                                <option value="acerca-del-dif/presidencia" <?= $fl['url']==='acerca-del-dif/presidencia.php'?'selected':'' ?>>Presidencia</option>
+                                                <option value="acerca-del-dif/direcciones" <?= $fl['url']==='acerca-del-dif/direcciones.php'?'selected':'' ?>>Direcciones</option>
+                                                <option value="acerca-del-dif/organigrama" <?= $fl['url']==='acerca-del-dif/organigrama.php'?'selected':'' ?>>Organigrama</option>
+                                                <option value="comunicacion-social/noticias" <?= $fl['url']==='comunicacion-social/noticias.php'?'selected':'' ?>>Noticias</option>
+                                                <option value="comunicacion-social/galeria" <?= $fl['url']==='comunicacion-social/galeria.php'?'selected':'' ?>>Galeria</option>
+                                                <option value="voluntariado" <?= $fl['url']==='voluntariado.php'?'selected':'' ?>>Voluntariado</option>
                                             </optgroup>
                                             <optgroup label="Transparencia">
-                                                <option value="transparencia/SEAC.php" <?= $fl['url']==='transparencia/SEAC.php'?'selected':'' ?>>SEAC</option>
-                                                <option value="transparencia/cuenta_publica.php" <?= $fl['url']==='transparencia/cuenta_publica.php'?'selected':'' ?>>Cuenta Publica</option>
-                                                <option value="transparencia/presupuesto_anual.php" <?= $fl['url']==='transparencia/presupuesto_anual.php'?'selected':'' ?>>Presupuesto Anual</option>
-                                                <option value="transparencia/pae.php" <?= $fl['url']==='transparencia/pae.php'?'selected':'' ?>>PAE</option>
-                                                <option value="transparencia/matrices_indicadores.php" <?= $fl['url']==='transparencia/matrices_indicadores.php'?'selected':'' ?>>Matrices de Indicadores</option>
-                                                <option value="transparencia/conac.php" <?= $fl['url']==='transparencia/conac.php'?'selected':'' ?>>CONAC</option>
-                                                <option value="transparencia/financiero.php" <?= $fl['url']==='transparencia/financiero.php'?'selected':'' ?>>Financiero</option>
-                                                <option value="transparencia/avisos_privacidad.php" <?= $fl['url']==='transparencia/avisos_privacidad.php'?'selected':'' ?>>Avisos de Privacidad</option>
+                                                <option value="transparencia/SEAC" <?= $fl['url']==='transparencia/SEAC.php'?'selected':'' ?>>SEAC</option>
+                                                <option value="transparencia/cuenta_publica" <?= $fl['url']==='transparencia/cuenta_publica.php'?'selected':'' ?>>Cuenta Publica</option>
+                                                <option value="transparencia/presupuesto_anual" <?= $fl['url']==='transparencia/presupuesto_anual.php'?'selected':'' ?>>Presupuesto Anual</option>
+                                                <option value="transparencia/pae" <?= $fl['url']==='transparencia/pae.php'?'selected':'' ?>>PAE</option>
+                                                <option value="transparencia/matrices_indicadores" <?= $fl['url']==='transparencia/matrices_indicadores.php'?'selected':'' ?>>Matrices de Indicadores</option>
+                                                <option value="transparencia/conac" <?= $fl['url']==='transparencia/conac.php'?'selected':'' ?>>CONAC</option>
+                                                <option value="transparencia/financiero" <?= $fl['url']==='transparencia/financiero.php'?'selected':'' ?>>Financiero</option>
+                                                <option value="transparencia/avisos_privacidad" <?= $fl['url']==='transparencia/avisos_privacidad.php'?'selected':'' ?>>Avisos de Privacidad</option>
                                             </optgroup>
                                             <optgroup label="Especiales">
                                                 <option value="__ubicacion__" <?= $fl['url']==='__ubicacion__'?'selected':'' ?>>Ubicacion en Google Maps</option>
