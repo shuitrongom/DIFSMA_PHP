@@ -16,7 +16,7 @@ $active_page = $active_page ?? '';
 <div class="container-fluid border-bottom bg-white wow fadeIn" data-wow-delay="0.1s">
     <div class="container px-0">
         <nav class="navbar navbar-expand-xl py-3">
-            <a href="<?= htmlspecialchars($base_path) ?>index.php" class="navbar-brand"></a>
+            <a href="<?= htmlspecialchars($base_path) ?>index" class="navbar-brand"></a>
             <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarCollapse" style="border-color:rgba(0,0,0,0.3);">
                 <span class="fa fa-bars text-primary"></span>
@@ -24,18 +24,18 @@ $active_page = $active_page ?? '';
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav mx-auto">
 
-                    <a href="<?= htmlspecialchars($base_path) ?>index.php"
+                    <a href="<?= htmlspecialchars($base_path) ?>index"
                        class="nav-item nav-link-green<?= $active_page === 'inicio' ? ' active' : '' ?>">INICIO</a>
 
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link-red dropdown-toggle<?= $active_page === 'acerca' ? ' active' : '' ?>"
                            data-bs-toggle="dropdown">ACERCA DEL DIF</a>
                         <li class="dropdown-menu rounded-0">
-                            <a href="<?= htmlspecialchars($base_path) ?>acerca-del-dif/presidencia.php"
+                            <a href="<?= htmlspecialchars($base_path) ?>acerca-del-dif/presidencia"
                                class="dropdown-item" style="color:#fff!important">Presidencia</a>
-                            <a href="<?= htmlspecialchars($base_path) ?>acerca-del-dif/direcciones.php"
+                            <a href="<?= htmlspecialchars($base_path) ?>acerca-del-dif/direcciones"
                                class="dropdown-item" style="color:#fff!important">Direcciones</a>
-                            <a href="<?= htmlspecialchars($base_path) ?>acerca-del-dif/organigrama.php"
+                            <a href="<?= htmlspecialchars($base_path) ?>acerca-del-dif/organigrama"
                                class="dropdown-item" style="color:#fff!important">Organigrama</a>
                         </li>
                     </div>
@@ -65,9 +65,9 @@ $active_page = $active_page ?? '';
                         <a href="#" class="nav-link-pink dropdown-toggle<?= $active_page === 'comunicacion' ? ' active' : '' ?>"
                            data-bs-toggle="dropdown">COMUNICACIÓN SOCIAL</a>
                         <div class="dropdown-menu m-0 rounded-0">
-                            <a href="<?= htmlspecialchars($base_path) ?>comunicacion-social/noticias.php"
+                            <a href="<?= htmlspecialchars($base_path) ?>comunicacion-social/noticias"
                                class="dropdown-item" style="color:#fff!important">Noticias</a>
-                            <a href="<?= htmlspecialchars($base_path) ?>comunicacion-social/galeria.php"
+                            <a href="<?= htmlspecialchars($base_path) ?>comunicacion-social/galeria"
                                class="dropdown-item" style="color:#fff!important">Galerías</a>
                         </div>
                     </div>
@@ -82,21 +82,21 @@ $active_page = $active_page ?? '';
                                class="dropdown-item" style="color:#fff!important">SAIMEX</a>
                             <a href="https://www.plataformadetransparencia.org.mx/" target="_blank"
                                class="dropdown-item" style="color:#fff!important">PLATAFORMA NACIONAL DE TRANSPARENCIA</a>
-                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/SEAC.php"
+                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/SEAC"
                                class="dropdown-item" style="color:#fff!important">SISTEMA DE EVALUACIONES DE LA ARMONIZACIÓN CONTABLE</a>
-                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/cuenta_publica.php"
+                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/cuenta_publica"
                                class="dropdown-item" style="color:#fff!important">CUENTA PÚBLICA</a>
-                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/presupuesto_anual.php"
+                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/presupuesto_anual"
                                class="dropdown-item" style="color:#fff!important">PRESUPUESTO ANUAL</a>
-                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/pae.php"
+                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/pae"
                                class="dropdown-item" style="color:#fff!important">PAE</a>
-                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/matrices_indicadores.php"
+                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/matrices_indicadores"
                                class="dropdown-item" style="color:#fff!important">MATRICES DE INDICADORES</a>
-                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/conac.php"
+                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/conac"
                                class="dropdown-item" style="color:#fff!important">CONAC</a>
-                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/financiero.php"
+                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/financiero"
                                class="dropdown-item" style="color:#fff!important">FINANCIERO</a>
-                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/avisos_privacidad.php"
+                            <a href="<?= htmlspecialchars($base_path) ?>transparencia/avisos_privacidad"
                                class="dropdown-item" style="color:#fff!important">AVISOS DE PRIVACIDAD</a>
 <?php
 // Secciones dinámicas de transparencia
@@ -111,7 +111,7 @@ try {
                         </div>
                     </div>
 
-                    <a href="<?= $base_path ?>voluntariado.php" class="nav-item nav-link-blue<?= $active_page === 'voluntariado' ? ' active' : '' ?>">VOLUNTARIADO</a>
+                    <a href="<?= $base_path ?>voluntariado" class="nav-item nav-link-blue<?= $active_page === 'voluntariado' ? ' active' : '' ?>">VOLUNTARIADO</a>
 
                 </div>
             </div>

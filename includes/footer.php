@@ -156,7 +156,7 @@ if (count($horario_parts) === 2) {
                                 <a class="text-white text-decoration-none mb-2" style="font-size:0.95rem;" href="<?= $fl_href ?>"<?= $fl_target ?>><?= htmlspecialchars($fl['titulo']) ?></a>
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <a class="text-white text-decoration-none mb-2" href="<?= $base_path ?>index.php">Inicio</a>
+                                <a class="text-white text-decoration-none mb-2" href="<?= $base_path ?>index">Inicio</a>
                             <?php endif; ?>
                         </div>
                         <!-- Redes sociales -->
