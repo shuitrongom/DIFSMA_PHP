@@ -53,7 +53,7 @@ $active_page = $active_page ?? '';
                                 }
                                 $_nav_tramites = $_nav_pdo->query('SELECT slug, titulo FROM tramites ORDER BY id ASC')->fetchAll();
                                 foreach ($_nav_tramites as $_nt) {
-                                    $href = htmlspecialchars($base_path) . 'tramites/' . htmlspecialchars($_nt['slug']) . '.php';
+                                    $href = htmlspecialchars($base_path) . 'tramites/' . htmlspecialchars($_nt['slug']);
                                     echo '<a href="' . $href . '" class="dropdown-item" style="color:#fff!important">' . htmlspecialchars($_nt['titulo']) . '</a>';
                                 }
                             } catch (Exception $e) { /* silenciar */ }
@@ -104,7 +104,7 @@ try {
     $__pdo = get_db();
     $__stmt = $__pdo->query('SELECT nombre, slug FROM trans_secciones WHERE activo = 1 ORDER BY orden ASC');
     while ($__sec = $__stmt->fetch()) {
-        echo '<a href="' . htmlspecialchars($base_path) . 'transparencia/seccion_dinamica.php?slug=' . htmlspecialchars($__sec['slug']) . '" class="dropdown-item" style="color:#fff!important">' . htmlspecialchars(strtoupper($__sec['nombre'])) . '</a>';
+        echo '<a href="' . htmlspecialchars($base_path) . 'transparencia/seccion_dinamica?slug=' . htmlspecialchars($__sec['slug']) . '" class="dropdown-item" style="color:#fff!important">' . htmlspecialchars(strtoupper($__sec['nombre'])) . '</a>';
     }
 } catch (Exception $e) {}
 ?>
