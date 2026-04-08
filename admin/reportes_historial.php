@@ -532,7 +532,7 @@ if ($action === 'excel') {
         $pdo = get_db();
         
         // Registros completos para el Excel
-        $stmtReg = $pdo->prepare("SELECT id, DATE(created_at) as fecha, TIME(created_at) as hora, username, accion, seccion, descripcion, ip FROM admin_historial WHERE {$filter['where']} ORDER BY created_at DESC");
+        $stmtReg = $pdo->prepare("SELECT id, DATE(created_at) as fecha, TIME(created_at) as hora, username, accion, seccion, descripcion, ip, dispositivo, hostname FROM admin_historial WHERE {$filter['where']} ORDER BY created_at DESC");
         $stmtReg->execute($filter['params']);
         $registros = $stmtReg->fetchAll();
         
