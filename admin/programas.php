@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido. Intente de nuevo.';
         $_SESSION['flash_type']    = 'danger';
-        header('Location: programas.php');
+        header('Location: programas');
         exit;
     }
 
@@ -31,14 +31,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($nombre)) {
             $_SESSION['flash_message'] = 'El nombre del programa es obligatorio.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: programas.php');
+            header('Location: programas');
             exit;
         }
 
         if (!isset($_FILES['imagen']) || $_FILES['imagen']['error'] === UPLOAD_ERR_NO_FILE) {
             $_SESSION['flash_message'] = 'Debe seleccionar una imagen para el programa.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: programas.php');
+            header('Location: programas');
             exit;
         }
 
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$upload['success']) {
             $_SESSION['flash_message'] = $upload['error'];
             $_SESSION['flash_type']    = 'danger';
-            header('Location: programas.php');
+            header('Location: programas');
             exit;
         }
 
@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header('Location: programas.php');
+        header('Location: programas');
         exit;
     }
 
@@ -106,14 +106,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($id <= 0) {
             $_SESSION['flash_message'] = 'ID de programa inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: programas.php');
+            header('Location: programas');
             exit;
         }
 
         if (empty($nombre)) {
             $_SESSION['flash_message'] = 'El nombre del programa es obligatorio.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: programas.php');
+            header('Location: programas');
             exit;
         }
 
@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$old) {
             $_SESSION['flash_message'] = 'Programa no encontrado.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: programas.php');
+            header('Location: programas');
             exit;
         }
 
@@ -138,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$upload['success']) {
                 $_SESSION['flash_message'] = $upload['error'];
                 $_SESSION['flash_type']    = 'danger';
-                header('Location: programas.php');
+                header('Location: programas');
                 exit;
             }
 
@@ -193,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header('Location: programas.php');
+        header('Location: programas');
         exit;
     }
 
@@ -204,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($id <= 0) {
             $_SESSION['flash_message'] = 'ID de programa inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: programas.php');
+            header('Location: programas');
             exit;
         }
 
@@ -215,7 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$programa) {
             $_SESSION['flash_message'] = 'Programa no encontrado.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: programas.php');
+            header('Location: programas');
             exit;
         }
 
@@ -239,7 +239,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header('Location: programas.php');
+        header('Location: programas');
         exit;
     }
 }
@@ -303,7 +303,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                     <i class="bi bi-list"></i>
                 </button>
                 <span class="navbar-brand mb-0 h6">Nuestros Programas</span>
-                <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto">
+                <a href="logout" class="btn btn-sm btn-outline-danger ms-auto">
                     <i class="bi bi-box-arrow-right"></i> Salir
                 </a>
             </nav>
@@ -326,7 +326,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                 <i class="bi bi-plus-circle me-1"></i> Crear programa
                             </div>
                             <div class="card-body">
-                                <form method="POST" enctype="multipart/form-data" action="programas.php" id="formCreate">
+                                <form method="POST" enctype="multipart/form-data" action="programas" id="formCreate">
                                     <input type="hidden" name="action" value="create">
                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                                     <div class="mb-3">
@@ -447,7 +447,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                 <div class="modal fade" id="editModal<?= (int) $prog['id'] ?>" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
-                            <form method="POST" enctype="multipart/form-data" action="programas.php">
+                            <form method="POST" enctype="multipart/form-data" action="programas">
                                 <input type="hidden" name="action" value="edit">
                                 <input type="hidden" name="id" value="<?= (int) $prog['id'] ?>">
                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
@@ -518,7 +518,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                 <div class="modal fade" id="deleteModal<?= (int) $prog['id'] ?>" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <form method="POST" action="programas.php">
+                            <form method="POST" action="programas">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="id" value="<?= (int) $prog['id'] ?>">
                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">

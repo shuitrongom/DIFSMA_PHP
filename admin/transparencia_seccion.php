@@ -8,7 +8,7 @@ $secId = (int) ($_GET['id'] ?? 0);
 $bloqueId = (int) ($_GET['bloque_id'] ?? 0);
 $stmt = $pdo->prepare('SELECT * FROM trans_secciones WHERE id = ?');
 $stmt->execute([$secId]); $seccion = $stmt->fetch();
-if (!$seccion) { header('Location: transparencia_dinamica.php'); exit; }
+if (!$seccion) { header('Location: transparencia_dinamica'); exit; }
 $plantilla = $seccion['plantilla'];
 $baseUrl = "transparencia_seccion.php?id={$secId}";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -41,7 +41,7 @@ $plN=['seac'=>'SEAC','cuenta_publica'=>'Cuenta Publica','presupuesto_anual'=>'Pr
 <nav class="navbar navbar-light bg-white shadow-sm px-3">
 <button class="btn btn-outline-secondary me-2" id="toggleSidebar"><i class="bi bi-list"></i></button>
 <span class="navbar-brand mb-0 h6">
-<a href="transparencia_dinamica.php" class="text-decoration-none text-muted">Secciones</a>
+<a href="transparencia_dinamica" class="text-decoration-none text-muted">Secciones</a>
 <i class="bi bi-chevron-right mx-2 small text-muted"></i>
 <?= htmlspecialchars($seccion['nombre']) ?>
 <small class="text-muted ms-2">(<?= $plN[$plantilla] ?? $plantilla ?>)</small>
@@ -49,7 +49,7 @@ $plN=['seac'=>'SEAC','cuenta_publica'=>'Cuenta Publica','presupuesto_anual'=>'Pr
 <i class="bi bi-chevron-right mx-2 small text-muted"></i> <?= (int)$currentBloque['anio'] ?>
 <?php endif; ?>
 </span>
-<a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
+<a href="logout" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
 </nav>
 <div class="container-fluid p-4">
 <?php if ($flashMessage): ?><div class="alert alert-<?= htmlspecialchars($flashType) ?> alert-dismissible fade show"><?= htmlspecialchars($flashMessage) ?><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div><?php endif; ?>

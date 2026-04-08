@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido. Intente de nuevo.';
         $_SESSION['flash_type']    = 'danger';
-        header('Location: organigrama.php');
+        header('Location: organigrama');
         exit;
     }
 
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($titulo)) {
         $_SESSION['flash_message'] = 'El título es obligatorio.';
         $_SESSION['flash_type']    = 'warning';
-        header('Location: organigrama.php');
+        header('Location: organigrama');
         exit;
     }
 
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$upload['success']) {
             $_SESSION['flash_message'] = $upload['error'];
             $_SESSION['flash_type']    = 'danger';
-            header('Location: organigrama.php');
+            header('Location: organigrama');
             exit;
         }
 
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['flash_type']    = 'danger';
     }
 
-    header('Location: organigrama.php');
+    header('Location: organigrama');
     exit;
 }
 
@@ -127,7 +127,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                     <i class="bi bi-list"></i>
                 </button>
                 <span class="navbar-brand mb-0 h6">Organigrama</span>
-                <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto">
+                <a href="logout" class="btn btn-sm btn-outline-danger ms-auto">
                     <i class="bi bi-box-arrow-right"></i> Salir
                 </a>
             </nav>
@@ -192,7 +192,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                 <?= ($organigrama && !empty($organigrama['pdf_path'])) ? 'Reemplazar PDF del organigrama' : 'Subir PDF del organigrama' ?>
                             </div>
                             <div class="card-body">
-                                <form method="POST" enctype="multipart/form-data" action="organigrama.php">
+                                <form method="POST" enctype="multipart/form-data" action="organigrama">
                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                                     <div class="mb-3">
                                         <label for="titulo" class="form-label">Título</label>

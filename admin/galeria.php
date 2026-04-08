@@ -57,28 +57,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($nombre)) {
             $_SESSION['flash_message'] = 'El nombre del álbum es obligatorio.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: galeria.php');
+            header('Location: galeria');
             exit;
         }
 
         if (empty($fecha) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha)) {
             $_SESSION['flash_message'] = 'Formato de fecha inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: galeria.php');
+            header('Location: galeria');
             exit;
         }
 
         if ($fecha > date('Y-m-d')) {
             $_SESSION['flash_message'] = 'La fecha no puede ser mayor al día de hoy.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: galeria.php');
+            header('Location: galeria');
             exit;
         }
 
         if (!isset($_FILES['portada']) || $_FILES['portada']['error'] === UPLOAD_ERR_NO_FILE) {
             $_SESSION['flash_message'] = 'Debe seleccionar una imagen de portada.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: galeria.php');
+            header('Location: galeria');
             exit;
         }
 
@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$upload['success']) {
             $_SESSION['flash_message'] = $upload['error'];
             $_SESSION['flash_type']    = 'danger';
-            header('Location: galeria.php');
+            header('Location: galeria');
             exit;
         }
 
@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header('Location: galeria.php');
+        header('Location: galeria');
         exit;
     }
 
@@ -117,28 +117,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($id <= 0) {
             $_SESSION['flash_message'] = 'ID de álbum inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: galeria.php');
+            header('Location: galeria');
             exit;
         }
 
         if (empty($nombre)) {
             $_SESSION['flash_message'] = 'El nombre del álbum es obligatorio.';
             $_SESSION['flash_type']    = 'warning';
-            header("Location: galeria.php?album_id={$id}");
+            header("Location: galeria?album_id={$id}");
             exit;
         }
 
         if (empty($fecha) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha)) {
             $_SESSION['flash_message'] = 'Formato de fecha inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header("Location: galeria.php?album_id={$id}");
+            header("Location: galeria?album_id={$id}");
             exit;
         }
 
         if ($fecha > date('Y-m-d')) {
             $_SESSION['flash_message'] = 'La fecha no puede ser mayor al día de hoy.';
             $_SESSION['flash_type']    = 'warning';
-            header("Location: galeria.php?album_id={$id}");
+            header("Location: galeria?album_id={$id}");
             exit;
         }
 
@@ -150,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$old) {
             $_SESSION['flash_message'] = 'Álbum no encontrado.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: galeria.php');
+            header('Location: galeria');
             exit;
         }
 
@@ -163,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$upload['success']) {
                 $_SESSION['flash_message'] = $upload['error'];
                 $_SESSION['flash_type']    = 'danger';
-                header("Location: galeria.php?album_id={$id}");
+                header("Location: galeria?album_id={$id}");
                 exit;
             }
 
@@ -191,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header("Location: galeria.php?album_id={$id}");
+        header("Location: galeria?album_id={$id}");
         exit;
     }
 
@@ -202,14 +202,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($aId <= 0) {
             $_SESSION['flash_message'] = 'ID de álbum inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: galeria.php');
+            header('Location: galeria');
             exit;
         }
 
         if (!isset($_FILES['imagenes']) || !is_array($_FILES['imagenes']['name'])) {
             $_SESSION['flash_message'] = 'Debe seleccionar al menos una imagen.';
             $_SESSION['flash_type']    = 'warning';
-            header("Location: galeria.php?album_id={$aId}");
+            header("Location: galeria?album_id={$aId}");
             exit;
         }
 
@@ -263,7 +263,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'warning';
         }
 
-        header("Location: galeria.php?album_id={$aId}");
+        header("Location: galeria?album_id={$aId}");
         exit;
     }
 
@@ -275,7 +275,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($imgId <= 0) {
             $_SESSION['flash_message'] = 'ID de imagen inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header("Location: galeria.php?album_id={$aId}");
+            header("Location: galeria?album_id={$aId}");
             exit;
         }
 
@@ -286,7 +286,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$row) {
             $_SESSION['flash_message'] = 'Imagen no encontrada.';
             $_SESSION['flash_type']    = 'danger';
-            header("Location: galeria.php?album_id={$aId}");
+            header("Location: galeria?album_id={$aId}");
             exit;
         }
 
@@ -306,7 +306,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header("Location: galeria.php?album_id={$aId}");
+        header("Location: galeria?album_id={$aId}");
         exit;
     }
 
@@ -317,7 +317,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($id <= 0) {
             $_SESSION['flash_message'] = 'ID de álbum inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: galeria.php');
+            header('Location: galeria');
             exit;
         }
 
@@ -328,7 +328,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$album) {
             $_SESSION['flash_message'] = 'Álbum no encontrado.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: galeria.php');
+            header('Location: galeria');
             exit;
         }
 
@@ -365,7 +365,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header('Location: galeria.php');
+        header('Location: galeria');
         exit;
     }
 }
@@ -441,14 +441,14 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                 </button>
                 <span class="navbar-brand mb-0 h6">
                     <?php if ($currentAlbum): ?>
-                        <a href="galeria.php" class="text-decoration-none text-muted">Galería</a>
+                        <a href="galeria" class="text-decoration-none text-muted">Galería</a>
                         <i class="bi bi-chevron-right mx-1 small"></i>
                         <?= htmlspecialchars($currentAlbum['nombre']) ?>
                     <?php else: ?>
                         Galería Fotográfica
                     <?php endif; ?>
                 </span>
-                <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto">
+                <a href="logout" class="btn btn-sm btn-outline-danger ms-auto">
                     <i class="bi bi-box-arrow-right"></i> Salir
                 </a>
             </nav>
@@ -613,7 +613,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                 <div class="modal fade" id="deleteAlbumModal" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <form method="POST" action="galeria.php">
+                            <form method="POST" action="galeria">
                                 <input type="hidden" name="action" value="delete_album">
                                 <input type="hidden" name="id" value="<?= (int) $currentAlbum['id'] ?>">
                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
@@ -645,7 +645,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                 <!-- Álbum no encontrado -->
                 <div class="alert alert-warning">
                     <i class="bi bi-exclamation-triangle me-1"></i> Álbum no encontrado.
-                    <a href="galeria.php" class="alert-link">Volver al listado</a>.
+                    <a href="galeria" class="alert-link">Volver al listado</a>.
                 </div>
 
                 <?php else: ?>
@@ -660,7 +660,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                 <i class="bi bi-plus-circle me-1"></i> Crear álbum
                             </div>
                             <div class="card-body">
-                                <form method="POST" enctype="multipart/form-data" action="galeria.php">
+                                <form method="POST" enctype="multipart/form-data" action="galeria">
                                     <input type="hidden" name="action" value="create_album">
                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                                     <div class="mb-3">
@@ -758,7 +758,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                                     <div class="modal fade" id="deleteAlbumListModal<?= (int) $album['id'] ?>" tabindex="-1" aria-hidden="true">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
-                                                                <form method="POST" action="galeria.php">
+                                                                <form method="POST" action="galeria">
                                                                     <input type="hidden" name="action" value="delete_album">
                                                                     <input type="hidden" name="id" value="<?= (int) $album['id'] ?>">
                                                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">

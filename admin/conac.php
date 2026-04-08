@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido.';
         $_SESSION['flash_type']    = 'danger';
-        header('Location: conac.php' . ($bloqueId > 0 ? "?bloque_id={$bloqueId}" : ''));
+        header('Location: conac' . ($bloqueId > 0 ? "?bloque_id={$bloqueId}" : ''));
         exit;
     }
 
@@ -26,16 +26,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($anio) || !preg_match('/^\d{4}$/', $anio)) {
             $_SESSION['flash_message'] = 'Año inválido (4 dígitos).';
             $_SESSION['flash_type'] = 'warning';
-            header('Location: conac.php'); exit;
+            header('Location: conac'); exit;
         }
         if ((int)$anio > (int)date('Y')) {
             $_SESSION['flash_message'] = 'El año no puede ser mayor al año en curso (' . date('Y') . ').';
             $_SESSION['flash_type'] = 'warning';
-            header('Location: conac.php'); exit;
+            header('Location: conac'); exit;
         }
         try {
             $s = $pdo->prepare('SELECT id FROM conac_bloques WHERE anio = ?'); $s->execute([$anio]);
-            if ($s->fetch()) { $_SESSION['flash_message'] = "Ya existe bloque {$anio}."; $_SESSION['flash_type'] = 'warning'; header('Location: conac.php'); exit; }
+            if ($s->fetch()) { $_SESSION['flash_message'] = "Ya existe bloque {$anio}."; $_SESSION['flash_type'] = 'warning'; header('Location: conac'); exit; }
             $s = $pdo->prepare('SELECT COALESCE(MAX(orden),0)+1 FROM conac_bloques'); $s->execute();
             $ord = (int)$s->fetchColumn();
             $pdo->prepare('INSERT INTO conac_bloques (anio,orden) VALUES (?,?)')->execute([$anio,$ord]);
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error al guardar.';
             $_SESSION['flash_type'] = 'danger';
         }
-        header('Location: conac.php'); exit;
+        header('Location: conac'); exit;
     }
 
     // ADD CONCEPTO
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($bId <= 0 || $nombre === '') {
             $_SESSION['flash_message'] = 'Ingrese un nombre para el concepto.';
             $_SESSION['flash_type'] = 'warning';
-            header("Location: conac.php?bloque_id={$bId}"); exit;
+            header("Location: conac?bloque_id={$bId}"); exit;
         }
         try {
             $s = $pdo->prepare('SELECT COALESCE(MAX(numero),0)+1 FROM conac_conceptos WHERE bloque_id=?'); $s->execute([$bId]);
@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error al guardar.';
             $_SESSION['flash_type'] = 'danger';
         }
-        header("Location: conac.php?bloque_id={$bId}"); exit;
+        header("Location: conac?bloque_id={$bId}"); exit;
     }
 
     // EDIT CONCEPTO
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($cId <= 0 || $nombre === '') {
             $_SESSION['flash_message'] = 'Datos inválidos.';
             $_SESSION['flash_type'] = 'warning';
-            header("Location: conac.php?bloque_id={$bId}"); exit;
+            header("Location: conac?bloque_id={$bId}"); exit;
         }
         try {
             $pdo->prepare('UPDATE conac_conceptos SET nombre=? WHERE id=? AND bloque_id=?')->execute([$nombre,$cId,$bId]);
@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error al actualizar.';
             $_SESSION['flash_type'] = 'danger';
         }
-        header("Location: conac.php?bloque_id={$bId}"); exit;
+        header("Location: conac?bloque_id={$bId}"); exit;
     }
 
     // DELETE CONCEPTO
@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($cId <= 0) {
             $_SESSION['flash_message'] = 'ID inválido.';
             $_SESSION['flash_type'] = 'danger';
-            header("Location: conac.php?bloque_id={$bId}"); exit;
+            header("Location: conac?bloque_id={$bId}"); exit;
         }
         try {
             $s = $pdo->prepare('SELECT pdf_path FROM conac_pdfs WHERE concepto_id=? AND bloque_id=? AND pdf_path IS NOT NULL AND pdf_path!=""');
@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error al eliminar.';
             $_SESSION['flash_type'] = 'danger';
         }
-        header("Location: conac.php?bloque_id={$bId}"); exit;
+        header("Location: conac?bloque_id={$bId}"); exit;
     }
 
     // UPLOAD PDF
@@ -126,16 +126,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $trim = (int)($_POST['trimestre'] ?? 0);
         if ($bId<=0||$cId<=0||$trim<1||$trim>4) {
             $_SESSION['flash_message']='Parámetros inválidos.'; $_SESSION['flash_type']='danger';
-            header("Location: conac.php?bloque_id={$bId}"); exit;
+            header("Location: conac?bloque_id={$bId}"); exit;
         }
         if (!isset($_FILES['pdf'])||$_FILES['pdf']['error']===UPLOAD_ERR_NO_FILE) {
             $_SESSION['flash_message']='Seleccione un PDF.'; $_SESSION['flash_type']='warning';
-            header("Location: conac.php?bloque_id={$bId}"); exit;
+            header("Location: conac?bloque_id={$bId}"); exit;
         }
         $upload = handle_upload($_FILES['pdf'], 'pdf');
         if (!$upload['success']) {
             $_SESSION['flash_message']=$upload['error']; $_SESSION['flash_type']='danger';
-            header("Location: conac.php?bloque_id={$bId}"); exit;
+            header("Location: conac?bloque_id={$bId}"); exit;
         }
         try {
             $s=$pdo->prepare('SELECT id,pdf_path FROM conac_pdfs WHERE bloque_id=? AND concepto_id=? AND trimestre=?');
@@ -151,15 +151,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_message']=(defined('APP_DEBUG')&&APP_DEBUG)?$e->getMessage():'Error al guardar.';
             $_SESSION['flash_type']='danger';
         }
-        header("Location: conac.php?bloque_id={$bId}"); exit;
+        header("Location: conac?bloque_id={$bId}"); exit;
     }
 
     // DELETE PDF
     if ($action === 'delete_pdf') {
         $pdfId=(int)($_POST['pdf_id']??0); $bId=(int)($_POST['bloque_id']??0);
-        if ($pdfId<=0) { $_SESSION['flash_message']='ID inválido.'; $_SESSION['flash_type']='danger'; header("Location: conac.php?bloque_id={$bId}"); exit; }
+        if ($pdfId<=0) { $_SESSION['flash_message']='ID inválido.'; $_SESSION['flash_type']='danger'; header("Location: conac?bloque_id={$bId}"); exit; }
         $s=$pdo->prepare('SELECT pdf_path FROM conac_pdfs WHERE id=?'); $s->execute([$pdfId]); $row=$s->fetch();
-        if (!$row) { $_SESSION['flash_message']='PDF no encontrado.'; $_SESSION['flash_type']='danger'; header("Location: conac.php?bloque_id={$bId}"); exit; }
+        if (!$row) { $_SESSION['flash_message']='PDF no encontrado.'; $_SESSION['flash_type']='danger'; header("Location: conac?bloque_id={$bId}"); exit; }
         try {
             $pdo->prepare('DELETE FROM conac_pdfs WHERE id=?')->execute([$pdfId]);
             if (!empty($row['pdf_path'])) { $f=BASE_PATH.'/'.$row['pdf_path']; if(file_exists($f)) unlink($f); }
@@ -168,15 +168,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_message']=(defined('APP_DEBUG')&&APP_DEBUG)?$e->getMessage():'Error al eliminar.';
             $_SESSION['flash_type']='danger';
         }
-        header("Location: conac.php?bloque_id={$bId}"); exit;
+        header("Location: conac?bloque_id={$bId}"); exit;
     }
 
     // DELETE BLOCK
     if ($action === 'delete_block') {
         $id=(int)($_POST['id']??0);
-        if ($id<=0) { $_SESSION['flash_message']='ID inválido.'; $_SESSION['flash_type']='danger'; header('Location: conac.php'); exit; }
+        if ($id<=0) { $_SESSION['flash_message']='ID inválido.'; $_SESSION['flash_type']='danger'; header('Location: conac'); exit; }
         $s=$pdo->prepare('SELECT id,anio FROM conac_bloques WHERE id=?'); $s->execute([$id]); $bl=$s->fetch();
-        if (!$bl) { $_SESSION['flash_message']='Bloque no encontrado.'; $_SESSION['flash_type']='danger'; header('Location: conac.php'); exit; }
+        if (!$bl) { $_SESSION['flash_message']='Bloque no encontrado.'; $_SESSION['flash_type']='danger'; header('Location: conac'); exit; }
         try {
             // Primero obtener y eliminar archivos PDF del servidor
             $sp=$pdo->prepare('SELECT pdf_path FROM conac_pdfs WHERE bloque_id=? AND pdf_path IS NOT NULL AND pdf_path!=""');
@@ -194,7 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_message']=(defined('APP_DEBUG')&&APP_DEBUG)?$e->getMessage():'Error al eliminar.';
             $_SESSION['flash_type']='danger';
         }
-        header('Location: conac.php'); exit;
+        header('Location: conac'); exit;
     }
 }
 
@@ -247,13 +247,13 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
             <button class="btn btn-outline-secondary me-2" id="toggleSidebar" aria-label="Menú"><i class="bi bi-list"></i></button>
             <span class="navbar-brand mb-0 h6">
                 <?php if ($currentBloque): ?>
-                    <a href="conac.php" class="text-decoration-none text-muted">CONAC</a>
+                    <a href="conac" class="text-decoration-none text-muted">CONAC</a>
                     <i class="bi bi-chevron-right mx-1 small"></i> Bloque <?= htmlspecialchars($currentBloque['anio']) ?>
                 <?php else: ?>
                     CONAC — Bloques por Año
                 <?php endif; ?>
             </span>
-            <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
+            <a href="logout" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
         </nav>
 
         <div class="container-fluid p-4">
@@ -380,7 +380,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
             <!-- Modal eliminar bloque -->
             <div class="modal fade" id="deleteBlockModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog"><div class="modal-content">
-                    <form method="POST" action="conac.php">
+                    <form method="POST" action="conac">
                         <input type="hidden" name="action" value="delete_block">
                         <input type="hidden" name="id" value="<?= (int)$currentBloque['id'] ?>">
                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
@@ -395,7 +395,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
             </div>
 
 <?php elseif ($bloqueId > 0 && !$currentBloque): ?>
-            <div class="alert alert-warning"><i class="bi bi-exclamation-triangle me-1"></i> Bloque no encontrado. <a href="conac.php" class="alert-link">Volver</a>.</div>
+            <div class="alert alert-warning"><i class="bi bi-exclamation-triangle me-1"></i> Bloque no encontrado. <a href="conac" class="alert-link">Volver</a>.</div>
 
 <?php else: ?>
             <!-- ══════ LISTADO BLOQUES ══════ -->
@@ -404,7 +404,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                     <div class="card">
                         <div class="card-header bg-primary text-white"><i class="bi bi-plus-circle me-1"></i> Crear bloque CONAC</div>
                         <div class="card-body">
-                            <form method="POST" action="conac.php">
+                            <form method="POST" action="conac">
                                 <input type="hidden" name="action" value="create_block">
                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                                 <div class="mb-3"><label for="anio" class="form-label">Año</label><input type="number" class="form-control" id="anio" name="anio" min="2000" max="<?= date('Y') ?>" placeholder="Ej: <?= date('Y') ?>" required></div>
@@ -435,7 +435,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                         </tr>
                                         <div class="modal fade" id="delBL<?= (int)$bl['id'] ?>" tabindex="-1" aria-hidden="true">
                                             <div class="modal-dialog"><div class="modal-content">
-                                                <form method="POST" action="conac.php">
+                                                <form method="POST" action="conac">
                                                     <input type="hidden" name="action" value="delete_block">
                                                     <input type="hidden" name="id" value="<?= (int)$bl['id'] ?>">
                                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">

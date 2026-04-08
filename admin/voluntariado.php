@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido.';
         $_SESSION['flash_type'] = 'danger';
-        header('Location: voluntariado.php'); exit;
+        header('Location: voluntariado'); exit;
     }
 
     // UPLOAD LOGO (dedicado)
@@ -39,13 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!isset($_FILES['logo']) || $_FILES['logo']['error'] === UPLOAD_ERR_NO_FILE) {
             $_SESSION['flash_message'] = 'Debe seleccionar una imagen.';
             $_SESSION['flash_type'] = 'warning';
-            header('Location: voluntariado.php'); exit;
+            header('Location: voluntariado'); exit;
         }
         $upload = handle_upload($_FILES['logo'], 'image');
         if (!$upload['success']) {
             $_SESSION['flash_message'] = $upload['error'];
             $_SESSION['flash_type'] = 'danger';
-            header('Location: voluntariado.php'); exit;
+            header('Location: voluntariado'); exit;
         }
         $stmt = $pdo->query('SELECT * FROM voluntariado_config LIMIT 1');
         $current = $stmt->fetch();
@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $_SESSION['flash_message'] = 'Logo actualizado correctamente.';
         $_SESSION['flash_type'] = 'success';
-        header('Location: voluntariado.php'); exit;
+        header('Location: voluntariado'); exit;
     }
 
     // DELETE LOGO
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $_SESSION['flash_message'] = 'Logo eliminado. Se usará la imagen por defecto.';
         $_SESSION['flash_type'] = 'success';
-        header('Location: voluntariado.php'); exit;
+        header('Location: voluntariado'); exit;
     }
 
     // SAVE CONFIG
@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al guardar.';
             $_SESSION['flash_type'] = 'danger';
         }
-        header('Location: voluntariado.php'); exit;
+        header('Location: voluntariado'); exit;
     }
 
     // ADD IMAGES (multi-upload)
@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!isset($_FILES['imagenes']) || !is_array($_FILES['imagenes']['name'])) {
             $_SESSION['flash_message'] = 'Seleccione al menos una imagen.';
             $_SESSION['flash_type'] = 'warning';
-            header('Location: voluntariado.php'); exit;
+            header('Location: voluntariado'); exit;
         }
         $count = count($_FILES['imagenes']['name']);
         $uploaded = 0;
@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $_SESSION['flash_message'] = $uploaded . ' imagen(es) agregada(s).';
         $_SESSION['flash_type'] = $uploaded > 0 ? 'success' : 'warning';
-        header('Location: voluntariado.php'); exit;
+        header('Location: voluntariado'); exit;
     }
 
     // DELETE IMAGE
@@ -159,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_message'] = 'Imagen eliminada.';
             $_SESSION['flash_type'] = 'success';
         }
-        header('Location: voluntariado.php'); exit;
+        header('Location: voluntariado'); exit;
     }
 
     // DELETE ALL IMAGES
@@ -170,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($paths as $p) { $f = BASE_PATH . '/' . $p['imagen_path']; if (file_exists($f)) unlink($f); }
         $_SESSION['flash_message'] = count($paths) . ' imagen(es) eliminada(s).';
         $_SESSION['flash_type'] = 'success';
-        header('Location: voluntariado.php'); exit;
+        header('Location: voluntariado'); exit;
     }
 }
 
@@ -204,7 +204,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
             <nav class="navbar navbar-light bg-white shadow-sm px-3">
                 <button class="btn btn-outline-secondary me-2" id="toggleSidebar"><i class="bi bi-list"></i></button>
                 <span class="navbar-brand mb-0 h6">Voluntariado</span>
-                <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
+                <a href="logout" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
             </nav>
             <div class="container-fluid p-4">
                 <?php page_help('voluntariado'); ?>
@@ -224,7 +224,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                             <img src="../<?= htmlspecialchars($config['logo_path']) ?>" class="img-fluid" style="max-height:100px;">
                             <div>
                                 <span class="badge bg-success mb-1">Logo actual</span><br>
-                                <form method="POST" action="voluntariado.php" class="d-inline" onsubmit="return confirm('¿Eliminar el logo?')">
+                                <form method="POST" action="voluntariado" class="d-inline" onsubmit="return confirm('¿Eliminar el logo?')">
                                     <input type="hidden" name="action" value="delete_logo">
                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                                     <button type="submit" class="btn btn-sm btn-action-delete mt-1"><i class="bi bi-trash3 me-1"></i> Eliminar logo</button>
@@ -234,7 +234,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                         <?php else: ?>
                         <div class="text-muted small mb-3"><i class="bi bi-image me-1"></i> Sin logo — se usa img/voluntariado.png por defecto</div>
                         <?php endif; ?>
-                        <form method="POST" enctype="multipart/form-data" action="voluntariado.php" class="d-flex gap-2 align-items-end">
+                        <form method="POST" enctype="multipart/form-data" action="voluntariado" class="d-flex gap-2 align-items-end">
                             <input type="hidden" name="action" value="upload_logo">
                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                             <div class="flex-grow-1">
@@ -250,7 +250,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white"><i class="bi bi-gear me-1"></i> Contenido de la página</div>
                     <div class="card-body">
-                        <form method="POST" enctype="multipart/form-data" action="voluntariado.php">
+                        <form method="POST" enctype="multipart/form-data" action="voluntariado">
                             <input type="hidden" name="action" value="save_config">
                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                             <div class="row g-3">
@@ -301,7 +301,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                     </div>
                     <div class="card-body">
                         <!-- Upload -->
-                        <form method="POST" enctype="multipart/form-data" action="voluntariado.php" class="row g-2 mb-3 align-items-end">
+                        <form method="POST" enctype="multipart/form-data" action="voluntariado" class="row g-2 mb-3 align-items-end">
                             <input type="hidden" name="action" value="add_images">
                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                             <div class="col-md-8">
@@ -326,7 +326,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                         <span class="position-absolute top-0 start-0 badge bg-dark m-1 orden-badge"><?= (int)$img['orden'] ?></span>
                                     </div>
                                     <div class="card-body p-1 text-center">
-                                        <form method="POST" action="voluntariado.php" onsubmit="return confirm('¿Eliminar esta imagen?')">
+                                        <form method="POST" action="voluntariado" onsubmit="return confirm('¿Eliminar esta imagen?')">
                                             <input type="hidden" name="action" value="delete_image">
                                             <input type="hidden" name="image_id" value="<?= (int)$img['id'] ?>">
                                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
@@ -346,7 +346,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                 <div class="modal fade" id="deleteAllModal" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <form method="POST" action="voluntariado.php">
+                            <form method="POST" action="voluntariado">
                                 <input type="hidden" name="action" value="delete_all_images">
                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                                 <div class="modal-header"><h5 class="modal-title text-danger"><i class="bi bi-exclamation-triangle me-1"></i> Eliminar todas</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>

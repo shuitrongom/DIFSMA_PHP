@@ -44,7 +44,7 @@ require_once __DIR__ . '/auth_guard.php';
                     <i class="bi bi-list"></i>
                 </button>
                 <span class="navbar-brand mb-0 h6">Panel de Administración</span>
-                <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto">
+                <a href="logout" class="btn btn-sm btn-outline-danger ms-auto">
                     <i class="bi bi-box-arrow-right"></i> Salir
                 </a>
             </nav>

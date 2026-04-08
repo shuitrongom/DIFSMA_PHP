@@ -14,20 +14,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $token  = $_POST['csrf_token'] ?? '';
     if (!csrf_validate($token)) {
         $_SESSION['flash_message']='Token CSRF inválido.'; $_SESSION['flash_type']='danger';
-        header('Location: cuenta_publica.php'.($bloqueId>0?"?bloque_id={$bloqueId}":'')); exit;
+        header('Location: cuenta_publica'.($bloqueId>0?"?bloque_id={$bloqueId}":'')); exit;
     }
     if ($action==='create_block') {
         $anio=trim($_POST['anio']??'');
-        if (empty($anio)||!preg_match('/^\d{4}$/',$anio)) { $_SESSION['flash_message']='Año inválido.'; $_SESSION['flash_type']='warning'; header('Location: cuenta_publica.php'); exit; }
-        if ((int)$anio > (int)date('Y')) { $_SESSION['flash_message']='El año no puede ser mayor al año en curso ('.date('Y').').'; $_SESSION['flash_type']='warning'; header('Location: cuenta_publica.php'); exit; }
+        if (empty($anio)||!preg_match('/^\d{4}$/',$anio)) { $_SESSION['flash_message']='Año inválido.'; $_SESSION['flash_type']='warning'; header('Location: cuenta_publica'); exit; }
+        if ((int)$anio > (int)date('Y')) { $_SESSION['flash_message']='El año no puede ser mayor al año en curso ('.date('Y').').'; $_SESSION['flash_type']='warning'; header('Location: cuenta_publica'); exit; }
         try {
             $s=$pdo->prepare('SELECT id FROM cp_bloques WHERE anio=?'); $s->execute([$anio]);
-            if ($s->fetch()) { $_SESSION['flash_message']="Ya existe bloque {$anio}."; $_SESSION['flash_type']='warning'; header('Location: cuenta_publica.php'); exit; }
+            if ($s->fetch()) { $_SESSION['flash_message']="Ya existe bloque {$anio}."; $_SESSION['flash_type']='warning'; header('Location: cuenta_publica'); exit; }
             $s=$pdo->prepare('SELECT COALESCE(MAX(orden),0)+1 FROM cp_bloques'); $s->execute(); $ord=(int)$s->fetchColumn();
             $pdo->prepare('INSERT INTO cp_bloques (anio,orden) VALUES (?,?)')->execute([$anio,$ord]);
             $_SESSION['flash_message']="Bloque {$anio} creado."; $_SESSION['flash_type']='success';
         } catch(PDOException $e) { $_SESSION['flash_message']=(defined('APP_DEBUG')&&APP_DEBUG)?$e->getMessage():'Error.'; $_SESSION['flash_type']='danger'; }
-        header('Location: cuenta_publica.php'); exit;
+        header('Location: cuenta_publica'); exit;
     }
     if ($action==='delete_block') {
         $id=(int)($_POST['id']??0);
@@ -37,23 +37,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             foreach($pdfs as $p){$f=BASE_PATH.'/'.$p['pdf_path'];if(file_exists($f))unlink($f);}
             $_SESSION['flash_message']='Bloque eliminado.'; $_SESSION['flash_type']='success';
         } catch(PDOException $e) { $_SESSION['flash_message']=(defined('APP_DEBUG')&&APP_DEBUG)?$e->getMessage():'Error.'; $_SESSION['flash_type']='danger'; }
-        header('Location: cuenta_publica.php'); exit;
+        header('Location: cuenta_publica'); exit;
     }
     if ($action==='add_titulo') {
         $bId=(int)($_POST['bloque_id']??0); $nombre=trim($_POST['nombre']??'');
-        if ($bId<=0||$nombre==='') { $_SESSION['flash_message']='Ingrese un nombre.'; $_SESSION['flash_type']='warning'; header("Location: cuenta_publica.php?bloque_id={$bId}"); exit; }
+        if ($bId<=0||$nombre==='') { $_SESSION['flash_message']='Ingrese un nombre.'; $_SESSION['flash_type']='warning'; header("Location: cuenta_publica?bloque_id={$bId}"); exit; }
         try { $s=$pdo->prepare('SELECT COALESCE(MAX(orden),0)+1 FROM cp_titulos WHERE bloque_id=?'); $s->execute([$bId]); $ord=(int)$s->fetchColumn();
             $pdo->prepare('INSERT INTO cp_titulos (bloque_id,nombre,orden) VALUES (?,?,?)')->execute([$bId,$nombre,$ord]);
             $_SESSION['flash_message']='Título agregado.'; $_SESSION['flash_type']='success';
         } catch(PDOException $e) { $_SESSION['flash_message']=(defined('APP_DEBUG')&&APP_DEBUG)?$e->getMessage():'Error.'; $_SESSION['flash_type']='danger'; }
-        header("Location: cuenta_publica.php?bloque_id={$bId}"); exit;
+        header("Location: cuenta_publica?bloque_id={$bId}"); exit;
     }
     if ($action==='edit_titulo') {
         $bId=(int)($_POST['bloque_id']??0); $tId=(int)($_POST['titulo_id']??0); $nombre=trim($_POST['nombre']??'');
-        if ($tId<=0||$nombre==='') { $_SESSION['flash_message']='Datos inválidos.'; $_SESSION['flash_type']='warning'; header("Location: cuenta_publica.php?bloque_id={$bId}"); exit; }
+        if ($tId<=0||$nombre==='') { $_SESSION['flash_message']='Datos inválidos.'; $_SESSION['flash_type']='warning'; header("Location: cuenta_publica?bloque_id={$bId}"); exit; }
         try { $pdo->prepare('UPDATE cp_titulos SET nombre=? WHERE id=? AND bloque_id=?')->execute([$nombre,$tId,$bId]); $_SESSION['flash_message']='Título actualizado.'; $_SESSION['flash_type']='success';
         } catch(PDOException $e) { $_SESSION['flash_message']=(defined('APP_DEBUG')&&APP_DEBUG)?$e->getMessage():'Error.'; $_SESSION['flash_type']='danger'; }
-        header("Location: cuenta_publica.php?bloque_id={$bId}"); exit;
+        header("Location: cuenta_publica?bloque_id={$bId}"); exit;
     }
     if ($action==='delete_titulo') {
         $bId=(int)($_POST['bloque_id']??0); $tId=(int)($_POST['titulo_id']??0);
@@ -62,41 +62,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             foreach($pdfs as $p){$f=BASE_PATH.'/'.$p['pdf_path'];if(file_exists($f))unlink($f);}
             $_SESSION['flash_message']='Título eliminado.'; $_SESSION['flash_type']='success';
         } catch(PDOException $e) { $_SESSION['flash_message']=(defined('APP_DEBUG')&&APP_DEBUG)?$e->getMessage():'Error.'; $_SESSION['flash_type']='danger'; }
-        header("Location: cuenta_publica.php?bloque_id={$bId}"); exit;
+        header("Location: cuenta_publica?bloque_id={$bId}"); exit;
     }
     if ($action==='add_concepto') {
         $bId=(int)($_POST['bloque_id']??0); $tId=(int)($_POST['titulo_id']??0); $nombre=trim($_POST['nombre']??'');
-        if ($tId<=0||$nombre==='') { $_SESSION['flash_message']='Ingrese un nombre.'; $_SESSION['flash_type']='warning'; header("Location: cuenta_publica.php?bloque_id={$bId}"); exit; }
+        if ($tId<=0||$nombre==='') { $_SESSION['flash_message']='Ingrese un nombre.'; $_SESSION['flash_type']='warning'; header("Location: cuenta_publica?bloque_id={$bId}"); exit; }
         $pdfPath=null;
         if (isset($_FILES['pdf'])&&$_FILES['pdf']['error']!==UPLOAD_ERR_NO_FILE) {
             $upload=handle_upload($_FILES['pdf'],'pdf');
-            if (!$upload['success']) { $_SESSION['flash_message']=$upload['error']; $_SESSION['flash_type']='danger'; header("Location: cuenta_publica.php?bloque_id={$bId}"); exit; }
+            if (!$upload['success']) { $_SESSION['flash_message']=$upload['error']; $_SESSION['flash_type']='danger'; header("Location: cuenta_publica?bloque_id={$bId}"); exit; }
             $pdfPath=$upload['path'];
         }
         try { $s=$pdo->prepare('SELECT COALESCE(MAX(numero),0)+1 FROM cp_conceptos WHERE titulo_id=?'); $s->execute([$tId]); $num=(int)$s->fetchColumn();
             $pdo->prepare('INSERT INTO cp_conceptos (titulo_id,numero,nombre,pdf_path,orden) VALUES (?,?,?,?,?)')->execute([$tId,$num,$nombre,$pdfPath,$num]);
             $_SESSION['flash_message']='Concepto agregado.'; $_SESSION['flash_type']='success';
         } catch(PDOException $e) { $_SESSION['flash_message']=(defined('APP_DEBUG')&&APP_DEBUG)?$e->getMessage():'Error.'; $_SESSION['flash_type']='danger'; }
-        header("Location: cuenta_publica.php?bloque_id={$bId}"); exit;
+        header("Location: cuenta_publica?bloque_id={$bId}"); exit;
     }
     if ($action==='edit_concepto') {
         $bId=(int)($_POST['bloque_id']??0); $cId=(int)($_POST['concepto_id']??0); $nombre=trim($_POST['nombre']??'');
-        if ($cId<=0||$nombre==='') { $_SESSION['flash_message']='Datos inválidos.'; $_SESSION['flash_type']='warning'; header("Location: cuenta_publica.php?bloque_id={$bId}"); exit; }
+        if ($cId<=0||$nombre==='') { $_SESSION['flash_message']='Datos inválidos.'; $_SESSION['flash_type']='warning'; header("Location: cuenta_publica?bloque_id={$bId}"); exit; }
         try { $pdo->prepare('UPDATE cp_conceptos SET nombre=? WHERE id=?')->execute([$nombre,$cId]); $_SESSION['flash_message']='Concepto actualizado.'; $_SESSION['flash_type']='success';
         } catch(PDOException $e) { $_SESSION['flash_message']=(defined('APP_DEBUG')&&APP_DEBUG)?$e->getMessage():'Error.'; $_SESSION['flash_type']='danger'; }
-        header("Location: cuenta_publica.php?bloque_id={$bId}"); exit;
+        header("Location: cuenta_publica?bloque_id={$bId}"); exit;
     }
     if ($action==='upload_pdf') {
         $bId=(int)($_POST['bloque_id']??0); $cId=(int)($_POST['concepto_id']??0);
-        if ($cId<=0||!isset($_FILES['pdf'])||$_FILES['pdf']['error']===UPLOAD_ERR_NO_FILE) { $_SESSION['flash_message']='Seleccione un PDF.'; $_SESSION['flash_type']='warning'; header("Location: cuenta_publica.php?bloque_id={$bId}"); exit; }
+        if ($cId<=0||!isset($_FILES['pdf'])||$_FILES['pdf']['error']===UPLOAD_ERR_NO_FILE) { $_SESSION['flash_message']='Seleccione un PDF.'; $_SESSION['flash_type']='warning'; header("Location: cuenta_publica?bloque_id={$bId}"); exit; }
         $upload=handle_upload($_FILES['pdf'],'pdf');
-        if (!$upload['success']) { $_SESSION['flash_message']=$upload['error']; $_SESSION['flash_type']='danger'; header("Location: cuenta_publica.php?bloque_id={$bId}"); exit; }
+        if (!$upload['success']) { $_SESSION['flash_message']=$upload['error']; $_SESSION['flash_type']='danger'; header("Location: cuenta_publica?bloque_id={$bId}"); exit; }
         try { $s=$pdo->prepare('SELECT pdf_path FROM cp_conceptos WHERE id=?'); $s->execute([$cId]); $old=$s->fetchColumn();
             if ($old&&file_exists(BASE_PATH.'/'.$old)) unlink(BASE_PATH.'/'.$old);
             $pdo->prepare('UPDATE cp_conceptos SET pdf_path=? WHERE id=?')->execute([$upload['path'],$cId]);
             $_SESSION['flash_message']='PDF subido.'; $_SESSION['flash_type']='success';
         } catch(PDOException $e) { $_SESSION['flash_message']=(defined('APP_DEBUG')&&APP_DEBUG)?$e->getMessage():'Error.'; $_SESSION['flash_type']='danger'; }
-        header("Location: cuenta_publica.php?bloque_id={$bId}"); exit;
+        header("Location: cuenta_publica?bloque_id={$bId}"); exit;
     }
     if ($action==='delete_pdf') {
         $bId=(int)($_POST['bloque_id']??0); $cId=(int)($_POST['concepto_id']??0);
@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo->prepare('UPDATE cp_conceptos SET pdf_path=NULL WHERE id=?')->execute([$cId]);
             $_SESSION['flash_message']='PDF eliminado.'; $_SESSION['flash_type']='success';
         } catch(PDOException $e) { $_SESSION['flash_message']=(defined('APP_DEBUG')&&APP_DEBUG)?$e->getMessage():'Error.'; $_SESSION['flash_type']='danger'; }
-        header("Location: cuenta_publica.php?bloque_id={$bId}"); exit;
+        header("Location: cuenta_publica?bloque_id={$bId}"); exit;
     }
     if ($action==='delete_concepto') {
         $bId=(int)($_POST['bloque_id']??0); $cId=(int)($_POST['concepto_id']??0); $tId=(int)($_POST['titulo_id']??0);
@@ -117,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             foreach($s->fetchAll() as $r){$u->execute([$n,$n,$r['id']]);$n++;}
             $_SESSION['flash_message']='Concepto eliminado.'; $_SESSION['flash_type']='success';
         } catch(PDOException $e) { $_SESSION['flash_message']=(defined('APP_DEBUG')&&APP_DEBUG)?$e->getMessage():'Error.'; $_SESSION['flash_type']='danger'; }
-        header("Location: cuenta_publica.php?bloque_id={$bId}"); exit;
+        header("Location: cuenta_publica?bloque_id={$bId}"); exit;
     }
 }
 $currentBloque=null; $titulos=[]; $conceptosMap=[]; $bloques=[];
@@ -154,8 +154,8 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
 <div class="main-content">
 <nav class="navbar navbar-light bg-white shadow-sm px-3">
 <button class="btn btn-outline-secondary me-2" id="toggleSidebar"><i class="bi bi-list"></i></button>
-<span class="navbar-brand mb-0 h6"><?php if($currentBloque):?><a href="cuenta_publica.php" class="text-decoration-none text-muted">Cuenta Pública</a> <i class="bi bi-chevron-right mx-1 small"></i> <?=htmlspecialchars($currentBloque['anio'])?><?php else:?>Cuenta Pública — Bloques por Año<?php endif;?></span>
-<a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
+<span class="navbar-brand mb-0 h6"><?php if($currentBloque):?><a href="cuenta_publica" class="text-decoration-none text-muted">Cuenta Pública</a> <i class="bi bi-chevron-right mx-1 small"></i> <?=htmlspecialchars($currentBloque['anio'])?><?php else:?>Cuenta Pública — Bloques por Año<?php endif;?></span>
+<a href="logout" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
 </nav>
 <div class="container-fluid p-4">
                 <?php page_help('cuenta_publica'); ?>

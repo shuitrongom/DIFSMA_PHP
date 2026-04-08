@@ -16,7 +16,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Redirigir si ya está autenticado
 if (($_SESSION['admin_logged'] ?? false) === true) {
-    header('Location: dashboard.php');
+    header('Location: dashboard');
     exit;
 }
 
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         require_once __DIR__ . '/historial_helper.php';
                         registrar_historial(get_db(), 'login', 'Sistema', 'Inicio de sesion: ' . $admin['username']);
                     } catch (Exception $e) {}
-                    header('Location: dashboard.php');
+                    header('Location: dashboard');
                     exit;
                 }
             } else {
@@ -334,7 +334,7 @@ $csrf = csrf_token();
                     </div>
                 <?php endif; ?>
 
-                <form method="POST" action="login.php" novalidate>
+                <form method="POST" action="login" novalidate>
                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf) ?>">
 
                     <div class="mb-3">

@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Redirigir URLs con .php a URLs limpias (301)
+    RewriteCond %{THE_REQUEST} ^[A-Z]+\s/+admin/(.+)\.php[\s?] [NC]
+    RewriteRule ^ /admin/%1 [R=301,L]
+
+    # Servir archivo .php si la URL no tiene extensión
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}.php -f
+    RewriteRule ^(.+)$ $1.php [L]
+</IfModule>

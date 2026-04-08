@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido. Intente de nuevo.';
         $_SESSION['flash_type']    = 'danger';
-        header('Location: noticias.php');
+        header('Location: noticias');
         exit;
     }
 
@@ -31,28 +31,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($fechaNoticia)) {
             $_SESSION['flash_message'] = 'Debe seleccionar una fecha para la noticia.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: noticias.php');
+            header('Location: noticias');
             exit;
         }
 
         if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $fechaNoticia)) {
             $_SESSION['flash_message'] = 'Formato de fecha inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: noticias.php');
+            header('Location: noticias');
             exit;
         }
 
         if ($fechaNoticia > date('Y-m-d')) {
             $_SESSION['flash_message'] = 'La fecha no puede ser mayor al día de hoy.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: noticias.php');
+            header('Location: noticias');
             exit;
         }
 
         if (!isset($_FILES['imagen']) || $_FILES['imagen']['error'] === UPLOAD_ERR_NO_FILE) {
             $_SESSION['flash_message'] = 'Debe seleccionar una imagen.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: noticias.php');
+            header('Location: noticias');
             exit;
         }
 
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$upload['success']) {
             $_SESSION['flash_message'] = $upload['error'];
             $_SESSION['flash_type']    = 'danger';
-            header('Location: noticias.php');
+            header('Location: noticias');
             exit;
         }
 
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header('Location: noticias.php');
+        header('Location: noticias');
         exit;
     }
 
@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($id <= 0) {
             $_SESSION['flash_message'] = 'ID de noticia inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: noticias.php');
+            header('Location: noticias');
             exit;
         }
 
@@ -98,14 +98,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($fechaNoticia) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $fechaNoticia)) {
             $_SESSION['flash_message'] = 'Formato de fecha inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: noticias.php');
+            header('Location: noticias');
             exit;
         }
 
         if ($fechaNoticia > date('Y-m-d')) {
             $_SESSION['flash_message'] = 'La fecha no puede ser mayor al día de hoy.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: noticias.php');
+            header('Location: noticias');
             exit;
         }
 
@@ -117,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$old) {
             $_SESSION['flash_message'] = 'Registro no encontrado.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: noticias.php');
+            header('Location: noticias');
             exit;
         }
 
@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$upload['success']) {
                 $_SESSION['flash_message'] = $upload['error'];
                 $_SESSION['flash_type']    = 'danger';
-                header('Location: noticias.php');
+                header('Location: noticias');
                 exit;
             }
 
@@ -158,7 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header('Location: noticias.php');
+        header('Location: noticias');
         exit;
     }
 
@@ -169,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($id <= 0) {
             $_SESSION['flash_message'] = 'ID de noticia inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: noticias.php');
+            header('Location: noticias');
             exit;
         }
 
@@ -180,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$row) {
             $_SESSION['flash_message'] = 'Registro no encontrado.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: noticias.php');
+            header('Location: noticias');
             exit;
         }
 
@@ -201,7 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header('Location: noticias.php');
+        header('Location: noticias');
         exit;
     }
 }
@@ -251,7 +251,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                     <i class="bi bi-list"></i>
                 </button>
                 <span class="navbar-brand mb-0 h6">Noticias por Día</span>
-                <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto">
+                <a href="logout" class="btn btn-sm btn-outline-danger ms-auto">
                     <i class="bi bi-box-arrow-right"></i> Salir
                 </a>
             </nav>
@@ -274,7 +274,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                 <i class="bi bi-plus-circle me-1"></i> Agregar imagen de noticia
                             </div>
                             <div class="card-body">
-                                <form method="POST" enctype="multipart/form-data" action="noticias.php">
+                                <form method="POST" enctype="multipart/form-data" action="noticias">
                                     <input type="hidden" name="action" value="add">
                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                                     <div class="mb-3">
@@ -365,7 +365,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                                         <div class="modal fade" id="editModal<?= (int) $noticia['id'] ?>" tabindex="-1" aria-labelledby="editLabel<?= (int) $noticia['id'] ?>" aria-hidden="true">
                                                             <div class="modal-dialog">
                                                                 <div class="modal-content">
-                                                                    <form method="POST" enctype="multipart/form-data" action="noticias.php">
+                                                                    <form method="POST" enctype="multipart/form-data" action="noticias">
                                                                         <input type="hidden" name="action" value="edit">
                                                                         <input type="hidden" name="id" value="<?= (int) $noticia['id'] ?>">
                                                                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
@@ -404,7 +404,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                                         <div class="modal fade" id="deleteModal<?= (int) $noticia['id'] ?>" tabindex="-1" aria-labelledby="deleteLabel<?= (int) $noticia['id'] ?>" aria-hidden="true">
                                                             <div class="modal-dialog">
                                                                 <div class="modal-content">
-                                                                    <form method="POST" action="noticias.php">
+                                                                    <form method="POST" action="noticias">
                                                                         <input type="hidden" name="action" value="delete">
                                                                         <input type="hidden" name="id" value="<?= (int) $noticia['id'] ?>">
                                                                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">

@@ -8,7 +8,7 @@ require_once __DIR__ . '/../includes/db.php';
 
 // Solo el admin puede acceder
 if (($_SESSION['admin_rol'] ?? '') !== 'admin') {
-    header('Location: dashboard.php'); exit;
+    header('Location: dashboard'); exit;
 }
 
 $pdo = get_db();
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF invalido.';
         $_SESSION['flash_type'] = 'danger';
-        header('Location: usuarios.php'); exit;
+        header('Location: usuarios'); exit;
     }
 
     // CREAR USUARIO
@@ -41,18 +41,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($username) || empty($password)) {
             $_SESSION['flash_message'] = 'Usuario y contrasena son obligatorios.';
             $_SESSION['flash_type'] = 'warning';
-            header('Location: usuarios.php'); exit;
+            header('Location: usuarios'); exit;
         }
         if (strlen($password) < 8 || !preg_match('/[A-Z]/', $password) || !preg_match('/[a-z]/', $password) || !preg_match('/[0-9]/', $password) || !preg_match('/[\W_]/', $password)) {
             $_SESSION['flash_message'] = 'La contrasena debe tener al menos 8 caracteres, una mayuscula, una minuscula, un numero y un simbolo.';
             $_SESSION['flash_type'] = 'warning';
-            header('Location: usuarios.php'); exit;
+            header('Location: usuarios'); exit;
         }
         $s = $pdo->prepare('SELECT id FROM admin WHERE username = ?'); $s->execute([$username]);
         if ($s->fetch()) {
             $_SESSION['flash_message'] = 'El usuario ya existe.';
             $_SESSION['flash_type'] = 'warning';
-            header('Location: usuarios.php'); exit;
+            header('Location: usuarios'); exit;
         }
         try {
             $hash = password_hash($password, PASSWORD_DEFAULT);
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al crear.';
             $_SESSION['flash_type'] = 'danger';
         }
-        header('Location: usuarios.php'); exit;
+        header('Location: usuarios'); exit;
     }
 
     // RESET PASSWORD
@@ -78,13 +78,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (strlen($newPass) < 8 || !preg_match('/[A-Z]/', $newPass) || !preg_match('/[a-z]/', $newPass) || !preg_match('/[0-9]/', $newPass) || !preg_match('/[\W_]/', $newPass)) {
             $_SESSION['flash_message'] = 'La contrasena debe tener al menos 8 caracteres, una mayuscula, una minuscula, un numero y un simbolo.';
             $_SESSION['flash_type'] = 'warning';
-            header('Location: usuarios.php'); exit;
+            header('Location: usuarios'); exit;
         }
         $hash = password_hash($newPass, PASSWORD_DEFAULT);
         $pdo->prepare('UPDATE admin SET password = ? WHERE id = ? AND rol = ?')->execute([$hash, $userId, 'usuario']);
         $_SESSION['flash_message'] = 'Contrasena actualizada.';
         $_SESSION['flash_type'] = 'success';
-        header('Location: usuarios.php'); exit;
+        header('Location: usuarios'); exit;
     }
 
     // UPDATE PERMISOS
@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($secciones as $sec) { $stmtP->execute([$userId, $sec]); }
         $_SESSION['flash_message'] = 'Permisos actualizados (' . count($secciones) . ' secciones).';
         $_SESSION['flash_type'] = 'success';
-        header('Location: usuarios.php'); exit;
+        header('Location: usuarios'); exit;
     }
 
     // TOGGLE ACTIVO
@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->prepare('UPDATE admin SET activo = NOT activo WHERE id = ? AND rol = ?')->execute([$userId, 'usuario']);
         $_SESSION['flash_message'] = 'Estado actualizado.';
         $_SESSION['flash_type'] = 'success';
-        header('Location: usuarios.php'); exit;
+        header('Location: usuarios'); exit;
     }
 
     // DELETE
@@ -114,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->prepare('DELETE FROM admin WHERE id = ? AND rol = ?')->execute([$userId, 'usuario']);
         $_SESSION['flash_message'] = 'Usuario eliminado.';
         $_SESSION['flash_type'] = 'success';
-        header('Location: usuarios.php'); exit;
+        header('Location: usuarios'); exit;
     }
 }
 
@@ -139,7 +139,7 @@ $token = csrf_token();
 <nav class="navbar navbar-light bg-white shadow-sm px-3">
 <button class="btn btn-outline-secondary me-2" id="toggleSidebar"><i class="bi bi-list"></i></button>
 <span class="navbar-brand mb-0 h6"><i class="bi bi-people me-1"></i> Gestion de Usuarios</span>
-<a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
+<a href="logout" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
 </nav>
 <div class="container-fluid p-4">
                 <?php page_help('usuarios'); ?>
@@ -169,7 +169,7 @@ $token = csrf_token();
     <i class="bi bi-person-plus me-1"></i> Nuevo usuario
   </div>
   <div class="card-body p-4">
-<form method="POST" action="usuarios.php" id="formCrearUsuario" novalidate>
+<form method="POST" action="usuarios" id="formCrearUsuario" novalidate>
 <input type="hidden" name="action" value="create">
 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
 
@@ -273,7 +273,7 @@ $token = csrf_token();
 <button class="btn btn-sm btn-action-key" data-bs-toggle="modal" data-bs-target="#passModal<?= (int)$usr['id'] ?>" title="Cambiar contraseña">
   <i class="bi bi-key"></i> Contraseña
 </button>
-<form method="POST" action="usuarios.php" class="d-inline">
+<form method="POST" action="usuarios" class="d-inline">
   <input type="hidden" name="action" value="toggle">
   <input type="hidden" name="user_id" value="<?= (int)$usr['id'] ?>">
   <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
@@ -281,7 +281,7 @@ $token = csrf_token();
     <i class="bi bi-<?= $usr['activo'] ? 'pause-circle' : 'play-circle' ?>"></i> <?= $usr['activo'] ? 'Desactivar' : 'Activar' ?>
   </button>
 </form>
-<form method="POST" action="usuarios.php" class="d-inline" onsubmit="return confirm('¿Eliminar usuario <?= htmlspecialchars($usr['username']) ?>? Esta acción no se puede deshacer.')">
+<form method="POST" action="usuarios" class="d-inline" onsubmit="return confirm('¿Eliminar usuario <?= htmlspecialchars($usr['username']) ?>? Esta acción no se puede deshacer.')">
   <input type="hidden" name="action" value="delete">
   <input type="hidden" name="user_id" value="<?= (int)$usr['id'] ?>">
   <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
@@ -293,7 +293,7 @@ $token = csrf_token();
 
 <!-- Modal Permisos -->
 <div class="modal fade" id="permsModal<?= (int)$usr['id'] ?>" tabindex="-1" aria-hidden="true"><div class="modal-dialog"><div class="modal-content">
-<form method="POST" action="usuarios.php"><input type="hidden" name="action" value="update_permisos"><input type="hidden" name="user_id" value="<?= (int)$usr['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+<form method="POST" action="usuarios"><input type="hidden" name="action" value="update_permisos"><input type="hidden" name="user_id" value="<?= (int)$usr['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
 <div class="modal-header"><h5 class="modal-title"><i class="bi bi-shield-check me-1"></i> Permisos: <?= htmlspecialchars($usr['username']) ?></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
 <div class="modal-body" style="max-height:400px;overflow-y:auto;">
 <?php $lastG=''; foreach ($all_sections as $sec): if($sec['group']!==$lastG){$lastG=$sec['group'];?><div class="fw-bold small text-muted mt-2 mb-1"><i class="bi bi-folder me-1"></i><?= htmlspecialchars($sec['group']) ?></div><?php } ?>
@@ -305,7 +305,7 @@ $token = csrf_token();
 
 <!-- Modal Reset Password -->
 <div class="modal fade" id="passModal<?= (int)$usr['id'] ?>" tabindex="-1" aria-hidden="true"><div class="modal-dialog"><div class="modal-content">
-<form method="POST" action="usuarios.php"><input type="hidden" name="action" value="reset_password"><input type="hidden" name="user_id" value="<?= (int)$usr['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+<form method="POST" action="usuarios"><input type="hidden" name="action" value="reset_password"><input type="hidden" name="user_id" value="<?= (int)$usr['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
 <div class="modal-header"><h5 class="modal-title"><i class="bi bi-key me-1"></i> Nueva contrasena: <?= htmlspecialchars($usr['username']) ?></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
 <div class="modal-body">
 <div class="mb-3"><label class="form-label">Nueva contraseña</label>

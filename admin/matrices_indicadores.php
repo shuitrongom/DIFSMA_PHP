@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $token  = $_POST['csrf_token'] ?? '';
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido.'; $_SESSION['flash_type'] = 'danger';
-        header('Location: matrices_indicadores.php'); exit;
+        header('Location: matrices_indicadores'); exit;
     }
 
     // — Agregar año
@@ -23,21 +23,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $anio = trim($_POST['anio'] ?? '');
         if (empty($anio) || !preg_match('/^\d{4}$/', $anio)) {
             $_SESSION['flash_message'] = 'Año inválido (4 dígitos).'; $_SESSION['flash_type'] = 'warning';
-            header('Location: matrices_indicadores.php'); exit;
+            header('Location: matrices_indicadores'); exit;
         }
         if ((int)$anio > (int)date('Y')) {
             $_SESSION['flash_message'] = 'El año no puede ser mayor al año en curso (' . date('Y') . ').'; $_SESSION['flash_type'] = 'warning';
-            header('Location: matrices_indicadores.php'); exit;
+            header('Location: matrices_indicadores'); exit;
         }
         $s = $pdo->prepare('SELECT id FROM mi_pdfs WHERE anio=?'); $s->execute([$anio]);
         if ($s->fetch()) {
             $_SESSION['flash_message'] = "Ya existe el año {$anio}."; $_SESSION['flash_type'] = 'warning';
-            header('Location: matrices_indicadores.php'); exit;
+            header('Location: matrices_indicadores'); exit;
         }
         $pdfPath = null;
         if (isset($_FILES['pdf']) && $_FILES['pdf']['error'] !== UPLOAD_ERR_NO_FILE) {
             $upload = handle_upload($_FILES['pdf'], 'pdf');
-            if (!$upload['success']) { $_SESSION['flash_message'] = $upload['error']; $_SESSION['flash_type'] = 'danger'; header('Location: matrices_indicadores.php'); exit; }
+            if (!$upload['success']) { $_SESSION['flash_message'] = $upload['error']; $_SESSION['flash_type'] = 'danger'; header('Location: matrices_indicadores'); exit; }
             $pdfPath = $upload['path'];
         }
         try {
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error.'; $_SESSION['flash_type'] = 'danger';
         }
-        header('Location: matrices_indicadores.php'); exit;
+        header('Location: matrices_indicadores'); exit;
     }
 
     // — Editar año (y opcionalmente reemplazar PDF)
@@ -55,18 +55,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $anio = trim($_POST['anio'] ?? '');
         if ($pId <= 0 || empty($anio) || !preg_match('/^\d{4}$/', $anio)) {
             $_SESSION['flash_message'] = 'Datos inválidos.'; $_SESSION['flash_type'] = 'warning';
-            header('Location: matrices_indicadores.php'); exit;
+            header('Location: matrices_indicadores'); exit;
         }
         // Verificar que no exista otro registro con el mismo año
         $s = $pdo->prepare('SELECT id FROM mi_pdfs WHERE anio=? AND id!=?'); $s->execute([$anio, $pId]);
         if ($s->fetch()) {
             $_SESSION['flash_message'] = "Ya existe otro registro con el año {$anio}."; $_SESSION['flash_type'] = 'warning';
-            header('Location: matrices_indicadores.php'); exit;
+            header('Location: matrices_indicadores'); exit;
         }
         $pdfPath = null;
         if (isset($_FILES['pdf']) && $_FILES['pdf']['error'] !== UPLOAD_ERR_NO_FILE) {
             $upload = handle_upload($_FILES['pdf'], 'pdf');
-            if (!$upload['success']) { $_SESSION['flash_message'] = $upload['error']; $_SESSION['flash_type'] = 'danger'; header('Location: matrices_indicadores.php'); exit; }
+            if (!$upload['success']) { $_SESSION['flash_message'] = $upload['error']; $_SESSION['flash_type'] = 'danger'; header('Location: matrices_indicadores'); exit; }
             $s = $pdo->prepare('SELECT pdf_path FROM mi_pdfs WHERE id=?'); $s->execute([$pId]); $old = $s->fetchColumn();
             if ($old && file_exists(BASE_PATH.'/'.$old)) unlink(BASE_PATH.'/'.$old);
             $pdfPath = $upload['path'];
@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error.'; $_SESSION['flash_type'] = 'danger';
         }
-        header('Location: matrices_indicadores.php'); exit;
+        header('Location: matrices_indicadores'); exit;
     }
 
     // — Subir/reemplazar PDF
@@ -89,10 +89,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pId = (int)($_POST['pdf_id'] ?? 0);
         if ($pId <= 0 || !isset($_FILES['pdf']) || $_FILES['pdf']['error'] === UPLOAD_ERR_NO_FILE) {
             $_SESSION['flash_message'] = 'Seleccione un PDF.'; $_SESSION['flash_type'] = 'warning';
-            header('Location: matrices_indicadores.php'); exit;
+            header('Location: matrices_indicadores'); exit;
         }
         $upload = handle_upload($_FILES['pdf'], 'pdf');
-        if (!$upload['success']) { $_SESSION['flash_message'] = $upload['error']; $_SESSION['flash_type'] = 'danger'; header('Location: matrices_indicadores.php'); exit; }
+        if (!$upload['success']) { $_SESSION['flash_message'] = $upload['error']; $_SESSION['flash_type'] = 'danger'; header('Location: matrices_indicadores'); exit; }
         try {
             $s = $pdo->prepare('SELECT pdf_path FROM mi_pdfs WHERE id=?'); $s->execute([$pId]); $old = $s->fetchColumn();
             if ($old && file_exists(BASE_PATH.'/'.$old)) unlink(BASE_PATH.'/'.$old);
@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error.'; $_SESSION['flash_type'] = 'danger';
         }
-        header('Location: matrices_indicadores.php'); exit;
+        header('Location: matrices_indicadores'); exit;
     }
 
     // — Eliminar año
@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error.'; $_SESSION['flash_type'] = 'danger';
         }
-        header('Location: matrices_indicadores.php'); exit;
+        header('Location: matrices_indicadores'); exit;
     }
 }
 
@@ -151,7 +151,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
         <nav class="navbar navbar-light bg-white shadow-sm px-3">
             <button class="btn btn-outline-secondary me-2" id="toggleSidebar" aria-label="Menú"><i class="bi bi-list"></i></button>
             <span class="navbar-brand mb-0 h6">Matrices de Indicadores</span>
-            <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
+            <a href="logout" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
         </nav>
         <div class="container-fluid p-4">
                 <?php page_help('matrices_indicadores'); ?>

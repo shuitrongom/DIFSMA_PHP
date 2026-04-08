@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido.';
         $_SESSION['flash_type']    = 'danger';
-        header('Location: tramites.php');
+        header('Location: tramites');
         exit;
     }
 
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($titulo) || empty($slug)) {
             $_SESSION['flash_message'] = 'El título y slug son obligatorios.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: tramites.php');
+            header('Location: tramites');
             exit;
         }
 
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($s->fetch()) {
             $_SESSION['flash_message'] = "Ya existe un trámite con el slug '{$slug}'.";
             $_SESSION['flash_type']    = 'warning';
-            header('Location: tramites.php');
+            header('Location: tramites');
             exit;
         }
 
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$upload['success']) {
                 $_SESSION['flash_message'] = $upload['error'];
                 $_SESSION['flash_type']    = 'danger';
-                header('Location: tramites.php');
+                header('Location: tramites');
                 exit;
             }
             $imagenPath = $upload['path'];
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al crear.';
             $_SESSION['flash_type']    = 'danger';
         }
-        header('Location: tramites.php');
+        header('Location: tramites');
         exit;
     }
 
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($id <= 0 || empty($titulo)) {
             $_SESSION['flash_message'] = 'Datos inválidos.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: tramites.php');
+            header('Location: tramites');
             exit;
         }
 
@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$current) {
             $_SESSION['flash_message'] = 'Trámite no encontrado.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: tramites.php');
+            header('Location: tramites');
             exit;
         }
 
@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$upload['success']) {
                 $_SESSION['flash_message'] = $upload['error'];
                 $_SESSION['flash_type']    = 'danger';
-                header('Location: tramites.php');
+                header('Location: tramites');
                 exit;
             }
             if (!empty($current['imagen_path'])) {
@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al guardar.';
             $_SESSION['flash_type']    = 'danger';
         }
-        header('Location: tramites.php');
+        header('Location: tramites');
         exit;
     }
 
@@ -139,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($id <= 0) {
             $_SESSION['flash_message'] = 'ID inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: tramites.php');
+            header('Location: tramites');
             exit;
         }
 
@@ -149,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$current) {
             $_SESSION['flash_message'] = 'Trámite no encontrado.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: tramites.php');
+            header('Location: tramites');
             exit;
         }
 
@@ -171,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al eliminar.';
             $_SESSION['flash_type']    = 'danger';
         }
-        header('Location: tramites.php');
+        header('Location: tramites');
         exit;
     }
 }
@@ -204,7 +204,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
         <nav class="navbar navbar-light bg-white shadow-sm px-3">
             <button class="btn btn-outline-secondary me-2" id="toggleSidebar" aria-label="Menú"><i class="bi bi-list"></i></button>
             <span class="navbar-brand mb-0 h6">Trámites y Servicios</span>
-            <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
+            <a href="logout" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
         </nav>
         <div class="container-fluid p-4">
                 <?php page_help('tramites'); ?>
@@ -222,7 +222,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                 </div>
                 <div class="collapse" id="formNuevoTramite">
                 <div class="card-body">
-                    <form method="POST" enctype="multipart/form-data" action="tramites.php">
+                    <form method="POST" enctype="multipart/form-data" action="tramites">
                         <input type="hidden" name="action" value="create">
                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                         <div class="row g-3">
@@ -309,7 +309,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
 <div class="modal fade" id="editM<?= (int)$tramite['id'] ?>" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <form method="POST" enctype="multipart/form-data" action="tramites.php">
+            <form method="POST" enctype="multipart/form-data" action="tramites">
                 <input type="hidden" name="action" value="edit">
                 <input type="hidden" name="id" value="<?= (int)$tramite['id'] ?>">
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
@@ -360,7 +360,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
 <div class="modal fade" id="delM<?= (int)$tramite['id'] ?>" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="tramites.php">
+            <form method="POST" action="tramites">
                 <input type="hidden" name="action" value="delete">
                 <input type="hidden" name="id" value="<?= (int)$tramite['id'] ?>">
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">

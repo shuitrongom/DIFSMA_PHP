@@ -56,14 +56,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'delet
     if (csrf_validate($token) && ($_SESSION['admin_rol'] ?? '') === 'admin') {
         $pdo->prepare('DELETE FROM admin_historial WHERE id = ?')->execute([(int)($_POST['log_id'] ?? 0)]);
     }
-    header('Location: historial.php?' . http_build_query($_GET)); exit;
+    header('Location: historial?' . http_build_query($_GET)); exit;
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'clear_all') {
     $token = $_POST['csrf_token'] ?? '';
     if (csrf_validate($token) && ($_SESSION['admin_rol'] ?? '') === 'admin') {
         $pdo->exec('DELETE FROM admin_historial');
     }
-    header('Location: historial.php'); exit;
+    header('Location: historial'); exit;
 }
 
 $token = csrf_token();
@@ -102,7 +102,7 @@ require_once __DIR__ . '/page_help.php';
 <span class="navbar-brand mb-0 h6"><i class="bi bi-clock-history me-1"></i> Historial de Actividad</span>
 <div class="ms-auto d-flex gap-2">
 <button onclick="window.print()" class="btn btn-sm btn-outline-secondary"><i class="bi bi-printer me-1"></i> Imprimir Reporte</button>
-<a href="logout.php" class="btn btn-sm btn-action-delete"><i class="bi bi-box-arrow-right"></i> Salir</a>
+<a href="logout" class="btn btn-sm btn-action-delete"><i class="bi bi-box-arrow-right"></i> Salir</a>
 </div>
 </nav>
 
@@ -144,7 +144,7 @@ require_once __DIR__ . '/page_help.php';
 <div class="card mb-4 no-print">
 <div class="card-header" style="background:rgb(107,98,90);color:#fff;"><i class="bi bi-funnel me-1"></i> Filtros</div>
 <div class="card-body">
-<form method="GET" action="historial.php" class="row g-2 align-items-end">
+<form method="GET" action="historial" class="row g-2 align-items-end">
 <div class="col-md-2"><label class="form-label small">Fecha inicio</label><input type="date" class="form-control form-control-sm" name="fecha_ini" value="<?= htmlspecialchars($filtro_fecha_ini) ?>"></div>
 <div class="col-md-2"><label class="form-label small">Fecha fin</label><input type="date" class="form-control form-control-sm" name="fecha_fin" value="<?= htmlspecialchars($filtro_fecha_fin) ?>"></div>
 <div class="col-md-2"><label class="form-label small">Usuario</label>
@@ -154,7 +154,7 @@ require_once __DIR__ . '/page_help.php';
 <div class="col-md-2"><label class="form-label small">Accion</label>
 <select class="form-select form-select-sm" name="accion"><option value="">Todas</option>
 <?php foreach (['crear','editar','eliminar','subir','login','logout','reorden'] as $a): ?><option value="<?= $a ?>" <?= $filtro_accion===$a?'selected':'' ?>><?= ucfirst($a) ?></option><?php endforeach; ?></select></div>
-<div class="col-md-2 d-flex gap-1"><button type="submit" class="btn btn-sm btn-danger w-100"><i class="bi bi-search me-1"></i> Filtrar</button><a href="historial.php" class="btn btn-sm btn-outline-secondary"><i class="bi bi-x"></i></a></div>
+<div class="col-md-2 d-flex gap-1"><button type="submit" class="btn btn-sm btn-danger w-100"><i class="bi bi-search me-1"></i> Filtrar</button><a href="historial" class="btn btn-sm btn-outline-secondary"><i class="bi bi-x"></i></a></div>
 </form>
 </div>
 </div>
@@ -164,7 +164,7 @@ require_once __DIR__ . '/page_help.php';
 <div class="card-header d-flex justify-content-between align-items-center" style="background:rgb(107,98,90);color:#fff;">
 <span><i class="bi bi-table me-1"></i> Registros <span class="badge bg-light text-dark ms-1"><?= $total ?></span></span>
 <?php if (($_SESSION['admin_rol'] ?? '') === 'admin'): ?>
-<form method="POST" action="historial.php" class="d-inline no-print" onsubmit="return confirm('Eliminar TODO el historial?')">
+<form method="POST" action="historial" class="d-inline no-print" onsubmit="return confirm('Eliminar TODO el historial?')">
 <input type="hidden" name="action" value="clear_all"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
 <button type="submit" class="btn btn-sm btn-outline-light"><i class="bi bi-trash3 me-1"></i> Limpiar todo</button>
 </form>

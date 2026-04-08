@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido. Intente de nuevo.';
         $_SESSION['flash_type']    = 'danger';
-        header('Location: transparencia.php');
+        header('Location: transparencia');
         exit;
     }
 
@@ -58,14 +58,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($titulo)) {
             $_SESSION['flash_message'] = 'El título es obligatorio.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: transparencia.php');
+            header('Location: transparencia');
             exit;
         }
 
         if (empty($url) && $pagina !== '__ninguno__') {
             $_SESSION['flash_message'] = 'Debe seleccionar una página de destino o ingresar una URL externa.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: transparencia.php');
+            header('Location: transparencia');
             exit;
         }
 
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$upload['success']) {
                 $_SESSION['flash_message'] = $upload['error'];
                 $_SESSION['flash_type']    = 'danger';
-                header('Location: transparencia.php');
+                header('Location: transparencia');
                 exit;
             }
 
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header('Location: transparencia.php');
+        header('Location: transparencia');
         exit;
     }
 
@@ -129,21 +129,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($id <= 0) {
             $_SESSION['flash_message'] = 'ID de entrada inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: transparencia.php');
+            header('Location: transparencia');
             exit;
         }
 
         if (empty($titulo)) {
             $_SESSION['flash_message'] = 'El título es obligatorio.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: transparencia.php');
+            header('Location: transparencia');
             exit;
         }
 
         if (empty($url) && $pagina !== '__ninguno__') {
             $_SESSION['flash_message'] = 'Debe seleccionar una página de destino o ingresar una URL externa.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: transparencia.php');
+            header('Location: transparencia');
             exit;
         }
 
@@ -155,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$old) {
             $_SESSION['flash_message'] = 'Registro no encontrado.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: transparencia.php');
+            header('Location: transparencia');
             exit;
         }
 
@@ -168,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$upload['success']) {
                 $_SESSION['flash_message'] = $upload['error'];
                 $_SESSION['flash_type']    = 'danger';
-                header('Location: transparencia.php');
+                header('Location: transparencia');
                 exit;
             }
 
@@ -196,7 +196,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header('Location: transparencia.php');
+        header('Location: transparencia');
         exit;
     }
 
@@ -207,7 +207,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($id <= 0) {
             $_SESSION['flash_message'] = 'ID de entrada inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: transparencia.php');
+            header('Location: transparencia');
             exit;
         }
 
@@ -218,7 +218,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$row) {
             $_SESSION['flash_message'] = 'Registro no encontrado.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: transparencia.php');
+            header('Location: transparencia');
             exit;
         }
 
@@ -241,7 +241,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header('Location: transparencia.php');
+        header('Location: transparencia');
         exit;
     }
 }
@@ -283,7 +283,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                     <i class="bi bi-list"></i>
                 </button>
                 <span class="navbar-brand mb-0 h6">Transparencia</span>
-                <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto">
+                <a href="logout" class="btn btn-sm btn-outline-danger ms-auto">
                     <i class="bi bi-box-arrow-right"></i> Salir
                 </a>
             </nav>
@@ -306,7 +306,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                 <i class="bi bi-plus-circle me-1"></i> Agregar entrada de transparencia
                             </div>
                             <div class="card-body">
-                                <form method="POST" enctype="multipart/form-data" action="transparencia.php">
+                                <form method="POST" enctype="multipart/form-data" action="transparencia">
                                     <input type="hidden" name="action" value="create">
                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                                     <div class="mb-3">
@@ -443,7 +443,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                 <div class="modal fade" id="editModal<?= (int) $item['id'] ?>" tabindex="-1" aria-labelledby="editLabel<?= (int) $item['id'] ?>" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <form method="POST" enctype="multipart/form-data" action="transparencia.php">
+                            <form method="POST" enctype="multipart/form-data" action="transparencia">
                                 <input type="hidden" name="action" value="edit">
                                 <input type="hidden" name="id" value="<?= (int) $item['id'] ?>">
                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
@@ -514,7 +514,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                 <div class="modal fade" id="deleteModal<?= (int) $item['id'] ?>" tabindex="-1" aria-labelledby="deleteLabel<?= (int) $item['id'] ?>" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <form method="POST" action="transparencia.php">
+                            <form method="POST" action="transparencia">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="id" value="<?= (int) $item['id'] ?>">
                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">

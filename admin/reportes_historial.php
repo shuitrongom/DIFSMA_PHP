@@ -460,7 +460,7 @@ require_once $autoload_path;
 // ---------------------------------------------------------------------------
 $rol = $_SESSION['admin_rol'] ?? '';
 if (!in_array($rol, ['admin', 'editor'])) {
-    header('Location: dashboard.php?error=acceso_denegado');
+    header('Location: dashboard?error=acceso_denegado');
     exit;
 }
 
@@ -520,7 +520,7 @@ if ($action === 'pdf') {
     } catch (\Throwable $e) {
         error_log('reportes_historial PDF error: ' . $e->getMessage());
         http_response_code(500);
-        echo '<!DOCTYPE html><html><body style="font-family:sans-serif;padding:20px;"><h2>Error al generar el PDF</h2><p>Ocurrió un error interno. Por favor intenta de nuevo.</p><a href="reportes_historial.php">Volver</a></body></html>';
+        echo '<!DOCTYPE html><html><body style="font-family:sans-serif;padding:20px;"><h2>Error al generar el PDF</h2><p>Ocurrió un error interno. Por favor intenta de nuevo.</p><a href="reportes_historial">Volver</a></body></html>';
         exit;
     }
 }
@@ -574,7 +574,7 @@ if ($action === 'excel') {
     } catch (\Exception $e) {
         error_log('reportes_historial Excel error: ' . $e->getMessage());
         http_response_code(500);
-        echo '<!DOCTYPE html><html><body style="font-family:sans-serif;padding:20px;"><h2>Error al generar el Excel</h2><p><strong>' . htmlspecialchars($e->getMessage()) . '</strong></p><a href="reportes_historial.php">Volver</a></body></html>';
+        echo '<!DOCTYPE html><html><body style="font-family:sans-serif;padding:20px;"><h2>Error al generar el Excel</h2><p><strong>' . htmlspecialchars($e->getMessage()) . '</strong></p><a href="reportes_historial">Volver</a></body></html>';
         exit;
     }
 }
@@ -646,7 +646,7 @@ $filtros_qs = http_build_query([
 <button class="btn btn-outline-secondary me-2" id="toggleSidebar"><i class="bi bi-list"></i></button>
 <span class="navbar-brand mb-0 h6"><i class="bi bi-file-earmark-bar-graph me-1"></i> Reportes de Historial</span>
 <div class="ms-auto d-flex gap-2">
-<a href="logout.php" class="btn btn-sm btn-action-delete"><i class="bi bi-box-arrow-right"></i> Salir</a>
+<a href="logout" class="btn btn-sm btn-action-delete"><i class="bi bi-box-arrow-right"></i> Salir</a>
 </div>
 </nav>
 
@@ -675,7 +675,7 @@ $filtros_qs = http_build_query([
 <div class="card mb-4">
 <div class="card-header" style="background:rgb(107,98,90);color:#fff;"><i class="bi bi-funnel me-1"></i> Filtros</div>
 <div class="card-body">
-<form method="GET" action="reportes_historial.php" class="row g-2 align-items-end">
+<form method="GET" action="reportes_historial" class="row g-2 align-items-end">
 <div class="col-md-2"><label class="form-label small">Fecha inicio</label><input type="date" class="form-control form-control-sm" name="fecha_ini" value="<?= htmlspecialchars($fecha_ini) ?>"></div>
 <div class="col-md-2"><label class="form-label small">Fecha fin</label><input type="date" class="form-control form-control-sm" name="fecha_fin" value="<?= htmlspecialchars($fecha_fin) ?>"></div>
 <div class="col-md-2"><label class="form-label small">Usuario</label>
@@ -685,7 +685,7 @@ $filtros_qs = http_build_query([
 <div class="col-md-2"><label class="form-label small">Acción</label>
 <select class="form-select form-select-sm" name="accion"><option value="">Todas</option>
 <?php foreach (['crear','editar','eliminar','subir','login','logout','reorden','reporte'] as $a): ?><option value="<?= $a ?>" <?= $filtro_accion===$a?'selected':'' ?>><?= ucfirst($a) ?></option><?php endforeach; ?></select></div>
-<div class="col-md-2 d-flex gap-1"><button type="submit" class="btn btn-sm btn-danger w-100"><i class="bi bi-search me-1"></i> Filtrar</button><a href="reportes_historial.php" class="btn btn-sm btn-outline-secondary"><i class="bi bi-x"></i></a></div>
+<div class="col-md-2 d-flex gap-1"><button type="submit" class="btn btn-sm btn-danger w-100"><i class="bi bi-search me-1"></i> Filtrar</button><a href="reportes_historial" class="btn btn-sm btn-outline-secondary"><i class="bi bi-x"></i></a></div>
 </form>
 </div>
 </div>

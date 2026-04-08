@@ -17,7 +17,7 @@ if (($_SESSION['admin_logged'] ?? false) !== true) {
     if (session_status() === PHP_SESSION_ACTIVE) {
         session_destroy();
     }
-    header('Location: login.php');
+    header('Location: login');
     exit;
 }
 
@@ -29,7 +29,7 @@ if (isset($_SESSION['last_activity'])) {
         // Sesión expirada por inactividad
         session_unset();
         session_destroy();
-        header('Location: login.php?expired=1');
+        header('Location: login?expired=1');
         exit;
     }
 }
@@ -110,12 +110,12 @@ if (!$is_admin_role && !in_array($current_admin_file_guard, $public_pages)) {
         if (!$stmt_guard->fetch()) {
             $_SESSION['flash_message'] = 'No tienes permiso para acceder a esta seccion.';
             $_SESSION['flash_type'] = 'danger';
-            header('Location: dashboard.php');
+            header('Location: dashboard');
             exit;
         }
     } catch (PDOException $e) {
         // Si falla la consulta, denegar acceso por seguridad
-        header('Location: dashboard.php');
+        header('Location: dashboard');
         exit;
     }
 }

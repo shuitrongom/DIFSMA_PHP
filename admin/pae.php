@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido.';
         $_SESSION['flash_type']    = 'danger';
-        header('Location: pae.php'); exit;
+        header('Location: pae'); exit;
     }
 
     // — Crear título
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nombre = trim($_POST['nombre'] ?? '');
         if ($nombre === '') {
             $_SESSION['flash_message'] = 'Ingrese un nombre para el título.'; $_SESSION['flash_type'] = 'warning';
-            header('Location: pae.php'); exit;
+            header('Location: pae'); exit;
         }
         try {
             $s = $pdo->prepare('SELECT COALESCE(MAX(orden),0)+1 FROM pae_titulos'); $s->execute();
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error al guardar.'; $_SESSION['flash_type'] = 'danger';
         }
-        header('Location: pae.php'); exit;
+        header('Location: pae'); exit;
     }
 
     // — Editar título
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nombre = trim($_POST['nombre'] ?? '');
         if ($tId <= 0 || $nombre === '') {
             $_SESSION['flash_message'] = 'Datos inválidos.'; $_SESSION['flash_type'] = 'warning';
-            header('Location: pae.php'); exit;
+            header('Location: pae'); exit;
         }
         try {
             $pdo->prepare('UPDATE pae_titulos SET nombre=? WHERE id=?')->execute([$nombre,$tId]);
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error.'; $_SESSION['flash_type'] = 'danger';
         }
-        header('Location: pae.php'); exit;
+        header('Location: pae'); exit;
     }
 
     // — Eliminar título (y sus PDFs en cascada)
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error.'; $_SESSION['flash_type'] = 'danger';
         }
-        header('Location: pae.php'); exit;
+        header('Location: pae'); exit;
     }
 
     // — Agregar año con PDF a un título
@@ -75,23 +75,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $anio = trim($_POST['anio'] ?? '');
         if ($tId <= 0 || empty($anio) || !preg_match('/^\d{4}$/', $anio)) {
             $_SESSION['flash_message'] = 'Datos inválidos.'; $_SESSION['flash_type'] = 'warning';
-            header('Location: pae.php'); exit;
+            header('Location: pae'); exit;
         }
         if ((int)$anio > (int)date('Y')) {
             $_SESSION['flash_message'] = 'El año no puede ser mayor al año en curso (' . date('Y') . ').'; $_SESSION['flash_type'] = 'warning';
-            header('Location: pae.php'); exit;
+            header('Location: pae'); exit;
         }
         $s = $pdo->prepare('SELECT id FROM pae_pdfs WHERE titulo_id=? AND anio=?'); $s->execute([$tId,$anio]);
         if ($s->fetch()) {
             $_SESSION['flash_message'] = "Ya existe el año {$anio} en este título."; $_SESSION['flash_type'] = 'warning';
-            header('Location: pae.php'); exit;
+            header('Location: pae'); exit;
         }
         $pdfPath = null;
         if (isset($_FILES['pdf']) && $_FILES['pdf']['error'] !== UPLOAD_ERR_NO_FILE) {
             $upload = handle_upload($_FILES['pdf'], 'pdf');
             if (!$upload['success']) {
                 $_SESSION['flash_message'] = $upload['error']; $_SESSION['flash_type'] = 'danger';
-                header('Location: pae.php'); exit;
+                header('Location: pae'); exit;
             }
             $pdfPath = $upload['path'];
         }
@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error.'; $_SESSION['flash_type'] = 'danger';
         }
-        header('Location: pae.php'); exit;
+        header('Location: pae'); exit;
     }
 
     // — Subir/reemplazar PDF
@@ -109,12 +109,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pId = (int)($_POST['pdf_id'] ?? 0);
         if ($pId <= 0 || !isset($_FILES['pdf']) || $_FILES['pdf']['error'] === UPLOAD_ERR_NO_FILE) {
             $_SESSION['flash_message'] = 'Seleccione un PDF.'; $_SESSION['flash_type'] = 'warning';
-            header('Location: pae.php'); exit;
+            header('Location: pae'); exit;
         }
         $upload = handle_upload($_FILES['pdf'], 'pdf');
         if (!$upload['success']) {
             $_SESSION['flash_message'] = $upload['error']; $_SESSION['flash_type'] = 'danger';
-            header('Location: pae.php'); exit;
+            header('Location: pae'); exit;
         }
         try {
             $s = $pdo->prepare('SELECT pdf_path FROM pae_pdfs WHERE id=?'); $s->execute([$pId]); $old = $s->fetchColumn();
@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error.'; $_SESSION['flash_type'] = 'danger';
         }
-        header('Location: pae.php'); exit;
+        header('Location: pae'); exit;
     }
 
     // — Eliminar año/PDF
@@ -138,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error.'; $_SESSION['flash_type'] = 'danger';
         }
-        header('Location: pae.php'); exit;
+        header('Location: pae'); exit;
     }
 }
 
@@ -181,7 +181,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
         <nav class="navbar navbar-light bg-white shadow-sm px-3">
             <button class="btn btn-outline-secondary me-2" id="toggleSidebar" aria-label="Menú"><i class="bi bi-list"></i></button>
             <span class="navbar-brand mb-0 h6">Programa Anual de Evaluación (PAE)</span>
-            <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
+            <a href="logout" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
         </nav>
         <div class="container-fluid p-4">
                 <?php page_help('pae'); ?>

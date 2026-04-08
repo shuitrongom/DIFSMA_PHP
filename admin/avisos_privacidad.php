@@ -14,30 +14,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $token  = $_POST['csrf_token'] ?? '';
     if (!csrf_validate($token)) {
         $_SESSION['flash_message']='Token CSRF inválido.'; $_SESSION['flash_type']='danger';
-        header('Location: avisos_privacidad.php'); exit;
+        header('Location: avisos_privacidad'); exit;
     }
 
     // UPDATE TEXT
     if ($action==='update_texto') {
         $texto=trim($_POST['texto_aviso']??'');
-        if ($texto==='') { $_SESSION['flash_message']='El texto no puede estar vacío.'; $_SESSION['flash_type']='warning'; header('Location: avisos_privacidad.php'); exit; }
+        if ($texto==='') { $_SESSION['flash_message']='El texto no puede estar vacío.'; $_SESSION['flash_type']='warning'; header('Location: avisos_privacidad'); exit; }
         try {
             $s=$pdo->query('SELECT id FROM avisos_privacidad_config LIMIT 1'); $row=$s->fetch();
             if ($row) { $pdo->prepare('UPDATE avisos_privacidad_config SET texto_aviso=? WHERE id=?')->execute([$texto,$row['id']]); }
             else { $pdo->prepare('INSERT INTO avisos_privacidad_config (texto_aviso) VALUES (?)')->execute([$texto]); }
             $_SESSION['flash_message']='Texto actualizado.'; $_SESSION['flash_type']='success';
         } catch(PDOException $e) { $_SESSION['flash_message']=(defined('APP_DEBUG')&&APP_DEBUG)?$e->getMessage():'Error.'; $_SESSION['flash_type']='danger'; }
-        header('Location: avisos_privacidad.php'); exit;
+        header('Location: avisos_privacidad'); exit;
     }
 
     // ADD BUTTON
     if ($action==='add_boton') {
         $titulo=trim($_POST['titulo']??'');
-        if ($titulo==='') { $_SESSION['flash_message']='Ingrese un título.'; $_SESSION['flash_type']='warning'; header('Location: avisos_privacidad.php'); exit; }
+        if ($titulo==='') { $_SESSION['flash_message']='Ingrese un título.'; $_SESSION['flash_type']='warning'; header('Location: avisos_privacidad'); exit; }
         $pdfPath=null;
         if (isset($_FILES['pdf'])&&$_FILES['pdf']['error']!==UPLOAD_ERR_NO_FILE) {
             $upload=handle_upload($_FILES['pdf'],'pdf');
-            if (!$upload['success']) { $_SESSION['flash_message']=$upload['error']; $_SESSION['flash_type']='danger'; header('Location: avisos_privacidad.php'); exit; }
+            if (!$upload['success']) { $_SESSION['flash_message']=$upload['error']; $_SESSION['flash_type']='danger'; header('Location: avisos_privacidad'); exit; }
             $pdfPath=$upload['path'];
         }
         try {
@@ -45,31 +45,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo->prepare('INSERT INTO avisos_privacidad (titulo,pdf_path,orden) VALUES (?,?,?)')->execute([$titulo,$pdfPath,$ord]);
             $_SESSION['flash_message']='Botón agregado.'; $_SESSION['flash_type']='success';
         } catch(PDOException $e) { $_SESSION['flash_message']=(defined('APP_DEBUG')&&APP_DEBUG)?$e->getMessage():'Error.'; $_SESSION['flash_type']='danger'; }
-        header('Location: avisos_privacidad.php'); exit;
+        header('Location: avisos_privacidad'); exit;
     }
 
     // EDIT BUTTON
     if ($action==='edit_boton') {
         $id=(int)($_POST['boton_id']??0); $titulo=trim($_POST['titulo']??'');
-        if ($id<=0||$titulo==='') { $_SESSION['flash_message']='Datos inválidos.'; $_SESSION['flash_type']='warning'; header('Location: avisos_privacidad.php'); exit; }
+        if ($id<=0||$titulo==='') { $_SESSION['flash_message']='Datos inválidos.'; $_SESSION['flash_type']='warning'; header('Location: avisos_privacidad'); exit; }
         try { $pdo->prepare('UPDATE avisos_privacidad SET titulo=? WHERE id=?')->execute([$titulo,$id]);
             $_SESSION['flash_message']='Botón actualizado.'; $_SESSION['flash_type']='success';
         } catch(PDOException $e) { $_SESSION['flash_message']=(defined('APP_DEBUG')&&APP_DEBUG)?$e->getMessage():'Error.'; $_SESSION['flash_type']='danger'; }
-        header('Location: avisos_privacidad.php'); exit;
+        header('Location: avisos_privacidad'); exit;
     }
 
     // UPLOAD PDF
     if ($action==='upload_pdf') {
         $id=(int)($_POST['boton_id']??0);
-        if ($id<=0||!isset($_FILES['pdf'])||$_FILES['pdf']['error']===UPLOAD_ERR_NO_FILE) { $_SESSION['flash_message']='Seleccione un PDF.'; $_SESSION['flash_type']='warning'; header('Location: avisos_privacidad.php'); exit; }
+        if ($id<=0||!isset($_FILES['pdf'])||$_FILES['pdf']['error']===UPLOAD_ERR_NO_FILE) { $_SESSION['flash_message']='Seleccione un PDF.'; $_SESSION['flash_type']='warning'; header('Location: avisos_privacidad'); exit; }
         $upload=handle_upload($_FILES['pdf'],'pdf');
-        if (!$upload['success']) { $_SESSION['flash_message']=$upload['error']; $_SESSION['flash_type']='danger'; header('Location: avisos_privacidad.php'); exit; }
+        if (!$upload['success']) { $_SESSION['flash_message']=$upload['error']; $_SESSION['flash_type']='danger'; header('Location: avisos_privacidad'); exit; }
         try { $s=$pdo->prepare('SELECT pdf_path FROM avisos_privacidad WHERE id=?'); $s->execute([$id]); $old=$s->fetchColumn();
             if ($old&&file_exists(BASE_PATH.'/'.$old)) unlink(BASE_PATH.'/'.$old);
             $pdo->prepare('UPDATE avisos_privacidad SET pdf_path=? WHERE id=?')->execute([$upload['path'],$id]);
             $_SESSION['flash_message']='PDF subido.'; $_SESSION['flash_type']='success';
         } catch(PDOException $e) { $_SESSION['flash_message']=(defined('APP_DEBUG')&&APP_DEBUG)?$e->getMessage():'Error.'; $_SESSION['flash_type']='danger'; }
-        header('Location: avisos_privacidad.php'); exit;
+        header('Location: avisos_privacidad'); exit;
     }
 
     // DELETE PDF
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo->prepare('UPDATE avisos_privacidad SET pdf_path=NULL WHERE id=?')->execute([$id]);
             $_SESSION['flash_message']='PDF eliminado.'; $_SESSION['flash_type']='success';
         } catch(PDOException $e) { $_SESSION['flash_message']=(defined('APP_DEBUG')&&APP_DEBUG)?$e->getMessage():'Error.'; $_SESSION['flash_type']='danger'; }
-        header('Location: avisos_privacidad.php'); exit;
+        header('Location: avisos_privacidad'); exit;
     }
 
     // DELETE BUTTON
@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo->prepare('DELETE FROM avisos_privacidad WHERE id=?')->execute([$id]);
             $_SESSION['flash_message']='Botón eliminado.'; $_SESSION['flash_type']='success';
         } catch(PDOException $e) { $_SESSION['flash_message']=(defined('APP_DEBUG')&&APP_DEBUG)?$e->getMessage():'Error.'; $_SESSION['flash_type']='danger'; }
-        header('Location: avisos_privacidad.php'); exit;
+        header('Location: avisos_privacidad'); exit;
     }
 }
 
@@ -121,7 +121,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
 <nav class="navbar navbar-light bg-white shadow-sm px-3">
 <button class="btn btn-outline-secondary me-2" id="toggleSidebar"><i class="bi bi-list"></i></button>
 <span class="navbar-brand mb-0 h6">Avisos de Privacidad</span>
-<a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
+<a href="logout" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
 </nav>
 <div class="container-fluid p-4">
                 <?php page_help('avisos_privacidad'); ?>

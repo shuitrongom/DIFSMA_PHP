@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido. Intente de nuevo.';
         $_SESSION['flash_type']    = 'danger';
-        header('Location: presidencia.php');
+        header('Location: presidencia');
         exit;
     }
 
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($nombre) || empty($apellidos) || empty($cargo)) {
         $_SESSION['flash_message'] = 'El nombre, apellidos y cargo son obligatorios.';
         $_SESSION['flash_type']    = 'warning';
-        header('Location: presidencia.php');
+        header('Location: presidencia');
         exit;
     }
 
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$upload['success']) {
             $_SESSION['flash_message'] = $upload['error'];
             $_SESSION['flash_type']    = 'danger';
-            header('Location: presidencia.php');
+            header('Location: presidencia');
             exit;
         }
 
@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['flash_type']    = 'danger';
     }
 
-    header('Location: presidencia.php');
+    header('Location: presidencia');
     exit;
 }
 
@@ -129,7 +129,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                     <i class="bi bi-list"></i>
                 </button>
                 <span class="navbar-brand mb-0 h6">Presidencia</span>
-                <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto">
+                <a href="logout" class="btn btn-sm btn-outline-danger ms-auto">
                     <i class="bi bi-box-arrow-right"></i> Salir
                 </a>
             </nav>
@@ -191,7 +191,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                 <?= $presidencia ? 'Editar datos de presidencia' : 'Registrar datos de presidencia' ?>
                             </div>
                             <div class="card-body">
-                                <form method="POST" enctype="multipart/form-data" action="presidencia.php">
+                                <form method="POST" enctype="multipart/form-data" action="presidencia">
                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                                     <div class="mb-3">
                                         <label for="nombre" class="form-label">Nombre(s)</label>

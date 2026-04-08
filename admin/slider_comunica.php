@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido. Intente de nuevo.';
         $_SESSION['flash_type']    = 'danger';
-        header('Location: slider_comunica.php');
+        header('Location: slider_comunica');
         exit;
     }
 
@@ -67,14 +67,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$valid_month) {
             $_SESSION['flash_message'] = 'Solo puede subir imágenes al mes actual o al siguiente.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: slider_comunica.php');
+            header('Location: slider_comunica');
             exit;
         }
 
         if (!isset($_FILES['imagenes']) || !is_array($_FILES['imagenes']['name'])) {
             $_SESSION['flash_message'] = 'Debe seleccionar al menos una imagen.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: slider_comunica.php');
+            header('Location: slider_comunica');
             exit;
         }
 
@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'warning';
         }
 
-        header('Location: slider_comunica.php');
+        header('Location: slider_comunica');
         exit;
     }
 
@@ -140,14 +140,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($id <= 0) {
             $_SESSION['flash_message'] = 'ID inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: slider_comunica.php');
+            header('Location: slider_comunica');
             exit;
         }
 
         if (!isset($_FILES['imagen']) || $_FILES['imagen']['error'] === UPLOAD_ERR_NO_FILE) {
             $_SESSION['flash_message'] = 'Debe seleccionar una imagen para reemplazar.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: slider_comunica.php');
+            header('Location: slider_comunica');
             exit;
         }
 
@@ -157,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$old) {
             $_SESSION['flash_message'] = 'Registro no encontrado.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: slider_comunica.php');
+            header('Location: slider_comunica');
             exit;
         }
 
@@ -165,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$upload['success']) {
             $_SESSION['flash_message'] = $upload['error'];
             $_SESSION['flash_type']    = 'danger';
-            header('Location: slider_comunica.php');
+            header('Location: slider_comunica');
             exit;
         }
 
@@ -181,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header('Location: slider_comunica.php');
+        header('Location: slider_comunica');
         exit;
     }
 
@@ -191,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($id <= 0) {
             $_SESSION['flash_message'] = 'ID inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: slider_comunica.php');
+            header('Location: slider_comunica');
             exit;
         }
 
@@ -201,7 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$row) {
             $_SESSION['flash_message'] = 'Registro no encontrado.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: slider_comunica.php');
+            header('Location: slider_comunica');
             exit;
         }
 
@@ -217,7 +217,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header('Location: slider_comunica.php');
+        header('Location: slider_comunica');
         exit;
     }
 
@@ -229,7 +229,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($del_mes <= 0 || $del_anio <= 0) {
             $_SESSION['flash_message'] = 'Datos de mes/año inválidos.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: slider_comunica.php');
+            header('Location: slider_comunica');
             exit;
         }
 
@@ -256,7 +256,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header('Location: slider_comunica.php');
+        header('Location: slider_comunica');
         exit;
     }
 }
@@ -311,7 +311,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                     <i class="bi bi-list"></i>
                 </button>
                 <span class="navbar-brand mb-0 h6">Slider DIF Comunica</span>
-                <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto">
+                <a href="logout" class="btn btn-sm btn-outline-danger ms-auto">
                     <i class="bi bi-box-arrow-right"></i> Salir
                 </a>
             </nav>
@@ -331,7 +331,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                         <i class="bi bi-plus-circle me-1"></i> Agregar imagen
                     </div>
                     <div class="card-body">
-                        <form method="POST" enctype="multipart/form-data" action="slider_comunica.php" class="row g-3 align-items-end">
+                        <form method="POST" enctype="multipart/form-data" action="slider_comunica" class="row g-3 align-items-end">
                             <input type="hidden" name="action" value="add">
                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                             <div class="col-md-4">
@@ -425,7 +425,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                 <div class="modal fade" id="editModal<?= (int) $slide['id'] ?>" tabindex="-1" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
-                                            <form method="POST" enctype="multipart/form-data" action="slider_comunica.php">
+                                            <form method="POST" enctype="multipart/form-data" action="slider_comunica">
                                                 <input type="hidden" name="action" value="edit">
                                                 <input type="hidden" name="id" value="<?= (int) $slide['id'] ?>">
                                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
@@ -454,7 +454,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                 <div class="modal fade" id="deleteModal<?= (int) $slide['id'] ?>" tabindex="-1" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
-                                            <form method="POST" action="slider_comunica.php">
+                                            <form method="POST" action="slider_comunica">
                                                 <input type="hidden" name="action" value="delete">
                                                 <input type="hidden" name="id" value="<?= (int) $slide['id'] ?>">
                                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
@@ -485,7 +485,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                 <div class="modal fade" id="deleteAllModal<?= $g_mes ?>_<?= $g_anio ?>" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <form method="POST" action="slider_comunica.php">
+                            <form method="POST" action="slider_comunica">
                                 <input type="hidden" name="action" value="delete_all">
                                 <input type="hidden" name="mes" value="<?= $g_mes ?>">
                                 <input type="hidden" name="anio" value="<?= $g_anio ?>">

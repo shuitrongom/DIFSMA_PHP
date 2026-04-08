@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido. Intente de nuevo.';
         $_SESSION['flash_type']    = 'danger';
-        header('Location: footer.php');
+        header('Location: footer');
         exit;
     }
 
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['flash_type']    = 'danger';
             }
         }
-        header('Location: footer.php');
+        header('Location: footer');
         exit;
     }
 
@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['flash_type']    = 'danger';
             }
         }
-        header('Location: footer.php');
+        header('Location: footer');
         exit;
     }
 
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['flash_type']    = 'danger';
             }
         }
-        header('Location: footer.php');
+        header('Location: footer');
         exit;
     }
 
@@ -140,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['flash_message'] = implode('<br>', $errors);
         $_SESSION['flash_type']    = 'warning';
         $_SESSION['footer_form_data'] = $data;
-        header('Location: footer.php');
+        header('Location: footer');
         exit;
     }
 
@@ -179,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     unset($_SESSION['footer_form_data']);
-    header('Location: footer.php');
+    header('Location: footer');
     exit;
 }
 
@@ -234,7 +234,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                     <i class="bi bi-list"></i>
                 </button>
                 <span class="navbar-brand mb-0 h6">Configuración del Footer</span>
-                <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto">
+                <a href="logout" class="btn btn-sm btn-outline-danger ms-auto">
                     <i class="bi bi-box-arrow-right"></i> Salir
                 </a>
             </nav>
@@ -300,7 +300,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                 <?= $footerData ? 'Editar configuración del footer' : 'Registrar configuración del footer' ?>
                             </div>
                             <div class="card-body">
-                                <form method="POST" action="footer.php">
+                                <form method="POST" action="footer">
                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
 
                                     <?php foreach ($fields as $key => $meta): ?>
@@ -352,7 +352,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                 <i class="bi bi-link-45deg me-1"></i> Agregar enlace
                             </div>
                             <div class="card-body">
-                                <form method="POST" action="footer.php">
+                                <form method="POST" action="footer">
                                     <input type="hidden" name="action" value="link_create">
                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                                     <div class="mb-3">
@@ -468,7 +468,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                 <div class="modal fade" id="editLink<?= (int)$fl['id'] ?>" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <form method="POST" action="footer.php">
+                            <form method="POST" action="footer">
                                 <input type="hidden" name="action" value="link_edit">
                                 <input type="hidden" name="link_id" value="<?= (int)$fl['id'] ?>">
                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
@@ -532,7 +532,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                 <div class="modal fade" id="delLink<?= (int)$fl['id'] ?>" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <form method="POST" action="footer.php">
+                            <form method="POST" action="footer">
                                 <input type="hidden" name="action" value="link_delete">
                                 <input type="hidden" name="link_id" value="<?= (int)$fl['id'] ?>">
                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">

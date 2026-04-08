@@ -11,66 +11,66 @@ $sidebar_groups = [
         'group' => 'Inicio',
         'icon'  => 'bi-house-door',
         'items' => [
-            ['title' => 'Slider Principal',    'file' => 'slider_principal.php', 'icon' => 'bi-images'],
-            ['title' => 'Slider DIF Comunica', 'file' => 'slider_comunica.php',  'icon' => 'bi-megaphone'],
-            ['title' => 'Programas',           'file' => 'programas.php',        'icon' => 'bi-grid-3x3-gap'],
-            ['title' => 'Imagen Institucional','file' => 'institucion.php',      'icon' => 'bi-card-image'],
-            ['title' => 'Transparencia Index', 'file' => 'transparencia.php',    'icon' => 'bi-shield-check'],
-            ['title' => 'Footer',              'file' => 'footer.php',           'icon' => 'bi-layout-text-window-reverse'],
+            ['title' => 'Slider Principal',    'file' => 'slider_principal', 'icon' => 'bi-images'],
+            ['title' => 'Slider DIF Comunica', 'file' => 'slider_comunica',  'icon' => 'bi-megaphone'],
+            ['title' => 'Programas',           'file' => 'programas',        'icon' => 'bi-grid-3x3-gap'],
+            ['title' => 'Imagen Institucional','file' => 'institucion',      'icon' => 'bi-card-image'],
+            ['title' => 'Transparencia Index', 'file' => 'transparencia',    'icon' => 'bi-shield-check'],
+            ['title' => 'Footer',              'file' => 'footer',           'icon' => 'bi-layout-text-window-reverse'],
         ],
     ],
     [
         'group' => 'Acerca del DIF',
         'icon'  => 'bi-info-circle',
         'items' => [
-            ['title' => 'Presidencia',  'file' => 'presidencia.php',  'icon' => 'bi-person-badge'],
-            ['title' => 'Direcciones',  'file' => 'direcciones.php',  'icon' => 'bi-people'],
-            ['title' => 'Organigrama',  'file' => 'organigrama.php',  'icon' => 'bi-diagram-3'],
+            ['title' => 'Presidencia',  'file' => 'presidencia',  'icon' => 'bi-person-badge'],
+            ['title' => 'Direcciones',  'file' => 'direcciones',  'icon' => 'bi-people'],
+            ['title' => 'Organigrama',  'file' => 'organigrama',  'icon' => 'bi-diagram-3'],
         ],
     ],
     [
         'group' => 'Servicios',
         'icon'  => 'bi-file-earmark-text',
         'items' => [
-            ['title' => 'Trámites', 'file' => 'tramites.php', 'icon' => 'bi-file-earmark-text'],
+            ['title' => 'Trámites', 'file' => 'tramites', 'icon' => 'bi-file-earmark-text'],
         ],
     ],
     [
         'group' => 'Comunicación Social',
         'icon'  => 'bi-megaphone',
         'items' => [
-            ['title' => 'Noticias', 'file' => 'noticias.php', 'icon' => 'bi-newspaper'],
-            ['title' => 'Galería',  'file' => 'galeria.php',  'icon' => 'bi-camera'],
+            ['title' => 'Noticias', 'file' => 'noticias', 'icon' => 'bi-newspaper'],
+            ['title' => 'Galería',  'file' => 'galeria',  'icon' => 'bi-camera'],
         ],
     ],
     [
         'group' => 'Voluntariado',
         'icon'  => 'bi-heart',
         'items' => [
-            ['title' => 'Voluntariado', 'file' => 'voluntariado.php', 'icon' => 'bi-heart'],
+            ['title' => 'Voluntariado', 'file' => 'voluntariado', 'icon' => 'bi-heart'],
         ],
     ],
     [
         'group' => 'Transparencia',
         'icon'  => 'bi-shield-check',
         'items' => [
-            ['title' => 'SEAC',              'file' => 'seac.php',                'icon' => 'bi-file-earmark-pdf'],
-            ['title' => 'Cuenta Pública',    'file' => 'cuenta_publica.php',      'icon' => 'bi-cash-stack'],
-            ['title' => 'Presupuesto Anual', 'file' => 'presupuesto_anual.php',   'icon' => 'bi-wallet2'],
-            ['title' => 'PAE',               'file' => 'pae.php',                 'icon' => 'bi-clipboard-data'],
-            ['title' => 'Matrices',          'file' => 'matrices_indicadores.php', 'icon' => 'bi-bar-chart-line'],
-            ['title' => 'CONAC',             'file' => 'conac.php',               'icon' => 'bi-bank'],
-            ['title' => 'Financiero',        'file' => 'financiero.php',          'icon' => 'bi-currency-dollar'],
-            ['title' => 'Avisos Privacidad', 'file' => 'avisos_privacidad.php',   'icon' => 'bi-shield-exclamation'],
-            ['title' => 'Secciones Dinámicas', 'file' => 'transparencia_dinamica.php', 'icon' => 'bi-plus-square'],
+            ['title' => 'SEAC',              'file' => 'seac',                'icon' => 'bi-file-earmark-pdf'],
+            ['title' => 'Cuenta Pública',    'file' => 'cuenta_publica',      'icon' => 'bi-cash-stack'],
+            ['title' => 'Presupuesto Anual', 'file' => 'presupuesto_anual',   'icon' => 'bi-wallet2'],
+            ['title' => 'PAE',               'file' => 'pae',                 'icon' => 'bi-clipboard-data'],
+            ['title' => 'Matrices',          'file' => 'matrices_indicadores', 'icon' => 'bi-bar-chart-line'],
+            ['title' => 'CONAC',             'file' => 'conac',               'icon' => 'bi-bank'],
+            ['title' => 'Financiero',        'file' => 'financiero',          'icon' => 'bi-currency-dollar'],
+            ['title' => 'Avisos Privacidad', 'file' => 'avisos_privacidad',   'icon' => 'bi-shield-exclamation'],
+            ['title' => 'Secciones Dinámicas', 'file' => 'transparencia_dinamica', 'icon' => 'bi-plus-square'],
         ],
     ],
     [
         'group' => 'Sistema',
         'icon'  => 'bi-gear',
         'items' => [
-            ['title' => 'Usuarios', 'file' => 'usuarios.php', 'icon' => 'bi-people'],
-            ['title' => 'Reportes', 'file' => 'reportes_historial.php', 'icon' => 'bi-file-earmark-bar-graph'],
+            ['title' => 'Usuarios', 'file' => 'usuarios', 'icon' => 'bi-people'],
+            ['title' => 'Reportes', 'file' => 'reportes_historial', 'icon' => 'bi-file-earmark-bar-graph'],
         ],
     ],
 ];
@@ -96,7 +96,7 @@ function render_admin_sidebar(array $sidebar_groups, string $current_file): void
 ?>
 <nav id="sidebar" class="sidebar d-flex flex-column">
     <div class="sidebar-header d-flex align-items-center justify-content-between">
-        <a href="dashboard.php" class="text-white text-decoration-none">
+        <a href="dashboard" class="text-white text-decoration-none">
             <img src="../img/escudo.png" alt="DIF" style="height:28px;margin-right:6px;vertical-align:middle;"> Admin DIF
         </a>
         <button class="btn btn-sm btn-outline-light d-md-none" id="closeSidebar" aria-label="Cerrar menú">
@@ -138,7 +138,7 @@ function render_admin_sidebar(array $sidebar_groups, string $current_file): void
 <?php endforeach; ?>
     </ul>
     <div class="mt-auto p-3 border-top border-secondary">
-        <a href="logout.php" class="btn btn-outline-light btn-sm w-100">
+        <a href="logout" class="btn btn-outline-light btn-sm w-100">
             <i class="bi bi-box-arrow-right me-1"></i> Cerrar sesión
         </a>
     </div>

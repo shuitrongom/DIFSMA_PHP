@@ -20,14 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido. Intente de nuevo.';
         $_SESSION['flash_type']    = 'danger';
-        header('Location: institucion.php');
+        header('Location: institucion');
         exit;
     }
 
     if (!isset($_FILES['imagen']) || $_FILES['imagen']['error'] === UPLOAD_ERR_NO_FILE) {
         $_SESSION['flash_message'] = 'Debe seleccionar una imagen.';
         $_SESSION['flash_type']    = 'warning';
-        header('Location: institucion.php');
+        header('Location: institucion');
         exit;
     }
 
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$upload['success']) {
         $_SESSION['flash_message'] = $upload['error'];
         $_SESSION['flash_type']    = 'danger';
-        header('Location: institucion.php');
+        header('Location: institucion');
         exit;
     }
 
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['flash_type']    = 'danger';
     }
 
-    header('Location: institucion.php');
+    header('Location: institucion');
     exit;
 }
 
@@ -116,7 +116,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                     <i class="bi bi-list"></i>
                 </button>
                 <span class="navbar-brand mb-0 h6">Imagen Institucional</span>
-                <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto">
+                <a href="logout" class="btn btn-sm btn-outline-danger ms-auto">
                     <i class="bi bi-box-arrow-right"></i> Salir
                 </a>
             </nav>
@@ -183,7 +183,7 @@ ON DUPLICATE KEY UPDATE `id` = `id`;</pre>
                                     Esta imagen se muestra en la página principal entre las secciones de Programas y Noticias.
                                     Formatos aceptados: JPG, PNG, WebP (máx. <?= UPLOAD_MAX_IMAGE_MB ?> MB).
                                 </p>
-                                <form method="POST" enctype="multipart/form-data" action="institucion.php">
+                                <form method="POST" enctype="multipart/form-data" action="institucion">
                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                                     <div class="mb-3">
                                         <label for="imagen" class="form-label">Seleccionar nueva imagen</label>

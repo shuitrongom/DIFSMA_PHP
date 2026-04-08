@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido.';
         $_SESSION['flash_type']    = 'danger';
-        header('Location: presupuesto_anual.php' . ($bloqueId > 0 ? "?bloque_id={$bloqueId}" : ''));
+        header('Location: presupuesto_anual' . ($bloqueId > 0 ? "?bloque_id={$bloqueId}" : ''));
         exit;
     }
 
@@ -26,15 +26,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $anio = trim($_POST['anio'] ?? '');
         if (empty($anio) || !preg_match('/^\d{4}$/', $anio)) {
             $_SESSION['flash_message'] = 'Año inválido (4 dígitos).'; $_SESSION['flash_type'] = 'warning';
-            header('Location: presupuesto_anual.php'); exit;
+            header('Location: presupuesto_anual'); exit;
         }
         if ((int)$anio > (int)date('Y')) {
             $_SESSION['flash_message'] = 'El año no puede ser mayor al año en curso (' . date('Y') . ').'; $_SESSION['flash_type'] = 'warning';
-            header('Location: presupuesto_anual.php'); exit;
+            header('Location: presupuesto_anual'); exit;
         }
         try {
             $s = $pdo->prepare('SELECT id FROM pa_bloques WHERE anio = ?'); $s->execute([$anio]);
-            if ($s->fetch()) { $_SESSION['flash_message'] = "Ya existe bloque {$anio}."; $_SESSION['flash_type'] = 'warning'; header('Location: presupuesto_anual.php'); exit; }
+            if ($s->fetch()) { $_SESSION['flash_message'] = "Ya existe bloque {$anio}."; $_SESSION['flash_type'] = 'warning'; header('Location: presupuesto_anual'); exit; }
             $s = $pdo->prepare('SELECT COALESCE(MAX(orden),0)+1 FROM pa_bloques'); $s->execute();
             $ord = (int)$s->fetchColumn();
             $pdo->prepare('INSERT INTO pa_bloques (anio,orden) VALUES (?,?)')->execute([$anio,$ord]);
@@ -42,13 +42,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error al guardar.'; $_SESSION['flash_type'] = 'danger';
         }
-        header('Location: presupuesto_anual.php'); exit;
+        header('Location: presupuesto_anual'); exit;
     }
 
     // — Eliminar bloque
     if ($action === 'delete_block') {
         $id = (int)($_POST['id'] ?? 0);
-        if ($id <= 0) { $_SESSION['flash_message'] = 'ID inválido.'; $_SESSION['flash_type'] = 'danger'; header('Location: presupuesto_anual.php'); exit; }
+        if ($id <= 0) { $_SESSION['flash_message'] = 'ID inválido.'; $_SESSION['flash_type'] = 'danger'; header('Location: presupuesto_anual'); exit; }
         try {
             $sp = $pdo->prepare('SELECT p.pdf_path FROM pa_pdfs p INNER JOIN pa_conceptos c ON p.concepto_id=c.id WHERE c.bloque_id=? AND p.pdf_path IS NOT NULL AND p.pdf_path!=""');
             $sp->execute([$id]); $pdfs = $sp->fetchAll();
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error.'; $_SESSION['flash_type'] = 'danger';
         }
-        header('Location: presupuesto_anual.php'); exit;
+        header('Location: presupuesto_anual'); exit;
     }
 
     // — Agregar concepto
@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nombre = trim($_POST['nombre'] ?? '');
         if ($bId <= 0 || $nombre === '') {
             $_SESSION['flash_message'] = 'Ingrese un nombre para el concepto.'; $_SESSION['flash_type'] = 'warning';
-            header("Location: presupuesto_anual.php?bloque_id={$bId}"); exit;
+            header("Location: presupuesto_anual?bloque_id={$bId}"); exit;
         }
         try {
             $s = $pdo->prepare('SELECT COALESCE(MAX(orden),0)+1 FROM pa_conceptos WHERE bloque_id=?'); $s->execute([$bId]);
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error.'; $_SESSION['flash_type'] = 'danger';
         }
-        header("Location: presupuesto_anual.php?bloque_id={$bId}"); exit;
+        header("Location: presupuesto_anual?bloque_id={$bId}"); exit;
     }
 
     // — Editar concepto
@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nombre = trim($_POST['nombre'] ?? '');
         if ($cId <= 0 || $nombre === '') {
             $_SESSION['flash_message'] = 'Datos inválidos.'; $_SESSION['flash_type'] = 'warning';
-            header("Location: presupuesto_anual.php?bloque_id={$bId}"); exit;
+            header("Location: presupuesto_anual?bloque_id={$bId}"); exit;
         }
         try {
             $pdo->prepare('UPDATE pa_conceptos SET nombre=? WHERE id=?')->execute([$nombre,$cId]);
@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error.'; $_SESSION['flash_type'] = 'danger';
         }
-        header("Location: presupuesto_anual.php?bloque_id={$bId}"); exit;
+        header("Location: presupuesto_anual?bloque_id={$bId}"); exit;
     }
 
     // — Eliminar concepto
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error.'; $_SESSION['flash_type'] = 'danger';
         }
-        header("Location: presupuesto_anual.php?bloque_id={$bId}"); exit;
+        header("Location: presupuesto_anual?bloque_id={$bId}"); exit;
     }
 
     // — Agregar sub-año con PDF
@@ -121,33 +121,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $subAnio = trim($_POST['sub_anio'] ?? '');
         if ($cId <= 0 || empty($subAnio) || !preg_match('/^\d{4}$/', $subAnio)) {
             $_SESSION['flash_message'] = 'Año inválido.'; $_SESSION['flash_type'] = 'warning';
-            header("Location: presupuesto_anual.php?bloque_id={$bId}"); exit;
+            header("Location: presupuesto_anual?bloque_id={$bId}"); exit;
         }
         // Validar que sub_anio <= año del bloque
         $s = $pdo->prepare('SELECT b.anio FROM pa_bloques b INNER JOIN pa_conceptos c ON c.bloque_id=b.id WHERE c.id=?');
         $s->execute([$cId]); $bloqueAnio = (int)$s->fetchColumn();
         if ((int)$subAnio > $bloqueAnio) {
             $_SESSION['flash_message'] = "El año no puede ser mayor a {$bloqueAnio}."; $_SESSION['flash_type'] = 'warning';
-            header("Location: presupuesto_anual.php?bloque_id={$bId}"); exit;
+            header("Location: presupuesto_anual?bloque_id={$bId}"); exit;
         }
         $pdfPath = null;
         if (isset($_FILES['pdf']) && $_FILES['pdf']['error'] !== UPLOAD_ERR_NO_FILE) {
             $upload = handle_upload($_FILES['pdf'], 'pdf');
             if (!$upload['success']) {
                 $_SESSION['flash_message'] = $upload['error']; $_SESSION['flash_type'] = 'danger';
-                header("Location: presupuesto_anual.php?bloque_id={$bId}"); exit;
+                header("Location: presupuesto_anual?bloque_id={$bId}"); exit;
             }
             $pdfPath = $upload['path'];
         }
         try {
             $s = $pdo->prepare('SELECT id FROM pa_pdfs WHERE concepto_id=? AND sub_anio=?'); $s->execute([$cId,$subAnio]);
-            if ($s->fetch()) { $_SESSION['flash_message'] = "Ya existe el año {$subAnio} en este concepto."; $_SESSION['flash_type'] = 'warning'; header("Location: presupuesto_anual.php?bloque_id={$bId}"); exit; }
+            if ($s->fetch()) { $_SESSION['flash_message'] = "Ya existe el año {$subAnio} en este concepto."; $_SESSION['flash_type'] = 'warning'; header("Location: presupuesto_anual?bloque_id={$bId}"); exit; }
             $pdo->prepare('INSERT INTO pa_pdfs (concepto_id,sub_anio,pdf_path,orden) VALUES (?,?,?,?)')->execute([$cId,$subAnio,$pdfPath,(int)$subAnio]);
             $_SESSION['flash_message'] = "Año {$subAnio} agregado."; $_SESSION['flash_type'] = 'success';
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error.'; $_SESSION['flash_type'] = 'danger';
         }
-        header("Location: presupuesto_anual.php?bloque_id={$bId}"); exit;
+        header("Location: presupuesto_anual?bloque_id={$bId}"); exit;
     }
 
     // — Subir/reemplazar PDF de sub-año
@@ -156,12 +156,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pId = (int)($_POST['pdf_id'] ?? 0);
         if ($pId <= 0 || !isset($_FILES['pdf']) || $_FILES['pdf']['error'] === UPLOAD_ERR_NO_FILE) {
             $_SESSION['flash_message'] = 'Seleccione un PDF.'; $_SESSION['flash_type'] = 'warning';
-            header("Location: presupuesto_anual.php?bloque_id={$bId}"); exit;
+            header("Location: presupuesto_anual?bloque_id={$bId}"); exit;
         }
         $upload = handle_upload($_FILES['pdf'], 'pdf');
         if (!$upload['success']) {
             $_SESSION['flash_message'] = $upload['error']; $_SESSION['flash_type'] = 'danger';
-            header("Location: presupuesto_anual.php?bloque_id={$bId}"); exit;
+            header("Location: presupuesto_anual?bloque_id={$bId}"); exit;
         }
         try {
             $s = $pdo->prepare('SELECT pdf_path FROM pa_pdfs WHERE id=?'); $s->execute([$pId]); $old = $s->fetchColumn();
@@ -171,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error.'; $_SESSION['flash_type'] = 'danger';
         }
-        header("Location: presupuesto_anual.php?bloque_id={$bId}"); exit;
+        header("Location: presupuesto_anual?bloque_id={$bId}"); exit;
     }
 
     // — Eliminar sub-año
@@ -186,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG')&&APP_DEBUG) ? $e->getMessage() : 'Error.'; $_SESSION['flash_type'] = 'danger';
         }
-        header("Location: presupuesto_anual.php?bloque_id={$bId}"); exit;
+        header("Location: presupuesto_anual?bloque_id={$bId}"); exit;
     }
 }
 
@@ -240,13 +240,13 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
             <button class="btn btn-outline-secondary me-2" id="toggleSidebar" aria-label="Menú"><i class="bi bi-list"></i></button>
             <span class="navbar-brand mb-0 h6">
                 <?php if ($currentBloque): ?>
-                    <a href="presupuesto_anual.php" class="text-decoration-none text-muted">Presupuesto Anual</a>
+                    <a href="presupuesto_anual" class="text-decoration-none text-muted">Presupuesto Anual</a>
                     <i class="bi bi-chevron-right mx-1 small"></i> <?= htmlspecialchars($currentBloque['anio']) ?>
                 <?php else: ?>
                     Presupuesto Anual — Bloques por Año
                 <?php endif; ?>
             </span>
-            <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
+            <a href="logout" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
         </nav>
         <div class="container-fluid p-4">
                 <?php page_help('presupuesto_anual'); ?>

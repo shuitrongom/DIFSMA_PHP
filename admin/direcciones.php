@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido. Intente de nuevo.';
         $_SESSION['flash_type']    = 'danger';
-        header('Location: direcciones.php');
+        header('Location: direcciones');
         exit;
     }
 
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($departamento) || empty($nombre) || empty($cargo)) {
             $_SESSION['flash_message'] = 'El departamento, nombre y cargo son obligatorios.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: direcciones.php');
+            header('Location: direcciones');
             exit;
         }
 
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$upload['success']) {
                 $_SESSION['flash_message'] = $upload['error'];
                 $_SESSION['flash_type']    = 'danger';
-                header('Location: direcciones.php');
+                header('Location: direcciones');
                 exit;
             }
             $imagenPath = $upload['path'];
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header('Location: direcciones.php');
+        header('Location: direcciones');
         exit;
     }
 
@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($id <= 0) {
             $_SESSION['flash_message'] = 'ID inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: direcciones.php');
+            header('Location: direcciones');
             exit;
         }
 
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$current) {
             $_SESSION['flash_message'] = 'Departamento no encontrado.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: direcciones.php');
+            header('Location: direcciones');
             exit;
         }
 
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header('Location: direcciones.php');
+        header('Location: direcciones');
         exit;
     }
 
@@ -126,14 +126,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($id <= 0) {
             $_SESSION['flash_message'] = 'ID de departamento inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: direcciones.php');
+            header('Location: direcciones');
             exit;
         }
 
         if (empty($departamento) || empty($nombre) || empty($cargo)) {
             $_SESSION['flash_message'] = 'El departamento, nombre y cargo son obligatorios.';
             $_SESSION['flash_type']    = 'warning';
-            header('Location: direcciones.php');
+            header('Location: direcciones');
             exit;
         }
 
@@ -145,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$current) {
             $_SESSION['flash_message'] = 'Departamento no encontrado.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: direcciones.php');
+            header('Location: direcciones');
             exit;
         }
 
@@ -158,7 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$upload['success']) {
                 $_SESSION['flash_message'] = $upload['error'];
                 $_SESSION['flash_type']    = 'danger';
-                header('Location: direcciones.php');
+                header('Location: direcciones');
                 exit;
             }
 
@@ -186,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header('Location: direcciones.php');
+        header('Location: direcciones');
         exit;
     }
 
@@ -197,7 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($id <= 0) {
             $_SESSION['flash_message'] = 'ID de departamento inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: direcciones.php');
+            header('Location: direcciones');
             exit;
         }
 
@@ -208,7 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$current) {
             $_SESSION['flash_message'] = 'Departamento no encontrado.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: direcciones.php');
+            header('Location: direcciones');
             exit;
         }
 
@@ -232,7 +232,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header('Location: direcciones.php');
+        header('Location: direcciones');
         exit;
     }
 }
@@ -276,7 +276,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                     <i class="bi bi-list"></i>
                 </button>
                 <span class="navbar-brand mb-0 h6">Direcciones</span>
-                <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto">
+                <a href="logout" class="btn btn-sm btn-outline-danger ms-auto">
                     <i class="bi bi-box-arrow-right"></i> Salir
                 </a>
             </nav>
@@ -300,7 +300,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                             </div>
                             <div class="collapse" id="formNuevoDepto">
                             <div class="card-body">
-                                <form method="POST" enctype="multipart/form-data" action="direcciones.php" class="row g-3 align-items-end">
+                                <form method="POST" enctype="multipart/form-data" action="direcciones" class="row g-3 align-items-end">
                                     <input type="hidden" name="action" value="add">
                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                                     <div class="col-md-3">
@@ -419,7 +419,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                             <div class="modal fade" id="editModal<?= (int) $dir['id'] ?>" tabindex="-1" aria-labelledby="editLabel<?= (int) $dir['id'] ?>" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
-                                                        <form method="POST" enctype="multipart/form-data" action="direcciones.php">
+                                                        <form method="POST" enctype="multipart/form-data" action="direcciones">
                                                             <input type="hidden" name="action" value="edit">
                                                             <input type="hidden" name="id" value="<?= (int) $dir['id'] ?>">
                                                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
@@ -496,7 +496,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                             <div class="modal fade" id="deleteImgModal<?= (int) $dir['id'] ?>" tabindex="-1" aria-labelledby="deleteImgLabel<?= (int) $dir['id'] ?>" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
-                                                        <form method="POST" action="direcciones.php">
+                                                        <form method="POST" action="direcciones">
                                                             <input type="hidden" name="action" value="delete_image">
                                                             <input type="hidden" name="id" value="<?= (int) $dir['id'] ?>">
                                                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
@@ -534,7 +534,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                             <div class="modal fade" id="deleteModal<?= (int) $dir['id'] ?>" tabindex="-1" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
-                                                        <form method="POST" action="direcciones.php">
+                                                        <form method="POST" action="direcciones">
                                                             <input type="hidden" name="action" value="delete">
                                                             <input type="hidden" name="id" value="<?= (int) $dir['id'] ?>">
                                                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">

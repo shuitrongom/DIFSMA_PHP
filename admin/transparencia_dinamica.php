@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $token  = $_POST['csrf_token'] ?? '';
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido.'; $_SESSION['flash_type'] = 'danger';
-        header('Location: transparencia_dinamica.php'); exit;
+        header('Location: transparencia_dinamica'); exit;
     }
 
     if ($action === 'create') {
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $plantilla = $_POST['plantilla'] ?? '';
         if (empty($nombre) || !isset($plantillas[$plantilla])) {
             $_SESSION['flash_message'] = 'Nombre y plantilla son obligatorios.'; $_SESSION['flash_type'] = 'warning';
-            header('Location: transparencia_dinamica.php'); exit;
+            header('Location: transparencia_dinamica'); exit;
         }
         $slug = preg_replace('/[^a-z0-9]+/', '_', strtolower(trim(preg_replace('/[áéíóúñ]/u', '', iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $nombre)))));
         $slug = trim($slug, '_');
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al crear.';
             $_SESSION['flash_type'] = 'danger';
         }
-        header('Location: transparencia_dinamica.php'); exit;
+        header('Location: transparencia_dinamica'); exit;
     }
 
     if ($action === 'delete') {
@@ -73,14 +73,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error.';
             $_SESSION['flash_type'] = 'danger';
         }
-        header('Location: transparencia_dinamica.php'); exit;
+        header('Location: transparencia_dinamica'); exit;
     }
 
     if ($action === 'toggle') {
         $id = (int) ($_POST['id'] ?? 0);
         $pdo->prepare('UPDATE trans_secciones SET activo = NOT activo WHERE id = ?')->execute([$id]);
         $_SESSION['flash_message'] = 'Estado actualizado.'; $_SESSION['flash_type'] = 'success';
-        header('Location: transparencia_dinamica.php'); exit;
+        header('Location: transparencia_dinamica'); exit;
     }
 }
 
@@ -111,7 +111,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
         <nav class="navbar navbar-light bg-white shadow-sm px-3">
             <button class="btn btn-outline-secondary me-2" id="toggleSidebar"><i class="bi bi-list"></i></button>
             <span class="navbar-brand mb-0 h6">Transparencia — Secciones Dinámicas</span>
-            <a href="logout.php" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
+            <a href="logout" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
         </nav>
         <div class="container-fluid p-4">
                 <?php page_help('transparencia_dinamica'); ?>
@@ -128,7 +128,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                     <div class="card">
                         <div class="card-header bg-danger text-white"><i class="bi bi-plus-circle me-1"></i> Crear nueva seccion</div>
                         <div class="card-body">
-                            <form method="POST" action="transparencia_dinamica.php">
+                            <form method="POST" action="transparencia_dinamica">
                                 <input type="hidden" name="action" value="create">
                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                                 <div class="mb-3">
@@ -170,7 +170,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                         <td><i class="bi <?= htmlspecialchars($sec['icono']) ?> me-1"></i> <?= htmlspecialchars($sec['nombre']) ?></td>
                                         <td><span class="badge bg-danger"><?= htmlspecialchars($plantillas[$sec['plantilla']]['nombre'] ?? $sec['plantilla']) ?></span></td>
                                         <td>
-                                            <form method="POST" action="transparencia_dinamica.php" class="d-inline">
+                                            <form method="POST" action="transparencia_dinamica" class="d-inline">
                                                 <input type="hidden" name="action" value="toggle">
                                                 <input type="hidden" name="id" value="<?= (int)$sec['id'] ?>">
                                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
@@ -181,7 +181,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                         </td>
                                         <td>
                                             <a href="transparencia_seccion.php?id=<?= (int)$sec['id'] ?>" class="btn btn-sm btn-action-delete"><i class="bi bi-pencil"></i> Gestionar</a>
-                                            <form method="POST" action="transparencia_dinamica.php" class="d-inline" onsubmit="return confirm('¿Eliminar esta sección y todo su contenido?')">
+                                            <form method="POST" action="transparencia_dinamica" class="d-inline" onsubmit="return confirm('¿Eliminar esta sección y todo su contenido?')">
                                                 <input type="hidden" name="action" value="delete">
                                                 <input type="hidden" name="id" value="<?= (int)$sec['id'] ?>">
                                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
