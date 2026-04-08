@@ -18,9 +18,13 @@ $page_title  = 'DIF San Mateo Atenco';
 $slider_images = [];
 try {
     $pdo  = get_db();
-    $stmt = $pdo->prepare(
-        'SELECT imagen_path FROM slider_principal WHERE activo = 1 ORDER BY orden ASC'
-    );
+    // Verificar si la columna link_url existe
+    $cols = $pdo->query("SHOW COLUMNS FROM slider_principal LIKE 'link_url'")->fetchAll();
+    $has_link_url = !empty($cols);
+    $select = $has_link_url
+        ? 'SELECT imagen_path, link_url FROM slider_principal WHERE activo = 1 ORDER BY orden ASC'
+        : 'SELECT imagen_path, NULL AS link_url FROM slider_principal WHERE activo = 1 ORDER BY orden ASC';
+    $stmt = $pdo->prepare($select);
     $stmt->execute();
     $slider_images = $stmt->fetchAll();
 } catch (PDOException $e) {
@@ -29,11 +33,13 @@ try {
     }
 }
 
-// Construir array de rutas para el JS
+// Construir array de rutas y links para el JS
 if (!empty($slider_images)) {
     $images_js = array_map(fn($row) => $row['imagen_path'], $slider_images);
+    $links_js  = array_map(fn($row) => $row['link_url'] ?? '', $slider_images);
 } else {
     $images_js = ['img/carousel-1.jpg'];
+    $links_js  = [''];
 }
 
 // ── Consultar slider_comunica del mes actual (DIF Comunica — Swiper 3D) ──────
@@ -151,6 +157,7 @@ require_once 'includes/navbar.php';
     <script>
     (function () {
         const images = <?= json_encode($images_js, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
+        const links  = <?= json_encode($links_js,  JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
 
         const viewport = document.getElementById('viewport');
         const dotsEl   = document.getElementById('dots');
@@ -163,6 +170,7 @@ require_once 'includes/navbar.php';
             imgs.forEach(function (src, i) {
                 const slide = document.createElement('div');
                 slide.className = 'slide';
+
                 const img = document.createElement('img');
                 img.src = src;
                 img.alt = 'Imagen del slider ' + (i + 1);
@@ -170,7 +178,19 @@ require_once 'includes/navbar.php';
                 img.style.width = '100%';
                 img.style.height = 'auto';
                 img.style.display = 'block';
-                slide.appendChild(img);
+
+                // Envolver en <a> si tiene link
+                if (links[i]) {
+                    const a = document.createElement('a');
+                    a.href = links[i];
+                    a.style.display = 'block';
+                    a.style.cursor = 'pointer';
+                    a.appendChild(img);
+                    slide.appendChild(a);
+                } else {
+                    slide.appendChild(img);
+                }
+
                 viewport.appendChild(slide);
 
                 const dot = document.createElement('button');

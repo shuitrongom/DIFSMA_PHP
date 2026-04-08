@@ -68,8 +68,54 @@ require_once __DIR__ . '/../includes/navbar.php';
                         <?php endif; ?>
                         <div class="px-4 pb-4 <?= $imagen ? '' : 'pt-4' ?> rounded-bottom" style="background:rgb(200,16,44);">
                             <div class="blog-text-inner" style="padding-top:1rem;">
-                                <style>.blog-text-inner,.blog-text-inner *{color:#fff !important;}</style>
-                                <?= $contenido ?>
+                                <style>
+                                    .blog-text-inner, .blog-text-inner * { color: #fff !important; }
+                                    .blog-text-inner p,
+                                    .blog-text-inner td,
+                                    .blog-text-inner div { text-align: justify !important; }
+                                    .blog-text-inner h1,
+                                    .blog-text-inner h2,
+                                    .blog-text-inner h3,
+                                    .blog-text-inner h4,
+                                    .blog-text-inner h5,
+                                    .blog-text-inner h6 { text-align: left !important; }
+                                    /* Lista con viñeta imagen */
+                                    .blog-text-inner ul {
+                                        list-style: none !important;
+                                        padding: 0 !important;
+                                        margin-left: 0 !important;
+                                    }
+                                    .blog-text-inner ul li {
+                                        display: grid !important;
+                                        grid-template-columns: 26px 1fr !important;
+                                        column-gap: 0.4rem !important;
+                                        align-items: start !important;
+                                        padding: 0 !important;
+                                        margin: 0 0 0.3rem 0 !important;
+                                        text-indent: 0 !important;
+                                        text-align: justify !important;
+                                    }
+                                    .blog-text-inner ul li::before {
+                                        content: '' !important;
+                                        display: block !important;
+                                        width: 20px !important;
+                                        height: 20px !important;
+                                        margin-top: 3px !important;
+                                        background-image: url('<?= $base_path ?>img/botoncito.png') !important;
+                                        background-size: contain !important;
+                                        background-repeat: no-repeat !important;
+                                        background-position: center top !important;
+                                    }
+                                </style>
+                                <?php
+                                // Limpiar &nbsp; al inicio de cada <li> que TinyMCE inyecta
+                                $contenido_clean = preg_replace(
+                                    '/(<li[^>]*>)(\s|&nbsp;)+/i',
+                                    '$1',
+                                    $contenido
+                                );
+                                echo $contenido_clean;
+                                ?>
                             </div>
                         </div>
                     </div>

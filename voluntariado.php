@@ -62,12 +62,12 @@ require_once __DIR__ . '/includes/navbar.php';
                     </div>
                     <h1 class="vol-title" style="font-family:'Montserrat',sans-serif;font-weight:800;color:rgb(188,185,182);font-size:clamp(2.4rem,4.5vw,4rem);margin:0;line-height:0.9;text-align:left;">MISIÓN</h1>
                 </div>
-                <div class="col-md-8" style="padding-left:clamp(16px,7vw,80px);">
+                <div class="col-md-8" style="padding-left:clamp(16px,7vw,80px);padding-right:clamp(16px,7vw,80px);">
                     <h6 style="font-family:'Montserrat',sans-serif;font-weight:700;color:rgb(107,98,90);text-align:left;"><?= htmlspecialchars($mision_titulo) ?></h6>
-                    <p style="font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;color:rgb(107,98,90);line-height:1.7;text-align:left;"><?= nl2br(htmlspecialchars($mision_texto)) ?></p>
+                    <p style="font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;color:rgb(107,98,90);line-height:1.7;text-align:justify;"><?= nl2br(htmlspecialchars($mision_texto)) ?></p>
                     <?php if (!empty($mision_subtitulo)): ?>
                     <h6 style="font-family:'Montserrat',sans-serif;font-weight:700;color:rgb(107,98,90);margin-top:16px;text-align:left;"><?= htmlspecialchars($mision_subtitulo) ?></h6>
-                    <p style="font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;color:rgb(107,98,90);line-height:1.7;text-align:left;"><?= nl2br(htmlspecialchars($mision_subtexto)) ?></p>
+                    <p style="font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;color:rgb(107,98,90);line-height:1.7;text-align:justify;"><?= nl2br(htmlspecialchars($mision_subtexto)) ?></p>
                     <?php endif; ?>
                 </div>
             </div>
@@ -81,8 +81,8 @@ require_once __DIR__ . '/includes/navbar.php';
                     </div>
                     <h2 class="vol-title" style="font-family:'Montserrat',sans-serif;font-weight:800;color:rgb(188,185,182);font-size:clamp(2.4rem,4.5vw,4rem);margin:0;line-height:0.9;text-align:left;">VISIÓN</h2>
                 </div>
-                <div class="col-md-8 d-flex align-items-center" style="padding-left:clamp(16px,7vw,80px);">
-                    <p style="font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;color:rgb(107,98,90);line-height:1.7;margin:0;text-align:left;"><?= nl2br(htmlspecialchars($vision_texto)) ?></p>
+                <div class="col-md-8 d-flex align-items-center" style="padding-left:clamp(16px,7vw,80px);padding-right:clamp(16px,7vw,80px);">
+                    <p style="font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;color:rgb(107,98,90);line-height:1.7;margin:0;text-align:justify;"><?= nl2br(htmlspecialchars($vision_texto)) ?></p>
                 </div>
             </div>
 
@@ -95,8 +95,8 @@ require_once __DIR__ . '/includes/navbar.php';
                     </div>
                     <h2 class="vol-title" style="font-family:'Montserrat',sans-serif;font-weight:800;color:rgb(188,185,182);font-size:clamp(2.4rem,4.5vw,4rem);margin:0;line-height:0.9;text-align:left;">VALORES</h2>
                 </div>
-                <div class="col-md-8 d-flex align-items-center" style="padding-left:clamp(16px,7vw,80px);">
-                    <p style="font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;color:rgb(107,98,90);line-height:1.7;margin:0;text-align:left;"><?= nl2br(htmlspecialchars($valores_texto)) ?></p>
+                <div class="col-md-8 d-flex align-items-center" style="padding-left:clamp(16px,7vw,80px);padding-right:clamp(16px,7vw,80px);">
+                    <p style="font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;color:rgb(107,98,90);line-height:1.7;margin:0;text-align:justify;"><?= nl2br(htmlspecialchars($valores_texto)) ?></p>
                 </div>
             </div>
 
@@ -138,6 +138,7 @@ require_once __DIR__ . '/includes/navbar.php';
         display: flex;
         gap: 4px;
         padding-left: clamp(12px, 8vw, 120px);
+        padding-right: clamp(12px, 8vw, 120px);
         height: 160px;
     }
     .vol-gallery-item {
