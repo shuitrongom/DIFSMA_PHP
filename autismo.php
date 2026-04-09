@@ -254,18 +254,18 @@ require_once __DIR__ . '/includes/navbar.php';
 
 /* ── Desktop normal (992px – 1399px) ── */
 @media (min-width: 992px) and (max-width: 1399px) {
-    .aut-plasta-amarilla { width: clamp(220px, 26vw, 332px); transform: translateY(-47px); margin-left: 3vw; }
+    .aut-plasta-amarilla { width: clamp(220px, 26vw, 332px); transform: translateY(-47px);  margin-left: 3vw; }
     .aut-plasta-azul     { width: clamp(300px, 36vw, 512px); transform: translateY(-108px); margin-right: 1vw; }
-    .aut-plasta-bl       { width: clamp(220px, 45vw, 553px); transform: translateY(var(--pr-y)); margin-left: 3vw; }
-    .aut-plasta-br       { width: clamp(300px, 45vw, 553px); transform: translateY(var(--pv-y)); margin-right: 1vw; }
+    .aut-plasta-bl       { width: clamp(220px, 45vw, 553px); transform: translateY(35px);  margin-left: 3vw; }
+    .aut-plasta-br       { width: clamp(300px, 45vw, 553px); transform: translateY(47px); margin-right: 1vw; }
 }
 
 /* ── Pantallas grandes (≥ 1400px) ── */
 @media (min-width: 1400px) {
-    .aut-plasta-amarilla { width: clamp(280px, 17vw, 332px); transform: translateY(-47px); margin-left: 12.8vw; }
+    .aut-plasta-amarilla { width: clamp(280px, 17vw, 332px); transform: translateY(-47px);  margin-left: 12.8vw; }
     .aut-plasta-azul     { width: clamp(380px, 26vw, 512px); transform: translateY(-115px); margin-right: 11.1vw; }
-    .aut-plasta-bl       { width: clamp(280px, 60vw, 590px); transform: translateY(var(--pr-y)); margin-left: 12.8vw; }
-    .aut-plasta-br       { width: clamp(380px, 45vw, 580px); transform: translateY(var(--pv-y)); margin-right: 11.1vw; }
+    .aut-plasta-bl       { width: clamp(280px, 60vw, 590px); transform: translateY(35px);  margin-left: 12.8vw; }
+    .aut-plasta-br       { width: clamp(380px, 45vw, 580px); transform: translateY(40px); margin-right: 11.1vw; }
 }
 
 /* ── Tablet (768px – 991px) ── */
