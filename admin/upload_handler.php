@@ -97,8 +97,17 @@ function handle_upload(array $file, string $type = 'image'): array
             $counter++;
         }
     } else {
-        // Imágenes: nombre aleatorio
-        $newName = bin2hex(random_bytes(16)) . '.' . $ext;
+        // Imágenes: conservar nombre original sanitizado
+        $baseName = pathinfo($originalName, PATHINFO_FILENAME);
+        $baseName = preg_replace('/[^a-zA-Z0-9_\-\. áéíóúñÁÉÍÓÚÑ]/', '_', $baseName);
+        $baseName = trim($baseName, '_');
+        if (empty($baseName)) $baseName = 'imagen';
+        $newName = $baseName . '.' . $ext;
+        $counter = 1;
+        while (file_exists($destDir . $newName)) {
+            $newName = $baseName . '_' . $counter . '.' . $ext;
+            $counter++;
+        }
     }
     $destPath = $destDir . $newName;
 

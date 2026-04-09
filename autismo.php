@@ -1,0 +1,319 @@
+<?php
+/**
+ * autismo.php — Unidad Municipal de Autismo — DIF San Mateo Atenco
+ */
+require_once __DIR__ . '/includes/db.php';
+
+$base_path   = '';
+$active_page = 'autismo';
+$page_title  = 'Unidad Municipal de Autismo — DIF San Mateo Atenco';
+
+$config = null;
+try {
+    $pdo    = get_db();
+    $stmt   = $pdo->query('SELECT * FROM autismo_config LIMIT 1');
+    $config = $stmt->fetch();
+} catch (PDOException $e) {
+    if (defined('APP_DEBUG') && APP_DEBUG) error_log('autismo.php: ' . $e->getMessage());
+}
+
+$logo_path      = !empty($config['logo_path'])            ? htmlspecialchars($config['logo_path'])            : 'img/UMA_SMA.png';
+$texto_derecha  = $config['texto_derecha']  ?? '';
+$texto_centro   = $config['texto_centro']   ?? '';
+$texto_inferior = $config['texto_inferior'] ?? '';
+$img_centro     = !empty($config['imagen_centro_path'])   ? htmlspecialchars($config['imagen_centro_path'])   : 'img/front-view-boy-playing-memory-game.jpg';
+$img_inferior   = !empty($config['imagen_inferior_path']) ? htmlspecialchars($config['imagen_inferior_path']) : 'img/top-view-kid-playing-with-colorful-game.jpg';
+
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/includes/navbar.php';
+?>
+
+<div class="container-fluid px-0" style="background:#f5f5f5;overflow-x:hidden;">
+
+    <!-- ── Título centrado ── -->
+    <div class="container px-0">
+        <div class="text-center pt-4 pb-2 wow fadeIn aut-titulo" data-wow-delay="0.1s">
+            <h4 style="font-family:'Montserrat',sans-serif;font-weight:800;letter-spacing:2px;color:rgb(107,98,90);margin:0;">UNIDAD MUNICIPAL DE AUTISMO</h4>
+            <h5 style="font-family:'Montserrat',sans-serif;font-weight:700;letter-spacing:2px;color:rgb(107,98,90);margin:4px 0 0;">SAN MATEO ATENCO</h5>
+            <div style="height:16px;background:rgb(199,14,44);width:130px;margin:10px auto 0;"></div>
+        </div>
+    </div>
+
+    <!-- ── Fila plastas: amarilla izq | vacío | azul der ── -->
+    <!-- ── Plastas superiores: siempre en la misma fila ── -->
+    <div style="display:flex;width:100%;overflow:hidden;align-items:flex-start;">
+        <div style="width:33.33%;flex-shrink:0;">
+            <img src="img/plasta_amarilla.png" class="aut-plasta-amarilla" alt="">
+        </div>
+        <div style="flex:1;"></div>
+        <div style="width:33.33%;flex-shrink:0;display:flex;justify-content:flex-end;">
+            <img src="img/plasta_azul.png" class="aut-plasta-azul" alt="">
+        </div>
+    </div>
+
+    <!-- ── Fila logo + texto ── -->
+    <div class="container px-0">
+        <div class="row g-0 align-items-center pb-4 aut-logo-row" style="margin-top:-80px;">
+            <div class="col-md-6 text-center px-4">
+                <img src="<?= $logo_path ?>" class="aut-logo-img" alt="Unidad Municipal de Autismo">
+            </div>
+            <div class="col-md-6 px-4 px-md-5 pt-4">
+                <div class="aut-texto aut-texto-derecha"><?= nl2br(htmlspecialchars($texto_derecha)) ?></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Contenido central ── -->
+    <div class="container py-2" style="margin-bottom: var(--contenido-mb, -180px);">
+
+        <!-- texto izquierda + imagen derecha -->
+        <div class="row align-items-center mb-3 wow fadeIn aut-content-row" data-wow-delay="0.3s">
+            <div class="col-md-6 mb-4 mb-md-0 px-4 px-md-5">
+                <div class="aut-texto aut-texto-centro"><?= nl2br(htmlspecialchars($texto_centro)) ?></div>
+            </div>
+            <div class="col-md-6 text-center px-4">
+                <img src="<?= $img_centro ?>" class="aut-img-centro" alt="Autismo">
+            </div>
+        </div>
+
+        <!-- imagen izquierda + texto derecha -->
+        <div class="row align-items-center mb-3 wow fadeIn aut-inferior-row" data-wow-delay="0.4s">
+            <div class="col-md-6 text-center mb-4 mb-md-0 px-4">
+                <img src="<?= $img_inferior ?>" class="aut-img-inferior" alt="Autismo">
+            </div>
+            <div class="col-md-6 px-4 px-md-5">
+                <div class="aut-texto aut-texto-inferior"><?= nl2br(htmlspecialchars($texto_inferior)) ?></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ── Contacto con plastas inferiores ── -->
+    <div class="aut-contacto-wrap wow fadeIn" data-wow-delay="0.5s">
+        <img src="img/plasta_rosa.png"  class="aut-plasta-bl" alt="">
+        <img src="img/plasta_verde.png" class="aut-plasta-br" alt="">
+        <div class="text-center py-5 px-3 aut-contacto-inner" style="position:relative;z-index:2;">
+            <h5 style="font-family:'Montserrat',sans-serif;font-weight:800;color:rgb(107,98,90);letter-spacing:1px;margin:0;">SERVICIOS MÉDICOS</h5>
+            <h5 style="font-family:'Montserrat',sans-serif;font-weight:800;color:rgb(107,98,90);letter-spacing:1px;margin:0 0 8px;">CLASES Y TALLERES</h5>
+            <p class="aut-contacto-txt">
+                Mariano Matamoros 310, Barrio de la Concepción CP 52105,<br>
+                San Mateo Atenco, Méx.<br>
+                Teléfono: 722 970 77 86<br>
+                Horario de Lunes a Viernes<br>
+                8:00 am a 3:30 pm<br>
+                correo: adultomayor@difsanmateoatenco.gob.mx
+            </p>
+        </div>
+    </div>
+
+</div>
+
+<div style="height:3rem;background:#f5f5f5;"></div>
+<div class="pleca"><img src="img/pleca.png" alt="pleca"></div>
+
+<style>
+/*
+ * ── PLASTAS — ajusta estas variables para mover/redimensionar ──────────────
+ * translate(X, Y): positivo = derecha/abajo, negativo = izquierda/arriba
+ */
+:root {
+    /* Plasta amarilla (superior izquierda) — NO MOVER */
+    --pa-w: clamp(160px, 26vw, 332px);
+    --pa-max: 600px;
+    --pa-x: 39px;
+    --pa-y: -47px;
+
+    /* Plasta azul (superior derecha) — NO MOVER */
+    --pb-w: clamp(150px, 36vw, 512px);
+    --pb-max: 600px;
+    --pb-x: -19px;
+    --pb-y: -93px;
+
+    /* Plasta rosa (inferior izquierda) — mismos valores que amarilla */
+    --pr-w: clamp(160px, 45vw, 553px);
+    --pr-max: 600px;
+    --pr-x: 9px;
+    --pr-y: 72px;
+
+    /* Plasta verde (inferior derecha) — mismos valores que azul */
+    --pv-w: clamp(150px, 45vw, 480px);
+    --pv-max: 600px;
+    --pv-x: -2px;
+    --pv-y: 72px;
+
+    /* Logo */
+    --logo-w: 100%;
+    --logo-max-w: 590px;
+    --logo-h: 400px;
+    --logo-x: 0px;
+    --logo-y: -182px;
+
+    /* Imagen central (foto niño con bloques) */
+    --img-centro-w: 100%;
+    --img-centro-max-w: 590px;
+    --img-centro-h: 400px;
+    --img-centro-x: 0px;
+    --img-centro-y: -200px;
+
+    /* Imagen inferior (foto niño en alfombra) */
+    --img-inferior-w: 100%;
+    --img-inferior-max-w: 590px;
+    --img-inferior-h: 400px;
+    --img-inferior-x: 0px;
+    --img-inferior-y: -175px;
+
+    /* Textos — margen superior para subir/bajar */
+    --texto-derecha-y: -170px;
+    --texto-centro-y: -222px;
+    --texto-inferior-y: -200px;
+
+    /* Bloque de contacto (SERVICIOS MÉDICOS / CLASES Y TALLERES) */
+    --contacto-x: 0px;
+    --contacto-y: 0px;
+
+    /* Espacio entre contenido y contacto — ajusta si hay espacio en blanco */
+    --contenido-mb: -210px;
+}
+.aut-plasta-amarilla {
+    display: block;
+    width: var(--pa-w);
+    max-width: var(--pa-max);
+    height: auto;
+    transform: translateY(var(--pa-y));
+}
+.aut-plasta-azul {
+    display: block;
+    width: var(--pb-w);
+    max-width: var(--pb-max);
+    height: auto;
+    transform: translateY(var(--pb-y));
+}
+.aut-contacto-wrap {
+    position: relative; overflow: hidden; min-height: 220px; padding-bottom: 3rem;
+}
+.aut-plasta-bl {
+    position: absolute; bottom: 0; left: 0;
+    width: var(--pr-w);
+    max-width: var(--pr-max);
+    transform: translate(var(--pr-x), var(--pr-y));
+    pointer-events: none;
+}
+.aut-plasta-br {
+    position: absolute; bottom: 0; right: 0;
+    width: var(--pv-w);
+    max-width: var(--pv-max);
+    transform: translate(var(--pv-x), var(--pv-y));
+    pointer-events: none;
+}
+.aut-contacto-wrap .text-center { position: relative; z-index: 2; }
+.aut-texto {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px; font-weight: 500;
+    color: rgb(107,98,90); line-height: 1.8; text-align: center;
+}
+/* Logo e imágenes con variables de posición y tamaño */
+.aut-logo-img {
+    width: var(--logo-w);
+    max-width: var(--logo-max-w);
+    height: var(--logo-h);
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+    transform: translate(var(--logo-x), var(--logo-y));
+}
+.aut-img-centro {
+    width: var(--img-centro-w);
+    max-width: var(--img-centro-max-w);
+    height: var(--img-centro-h);
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transform: translate(var(--img-centro-x), var(--img-centro-y));
+}
+.aut-img-inferior {
+    width: var(--img-inferior-w);
+    max-width: var(--img-inferior-max-w);
+    height: var(--img-inferior-h);
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transform: translate(var(--img-inferior-x), var(--img-inferior-y));
+}
+.aut-texto-derecha  { transform: translateY(var(--texto-derecha-y)); }
+.aut-texto-centro   { transform: translateY(var(--texto-centro-y)); }
+.aut-texto-inferior { transform: translateY(var(--texto-inferior-y)); }
+.aut-contacto-inner { transform: translate(var(--contacto-x), var(--contacto-y)); }
+.aut-contacto-txt {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px; color: rgb(107,98,90); line-height: 1.9;
+}
+
+/* ── Desktop normal (992px – 1399px) ── */
+@media (min-width: 992px) and (max-width: 1399px) {
+    .aut-plasta-amarilla { width: clamp(220px, 26vw, 332px); transform: translateY(-47px); margin-left: 3vw; }
+    .aut-plasta-azul     { width: clamp(300px, 36vw, 512px); transform: translateY(-94px); margin-right: 1vw; }
+    .aut-plasta-bl       { width: clamp(220px, 26vw, 332px); transform: translateY(var(--pr-y)); margin-left: 3vw; }
+    .aut-plasta-br       { width: clamp(300px, 36vw, 512px); transform: translateY(var(--pv-y)); margin-right: 1vw; }
+}
+
+/* ── Pantallas grandes (≥ 1400px) ── */
+@media (min-width: 1400px) {
+    .aut-plasta-amarilla { width: clamp(280px, 17vw, 332px); transform: translateY(-47px); margin-left: 12.8vw; }
+    .aut-plasta-azul     { width: clamp(380px, 26vw, 512px); transform: translateY(-94px); margin-right: 11.1vw; }
+    .aut-plasta-bl       { width: clamp(280px, 17vw, 332px); transform: translateY(var(--pr-y)); margin-left: 12.8vw; }
+    .aut-plasta-br       { width: clamp(380px, 26vw, 512px); transform: translateY(var(--pv-y)); margin-right: 11.1vw; }
+}
+
+/* ── Tablet (768px – 991px) ── */
+@media (max-width: 991px) {
+    .aut-plasta-amarilla { width: clamp(130px, 22vw, 200px); transform: translate(5px, -10px); }
+    .aut-plasta-azul     { width: clamp(150px, 28vw, 260px); transform: translate(-5px, -15px); }
+    .aut-plasta-bl, .aut-plasta-br { width: clamp(110px, 18vw, 180px); }
+    /* Reset transforms — columnas apiladas, no hay espacio para negativos */
+    .aut-logo-img    { transform: none !important; height: auto !important; max-width: 280px !important; }
+    .aut-img-centro  { transform: none !important; height: 240px !important; }
+    .aut-img-inferior{ transform: none !important; height: 240px !important; }
+    .aut-texto-derecha, .aut-texto-centro, .aut-texto-inferior { transform: none !important; }
+    .aut-contacto-inner { transform: none !important; }
+    /* Layout apilado */
+    .aut-logo-row { flex-direction: column !important; margin-top: 0 !important; }
+    .aut-logo-row .col-md-6 { width: 100% !important; text-align: center !important; padding: 1rem 2rem !important; }
+    .aut-content-row, .aut-inferior-row { flex-direction: column !important; }
+    .aut-content-row .col-md-6,
+    .aut-inferior-row .col-md-6 { width: 100% !important; }
+    /* Sin margin negativo en tablet */
+    .container[style*="contenido-mb"] { margin-bottom: 0 !important; }
+}
+
+/* ── Móvil (< 768px) ── */
+@media (max-width: 767px) {
+    .aut-plasta-amarilla { width: clamp(80px, 28vw, 130px); transform: translate(0px, 0px); }
+    .aut-plasta-azul     { width: clamp(90px, 32vw, 150px); transform: translate(0px, 0px); }
+    .aut-plasta-bl, .aut-plasta-br { width: clamp(80px, 35vw, 130px); }
+    /* Reset transforms */
+    .aut-logo-img    { transform: none !important; height: auto !important; max-width: 220px !important; }
+    .aut-img-centro  { transform: none !important; height: 200px !important; }
+    .aut-img-inferior{ transform: none !important; height: 200px !important; }
+    .aut-texto-derecha, .aut-texto-centro, .aut-texto-inferior { transform: none !important; }
+    .aut-contacto-inner { transform: none !important; }
+    /* Título */
+    .aut-titulo h4 { font-size: 1rem !important; letter-spacing: 1px !important; }
+    .aut-titulo h5 { font-size: 0.85rem !important; }
+    /* Layout apilado */
+    .aut-logo-row { margin-top: 0 !important; flex-direction: column !important; }
+    .aut-logo-row .col-md-6 { width: 100% !important; text-align: center !important; padding: 0.5rem 1rem !important; }
+    .aut-content-row, .aut-inferior-row { flex-direction: column !important; }
+    .aut-content-row .col-md-6,
+    .aut-inferior-row .col-md-6 { width: 100% !important; }
+    /* Sin margin negativo en móvil */
+    .container[style*="contenido-mb"] { margin-bottom: 0 !important; }
+    .aut-contacto-wrap { min-height: 200px; }
+    .aut-contacto-txt { font-size: 13px; }
+}
+</style>
+
+<?php require_once __DIR__ . '/includes/footer.php'; ?>

@@ -51,6 +51,11 @@ function page_help(string $seccion): void {
             'title' => 'Organigrama',
             'desc'  => 'Actualiza la imagen del organigrama institucional del DIF. Sube una imagen clara y legible en formato JPG, PNG o WEBP.',
         ],
+        'autismo' => [
+            'icon'  => 'bi-heart-pulse',
+            'title' => 'Unidad Municipal de Autismo',
+            'desc'  => 'Administra el contenido de la página de la Unidad Municipal de Autismo. Puedes actualizar el logo/imagen principal, los textos descriptivos y las imágenes de la sección central e inferior.',
+        ],
         'tramites' => [
             'icon'  => 'bi-file-earmark-text',
             'title' => 'Trámites y Servicios',

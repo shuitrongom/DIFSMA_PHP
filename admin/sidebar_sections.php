@@ -32,7 +32,8 @@ $sidebar_groups = [
         'group' => 'Servicios',
         'icon'  => 'bi-file-earmark-text',
         'items' => [
-            ['title' => 'Trámites', 'file' => 'tramites', 'icon' => 'bi-file-earmark-text'],
+            ['title' => 'Trámites',              'file' => 'tramites', 'icon' => 'bi-file-earmark-text'],
+            ['title' => 'Unidad de Autismo',     'file' => 'autismo',  'icon' => 'bi-heart-pulse'],
         ],
     ],
     [

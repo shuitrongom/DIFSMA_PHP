@@ -56,6 +56,8 @@ $active_page = $active_page ?? '';
                                     $href = htmlspecialchars($base_path) . 'tramites/' . htmlspecialchars($_nt['slug']);
                                     echo '<a href="' . $href . '" class="dropdown-item" style="color:#fff!important">' . htmlspecialchars($_nt['titulo']) . '</a>';
                                 }
+                                // Unidad de Autismo al final de servicios
+                                echo '<a href="' . htmlspecialchars($base_path) . 'autismo" class="dropdown-item" style="color:#fff!important">Unidad Municipal de Autismo</a>';
                             } catch (Exception $e) { /* silenciar */ }
                             ?>
                         </div>
