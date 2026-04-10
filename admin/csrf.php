@@ -36,7 +36,7 @@ function csrf_token(): string
  * Validates the provided token against stored tokens using
  * a timing-safe comparison. Removes the used token after validation.
  */
-function csrf_validate(string $token): bool
+function csrf_validate(string $token, bool $consume = true): bool
 {
     if (empty($token)) {
         return false;
@@ -45,14 +45,16 @@ function csrf_validate(string $token): bool
     if (!isset($_SESSION['csrf_tokens']) || !is_array($_SESSION['csrf_tokens'])) {
         // Backward compat: check old single-token format
         $stored = $_SESSION['csrf_token'] ?? '';
-        unset($_SESSION['csrf_token']);
+        if ($consume) unset($_SESSION['csrf_token']);
         return $stored !== '' && hash_equals($stored, $token);
     }
 
     foreach ($_SESSION['csrf_tokens'] as $i => $stored) {
         if (hash_equals($stored, $token)) {
-            unset($_SESSION['csrf_tokens'][$i]);
-            $_SESSION['csrf_tokens'] = array_values($_SESSION['csrf_tokens']);
+            if ($consume) {
+                unset($_SESSION['csrf_tokens'][$i]);
+                $_SESSION['csrf_tokens'] = array_values($_SESSION['csrf_tokens']);
+            }
             return true;
         }
     }

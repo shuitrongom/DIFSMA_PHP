@@ -15,11 +15,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? 'edit';
     $token  = $_POST['csrf_token'] ?? '';
 
-    if (!csrf_validate($token)) {
-        $_SESSION['flash_message'] = 'Token CSRF inválido.';
-        $_SESSION['flash_type']    = 'danger';
-        header('Location: tramites');
-        exit;
+    // ── AJAX de galería: validar sin consumir el token ───────────────────────
+    $galeria_actions = ['galeria_add', 'galeria_delete', 'galeria_reorder'];
+    if (in_array($action, $galeria_actions)) {
+        header('Content-Type: application/json');
+        if (!csrf_validate($token, false)) {
+            echo json_encode(['success'=>false,'error'=>'Token inválido.']); exit;
+        }
+        // Los handlers de galería se ejecutan más abajo
+    } elseif ($action === 'reorder') {
+        // reorder también es AJAX, no consume token
+    } else {
+        if (!csrf_validate($token)) {
+            $_SESSION['flash_message'] = 'Token CSRF inválido.';
+            $_SESSION['flash_type']    = 'danger';
+            header('Location: tramites');
+            exit;
+        }
     }
 
     // ── CREATE ──────────────────────────────────────────────────────────────
@@ -203,7 +215,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // ── GALERÍA: ADD IMAGES ─────────────────────────────────────────────────
     if ($action === 'galeria_add') {
-        header('Content-Type: application/json');
         $tramite_id = (int)($_POST['tramite_id'] ?? 0);
         if ($tramite_id <= 0 || !isset($_FILES['imagenes']) || !is_array($_FILES['imagenes']['name'])) {
             echo json_encode(['success'=>false,'error'=>'Datos inválidos.']); exit;
@@ -238,7 +249,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // ── GALERÍA: DELETE IMAGE ───────────────────────────────────────────────
     if ($action === 'galeria_delete') {
-        header('Content-Type: application/json');
         $img_id = (int)($_POST['img_id'] ?? 0);
         $stmt = $pdo->prepare('SELECT imagen_path FROM tramites_galeria WHERE id=?');
         $stmt->execute([$img_id]);
@@ -253,7 +263,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // ── GALERÍA: REORDER ────────────────────────────────────────────────────
     if ($action === 'galeria_reorder') {
-        header('Content-Type: application/json');
         $order = $_POST['order'] ?? '';
         if (empty($order)) { echo json_encode(['success'=>false]); exit; }
         $ids = array_map('intval', explode(',', $order));
@@ -575,6 +584,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
 <?php endforeach; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script src="../js/upload-progress.js?v=13"></script>
 <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
 <script>
@@ -587,6 +597,31 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
     // TinyMCE en modales
     document.querySelectorAll('.modal').forEach(function (modal) {
         modal.addEventListener('shown.bs.modal', function () {
+            // Inicializar Sortable en galería
+            var grid = modal.querySelector('.galeria-grid');
+            if (grid && typeof Sortable !== 'undefined' && !grid._sortable) {
+                grid._sortable = new Sortable(grid, {
+                    animation: 150,
+                    ghostClass: 'sortable-ghost',
+                    draggable: '.galeria-item',
+                    onEnd: function() {
+                        var tramiteId = grid.id.replace('galeriaGrid','');
+                        var ids = [];
+                        grid.querySelectorAll('.galeria-item').forEach(function(item) {
+                            ids.push(item.getAttribute('data-id'));
+                        });
+                        var t = galeriaTokens[tramiteId] || (document.querySelector('#editM' + tramiteId + ' input[name="csrf_token"]') || {}).value || '';
+                        var fd = new FormData();
+                        fd.append('action', 'galeria_reorder');
+                        fd.append('order', ids.join(','));
+                        fd.append('csrf_token', t);
+                        fetch('tramites', { method: 'POST', body: fd })
+                            .then(function(r){ return r.json(); })
+                            .then(function(d){ if(d.new_csrf_token) galeriaTokens[tramiteId] = d.new_csrf_token; });
+                    }
+                });
+            }
+
             const ta = modal.querySelector('.tinymce-editor');
             if (ta && !tinymce.get(ta.id)) {
                 tinymce.init({
@@ -831,22 +866,32 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
             }).catch(function() { alert('Error de conexión.'); });
     }
 
-    // Sortable en grids de galería
-    document.querySelectorAll('.galeria-grid').forEach(function(grid) {
-        if (typeof Sortable === 'undefined') return;
-        new Sortable(grid, {
-            animation: 150, ghostClass: 'sortable-ghost', draggable: '.galeria-item',
-            onEnd: function() {
-                var tramiteId = grid.id.replace('galeriaGrid','');
-                var ids = [];
-                grid.querySelectorAll('.galeria-item').forEach(function(item) { ids.push(item.getAttribute('data-id')); });
-                var t = galeriaTokens[tramiteId] || document.querySelector('#editM' + tramiteId + ' input[name="csrf_token"]').value;
-                var fd = new FormData();
-                fd.append('action', 'galeria_reorder');
-                fd.append('order', ids.join(','));
-                fd.append('csrf_token', t);
-                fetch('tramites', { method: 'POST', body: fd }).then(function(r){return r.json();}).then(function(d){ if(d.new_csrf_token) galeriaTokens[tramiteId]=d.new_csrf_token; });
-            }
+    // Sortable en grids de galería — inicializar al abrir el modal
+    var galeriasSortable = {};
+    document.querySelectorAll('.modal').forEach(function(modal) {
+        modal.addEventListener('shown.bs.modal', function() {
+            var grid = modal.querySelector('.galeria-grid');
+            if (!grid || typeof Sortable === 'undefined') return;
+            var tramiteId = grid.id.replace('galeriaGrid','');
+            if (galeriasSortable[tramiteId]) return; // ya inicializado
+            galeriasSortable[tramiteId] = new Sortable(grid, {
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                draggable: '.galeria-item',
+                handle: '.card',
+                onEnd: function() {
+                    var ids = [];
+                    grid.querySelectorAll('.galeria-item').forEach(function(item) { ids.push(item.getAttribute('data-id')); });
+                    var t = galeriaTokens[tramiteId] || document.querySelector('#editM' + tramiteId + ' input[name="csrf_token"]').value;
+                    var fd = new FormData();
+                    fd.append('action', 'galeria_reorder');
+                    fd.append('order', ids.join(','));
+                    fd.append('csrf_token', t);
+                    fetch('tramites', { method: 'POST', body: fd })
+                        .then(function(r){return r.json();})
+                        .then(function(d){ if(d.new_csrf_token) galeriaTokens[tramiteId]=d.new_csrf_token; });
+                }
+            });
         });
     });
 </script></body>
