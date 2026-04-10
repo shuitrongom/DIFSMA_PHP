@@ -228,7 +228,6 @@ require_once __DIR__ . '/includes/navbar.php';
     object-fit: cover;
     display: block;
     margin: 0 auto;
-    border-radius: 6px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     transform: translate(var(--img-centro-x), var(--img-centro-y));
 }
@@ -239,7 +238,6 @@ require_once __DIR__ . '/includes/navbar.php';
     object-fit: cover;
     display: block;
     margin: 0 auto;
-    border-radius: 6px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     transform: translate(var(--img-inferior-x), var(--img-inferior-y));
 }
