@@ -42,19 +42,14 @@ $img2     = !empty($pagina['imagen2_path']) ? $base_path . htmlspecialchars($pag
 $texto2   = preg_replace('/(<li[^>]*>)(\s|&nbsp;)+/i', '$1', $pagina['texto2'] ?? '');
 $page_title = htmlspecialchars($titulo) . ' — DIF San Mateo Atenco';
 
-// Contacto — por sección, con fallback al global
-$contacto_global = null;
-try {
-    $stmt = $pdo->query('SELECT * FROM contacto_config LIMIT 1');
-    $contacto_global = $stmt->fetch();
-} catch (PDOException $e) {}
-
-$c_titulo1   = !empty($pagina['c_titulo1'])   ? $pagina['c_titulo1']   : ($contacto_global['titulo1']   ?? 'SERVICIOS MÉDICOS');
-$c_titulo2   = !empty($pagina['c_titulo2'])   ? $pagina['c_titulo2']   : ($contacto_global['titulo2']   ?? 'CLASES Y TALLERES');
-$c_direccion = !empty($pagina['c_direccion']) ? $pagina['c_direccion'] : ($contacto_global['direccion'] ?? 'Mariano Matamoros 310, Barrio de la Concepción CP 52105,\nSan Mateo Atenco, Méx.');
-$c_telefono  = !empty($pagina['c_telefono'])  ? $pagina['c_telefono']  : ($contacto_global['telefono']  ?? '722 970 77 86');
-$c_horario   = !empty($pagina['c_horario'])   ? $pagina['c_horario']   : ($contacto_global['horario']   ?? 'Horario de Lunes a Viernes\n8:00 am a 3:30 pm');
-$c_correo    = !empty($pagina['c_correo'])    ? $pagina['c_correo']    : ($contacto_global['correo']    ?? 'adultomayor@difsanmateoatenco.gob.mx');
+// Contacto — solo de la sección, sin fallback global
+$c_titulo1   = $pagina['c_titulo1']   ?? '';
+$c_titulo2   = $pagina['c_titulo2']   ?? '';
+$c_direccion = $pagina['c_direccion'] ?? '';
+$c_telefono  = $pagina['c_telefono']  ?? '';
+$c_horario   = $pagina['c_horario']   ?? '';
+$c_correo    = $pagina['c_correo']    ?? '';
+$tiene_contacto = !empty($c_titulo1) || !empty($c_titulo2) || !empty($c_direccion) || !empty($c_telefono) || !empty($c_horario) || !empty($c_correo);
 
 // Galería de servicios
 $galeria_imgs = [];
@@ -148,6 +143,7 @@ require_once __DIR__ . '/../includes/navbar.php';
         <?php endif; ?>
 
         <!-- Contacto -->
+        <?php if ($tiene_contacto): ?>
         <div class="text-center py-4 px-3">
             <h5 style="font-family:'Montserrat',sans-serif;font-weight:800;color:rgb(107,98,90);letter-spacing:1px;margin:0;"><?= htmlspecialchars($c_titulo1) ?></h5>
             <h5 style="font-family:'Montserrat',sans-serif;font-weight:800;color:rgb(107,98,90);letter-spacing:1px;margin:0 0 12px;"><?= htmlspecialchars($c_titulo2) ?></h5>
@@ -158,6 +154,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                 correo: <?= htmlspecialchars($c_correo) ?>
             </p>
         </div>
+        <?php endif; ?>
 
         </div><!-- /container -->
     </div>
