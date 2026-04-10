@@ -229,6 +229,7 @@ $menu_pages = [
     'transparencia/financiero'                  => 'Transparencia — Financiero',
     'transparencia/avisos_privacidad'           => 'Transparencia — Avisos de Privacidad',
     'voluntariado'                              => 'Voluntariado',
+    'autismo'                                   => 'Servicios — Unidad Municipal de Autismo',
 ];
 // Agregar trámites dinámicamente
 try {
