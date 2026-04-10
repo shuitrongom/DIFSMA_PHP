@@ -126,12 +126,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type'] = 'warning';
             header('Location: voluntariado'); exit;
         }
+        // Verificar límite de 5
+        $currentCount = (int)$pdo->query('SELECT COUNT(*) FROM voluntariado_imagenes')->fetchColumn();
+        if ($currentCount >= 5) {
+            $_SESSION['flash_message'] = 'Máximo 5 fotos permitidas. Elimina alguna antes de subir más.';
+            $_SESSION['flash_type'] = 'warning';
+            header('Location: voluntariado'); exit;
+        }
         $count = count($_FILES['imagenes']['name']);
         $uploaded = 0;
         $stmt = $pdo->query('SELECT COALESCE(MAX(orden),0) FROM voluntariado_imagenes');
         $nextOrden = (int) $stmt->fetchColumn() + 1;
+        $allowed = 5 - $currentCount;
 
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $count && $uploaded < $allowed; $i++) {
             if ($_FILES['imagenes']['error'][$i] === UPLOAD_ERR_NO_FILE) continue;
             $f = ['name'=>$_FILES['imagenes']['name'][$i],'type'=>$_FILES['imagenes']['type'][$i],'tmp_name'=>$_FILES['imagenes']['tmp_name'][$i],'error'=>$_FILES['imagenes']['error'][$i],'size'=>$_FILES['imagenes']['size'][$i]];
             $upload = handle_upload($f, 'image');
@@ -306,10 +314,11 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                             <div class="col-md-8">
                                 <label class="form-label">Imágenes (JPG, PNG, WEBP — máx. 20 MB c/u)</label>
-                                <input type="file" class="form-control" name="imagenes[]" accept=".jpg,.jpeg,.png,.webp" multiple required>
+                                <input type="file" class="form-control" name="imagenes[]" accept=".jpg,.jpeg,.png,.webp" multiple required <?= count($imagenes) >= 5 ? 'disabled' : '' ?>>
+                                <small class="text-muted"><i class="bi bi-info-circle me-1"></i>Máximo <strong>5 fotos</strong>. Actualmente: <strong><?= count($imagenes) ?>/5</strong><?= count($imagenes) >= 5 ? ' — elimina una para poder subir más.' : '.' ?></small>
                             </div>
                             <div class="col-md-4">
-                                <button type="submit" class="btn btn-success w-100"><i class="bi bi-upload me-1"></i> Subir</button>
+                                <button type="submit" class="btn btn-success w-100" <?= count($imagenes) >= 5 ? 'disabled' : '' ?>><i class="bi bi-upload me-1"></i> Subir</button>
                             </div>
                         </form>
 

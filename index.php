@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * index.php — Página principal del sitio DIF San Mateo Atenco
  *
@@ -106,10 +106,9 @@ try {
     $stmt->execute();
     $programas = $stmt->fetchAll();
 
-    // Cargar secciones para cada programa
     if (!empty($programas)) {
         $stmtSec = $pdo->prepare(
-            'SELECT titulo, contenido FROM programas_secciones WHERE programa_id = ? ORDER BY orden ASC'
+            'SELECT titulo, slug FROM programas_secciones WHERE programa_id = ? AND slug IS NOT NULL ORDER BY orden ASC'
         );
         foreach ($programas as &$prog) {
             $stmtSec->execute([$prog['id']]);
@@ -294,30 +293,23 @@ require_once 'includes/navbar.php';
                         </div>
                         <div class="events-text p-0 border-0 rounded-bottom" style="background:transparent;">
                             <?php if (!empty($programa['secciones'])): ?>
-                            <div class="dropdown">
-                                <button class="btn p-0 w-100 dropdown-toggle btn-ver-programas" type="button"
-                                    id="dropdownPrograma<?= $programa['id'] ?>" data-bs-toggle="dropdown" aria-expanded="false"
-                                    data-bs-auto-close="outside">
+                            <div class="prog-dropdown-wrap" style="position:relative;">
+                                <button class="btn p-0 w-100 btn-ver-programas" type="button"
+                                    onclick="toggleVerProgramas(event, this)">
                                     <img src="img/btn_ver_programas.png" alt="Ver Programas" class="img-fluid w-100" style="display:block;">
                                 </button>
-                                <div class="dropdown-menu p-0 shadow-lg border-0 prog-dropdown" aria-labelledby="dropdownPrograma<?= $programa['id'] ?>" style="width:320px;border-radius:14px;overflow:hidden;background:rgba(255,255,255,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.4);">
-                                    <div style="background:rgba(107,98,90,0.9);padding:12px 18px;backdrop-filter:blur(8px);">
+                                <div class="prog-dropdown" style="display:none;position:absolute;top:100%;left:0;z-index:9999;width:320px;border-radius:14px;overflow:hidden;background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.4);box-shadow:0 20px 60px rgba(0,0,0,0.15);">
+                                    <div style="background:rgba(107,98,90,0.9);padding:12px 18px;">
                                         <span style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;color:#fff;letter-spacing:1px;text-transform:uppercase;">
                                             <?= htmlspecialchars($programa['nombre']) ?>
                                         </span>
                                     </div>
-                                    <?php foreach ($programa['secciones'] as $sIdx => $seccion): ?>
-                                    <div class="prog-seccion-item" style="border-bottom:1px solid rgba(0,0,0,0.06);">
-                                        <button class="prog-sec-btn w-100 text-start d-flex justify-content-between align-items-center"
-                                            type="button" onclick="toggleProgSec(this)"
-                                            style="background:transparent;border:none;padding:11px 18px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:rgb(107,98,90);cursor:pointer;transition:background 0.2s;letter-spacing:0.3px;">
-                                            <span><?= htmlspecialchars($seccion['titulo']) ?></span>
-                                            <i class="fas fa-chevron-down" style="font-size:10px;color:rgb(200,16,44);transition:transform 0.25s;flex-shrink:0;margin-left:8px;"></i>
-                                        </button>
-                                        <div class="prog-sec-body" style="display:none;padding:10px 18px 14px;background:rgba(200,16,44,0.04);font-family:'Montserrat',sans-serif;font-size:12px;color:rgba(0,0,0,0.65);line-height:1.7;border-top:1px solid rgba(200,16,44,0.1);">
-                                            <?= $seccion['contenido'] ?>
-                                        </div>
-                                    </div>
+                                    <?php foreach ($programa['secciones'] as $seccion): ?>
+                                    <a href="programas/seccion?slug=<?= urlencode($seccion['slug']) ?>"
+                                       style="display:block;padding:11px 18px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:rgb(107,98,90);text-decoration:none;border-bottom:1px solid rgba(0,0,0,0.06);transition:background 0.2s;"
+                                       onmouseover="this.style.background='rgba(200,16,44,0.06)'" onmouseout="this.style.background=''">
+                                        <?= htmlspecialchars($seccion['titulo']) ?>
+                                    </a>
                                     <?php endforeach; ?>
                                 </div>
                             </div>
@@ -458,7 +450,6 @@ require_once 'includes/navbar.php';
 function toggleProgSec(btn) {
     var body = btn.nextElementSibling;
     var isOpen = btn.classList.contains('open');
-    // Cerrar todos en el mismo dropdown
     var dropdown = btn.closest('.prog-dropdown');
     dropdown.querySelectorAll('.prog-sec-btn').forEach(function(b) {
         b.classList.remove('open');
@@ -469,6 +460,26 @@ function toggleProgSec(btn) {
         body.style.display = 'block';
     }
 }
+
+function toggleVerProgramas(e, btn) {
+    e.stopPropagation();
+    var menu = btn.nextElementSibling;
+    var isOpen = menu.style.display === 'block';
+    document.querySelectorAll('.prog-dropdown-wrap .prog-dropdown').forEach(function(m) {
+        m.style.display = 'none';
+    });
+    if (!isOpen) {
+        menu.style.display = 'block';
+    }
+}
+
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.prog-dropdown-wrap')) {
+        document.querySelectorAll('.prog-dropdown-wrap .prog-dropdown').forEach(function(m) {
+            m.style.display = 'none';
+        });
+    }
+});
 </script>
 
 <?php if (!empty($comunica_images)): ?>

@@ -71,6 +71,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 file_put_contents($phpFile, $phpContent);
             }
 
+            // Galería inicial
+            $newId = (int)$pdo->lastInsertId();
+            if ($newId > 0 && isset($_FILES['galeria_nuevas']) && is_array($_FILES['galeria_nuevas']['name'])) {
+                $gCount = count($_FILES['galeria_nuevas']['name']);
+                $gOrden = 1;
+                for ($i = 0; $i < $gCount; $i++) {
+                    if ($_FILES['galeria_nuevas']['error'][$i] === UPLOAD_ERR_NO_FILE) continue;
+                    $gf = ['name'=>$_FILES['galeria_nuevas']['name'][$i],'type'=>$_FILES['galeria_nuevas']['type'][$i],'tmp_name'=>$_FILES['galeria_nuevas']['tmp_name'][$i],'error'=>$_FILES['galeria_nuevas']['error'][$i],'size'=>$_FILES['galeria_nuevas']['size'][$i]];
+                    $gup = handle_upload($gf, 'image');
+                    if ($gup['success']) {
+                        $pdo->prepare('INSERT INTO tramites_galeria (tramite_id, imagen_path, orden, activo) VALUES (?,?,?,1)')->execute([$newId, $gup['path'], $gOrden++]);
+                    }
+                }
+            }
+
             $_SESSION['flash_message'] = "Trámite '{$titulo}' creado correctamente.";
             $_SESSION['flash_type']    = 'success';
         } catch (PDOException $e) {
@@ -186,6 +201,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    // ── GALERÍA: ADD IMAGES ─────────────────────────────────────────────────
+    if ($action === 'galeria_add') {
+        header('Content-Type: application/json');
+        $tramite_id = (int)($_POST['tramite_id'] ?? 0);
+        if ($tramite_id <= 0 || !isset($_FILES['imagenes']) || !is_array($_FILES['imagenes']['name'])) {
+            echo json_encode(['success'=>false,'error'=>'Datos inválidos.']); exit;
+        }
+        // Verificar límite de 5
+        $countStmt = $pdo->prepare('SELECT COUNT(*) FROM tramites_galeria WHERE tramite_id=?');
+        $countStmt->execute([$tramite_id]);
+        $currentCount = (int)$countStmt->fetchColumn();
+        if ($currentCount >= 5) {
+            echo json_encode(['success'=>false,'error'=>'Máximo 5 fotos por trámite.']); exit;
+        }
+        $stmt = $pdo->prepare('SELECT COALESCE(MAX(orden),0) FROM tramites_galeria WHERE tramite_id=?');
+        $stmt->execute([$tramite_id]);
+        $nextOrden = (int)$stmt->fetchColumn() + 1;
+        $uploaded = 0; $errors = []; $items = [];
+        $count = count($_FILES['imagenes']['name']);
+        $allowed = 5 - $currentCount;
+        for ($i = 0; $i < $count && $uploaded < $allowed; $i++) {
+            if ($_FILES['imagenes']['error'][$i] === UPLOAD_ERR_NO_FILE) continue;
+            $f = ['name'=>$_FILES['imagenes']['name'][$i],'type'=>$_FILES['imagenes']['type'][$i],'tmp_name'=>$_FILES['imagenes']['tmp_name'][$i],'error'=>$_FILES['imagenes']['error'][$i],'size'=>$_FILES['imagenes']['size'][$i]];
+            $upload = handle_upload($f, 'image');
+            if (!$upload['success']) { $errors[] = $upload['error']; continue; }
+            try {
+                $pdo->prepare('INSERT INTO tramites_galeria (tramite_id, imagen_path, orden, activo) VALUES (?,?,?,1)')->execute([$tramite_id, $upload['path'], $nextOrden++]);
+                $items[] = ['id' => (int)$pdo->lastInsertId(), 'path' => $upload['path']];
+                $uploaded++;
+            } catch (PDOException $e) {}
+        }
+        $newToken = csrf_token();
+        echo json_encode(['success'=>$uploaded>0,'uploaded'=>$uploaded,'items'=>$items,'errors'=>$errors,'new_csrf_token'=>$newToken]); exit;
+    }
+
+    // ── GALERÍA: DELETE IMAGE ───────────────────────────────────────────────
+    if ($action === 'galeria_delete') {
+        header('Content-Type: application/json');
+        $img_id = (int)($_POST['img_id'] ?? 0);
+        $stmt = $pdo->prepare('SELECT imagen_path FROM tramites_galeria WHERE id=?');
+        $stmt->execute([$img_id]);
+        $row = $stmt->fetch();
+        if ($row) {
+            $pdo->prepare('DELETE FROM tramites_galeria WHERE id=?')->execute([$img_id]);
+            $f = BASE_PATH . '/' . $row['imagen_path'];
+            if (file_exists($f)) unlink($f);
+        }
+        echo json_encode(['success'=>true,'new_csrf_token'=>csrf_token()]); exit;
+    }
+
+    // ── GALERÍA: REORDER ────────────────────────────────────────────────────
+    if ($action === 'galeria_reorder') {
+        header('Content-Type: application/json');
+        $order = $_POST['order'] ?? '';
+        if (empty($order)) { echo json_encode(['success'=>false]); exit; }
+        $ids = array_map('intval', explode(',', $order));
+        $stmt = $pdo->prepare('UPDATE tramites_galeria SET orden=? WHERE id=?');
+        foreach ($ids as $pos => $id) { if ($id > 0) $stmt->execute([$pos+1, $id]); }
+        echo json_encode(['success'=>true]); exit;
+    }
+
     // ── DELETE ──────────────────────────────────────────────────────────────
     if ($action === 'delete') {
         $id = (int) ($_POST['id'] ?? 0);
@@ -207,11 +283,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         try {
-            // Eliminar imagen
+            // Eliminar imagen principal
             if (!empty($current['imagen_path'])) {
                 $f = BASE_PATH . '/' . $current['imagen_path'];
                 if (file_exists($f)) unlink($f);
             }
+            // Eliminar galería
+            $gstmt = $pdo->prepare('SELECT imagen_path FROM tramites_galeria WHERE tramite_id=?');
+            $gstmt->execute([$id]);
+            foreach ($gstmt->fetchAll() as $gi) { $gf = BASE_PATH.'/'.$gi['imagen_path']; if(file_exists($gf)) unlink($gf); }
+            $pdo->prepare('DELETE FROM tramites_galeria WHERE tramite_id=?')->execute([$id]);
             $pdo->prepare('DELETE FROM tramites WHERE id = ?')->execute([$id]);
 
             // Eliminar archivo PHP si existe
@@ -232,6 +313,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // ── Consultar todos los trámites ───────────────────────────────────────────
 $stmt = $pdo->query('SELECT * FROM tramites ORDER BY id ASC');
 $tramites = $stmt->fetchAll();
+
+// Cargar galerías por trámite
+$galerias = [];
+$gstmt = $pdo->query('SELECT * FROM tramites_galeria ORDER BY orden ASC');
+foreach ($gstmt->fetchAll() as $gi) { $galerias[(int)$gi['tramite_id']][] = $gi; }
 
 $flashMessage = $_SESSION['flash_message'] ?? '';
 $flashType    = $_SESSION['flash_type'] ?? '';
@@ -294,6 +380,11 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                             </div>
                             <div class="col-md-2 d-flex align-items-end">
                                 <button type="submit" class="btn btn-primary w-100"><i class="bi bi-plus-circle me-1"></i> Crear</button>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Fotos de galería (opcional, múltiples)</label>
+                                <input type="file" class="form-control" name="galeria_nuevas[]" accept=".jpg,.jpeg,.png,.webp" multiple>
+                                <small class="text-muted"><i class="bi bi-info-circle me-1"></i>Máximo <strong>5 fotos</strong> por trámite. Puedes agregar o cambiarlas después desde Editar.</small>
                             </div>
                         </div>
                     </form>
@@ -414,6 +505,40 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                             </div>
                         </div>
                     </div>
+                </div>
+                <!-- Galería de fotos -->
+                <div class="modal-body border-top pt-3">
+                    <h6 class="mb-2"><i class="bi bi-images me-1"></i> Galería de fotos</h6>
+                    <div class="alert alert-info py-2 px-3 mb-2" style="font-size:13px;">
+                        <i class="bi bi-info-circle me-1"></i> Máximo <strong>5 fotos</strong> por trámite. Puedes subir, reordenar o eliminar fotos sin cerrar esta ventana.
+                    </div>
+                    <!-- Subir nuevas fotos -->
+                    <div class="d-flex gap-2 align-items-end mb-3">
+                        <div class="flex-grow-1">
+                            <input type="file" class="form-control form-control-sm" id="galeriaFiles<?= (int)$tramite['id'] ?>" accept=".jpg,.jpeg,.png,.webp" multiple>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-success" onclick="galeriaSubir(<?= (int)$tramite['id'] ?>)">
+                            <i class="bi bi-upload"></i> Subir
+                        </button>
+                    </div>
+                    <!-- Grid de imágenes existentes -->
+                    <div class="row g-2 galeria-grid" id="galeriaGrid<?= (int)$tramite['id'] ?>">
+                        <?php foreach ($galerias[(int)$tramite['id']] ?? [] as $gi): ?>
+                        <div class="col-4 col-md-2 galeria-item" data-id="<?= (int)$gi['id'] ?>">
+                            <div class="card shadow-sm" style="cursor:grab;">
+                                <img src="../<?= htmlspecialchars($gi['imagen_path']) ?>" class="card-img-top" style="height:70px;object-fit:cover;">
+                                <div class="card-body p-1 text-center">
+                                    <button type="button" class="btn btn-sm btn-action-delete w-100" onclick="galeriaEliminar(<?= (int)$gi['id'] ?>, <?= (int)$tramite['id'] ?>, '<?= htmlspecialchars($token) ?>')">
+                                        <i class="bi bi-trash3"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php if (empty($galerias[(int)$tramite['id']])): ?>
+                    <p class="text-muted small" id="galeriaEmpty<?= (int)$tramite['id'] ?>">Sin fotos aún.</p>
+                    <?php endif; ?>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -633,6 +758,97 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                 btn.innerHTML = '<i class="bi bi-upload"></i> Subir imagen ahora';
             });
     }
+    // ── Galería por trámite ──────────────────────────────────────────────────
+    var galeriaTokens = {};
+
+    function galeriaSubir(tramiteId) {
+        var input = document.getElementById('galeriaFiles' + tramiteId);
+        if (!input || !input.files || input.files.length === 0) { alert('Selecciona al menos una imagen.'); return; }
+
+        // Límite de 5 fotos
+        var grid = document.getElementById('galeriaGrid' + tramiteId);
+        var current = grid ? grid.querySelectorAll('.galeria-item').length : 0;
+        if (current >= 5) { alert('Máximo 5 fotos por trámite.'); return; }
+        var allowed = 5 - current;
+        if (input.files.length > allowed) { alert('Solo puedes subir ' + allowed + ' foto(s) más (máximo 5 en total).'); return; }
+
+        var t = galeriaTokens[tramiteId] || document.querySelector('#editM' + tramiteId + ' input[name="csrf_token"]').value;
+        var fd = new FormData();
+        fd.append('action', 'galeria_add');
+        fd.append('tramite_id', tramiteId);
+        fd.append('csrf_token', t);
+        for (var i = 0; i < input.files.length; i++) fd.append('imagenes[]', input.files[i]);
+
+        fetch('tramites', { method: 'POST', body: fd })
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                if (d.new_csrf_token) {
+                    galeriaTokens[tramiteId] = d.new_csrf_token;
+                    var mf = document.querySelector('#editM' + tramiteId + ' input[name="csrf_token"]');
+                    if (mf) mf.value = d.new_csrf_token;
+                }
+                if (d.success && d.items) {
+                    input.value = '';
+                    var empty = document.getElementById('galeriaEmpty' + tramiteId);
+                    if (empty) empty.remove();
+                    d.items.forEach(function(item) {
+                        var col = document.createElement('div');
+                        col.className = 'col-4 col-md-2 galeria-item';
+                        col.setAttribute('data-id', item.id);
+                        col.innerHTML = '<div class="card shadow-sm" style="cursor:grab;">' +
+                            '<img src="../' + item.path + '" class="card-img-top" style="height:70px;object-fit:cover;">' +
+                            '<div class="card-body p-1 text-center">' +
+                            '<button type="button" class="btn btn-sm btn-action-delete w-100" onclick="galeriaEliminar(' + item.id + ',' + tramiteId + ',\'' + (d.new_csrf_token||t) + '\')">' +
+                            '<i class="bi bi-trash3"></i></button></div></div>';
+                        grid.appendChild(col);
+                    });
+                    // Actualizar contador
+                    var newCount = grid.querySelectorAll('.galeria-item').length;
+                    if (newCount >= 5) input.disabled = true;
+                } else if (!d.success) {
+                    alert('Error al subir: ' + (d.errors || []).join(', '));
+                }
+            }).catch(function() { alert('Error de conexión.'); });
+    }
+
+    function galeriaEliminar(imgId, tramiteId, token) {
+        if (!confirm('¿Eliminar esta foto?')) return;
+        var t = galeriaTokens[tramiteId] || token;
+        var fd = new FormData();
+        fd.append('action', 'galeria_delete');
+        fd.append('img_id', imgId);
+        fd.append('csrf_token', t);
+        fetch('tramites', { method: 'POST', body: fd })
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                if (d.new_csrf_token) galeriaTokens[tramiteId] = d.new_csrf_token;
+                var item = document.querySelector('.galeria-item[data-id="' + imgId + '"]');
+                if (item) item.remove();
+                // Rehabilitar input si bajó de 5
+                var grid = document.getElementById('galeriaGrid' + tramiteId);
+                var input = document.getElementById('galeriaFiles' + tramiteId);
+                if (grid && input && grid.querySelectorAll('.galeria-item').length < 5) input.disabled = false;
+            }).catch(function() { alert('Error de conexión.'); });
+    }
+
+    // Sortable en grids de galería
+    document.querySelectorAll('.galeria-grid').forEach(function(grid) {
+        if (typeof Sortable === 'undefined') return;
+        new Sortable(grid, {
+            animation: 150, ghostClass: 'sortable-ghost', draggable: '.galeria-item',
+            onEnd: function() {
+                var tramiteId = grid.id.replace('galeriaGrid','');
+                var ids = [];
+                grid.querySelectorAll('.galeria-item').forEach(function(item) { ids.push(item.getAttribute('data-id')); });
+                var t = galeriaTokens[tramiteId] || document.querySelector('#editM' + tramiteId + ' input[name="csrf_token"]').value;
+                var fd = new FormData();
+                fd.append('action', 'galeria_reorder');
+                fd.append('order', ids.join(','));
+                fd.append('csrf_token', t);
+                fetch('tramites', { method: 'POST', body: fd }).then(function(r){return r.json();}).then(function(d){ if(d.new_csrf_token) galeriaTokens[tramiteId]=d.new_csrf_token; });
+            }
+        });
+    });
 </script></body>
 </html>
 

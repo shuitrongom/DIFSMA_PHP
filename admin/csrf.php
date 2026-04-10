@@ -23,9 +23,9 @@ function csrf_token(): string
         $_SESSION['csrf_tokens'] = [];
     }
 
-    // Keep max 5 tokens (oldest removed first)
+    // Keep max 10 tokens (oldest removed first)
     $_SESSION['csrf_tokens'][] = $token;
-    if (count($_SESSION['csrf_tokens']) > 5) {
+    if (count($_SESSION['csrf_tokens']) > 10) {
         array_shift($_SESSION['csrf_tokens']);
     }
 

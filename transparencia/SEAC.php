@@ -14,7 +14,7 @@ $pdfs_map      = [];
 
 try {
     $pdo = get_db();
-    $stmt = $pdo->prepare('SELECT id, anio, orden FROM seac_bloques ORDER BY anio DESC');
+    $stmt = $pdo->prepare('SELECT id, anio, orden FROM seac_bloques ORDER BY anio ASC');
     $stmt->execute();
     $bloques = $stmt->fetchAll();
     $stmt = $pdo->prepare('SELECT id, bloque_id, numero, nombre, orden FROM seac_conceptos ORDER BY orden ASC');

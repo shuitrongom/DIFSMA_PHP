@@ -58,6 +58,21 @@ $active_page = $active_page ?? '';
                                 }
                                 // Unidad de Autismo al final de servicios
                                 echo '<a href="' . htmlspecialchars($base_path) . 'autismo" class="dropdown-item" style="color:#fff!important">Unidad Municipal de Autismo</a>';
+                                // Secciones de programas
+                                $_nav_progs = $_nav_pdo->query(
+                                    'SELECT p.nombre AS prog_nombre, s.titulo, s.slug
+                                     FROM programas_secciones s
+                                     JOIN programas p ON p.id = s.programa_id
+                                     WHERE p.activo = 1 AND s.slug IS NOT NULL
+                                     ORDER BY p.orden ASC, s.orden ASC'
+                                )->fetchAll();
+                                if (!empty($_nav_progs)) {
+                                    echo '<div class="dropdown-divider" style="border-color:rgba(255,255,255,0.2);"></div>';
+                                    foreach ($_nav_progs as $_ps) {
+                                        $href = htmlspecialchars($base_path) . 'programas/seccion?slug=' . urlencode($_ps['slug']);
+                                        echo '<a href="' . $href . '" class="dropdown-item" style="color:#fff!important">' . htmlspecialchars($_ps['titulo']) . '</a>';
+                                    }
+                                }
                             } catch (Exception $e) { /* silenciar */ }
                             ?>
                         </div>

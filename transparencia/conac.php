@@ -15,7 +15,7 @@ $pdfs_map      = [];
 
 try {
     $pdo = get_db();
-    $bloques = $pdo->query('SELECT id, anio, orden FROM conac_bloques ORDER BY anio DESC')->fetchAll();
+    $bloques = $pdo->query('SELECT id, anio, orden FROM conac_bloques ORDER BY anio ASC')->fetchAll();
     $stmt = $pdo->query('SELECT id, bloque_id, numero, nombre, orden FROM conac_conceptos ORDER BY orden ASC');
     while ($row = $stmt->fetch()) { $conceptos_map[(int)$row['bloque_id']][] = $row; }
     $stmt = $pdo->query('SELECT bloque_id, concepto_id, trimestre, pdf_path FROM conac_pdfs WHERE pdf_path IS NOT NULL AND pdf_path != ""');

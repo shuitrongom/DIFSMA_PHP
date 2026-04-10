@@ -12,7 +12,7 @@ $page_title  = 'Matrices de Indicadores — DIF San Mateo Atenco';
 $registros = [];
 try {
     $pdo  = get_db();
-    $registros = $pdo->query('SELECT id, anio, pdf_path FROM mi_pdfs ORDER BY anio DESC')->fetchAll();
+    $registros = $pdo->query('SELECT id, anio, pdf_path FROM mi_pdfs ORDER BY anio ASC')->fetchAll();
 } catch (PDOException $e) {
     if (defined('APP_DEBUG') && APP_DEBUG) error_log('matrices_indicadores.php PDOException: ' . $e->getMessage());
 }

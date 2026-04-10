@@ -15,7 +15,7 @@ $pdfs_map      = [];
 
 try {
     $pdo = get_db();
-    $stmt = $pdo->query('SELECT id, anio, orden FROM pa_bloques ORDER BY anio DESC');
+    $stmt = $pdo->query('SELECT id, anio, orden FROM pa_bloques ORDER BY anio ASC');
     $bloques = $stmt->fetchAll();
 
     $stmt = $pdo->query('SELECT id, bloque_id, nombre, orden FROM pa_conceptos ORDER BY orden ASC');
@@ -77,7 +77,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                     $cPdfs = $pdfs_map[(int)$c['id']] ?? [];
                     foreach ($cPdfs as $p) { $all_years[(int)$p['sub_anio']] = true; }
                 }
-                krsort($all_years);
+                ksort($all_years);
                 $year_keys = array_keys($all_years);
 
                 if (empty($year_keys)):

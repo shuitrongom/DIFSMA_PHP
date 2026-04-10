@@ -19,7 +19,7 @@ $conceptos_map = [];
 try {
     $pdo = get_db();
 
-    $stmt = $pdo->query('SELECT id, anio, orden FROM cp_bloques ORDER BY anio DESC');
+    $stmt = $pdo->query('SELECT id, anio, orden FROM cp_bloques ORDER BY anio ASC');
     $bloques = $stmt->fetchAll();
 
     $stmt = $pdo->query('SELECT id, bloque_id, nombre, orden FROM cp_titulos ORDER BY orden ASC');

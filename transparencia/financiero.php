@@ -14,7 +14,7 @@ $conceptos_map = [];
 
 try {
     $pdo = get_db();
-    $bloques = $pdo->query('SELECT id, anio, orden FROM fin_bloques ORDER BY anio DESC')->fetchAll();
+    $bloques = $pdo->query('SELECT id, anio, orden FROM fin_bloques ORDER BY anio ASC')->fetchAll();
     $stmt = $pdo->query('SELECT id, bloque_id, numero, nombre, pdf_path, orden FROM fin_conceptos ORDER BY orden ASC');
     while ($row = $stmt->fetch()) { $conceptos_map[(int)$row['bloque_id']][] = $row; }
 } catch (PDOException $e) {

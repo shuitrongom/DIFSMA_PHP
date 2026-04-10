@@ -15,12 +15,12 @@ $years   = [];
 try {
     $pdo = get_db();
     $titulos = $pdo->query('SELECT id, nombre, orden FROM pae_titulos ORDER BY orden ASC')->fetchAll();
-    $stmt = $pdo->query('SELECT id, titulo_id, anio, pdf_path FROM pae_pdfs ORDER BY anio DESC');
+    $stmt = $pdo->query('SELECT id, titulo_id, anio, pdf_path FROM pae_pdfs ORDER BY anio ASC');
     while ($row = $stmt->fetch()) {
         $pdfs[(int)$row['titulo_id']][(int)$row['anio']] = $row;
         $years[(int)$row['anio']] = true;
     }
-    krsort($years);
+    ksort($years);
 } catch (PDOException $e) {
     if (defined('APP_DEBUG') && APP_DEBUG) error_log('pae.php PDOException: ' . $e->getMessage());
 }
