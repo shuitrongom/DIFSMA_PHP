@@ -42,18 +42,19 @@ $img2     = !empty($pagina['imagen2_path']) ? $base_path . htmlspecialchars($pag
 $texto2   = preg_replace('/(<li[^>]*>)(\s|&nbsp;)+/i', '$1', $pagina['texto2'] ?? '');
 $page_title = htmlspecialchars($titulo) . ' — DIF San Mateo Atenco';
 
-// Contacto
-$contacto = null;
+// Contacto — por sección, con fallback al global
+$contacto_global = null;
 try {
     $stmt = $pdo->query('SELECT * FROM contacto_config LIMIT 1');
-    $contacto = $stmt->fetch();
+    $contacto_global = $stmt->fetch();
 } catch (PDOException $e) {}
-$c_titulo1   = $contacto['titulo1']   ?? 'SERVICIOS MÉDICOS';
-$c_titulo2   = $contacto['titulo2']   ?? 'CLASES Y TALLERES';
-$c_direccion = $contacto['direccion'] ?? 'Mariano Matamoros 310, Barrio de la Concepción CP 52105,\nSan Mateo Atenco, Méx.';
-$c_telefono  = $contacto['telefono']  ?? '722 970 77 86';
-$c_horario   = $contacto['horario']   ?? 'Horario de Lunes a Viernes\n8:00 am a 3:30 pm';
-$c_correo    = $contacto['correo']    ?? 'adultomayor@difsanmateoatenco.gob.mx';
+
+$c_titulo1   = !empty($pagina['c_titulo1'])   ? $pagina['c_titulo1']   : ($contacto_global['titulo1']   ?? 'SERVICIOS MÉDICOS');
+$c_titulo2   = !empty($pagina['c_titulo2'])   ? $pagina['c_titulo2']   : ($contacto_global['titulo2']   ?? 'CLASES Y TALLERES');
+$c_direccion = !empty($pagina['c_direccion']) ? $pagina['c_direccion'] : ($contacto_global['direccion'] ?? 'Mariano Matamoros 310, Barrio de la Concepción CP 52105,\nSan Mateo Atenco, Méx.');
+$c_telefono  = !empty($pagina['c_telefono'])  ? $pagina['c_telefono']  : ($contacto_global['telefono']  ?? '722 970 77 86');
+$c_horario   = !empty($pagina['c_horario'])   ? $pagina['c_horario']   : ($contacto_global['horario']   ?? 'Horario de Lunes a Viernes\n8:00 am a 3:30 pm');
+$c_correo    = !empty($pagina['c_correo'])    ? $pagina['c_correo']    : ($contacto_global['correo']    ?? 'adultomayor@difsanmateoatenco.gob.mx');
 
 // Galería de servicios
 $galeria_imgs = [];

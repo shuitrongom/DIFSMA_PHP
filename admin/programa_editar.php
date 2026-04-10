@@ -100,6 +100,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $seccion_id = (int)($_POST['seccion_id'] ?? 0);
         $texto1 = $_POST['texto1'] ?? '';
         $texto2 = $_POST['texto2'] ?? '';
+        $c_titulo1   = trim($_POST['c_titulo1']   ?? '');
+        $c_titulo2   = trim($_POST['c_titulo2']   ?? '');
+        $c_direccion = trim($_POST['c_direccion'] ?? '');
+        $c_telefono  = trim($_POST['c_telefono']  ?? '');
+        $c_horario   = trim($_POST['c_horario']   ?? '');
+        $c_correo    = trim($_POST['c_correo']    ?? '');
 
         $stmt = $pdo->prepare('SELECT * FROM programas_secciones_paginas WHERE seccion_id = ?');
         $stmt->execute([$seccion_id]);
@@ -119,11 +125,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         try {
             if ($current) {
-                $pdo->prepare('UPDATE programas_secciones_paginas SET imagen1_path=?,texto1=?,imagen2_path=?,texto2=?,updated_at=NOW() WHERE seccion_id=?')
-                    ->execute([$img1, $texto1, $img2, $texto2, $seccion_id]);
+                $pdo->prepare('UPDATE programas_secciones_paginas SET imagen1_path=?,texto1=?,imagen2_path=?,texto2=?,c_titulo1=?,c_titulo2=?,c_direccion=?,c_telefono=?,c_horario=?,c_correo=?,updated_at=NOW() WHERE seccion_id=?')
+                    ->execute([$img1, $texto1, $img2, $texto2, $c_titulo1, $c_titulo2, $c_direccion, $c_telefono, $c_horario, $c_correo, $seccion_id]);
             } else {
-                $pdo->prepare('INSERT INTO programas_secciones_paginas (seccion_id,imagen1_path,texto1,imagen2_path,texto2) VALUES (?,?,?,?,?)')
-                    ->execute([$seccion_id, $img1, $texto1, $img2, $texto2]);
+                $pdo->prepare('INSERT INTO programas_secciones_paginas (seccion_id,imagen1_path,texto1,imagen2_path,texto2,c_titulo1,c_titulo2,c_direccion,c_telefono,c_horario,c_correo) VALUES (?,?,?,?,?,?,?,?,?,?,?)')
+                    ->execute([$seccion_id, $img1, $texto1, $img2, $texto2, $c_titulo1, $c_titulo2, $c_direccion, $c_telefono, $c_horario, $c_correo]);
             }
             $_SESSION['flash_message'] = 'Contenido guardado.';
             $_SESSION['flash_type']    = 'success';
@@ -189,7 +195,8 @@ $prog = $stmt->fetch();
 if (!$prog) { header('Location: programas'); exit; }
 
 $secciones = $pdo->prepare(
-    'SELECT s.*, p.imagen1_path, p.texto1, p.imagen2_path, p.texto2
+    'SELECT s.*, p.imagen1_path, p.texto1, p.imagen2_path, p.texto2,
+            p.c_titulo1, p.c_titulo2, p.c_direccion, p.c_telefono, p.c_horario, p.c_correo
      FROM programas_secciones s
      LEFT JOIN programas_secciones_paginas p ON p.seccion_id = s.id
      WHERE s.programa_id = ? ORDER BY s.orden ASC'
@@ -347,6 +354,32 @@ $t_delete   = csrf_token();
                                             <label class="form-label fw-semibold">Texto 2 (junto a imagen 2)</label>
                                             <textarea class="form-control tinymce-editor" id="texto2_<?= (int)$sec['id'] ?>" name="texto2" rows="6"><?= htmlspecialchars($sec['texto2'] ?? '') ?></textarea>
                                         </div>
+                                        <!-- Contacto por sección -->
+                                        <div class="col-12"><hr><p class="fw-semibold mb-2"><i class="bi bi-geo-alt me-1"></i> Información de contacto de esta sección</p></div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Título 1</label>
+                                            <input type="text" class="form-control form-control-sm" name="c_titulo1" value="<?= htmlspecialchars($sec['c_titulo1'] ?? '') ?>" placeholder="Ej: SERVICIOS MÉDICOS">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Título 2</label>
+                                            <input type="text" class="form-control form-control-sm" name="c_titulo2" value="<?= htmlspecialchars($sec['c_titulo2'] ?? '') ?>" placeholder="Ej: CLASES Y TALLERES">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Dirección</label>
+                                            <textarea class="form-control form-control-sm" name="c_direccion" rows="2" placeholder="Dirección..."><?= htmlspecialchars($sec['c_direccion'] ?? '') ?></textarea>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Teléfono</label>
+                                            <input type="text" class="form-control form-control-sm" name="c_telefono" value="<?= htmlspecialchars($sec['c_telefono'] ?? '') ?>" placeholder="722 000 00 00">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Horario</label>
+                                            <input type="text" class="form-control form-control-sm" name="c_horario" value="<?= htmlspecialchars($sec['c_horario'] ?? '') ?>" placeholder="Lunes a Viernes 8:00 - 15:00">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Correo</label>
+                                            <input type="email" class="form-control form-control-sm" name="c_correo" value="<?= htmlspecialchars($sec['c_correo'] ?? '') ?>" placeholder="correo@ejemplo.com">
+                                        </div>
                                         <div class="col-12">
                                             <button type="submit" class="btn btn-warning"><i class="bi bi-save me-1"></i> Guardar sección</button>
                                         </div>
@@ -360,45 +393,6 @@ $t_delete   = csrf_token();
                 </div>
             </div>
             <?php endif; ?>
-
-            <!-- ── 3. Información de contacto ── -->
-            <div class="card mb-4">
-                <div class="card-header"><i class="bi bi-geo-alt me-1"></i> Información de contacto</div>
-                <div class="card-body">
-                    <form method="POST" action="programa_editar?id=<?= $id ?>">
-                        <input type="hidden" name="action" value="save_contacto">
-                        <input type="hidden" name="id" value="<?= $id ?>">
-                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($t_contacto) ?>">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">Título 1</label>
-                                <input type="text" class="form-control" name="titulo1" value="<?= htmlspecialchars($contacto['titulo1'] ?? 'SERVICIOS MÉDICOS') ?>">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">Título 2</label>
-                                <input type="text" class="form-control" name="titulo2" value="<?= htmlspecialchars($contacto['titulo2'] ?? 'CLASES Y TALLERES') ?>">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">Dirección</label>
-                                <textarea class="form-control" name="direccion" rows="2"><?= htmlspecialchars($contacto['direccion'] ?? '') ?></textarea>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">Teléfono</label>
-                                <input type="text" class="form-control mb-2" name="telefono" value="<?= htmlspecialchars($contacto['telefono'] ?? '') ?>">
-                                <label class="form-label fw-semibold">Correo</label>
-                                <input type="text" class="form-control" name="correo" value="<?= htmlspecialchars($contacto['correo'] ?? '') ?>">
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label fw-semibold">Horario</label>
-                                <input type="text" class="form-control" name="horario" value="<?= htmlspecialchars($contacto['horario'] ?? '') ?>">
-                            </div>
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-danger text-white"><i class="bi bi-save me-1"></i> Guardar contacto</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
 
         </div>
     </div>
