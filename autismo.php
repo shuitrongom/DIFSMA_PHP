@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * autismo.php — Unidad Municipal de Autismo — DIF San Mateo Atenco
  */
@@ -32,28 +32,28 @@ require_once __DIR__ . '/includes/navbar.php';
 
     <!-- ── Título centrado ── -->
     <div class="container px-0">
-        <div class="text-center pt-4 pb-2 wow fadeIn aut-titulo" data-wow-delay="0.1s">
+        <div class="text-center pt-4 pb-0 wow fadeIn aut-titulo" data-wow-delay="0.1s">
             <h4 style="font-family:'Montserrat',sans-serif;font-weight:800;letter-spacing:2px;color:rgb(107,98,90);margin:0;">UNIDAD MUNICIPAL DE AUTISMO</h4>
             <h5 style="font-family:'Montserrat',sans-serif;font-weight:700;letter-spacing:2px;color:rgb(107,98,90);margin:4px 0 0;">SAN MATEO ATENCO</h5>
             <div style="height:16px;background:rgb(199,14,44);width:130px;margin:10px auto 0;"></div>
         </div>
     </div>
 
-    <!-- ── Fila plastas: amarilla izq | vacío | azul der ── -->
-    <!-- ── Plastas superiores: siempre en la misma fila ── -->
-    <div style="display:flex;width:100%;overflow:hidden;align-items:flex-start;">
-        <div style="width:33.33%;flex-shrink:0;">
+    <!-- ── Plastas superiores ── -->
+    <div class="container px-0">
+    <div class="row g-0" style="overflow:visible;">
+        <div class="col-6 px-0" style="overflow:visible;">
             <img src="img/plasta_amarilla.png" class="aut-plasta-amarilla" alt="">
         </div>
-        <div style="flex:1;"></div>
-        <div style="width:33.33%;flex-shrink:0;display:flex;justify-content:flex-end;">
+        <div class="col-6 px-0 d-flex justify-content-end" style="overflow:visible;">
             <img src="img/plasta_azul.png" class="aut-plasta-azul" alt="">
         </div>
     </div>
+    </div>
 
-    <!-- ── Fila logo + texto ── -->
+        <!-- ── Fila logo + texto ── -->
     <div class="container px-0">
-        <div class="row g-0 align-items-center pb-4 aut-logo-row" style="margin-top:-80px;">
+        <div class="row g-0 align-items-center pb-4 aut-logo-row">
             <div class="col-md-6 text-center px-4">
                 <img src="<?= $logo_path ?>" class="aut-logo-img" alt="Unidad Municipal de Autismo">
             </div>
@@ -89,22 +89,39 @@ require_once __DIR__ . '/includes/navbar.php';
     </div>
 
     <!-- ── Contacto con plastas inferiores ── -->
-    <div class="aut-contacto-wrap wow fadeIn" data-wow-delay="0.5s">
-        <img src="img/plasta_rosa.png"  class="aut-plasta-bl" alt="">
-        <img src="img/plasta_verde.png" class="aut-plasta-br" alt="">
-        <div class="text-center py-5 px-3 aut-contacto-inner" style="position:relative;z-index:2;">
-            <h5 style="font-family:'Montserrat',sans-serif;font-weight:800;color:rgb(107,98,90);letter-spacing:1px;margin:0;">SERVICIOS MÉDICOS</h5>
-            <h5 style="font-family:'Montserrat',sans-serif;font-weight:800;color:rgb(107,98,90);letter-spacing:1px;margin:0 0 8px;">CLASES Y TALLERES</h5>
-            <p class="aut-contacto-txt">
-                Mariano Matamoros 310, Barrio de la Concepción CP 52105,<br>
-                San Mateo Atenco, Méx.<br>
-                Teléfono: 722 970 77 86<br>
-                Horario de Lunes a Viernes<br>
-                8:00 am a 3:30 pm<br>
-                correo: adultomayor@difsanmateoatenco.gob.mx
-            </p>
+    <div class="container px-0 wow fadeIn" data-wow-delay="0.5s">
+        <div class="row g-0">
+            <div class="col-3 aut-plasta-col-bl">
+                <img src="img/plasta_rosa.png" class="aut-plasta-bl" alt="">
+            </div>
+            <div class="col-6 col-sm-6 col-xs-12 d-flex align-items-center justify-content-center aut-contacto-col">
+                <div class="text-center py-5 px-3 aut-contacto-inner">
+                    <h5 style="font-family:'Montserrat',sans-serif;font-weight:800;color:rgb(107,98,90);letter-spacing:1px;margin:0;">SERVICIOS MÉDICOS</h5>
+                    <h5 style="font-family:'Montserrat',sans-serif;font-weight:800;color:rgb(107,98,90);letter-spacing:1px;margin:0 0 8px;">CLASES Y TALLERES</h5>
+                    <p class="aut-contacto-txt">
+                        Mariano Matamoros 310, Barrio de la Concepción CP 52105,<br>
+                        San Mateo Atenco, Méx.<br>
+                        Teléfono: 722 970 77 86<br>
+                        Horario de Lunes a Viernes<br>
+                        8:00 am a 3:30 pm<br>
+                        correo: adultomayor@difsanmateoatenco.gob.mx
+                    </p>
+                </div>
+            </div>
+            <div class="col-3 d-flex justify-content-end aut-plasta-col-br">
+                <img src="img/plasta_verde.png" class="aut-plasta-br" alt="">
+            </div>
         </div>
-    </div>
+        <!-- Fila solo móvil: plastas abajo -->
+        <div class="row g-0 d-none aut-plastas-movil">
+            <div class="col-6">
+                <img src="img/plasta_rosa.png" class="aut-plasta-bl" alt="">
+            </div>
+            <div class="col-6 d-flex justify-content-end">
+                <img src="img/plasta_verde.png" class="aut-plasta-br" alt="">
+            </div>
+        </div>
+</div>
 
 </div>
 
@@ -173,38 +190,31 @@ require_once __DIR__ . '/includes/navbar.php';
 
     /* Espacio entre contenido y contacto — ajusta si hay espacio en blanco */
     --contenido-mb: -210px;
+
+    /* ── Tamaño y posición X de plastas (ajusta a tu gusto) ── */
+    --pa-size: 100%;        /* amarilla: tamaño (% de su col) */
+    --pa-max-w: 332px;      /* amarilla: máximo en px */
+    --pa-offset-x: -65px;     /* amarilla: mover horizontal (+ derecha, - izquierda) */
+    --pb-size: 100%;        /* azul: tamaño */
+    --pb-max-w: 490px;      /* azul: máximo en px */
+    --pb-offset-x: 91px;     /* azul: mover horizontal */
+    --pb-offset-y: -68px;      /* azul: mover vertical (+ abajo, - arriba) */
+    --pr-size: clamp(120px,24.4vw,332px); /* rosa: tamaño */
+    --pr-max-w: 332px;      /* rosa: máximo en px */
+    --pr-offset-x: 0px;     /* rosa: mover horizontal */
+    --pr-offset-y: 0px;     /* rosa: mover vertical */
+    --pv-size: clamp(160px,36vw,490px);   /* verde: tamaño */
+    --pv-max-w: 490px;      /* verde: máximo en px */
+    --pv-offset-x: 0px;     /* verde: mover horizontal */
+    --pv-offset-y: 0px;     /* verde: mover vertical */
 }
-.aut-plasta-amarilla {
-    display: block;
-    width: var(--pa-w);
-    max-width: var(--pa-max);
-    height: auto;
-    transform: translateY(var(--pa-y));
-}
-.aut-plasta-azul {
-    display: block;
-    width: var(--pb-w);
-    max-width: var(--pb-max);
-    height: auto;
-    transform: translateY(var(--pb-y));
-}
+.aut-plasta-amarilla { display:block; width:var(--pa-size); max-width:var(--pa-max-w); height:auto; transform:translateX(var(--pa-offset-x)); }
+.aut-plasta-azul { display:block; width:var(--pb-size); max-width:var(--pb-max-w); height:auto; margin-left:auto; transform:translate(var(--pb-offset-x),var(--pb-offset-y)); }
 .aut-contacto-wrap {
-    position: relative; overflow: hidden; min-height: 220px; padding-bottom: 3rem;
+    overflow: hidden;
 }
-.aut-plasta-bl {
-    position: absolute; bottom: 0; left: 0;
-    width: var(--pr-w);
-    max-width: var(--pr-max);
-    transform: translate(var(--pr-x), var(--pr-y));
-    pointer-events: none;
-}
-.aut-plasta-br {
-    position: absolute; bottom: 0; right: 0;
-    width: var(--pv-w);
-    max-width: var(--pv-max);
-    transform: translate(var(--pv-x), var(--pv-y));
-    pointer-events: none;
-}
+.aut-plasta-bl { display:block; width:var(--pr-size); max-width:var(--pr-max-w, 100%); height:auto; transform:translate(var(--pr-offset-x), var(--pr-offset-y)); }
+.aut-plasta-br { display:block; width:var(--pv-size); max-width:var(--pv-max-w, 100%); height:auto; margin-left:auto; transform:translate(var(--pv-offset-x), var(--pv-offset-y)); }
 .aut-contacto-wrap .text-center { position: relative; z-index: 2; }
 .aut-texto {
     font-family: 'Montserrat', sans-serif;
@@ -250,28 +260,34 @@ require_once __DIR__ . '/includes/navbar.php';
     font-size: 14px; color: rgb(107,98,90); line-height: 1.9;
 }
 
-/* ── Desktop normal (992px – 1399px) ── */
+/* ── Desktop normal (992px – 1399px): laptop 15" ── */
 @media (min-width: 992px) and (max-width: 1399px) {
-    .aut-plasta-amarilla { width: clamp(220px, 26vw, 332px); transform: translateY(-47px);  margin-left: 3vw; }
-    .aut-plasta-azul     { width: clamp(300px, 36vw, 512px); transform: translateY(-108px); margin-right: 1vw; }
-    .aut-plasta-bl       { width: clamp(220px, 45vw, 553px); transform: translateY(35px);  margin-left: 3vw; }
-    .aut-plasta-br       { width: clamp(300px, 45vw, 553px); transform: translateY(47px); margin-right: 1vw; }
+    :root {
+        --pa-size: 100%; --pa-max-w: 332px; --pa-offset-x: -65px;
+        --pb-size: 100%; --pb-max-w: 490px; --pb-offset-x: 87px; --pb-offset-y: -78px;
+        --pr-size: 200%; --pr-max-w: 540px; --pr-offset-x: -95px; --pr-offset-y: 21px;
+        --pv-size: 175%; --pv-max-w: 500px; --pv-offset-x: 75px; --pv-offset-y: 23px;
+    }
 }
 
-/* ── Pantallas grandes (≥ 1400px) ── */
+/* ── Pantallas grandes (≥ 1400px): monitor ── */
 @media (min-width: 1400px) {
-    .aut-plasta-amarilla { width: clamp(280px, 17vw, 332px); transform: translateY(-47px);  margin-left: 12.8vw; }
-    .aut-plasta-azul     { width: clamp(380px, 26vw, 512px); transform: translateY(-115px); margin-right: 11.1vw; }
-    .aut-plasta-bl       { width: clamp(280px, 60vw, 590px); transform: translateY(35px);  margin-left: 12.8vw; }
-    .aut-plasta-br       { width: clamp(380px, 45vw, 580px); transform: translateY(40px); margin-right: 11.1vw; }
+    :root {
+        --pa-size: 100%; --pa-max-w: 332px; --pa-offset-x: -41px;
+        --pb-size: 100%; --pb-max-w: 490px; --pb-offset-x: 74px; --pb-offset-y: -78px;
+        --pr-size: 400%; --pr-max-w: 630px; --pr-offset-x: -79px; --pr-offset-y: 8px;
+        --pv-size: 400%; --pv-max-w: 614px; --pv-offset-x: 67px; --pv-offset-y: 14px;
+    }
 }
 
 /* ── Tablet (768px – 991px) ── */
-@media (max-width: 991px) {
-    .aut-plasta-amarilla { width: clamp(130px, 22vw, 200px); transform: translateY(-10px); margin-left: 5px; }
-    .aut-plasta-azul     { width: clamp(150px, 28vw, 260px); transform: translateY(-15px); margin-right: 5px; }
-    .aut-plasta-bl       { width: clamp(130px, 22vw, 200px); transform: translateY(var(--pr-y)); margin-left: 5px; }
-    .aut-plasta-br       { width: clamp(150px, 28vw, 260px); transform: translateY(var(--pv-y)); margin-right: 5px; }
+@media (min-width: 768px) and (max-width: 991px) {
+    :root {
+        --pa-size: 100%; --pa-max-w: 260px; --pa-offset-x: -33px;
+        --pb-size: 100%; --pb-max-w: 290px; --pb-offset-x: 23px; --pb-offset-y: -29px;
+        --pr-size: 300%; --pr-max-w: 323px; --pr-offset-x: -58px; --pr-offset-y: 142px;
+        --pv-size: 300%; --pv-max-w: 323px; --pv-offset-x: 50px; --pv-offset-y: 41px;
+    }
     /* Reset transforms */
     .aut-logo-img    { transform: none !important; height: auto !important; max-width: 280px !important; }
     .aut-img-centro  { transform: none !important; height: 240px !important; }
@@ -295,10 +311,12 @@ require_once __DIR__ . '/includes/navbar.php';
 
 /* ── Móvil (< 768px) ── */
 @media (max-width: 767px) {
-    .aut-plasta-amarilla { width: clamp(80px, 45vw, 220px); transform: translate(-30px, 0px); }
-    .aut-plasta-azul     { width: clamp(90px, 50vw, 280px); transform: translate(21px, -28px); }
-    .aut-plasta-bl { width: clamp(80px, 45vw, 220px); transform: translate(-32px, 30px); }
-    .aut-plasta-br { width: clamp(90px, 50vw, 220px); transform: translate(29px, 36px); }
+    :root {
+        --pa-size: 100%; --pa-max-w: 214px; --pa-offset-x: -33px;
+        --pb-size: 100%; --pb-max-w: 280px; --pb-offset-x: 26px; --pb-offset-y: -28px;
+        --pr-size: 300%; --pr-max-w: 260px; --pr-offset-x: -38px; --pr-offset-y: -50px;
+        --pv-size: 300%; --pv-max-w: 260px; --pv-offset-x: 37px; --pv-offset-y: -44px;
+    }
     /* Reset transforms */
     .aut-logo-img    { transform: none !important; height: auto !important; max-width: 220px !important; }
     .aut-img-centro  { transform: none !important; height: 200px !important; }
@@ -323,6 +341,20 @@ require_once __DIR__ . '/includes/navbar.php';
     .aut-inferior-row .col-md-6:last-child  { order: 2; width: 100% !important; padding: 0.5rem 1rem !important; }
     .aut-contacto-wrap { min-height: 200px; }
     .aut-contacto-txt { font-size: 13px; }
+    /* Móvil: ocultar plastas del row, mostrar contacto full width */
+    .aut-contacto-wrap .row { display: block !important; overflow: hidden !important; }
+    .aut-contacto-wrap .col-3 { display: none !important; }
+    .aut-contacto-wrap .col-6, .aut-contacto-col { width: 100% !important; max-width: 100% !important; flex: 0 0 100% !important; text-align: center !important; padding: 0 1rem !important; }
+    .aut-contacto-inner { text-align: center !important; margin: 0 auto !important; width: 100% !important; }
+    .aut-contacto-inner h5, .aut-contacto-inner p { text-align: center !important; }
+    .aut-contacto-wrap .col-6 > div { margin: 0 auto !important; text-align: center !important; display: flex !important; flex-direction: column !important; align-items: center !important; }
+    .aut-plasta-bl, .aut-plasta-br { display: none !important; }
+    /* Ocultar plastas del col-3 en row principal */
+    .aut-plasta-col-bl, .aut-plasta-col-br { display: none !important; }
+    /* Mostrar fila extra de plastas abajo */
+    .aut-plastas-movil { display: flex !important; }
+    .aut-plastas-movil .aut-plasta-bl,
+    .aut-plastas-movil .aut-plasta-br { display: block !important; }
 }
 </style>
 
