@@ -220,37 +220,31 @@ require_once __DIR__ . '/../includes/navbar.php';
         --sec-titulo-w: 1336px;
         --sec-titulo-x: 6px;
         --sec-titulo-pad-x: 0px;
-        --sec-img1-h: 320px;
-        --sec-img1-w: 94.5%;        /* <-- ancho imagen 1 */
-        --sec-img1-col-w: 49%;     /* <-- ancho columna imagen 1 (horizontal) */
-        --sec-img1-x: 40px;
-        --sec-img1-y: -6px;
-        --sec-img2-h: 320px;
-        --sec-img2-w: 94.5%;        /* <-- ancho imagen 2 */
-        --sec-img2-col-w: 49%;     /* <-- ancho columna imagen 2 (horizontal) */
-        --sec-img2-x: -20px;
-        --sec-img2-y: 11px;
-        --sec-texto1-x: 7px;       /* <-- mover texto 1 horizontal */
-        --sec-texto2-x: 14px;       /* <-- mover texto 2 horizontal */
+        --sec-img1-h: 445px;
+        --sec-img1-w: 138%;
+        --sec-img1-col-w: 50%;
+        --sec-img1-x: -163px;
+        --sec-img1-y: 0px;
+        --sec-img2-h: 445px;
+        --sec-img2-w: 138%;
+        --sec-img2-col-w: 50%;
+        --sec-img2-x: 12px;
+        --sec-img2-y: 33px;
+        --sec-texto1-x: 145px;
+        --sec-texto2-x: -105px;
     }
     .sec-titulo-text { font-size: 1.3rem; }
     .prog-sec-texto  { font-size: 16px !important; }
-    /* Reducir texto del bloque contacto */
     #sec-content-wrap .text-center h5 { font-size: 0.85rem !important; }
     #sec-content-wrap .text-center p  { font-size: 11px !important; }
-    /* Bajar bloque contacto */
     #sec-content-wrap .text-center.py-4 { padding-top: 5.5rem !important; }
-    /* Limitar ancho del contenido igual que desktop normal */
     #sec-content-wrap .container { max-width: 960px !important; }
     #sec-content-wrap .sec-row   { max-width: 960px; margin-left: auto !important; margin-right: auto !important; }
-    /* Quitar espacio blanco entre filas y centrar texto */
     #sec-content-wrap .sec-row.mb-5 { margin-bottom: 0 !important; }
     #sec-content-wrap .container-fluid.py-4 { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
-    #sec-content-wrap .col-md-6.d-flex { padding-left: 2.5rem !important; padding-right: 2.5rem !important; }
-    /* Fijar alto de imagen para que no crezca con la fila */
+    #sec-content-wrap .col-md-6.d-flex { padding-left: 1rem !important; padding-right: 1rem !important; }
     #sec-content-wrap .sec-img1,
     #sec-content-wrap .sec-img2 { max-height: var(--sec-img1-h) !important; min-height: unset !important; }
-    /* Controlar ancho horizontal de columnas de imagen */
     #sec-content-wrap .sec-row .col-md-6:has(.sec-img1) { flex: 0 0 var(--sec-img1-col-w) !important; max-width: var(--sec-img1-col-w) !important; }
     #sec-content-wrap .sec-row .col-md-6:has(.sec-img2) { flex: 0 0 var(--sec-img2-col-w) !important; max-width: var(--sec-img2-col-w) !important; }
 }
