@@ -34,7 +34,7 @@ require_once __DIR__ . '/includes/navbar.php';
     <div class="container px-0">
         <div class="text-center pt-4 pb-0 wow fadeIn aut-titulo" data-wow-delay="0.1s">
             <h4 style="font-family:'Montserrat',sans-serif;font-weight:800;letter-spacing:2px;color:rgb(107,98,90);margin:0;">UNIDAD MUNICIPAL DE AUTISMO</h4>
-            <h5 style="font-family:'Montserrat',sans-serif;font-weight:700;letter-spacing:2px;color:rgb(107,98,90);margin:4px 0 0;">SAN MATEO ATENCO</h5>
+            <h5 style="font-family:'Montserrat',sans-serif;font-weight:800;letter-spacing:2px;color:rgb(107,98,90);margin:4px 0 0;font-size:1.5rem;">SAN MATEO ATENCO</h5>
             <div style="height:16px;background:rgb(199,14,44);width:130px;margin:10px auto 0;"></div>
         </div>
     </div>

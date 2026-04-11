@@ -59,35 +59,6 @@ require_once __DIR__ . '/../includes/navbar.php';
 
 <div class="container-fluid px-0" style="background:#f5f5f5;overflow-x:hidden;">
 
-    <script>
-    // Escalar el contenido proporcionalmente al ancho de ventana
-    // sin activar media queries — todo se ve igual pero más pequeño/grande
-    (function() {
-        var BASE_W = 1280; // ancho de referencia en px
-        function applyScale() {
-            var w = window.innerWidth;
-            var scale = w / BASE_W;
-            // Solo aplicar en desktop (> 991px) para no afectar móvil/tablet real
-            if (w > 991) {
-                document.getElementById('sec-content-wrap').style.transform = 'scale(' + scale + ')';
-                document.getElementById('sec-content-wrap').style.transformOrigin = 'top center';
-                document.getElementById('sec-content-wrap').style.width = BASE_W + 'px';
-                document.getElementById('sec-content-wrap').style.marginLeft = 'auto';
-                document.getElementById('sec-content-wrap').style.marginRight = 'auto';
-                // Ajustar altura del wrapper para evitar espacio en blanco
-                var h = document.getElementById('sec-content-wrap').scrollHeight * scale;
-                document.getElementById('sec-outer-wrap').style.height = h + 'px';
-            } else {
-                document.getElementById('sec-content-wrap').style.transform = '';
-                document.getElementById('sec-content-wrap').style.width = '';
-                document.getElementById('sec-outer-wrap').style.height = '';
-            }
-        }
-        window.addEventListener('load', applyScale);
-        window.addEventListener('resize', applyScale);
-    })();
-    </script>
-
     <div id="sec-outer-wrap" style="overflow:hidden;">
     <div id="sec-content-wrap">
 
@@ -218,15 +189,15 @@ require_once __DIR__ . '/../includes/navbar.php';
     :root {
         --sec-titulo-pad-y: 1.1rem;
         --sec-titulo-max-w: 900px;
-        --sec-titulo-w: 88%;
+        --sec-titulo-w: 1190px;
         --sec-titulo-x: 8px;
         --sec-titulo-pad-x: 0px;
-        --sec-img1-h: clamp(200px, 28vw, 360px);
+        --sec-img1-h: 360px;
         --sec-img1-w: 100%;        /* <-- ancho imagen 1 */
         --sec-img1-col-w: 49%;     /* <-- ancho columna imagen 1 (horizontal) */
         --sec-img1-x: 15px;
         --sec-img1-y: 0px;
-        --sec-img2-h: clamp(200px, 28vw, 360px);
+        --sec-img2-h: 360px;
         --sec-img2-w: 100%;        /* <-- ancho imagen 2 */
         --sec-img2-col-w: 49%;     /* <-- ancho columna imagen 2 (horizontal) */
         --sec-img2-x: 12px;
@@ -234,7 +205,7 @@ require_once __DIR__ . '/../includes/navbar.php';
         --sec-texto1-x: 24px;       /* <-- mover texto 1 horizontal */
         --sec-texto2-x: -12px;       /* <-- mover texto 2 horizontal */
     }
-    .sec-titulo-text { font-size: clamp(1.1rem, 2vw, 1.4rem); }
+    .sec-titulo-text { font-size: 1.3rem; }
     .prog-sec-texto  { font-size: 16px; }
     /* Controlar ancho horizontal de columnas de imagen */
     #sec-content-wrap .sec-row .col-md-6:has(.sec-img1) { flex: 0 0 var(--sec-img1-col-w) !important; max-width: var(--sec-img1-col-w) !important; }
@@ -246,15 +217,15 @@ require_once __DIR__ . '/../includes/navbar.php';
     :root {
         --sec-titulo-pad-y: 1.1rem;
         --sec-titulo-max-w: 900px;
-        --sec-titulo-w: 70%;
+        --sec-titulo-w: 1336px;
         --sec-titulo-x: 6px;
         --sec-titulo-pad-x: 0px;
-        --sec-img1-h: clamp(200px, 22vw, 320px);
+        --sec-img1-h: 320px;
         --sec-img1-w: 94.5%;        /* <-- ancho imagen 1 */
         --sec-img1-col-w: 49%;     /* <-- ancho columna imagen 1 (horizontal) */
         --sec-img1-x: 40px;
         --sec-img1-y: -6px;
-        --sec-img2-h: clamp(200px, 22vw, 320px);
+        --sec-img2-h: 320px;
         --sec-img2-w: 94.5%;        /* <-- ancho imagen 2 */
         --sec-img2-col-w: 49%;     /* <-- ancho columna imagen 2 (horizontal) */
         --sec-img2-x: -20px;
@@ -262,7 +233,7 @@ require_once __DIR__ . '/../includes/navbar.php';
         --sec-texto1-x: 7px;       /* <-- mover texto 1 horizontal */
         --sec-texto2-x: 14px;       /* <-- mover texto 2 horizontal */
     }
-    .sec-titulo-text { font-size: clamp(1.1rem, 2vw, 1.4rem); }
+    .sec-titulo-text { font-size: 1.3rem; }
     .prog-sec-texto  { font-size: 16px !important; }
     /* Reducir texto del bloque contacto */
     #sec-content-wrap .text-center h5 { font-size: 0.85rem !important; }
@@ -287,15 +258,19 @@ require_once __DIR__ . '/../includes/navbar.php';
 /* Barra de titulo */
 .sec-titulo-wrap {
     background: rgb(200,16,44);
-    width: var(--sec-titulo-w, 100%);
+    width: 100%;
+    max-width: var(--sec-titulo-w, 100%);
     padding: var(--sec-titulo-pad-y) 1rem;
     margin-bottom: 2rem;
-    transform: translateX(var(--sec-titulo-x, 0px));
+    position: relative;
+    left: 0.5%;
+    transform: translateX(calc(-50% + var(--sec-titulo-x, 0px)));
+    transform: none;
 }
 .sec-titulo-text {
     font-family: 'Montserrat', sans-serif;
     font-weight: 800;
-    font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+    font-size: 1.4rem;
     color: #fff;
     text-align: center;
     margin: 0 auto;
