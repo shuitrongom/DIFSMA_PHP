@@ -31,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$old) { header('Location: programas'); exit; }
 
         $newImagePath = $old['imagen_path'];
+        $imagenLink   = trim($_POST['imagen_link'] ?? $old['imagen_link'] ?? '');
         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] !== UPLOAD_ERR_NO_FILE) {
             $upload = handle_upload($_FILES['imagen'], 'image');
             if ($upload['success']) {
@@ -49,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         try {
             $pdo->beginTransaction();
-            $pdo->prepare('UPDATE programas SET nombre=?, imagen_path=? WHERE id=?')->execute([$nombre, $newImagePath, $id]);
+            $pdo->prepare('UPDATE programas SET nombre=?, imagen_path=?, imagen_link=? WHERE id=?')->execute([$nombre, $newImagePath, $imagenLink, $id]);
 
             // Obtener secciones actuales en BD
             $stmtEx = $pdo->prepare('SELECT id, titulo, slug FROM programas_secciones WHERE programa_id = ? ORDER BY orden ASC');
@@ -106,6 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $c_telefono  = trim($_POST['c_telefono']  ?? '');
         $c_horario   = trim($_POST['c_horario']   ?? '');
         $c_correo    = trim($_POST['c_correo']    ?? '');
+        $c_contacto  = $_POST['c_contacto'] ?? '';
 
         $stmt = $pdo->prepare('SELECT * FROM programas_secciones_paginas WHERE seccion_id = ?');
         $stmt->execute([$seccion_id]);
@@ -125,11 +127,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         try {
             if ($current) {
-                $pdo->prepare('UPDATE programas_secciones_paginas SET imagen1_path=?,texto1=?,imagen2_path=?,texto2=?,c_titulo1=?,c_titulo2=?,c_direccion=?,c_telefono=?,c_horario=?,c_correo=?,updated_at=NOW() WHERE seccion_id=?')
-                    ->execute([$img1, $texto1, $img2, $texto2, $c_titulo1, $c_titulo2, $c_direccion, $c_telefono, $c_horario, $c_correo, $seccion_id]);
+                $pdo->prepare('UPDATE programas_secciones_paginas SET imagen1_path=?,texto1=?,imagen2_path=?,texto2=?,c_titulo1=?,c_titulo2=?,c_direccion=?,c_telefono=?,c_horario=?,c_correo=?,c_contacto=?,updated_at=NOW() WHERE seccion_id=?')
+                    ->execute([$img1, $texto1, $img2, $texto2, $c_titulo1, $c_titulo2, $c_direccion, $c_telefono, $c_horario, $c_correo, $c_contacto, $seccion_id]);
             } else {
-                $pdo->prepare('INSERT INTO programas_secciones_paginas (seccion_id,imagen1_path,texto1,imagen2_path,texto2,c_titulo1,c_titulo2,c_direccion,c_telefono,c_horario,c_correo) VALUES (?,?,?,?,?,?,?,?,?,?,?)')
-                    ->execute([$seccion_id, $img1, $texto1, $img2, $texto2, $c_titulo1, $c_titulo2, $c_direccion, $c_telefono, $c_horario, $c_correo]);
+                $pdo->prepare('INSERT INTO programas_secciones_paginas (seccion_id,imagen1_path,texto1,imagen2_path,texto2,c_titulo1,c_titulo2,c_direccion,c_telefono,c_horario,c_correo,c_contacto) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)')
+                    ->execute([$seccion_id, $img1, $texto1, $img2, $texto2, $c_titulo1, $c_titulo2, $c_direccion, $c_telefono, $c_horario, $c_correo, $c_contacto]);
             }
             $_SESSION['flash_message'] = 'Contenido guardado.';
             $_SESSION['flash_type']    = 'success';
@@ -196,7 +198,7 @@ if (!$prog) { header('Location: programas'); exit; }
 
 $secciones = $pdo->prepare(
     'SELECT s.*, p.imagen1_path, p.texto1, p.imagen2_path, p.texto2,
-            p.c_titulo1, p.c_titulo2, p.c_direccion, p.c_telefono, p.c_horario, p.c_correo
+            p.c_titulo1, p.c_titulo2, p.c_direccion, p.c_telefono, p.c_horario, p.c_correo, p.c_contacto
      FROM programas_secciones s
      LEFT JOIN programas_secciones_paginas p ON p.seccion_id = s.id
      WHERE s.programa_id = ? ORDER BY s.orden ASC'
@@ -210,6 +212,10 @@ catch (PDOException $e) { $contacto = null; }
 $flashMessage = $_SESSION['flash_message'] ?? '';
 $flashType    = $_SESSION['flash_type']    ?? '';
 unset($_SESSION['flash_message'], $_SESSION['flash_type']);
+
+// Cargar trámites para el selector de enlace
+$tramites_sel = [];
+try { $tramites_sel = $pdo->query('SELECT slug, titulo FROM tramites ORDER BY id ASC')->fetchAll(); } catch (PDOException $e) {}
 
 $t_edit     = csrf_token();
 $t_pages    = csrf_token();
@@ -277,6 +283,19 @@ $t_delete   = csrf_token();
                                 <?php endif; ?>
                                 <input type="file" class="form-control" name="imagen" accept=".jpg,.jpeg,.png,.webp">
                                 <small class="text-muted">Dejar vacío para mantener la imagen actual</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Enlace de la imagen (opcional)</label>
+                                <select class="form-select" name="imagen_link">
+                                    <option value="">— Sin enlace —</option>
+                                    <option value="autismo" <?= ($prog['imagen_link'] ?? '') === 'autismo' ? 'selected' : '' ?>>Unidad Municipal de Autismo</option>
+                                    <?php foreach ($tramites_sel as $tr): ?>
+                                    <option value="tramites/<?= htmlspecialchars($tr['slug']) ?>" <?= ($prog['imagen_link'] ?? '') === 'tramites/' . $tr['slug'] ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($tr['titulo']) ?>
+                                    </option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <small class="text-muted">Si se selecciona, al dar clic en la imagen llevará a ese servicio.</small>
                             </div>
                             <div class="col-12">
                                 <label class="form-label fw-semibold">Secciones <small class="text-muted">(solo título — cada una genera su propia página)</small></label>
@@ -356,29 +375,9 @@ $t_delete   = csrf_token();
                                         </div>
                                         <!-- Contacto por sección -->
                                         <div class="col-12"><hr><p class="fw-semibold mb-2"><i class="bi bi-geo-alt me-1"></i> Información de contacto de esta sección</p></div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Título 1</label>
-                                            <input type="text" class="form-control form-control-sm" name="c_titulo1" value="<?= htmlspecialchars($sec['c_titulo1'] ?? '') ?>" placeholder="Ej: SERVICIOS MÉDICOS">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Título 2</label>
-                                            <input type="text" class="form-control form-control-sm" name="c_titulo2" value="<?= htmlspecialchars($sec['c_titulo2'] ?? '') ?>" placeholder="Ej: CLASES Y TALLERES">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Dirección</label>
-                                            <textarea class="form-control form-control-sm" name="c_direccion" rows="2" placeholder="Dirección..."><?= htmlspecialchars($sec['c_direccion'] ?? '') ?></textarea>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Teléfono</label>
-                                            <input type="text" class="form-control form-control-sm" name="c_telefono" value="<?= htmlspecialchars($sec['c_telefono'] ?? '') ?>" placeholder="722 000 00 00">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Horario</label>
-                                            <input type="text" class="form-control form-control-sm" name="c_horario" value="<?= htmlspecialchars($sec['c_horario'] ?? '') ?>" placeholder="Lunes a Viernes 8:00 - 15:00">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Correo</label>
-                                            <input type="email" class="form-control form-control-sm" name="c_correo" value="<?= htmlspecialchars($sec['c_correo'] ?? '') ?>" placeholder="correo@ejemplo.com">
+                                        <div class="col-12">
+                                            <textarea class="form-control tinymce-editor" id="c_contacto_<?= (int)$sec['id'] ?>" name="c_contacto" rows="6"><?= htmlspecialchars($sec['c_contacto'] ?? '') ?></textarea>
+                                            <small class="text-muted">Puedes usar negritas, colores, listas, etc. Si se deja vacío no se mostrará el bloque de contacto.</small>
                                         </div>
                                         <div class="col-12">
                                             <button type="submit" class="btn btn-warning"><i class="bi bi-save me-1"></i> Guardar sección</button>

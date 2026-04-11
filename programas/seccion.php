@@ -43,13 +43,8 @@ $texto2   = preg_replace('/(<li[^>]*>)(\s|&nbsp;)+/i', '$1', $pagina['texto2'] ?
 $page_title = htmlspecialchars($titulo) . ' — DIF San Mateo Atenco';
 
 // Contacto — solo de la sección, sin fallback global
-$c_titulo1   = $pagina['c_titulo1']   ?? '';
-$c_titulo2   = $pagina['c_titulo2']   ?? '';
-$c_direccion = $pagina['c_direccion'] ?? '';
-$c_telefono  = $pagina['c_telefono']  ?? '';
-$c_horario   = $pagina['c_horario']   ?? '';
-$c_correo    = $pagina['c_correo']    ?? '';
-$tiene_contacto = !empty($c_titulo1) || !empty($c_titulo2) || !empty($c_direccion) || !empty($c_telefono) || !empty($c_horario) || !empty($c_correo);
+$c_contacto     = $pagina['c_contacto'] ?? '';
+$tiene_contacto = !empty(trim(strip_tags($c_contacto)));
 
 // Galería de servicios
 $galeria_imgs = [];
@@ -145,16 +140,16 @@ require_once __DIR__ . '/../includes/navbar.php';
         <!-- Contacto -->
         <?php if ($tiene_contacto): ?>
         <div class="text-center py-4 px-3">
-            <h5 style="font-family:'Montserrat',sans-serif;font-weight:800;color:rgb(107,98,90);letter-spacing:1px;margin:0;"><?= htmlspecialchars($c_titulo1) ?></h5>
-            <h5 style="font-family:'Montserrat',sans-serif;font-weight:800;color:rgb(107,98,90);letter-spacing:1px;margin:0 0 12px;"><?= htmlspecialchars($c_titulo2) ?></h5>
-            <p style="font-family:'Montserrat',sans-serif;font-size:14px;color:rgb(107,98,90);line-height:1.9;">
-                <?= nl2br(htmlspecialchars($c_direccion)) ?><br>
-                Teléfono: <?= htmlspecialchars($c_telefono) ?><br>
-                <?= nl2br(htmlspecialchars($c_horario)) ?><br>
-                correo: <?= htmlspecialchars($c_correo) ?>
-            </p>
+            <?= $c_contacto ?>
         </div>
         <?php endif; ?>
+
+        <!-- Botón regresar -->
+        <div class="text-center pb-4">
+            <a href="<?= $base_path ?>index" class="btn btn-danger px-4 py-2" style="font-family:'Montserrat',sans-serif;font-weight:700;letter-spacing:1px;background:rgb(200,16,44);border:none;">
+                REGRESAR INICIO
+            </a>
+        </div>
 
         </div><!-- /container -->
     </div>
@@ -240,7 +235,7 @@ require_once __DIR__ . '/../includes/navbar.php';
         --sec-texto2-x: -12px;       /* <-- mover texto 2 horizontal */
     }
     .sec-titulo-text { font-size: clamp(1.1rem, 2vw, 1.4rem); }
-    .prog-sec-texto  { font-size: 14px; }
+    .prog-sec-texto  { font-size: 16px; }
     /* Controlar ancho horizontal de columnas de imagen */
     #sec-content-wrap .sec-row .col-md-6:has(.sec-img1) { flex: 0 0 var(--sec-img1-col-w) !important; max-width: var(--sec-img1-col-w) !important; }
     #sec-content-wrap .sec-row .col-md-6:has(.sec-img2) { flex: 0 0 var(--sec-img2-col-w) !important; max-width: var(--sec-img2-col-w) !important; }
@@ -268,7 +263,7 @@ require_once __DIR__ . '/../includes/navbar.php';
         --sec-texto2-x: 14px;       /* <-- mover texto 2 horizontal */
     }
     .sec-titulo-text { font-size: clamp(1.1rem, 2vw, 1.4rem); }
-    .prog-sec-texto  { font-size: 11px !important; }
+    .prog-sec-texto  { font-size: 16px !important; }
     /* Reducir texto del bloque contacto */
     #sec-content-wrap .text-center h5 { font-size: 0.85rem !important; }
     #sec-content-wrap .text-center p  { font-size: 11px !important; }

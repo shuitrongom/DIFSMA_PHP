@@ -94,8 +94,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id = (int) ($_POST['link_id'] ?? 0);
         if ($id > 0) {
             try {
-                $stmt = $pdo->prepare('DELETE FROM footer_links WHERE id = ?');
-                $stmt->execute([$id]);
+                $pdo->prepare('DELETE FROM footer_links WHERE id = ?')->execute([$id]);
+                // Resetear orden consecutivo
+                $links = $pdo->query('SELECT id FROM footer_links ORDER BY orden ASC, id ASC')->fetchAll();
+                $stmt  = $pdo->prepare('UPDATE footer_links SET orden = ? WHERE id = ?');
+                foreach ($links as $i => $l) { $stmt->execute([$i + 1, $l['id']]); }
                 $_SESSION['flash_message'] = 'Enlace eliminado.';
                 $_SESSION['flash_type']    = 'success';
             } catch (PDOException $e) {
@@ -193,6 +196,12 @@ $footerLinks = [];
 try {
     $stmt = $pdo->query('SELECT * FROM footer_links ORDER BY orden ASC, id ASC');
     $footerLinks = $stmt->fetchAll();
+} catch (PDOException $e) {}
+
+// ── Cargar trámites para el selector de URL ────────────────────────────────────
+$tramites_footer = [];
+try {
+    $tramites_footer = $pdo->query('SELECT slug, titulo FROM tramites ORDER BY id ASC')->fetchAll();
 } catch (PDOException $e) {}
 
 // Si hay datos de formulario guardados por error de validación, usarlos
@@ -386,6 +395,14 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                                 <option value="__ubicacion__">Ubicacion en Google Maps</option>
                                                 <option value="#">Sin enlace (#)</option>
                                             </optgroup>
+                                            <?php if (!empty($tramites_footer)): ?>
+                                            <optgroup label="Servicios y Trámites">
+                                                <option value="autismo">Unidad Municipal de Autismo</option>
+                                                <?php foreach ($tramites_footer as $tr): ?>
+                                                <option value="tramites/<?= htmlspecialchars($tr['slug']) ?>"><?= htmlspecialchars($tr['titulo']) ?></option>
+                                                <?php endforeach; ?>
+                                            </optgroup>
+                                            <?php endif; ?>
                                         </select>
                                         <input type="text" class="form-control" id="link_url_new" name="link_url" value="#" placeholder="index.php o https://...">
                                         <div class="form-text">Selecciona una seccion del sitio o escribe la URL manualmente.</div>

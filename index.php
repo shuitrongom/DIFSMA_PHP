@@ -101,7 +101,7 @@ $programas = [];
 try {
     $pdo  = $pdo ?? get_db();
     $stmt = $pdo->prepare(
-        'SELECT id, nombre, imagen_path FROM programas WHERE activo = 1 ORDER BY orden ASC'
+        'SELECT id, nombre, imagen_path, imagen_link FROM programas WHERE activo = 1 ORDER BY orden ASC'
     );
     $stmt->execute();
     $programas = $stmt->fetchAll();
@@ -288,7 +288,13 @@ require_once 'includes/navbar.php';
                     <div class="events-item">
                         <div class="events-inner position-relative">
                             <div class="events-img overflow-hidden position-relative">
+                                <?php if (!empty($programa['imagen_link'])): ?>
+                                <a href="<?= htmlspecialchars($programa['imagen_link']) ?>">
+                                    <img src="<?= htmlspecialchars($programa['imagen_path'] ?? 'img/placeholder.jpg') ?>" class="img-fluid w-100" alt="<?= htmlspecialchars($programa['nombre']) ?>">
+                                </a>
+                                <?php else: ?>
                                 <img src="<?= htmlspecialchars($programa['imagen_path'] ?? 'img/placeholder.jpg') ?>" class="img-fluid w-100" alt="<?= htmlspecialchars($programa['nombre']) ?>">
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="events-text p-0 border-0 rounded-bottom" style="background:transparent;">
@@ -298,12 +304,7 @@ require_once 'includes/navbar.php';
                                     onclick="toggleVerProgramas(event, this)">
                                     <img src="img/btn_ver_programas.png" alt="Ver Programas" class="img-fluid w-100" style="display:block;">
                                 </button>
-                                <div class="prog-dropdown" style="display:none;position:absolute;top:100%;left:0;z-index:9999;width:320px;border-radius:14px;overflow:hidden;background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.4);box-shadow:0 20px 60px rgba(0,0,0,0.15);">
-                                    <div style="background:rgba(107,98,90,0.9);padding:12px 18px;">
-                                        <span style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;color:#fff;letter-spacing:1px;text-transform:uppercase;">
-                                            <?= htmlspecialchars($programa['nombre']) ?>
-                                        </span>
-                                    </div>
+                                <div class="prog-dropdown" style="display:none;position:absolute;top:100%;left:0;z-index:9999;width:100%;border-radius:14px;overflow:hidden;background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.4);box-shadow:0 20px 60px rgba(0,0,0,0.15);">
                                     <?php foreach ($programa['secciones'] as $seccion): ?>
                                     <a href="programas/seccion?slug=<?= urlencode($seccion['slug']) ?>"
                                        style="display:block;padding:11px 18px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:rgb(107,98,90);text-decoration:none;border-bottom:1px solid rgba(0,0,0,0.06);transition:background 0.2s;"
