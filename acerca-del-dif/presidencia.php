@@ -49,6 +49,9 @@ if ($presidente) {
     if (!empty($presidente['descripcion'])) {
         $descripcion = $presidente['descripcion'];
     }
+    if (!empty($presidente['url_facebook'])) {
+        $url_facebook = $presidente['url_facebook'];
+    }
 }
 
 require_once __DIR__ . '/../includes/header.php';
