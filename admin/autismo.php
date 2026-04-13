@@ -250,7 +250,8 @@ function aut_img_card(string $campo, string $label, string $default, ?array $con
 <script>
     tinymce.init({
         selector: '.tinymce-editor',
-        plugins: 'lists link image table code fullscreen preview wordcount charmap hr pagebreak emoticons align',
+        license_key: 'gpl',
+            plugins: 'lists link image table code fullscreen preview wordcount charmap hr pagebreak emoticons align',
         toolbar1: 'undo redo | cut copy paste | selectall | searchreplace | fullscreen preview',
         toolbar2: 'fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor | removeformat',
         toolbar3: 'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | blockquote hr',

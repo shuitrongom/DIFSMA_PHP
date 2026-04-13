@@ -250,6 +250,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
     <script>
         tinymce.init({
             selector: '#descripcion',
+            license_key: 'gpl',
             plugins: 'lists link image table code fullscreen preview wordcount charmap hr pagebreak emoticons align',
             toolbar1: 'undo redo | cut copy paste | selectall | searchreplace | fullscreen preview',
             toolbar2: 'fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor | removeformat',
