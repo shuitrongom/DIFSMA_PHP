@@ -27,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $apellidos   = trim($_POST['apellidos'] ?? '');
     $cargo       = trim($_POST['cargo'] ?? '');
     $descripcion = $_POST['descripcion'] ?? '';
+    $url_facebook = trim($_POST['url_facebook'] ?? '');
 
     if (empty($nombre) || empty($apellidos) || empty($cargo)) {
         $_SESSION['flash_message'] = 'El nombre, apellidos y cargo son obligatorios.';
@@ -245,7 +246,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../lib/tinymce/tinymce.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
     <script src="../js/upload-progress.js?v=13"></script>
     <script>
         tinymce.init({
