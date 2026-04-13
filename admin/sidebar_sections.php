@@ -74,6 +74,13 @@ $sidebar_groups = [
             ['title' => 'Reportes', 'file' => 'reportes_historial', 'icon' => 'bi-file-earmark-bar-graph'],
         ],
     ],
+    [
+        'group' => 'Documentación',
+        'icon'  => 'bi-book',
+        'items' => [
+            ['title' => 'Documentación',  'file' => 'documentacion',  'icon' => 'bi-book'],
+        ],
+    ],
 ];
 
 // Determinar archivo actual para marcar como activo

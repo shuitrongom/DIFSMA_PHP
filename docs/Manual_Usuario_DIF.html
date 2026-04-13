@@ -1,0 +1,2545 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual de Usuario — Sistema CMS DIF San Mateo Atenco</title>
+<link rel="icon" href="img/favicon-32x32.png" sizes="32x32">
+<style>
+  /* ── Reset y base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    color: #2d2d2d;
+    background: #fff;
+  }
+
+  /* ── Colores institucionales ── */
+  :root {
+    --rojo: #C8102C;
+    --rojo-oscuro: #a00d23;
+    --gris: #6B625A;
+    --gris-claro: #f5f4f3;
+    --gris-borde: #ddd;
+    --blanco: #ffffff;
+    --texto: #2d2d2d;
+    --texto-suave: #555;
+  }
+
+  /* ── Portada ── */
+  .portada {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, var(--rojo) 100%);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 40px;
+    page-break-after: always;
+  }
+  .portada .logo-placeholder {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    border: 3px solid rgba(255,255,255,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 30px;
+    padding: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  .portada h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .portada h2 {
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .portada .subtitulo {
+    font-size: 1rem;
+    color: #fff;
+    margin-bottom: 40px;
+  }
+  .portada .meta {
+    margin-top: 50px;
+    font-size: 0.85rem;
+    color: #fff;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding-top: 20px;
+    width: 100%;
+    max-width: 500px;
+  }
+  .portada .meta p { color: #fff !important; }
+  .portada .version-badge {
+    display: inline-block;
+    background: var(--rojo);
+    color: #fff;
+    padding: 6px 20px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+
+  /* ── Layout principal ── */
+  .contenido {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 40px 80px;
+  }
+
+  /* ── Tabla de contenidos ── */
+  .toc {
+    background: var(--gris-claro);
+    border-left: 5px solid var(--rojo);
+    border-radius: 0 8px 8px 0;
+    padding: 30px 35px;
+    margin-bottom: 50px;
+    page-break-after: always;
+  }
+  .toc h2 {
+    font-size: 1.4rem;
+    color: var(--rojo);
+    margin-bottom: 20px;
+    font-weight: 700;
+    border-bottom: 2px solid var(--rojo);
+    padding-bottom: 10px;
+  }
+  .toc ol {
+    padding-left: 20px;
+  }
+  .toc > ol > li {
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .toc > ol > li > ol {
+    margin-top: 4px;
+    padding-left: 18px;
+  }
+  .toc > ol > li > ol > li {
+    font-weight: 400;
+    font-size: 0.88rem;
+    margin-bottom: 2px;
+  }
+  .toc a {
+    color: var(--gris);
+    text-decoration: none;
+  }
+  .toc a:hover { color: var(--rojo); text-decoration: underline; }
+
+  /* ── Secciones ── */
+  .seccion {
+    margin-bottom: 60px;
+    page-break-inside: avoid;
+  }
+  .seccion-break {
+    page-break-before: always;
+  }
+
+  /* ── Encabezados ── */
+  h1.titulo-seccion {
+    font-size: 1.9rem;
+    font-weight: 800;
+    color: var(--rojo);
+    border-bottom: 3px solid var(--rojo);
+    padding-bottom: 12px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  h1.titulo-seccion .num {
+    background: var(--rojo);
+    color: #fff;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  h2.titulo-subseccion {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--gris);
+    margin: 30px 0 14px;
+    padding-left: 14px;
+    border-left: 4px solid var(--rojo);
+  }
+  h3.titulo-sub2 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--texto);
+    margin: 22px 0 10px;
+  }
+
+  /* ── Párrafos ── */
+  p { margin-bottom: 14px; color: var(--texto-suave); }
+  p strong { color: var(--texto); }
+
+  /* ── Listas ── */
+  ol.pasos, ul.lista {
+    padding-left: 22px;
+    margin-bottom: 16px;
+  }
+  ol.pasos li, ul.lista li {
+    margin-bottom: 8px;
+    color: var(--texto-suave);
+    line-height: 1.7;
+  }
+  ol.pasos li strong, ul.lista li strong { color: var(--texto); }
+
+  /* ── Placeholder de captura ── */
+  .captura {
+    border: 2px dashed #ccc;
+    background: #f9f9f9;
+    padding: 40px 20px;
+    text-align: center;
+    color: #999;
+    margin: 20px 0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-style: italic;
+  }
+  .captura .icono { font-size: 2rem; display: block; margin-bottom: 8px; }
+  .captura img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 6px;
+  }
+
+  /* ── Notas y alertas ── */
+  .nota {
+    background: #fff8e1;
+    border-left: 4px solid #f59e0b;
+    padding: 14px 18px;
+    border-radius: 0 6px 6px 0;
+    margin: 16px 0;
+    font-size: 0.9rem;
+    color: #78350f;
+  }
+  .nota strong { color: #92400e; }
+  .alerta {
+    background: #fef2f2;
+    border-left: 4px solid var(--rojo);
+    padding: 14px 18px;
+    border-radius: 0 6px 6px 0;
+    margin: 16px 0;
+    font-size: 0.9rem;
+    color: #7f1d1d;
+  }
+  .alerta strong { color: #991b1b; }
+  .info {
+    background: #eff6ff;
+    border-left: 4px solid #3b82f6;
+    padding: 14px 18px;
+    border-radius: 0 6px 6px 0;
+    margin: 16px 0;
+    font-size: 0.9rem;
+    color: #1e3a5f;
+  }
+  .exito {
+    background: #f0fdf4;
+    border-left: 4px solid #22c55e;
+    padding: 14px 18px;
+    border-radius: 0 6px 6px 0;
+    margin: 16px 0;
+    font-size: 0.9rem;
+    color: #14532d;
+  }
+
+  /* ── Tabla ── */
+  table.tabla-manual {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.9rem;
+  }
+  table.tabla-manual th {
+    background: var(--rojo);
+    color: #fff;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+  }
+  table.tabla-manual td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--gris-borde);
+    color: var(--texto-suave);
+    vertical-align: top;
+  }
+  table.tabla-manual tr:nth-child(even) td { background: var(--gris-claro); }
+
+  /* ── Código / ruta ── */
+  code {
+    background: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--rojo-oscuro);
+  }
+
+  /* ── Separador ── */
+  hr.separador {
+    border: none;
+    border-top: 2px solid var(--gris-borde);
+    margin: 40px 0;
+  }
+
+  /* ── Glosario ── */
+  .glosario-item {
+    margin-bottom: 18px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--gris-borde);
+  }
+  .glosario-item dt {
+    font-weight: 700;
+    color: var(--rojo);
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+  .glosario-item dd {
+    color: var(--texto-suave);
+    margin-left: 0;
+    font-size: 0.92rem;
+  }
+
+  /* ── Pie de página ── */
+  .pie-pagina {
+    background: var(--gris-claro);
+    border-top: 3px solid var(--rojo);
+    padding: 30px 40px;
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--gris);
+    margin-top: 60px;
+  }
+
+  /* ── Impresión ── */
+  @media print {
+    body { font-size: 12pt; }
+    .portada { min-height: auto; padding: 40px; }
+    .toc { page-break-after: always; }
+    .seccion-break { page-break-before: always; }
+    .captura { border: 1px dashed #aaa; padding: 20px; }
+    a { color: inherit; text-decoration: none; }
+    h1.titulo-seccion { page-break-after: avoid; }
+    h2.titulo-subseccion { page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PORTADA
+═══════════════════════════════════════════════════════════════ -->
+<div class="portada">
+  <div class="logo-placeholder">
+    <img src="img/logo_DIF.png" alt="Logo DIF San Mateo Atenco" style="width:100%;height:100%;object-fit:contain;border-radius:50%;">
+  </div>
+  <div class="version-badge">Versión 1.0 — 2025</div>
+  <h1>Manual de Usuario</h1>
+  <h2>Sistema de Gestión de Contenido (CMS)</h2>
+  <p class="subtitulo">Sistema Municipal DIF San Mateo Atenco<br>Panel de Administración Web</p>
+  <div class="meta">
+    <p>Documento de uso interno — Confidencial</p>
+    <p>Elaborado para el personal administrativo autorizado del DIF San Mateo Atenco</p>
+    <p>Estado de México, México</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     TABLA DE CONTENIDOS
+═══════════════════════════════════════════════════════════════ -->
+<div class="contenido">
+<div class="toc" id="toc">
+  <h2>Tabla de Contenidos</h2>
+  <ol>
+    <li><a href="#sec1">Introducción</a>
+      <ol>
+        <li><a href="#sec1-1">Propósito del sistema</a></li>
+        <li><a href="#sec1-2">Alcance</a></li>
+        <li><a href="#sec1-3">Audiencia objetivo</a></li>
+        <li><a href="#sec1-4">Convenciones del documento</a></li>
+      </ol>
+    </li>
+    <li><a href="#sec2">Acceso al Sistema</a>
+      <ol>
+        <li><a href="#sec2-1">URL de acceso al panel administrativo</a></li>
+        <li><a href="#sec2-2">Pantalla de inicio de sesión</a></li>
+        <li><a href="#sec2-3">Credenciales y seguridad</a></li>
+        <li><a href="#sec2-4">Cierre de sesión</a></li>
+        <li><a href="#sec2-5">Auto-logout por inactividad</a></li>
+      </ol>
+    </li>
+    <li><a href="#sec3">Panel de Administración — Navegación</a>
+      <ol>
+        <li><a href="#sec3-1">Descripción del menú lateral (sidebar)</a></li>
+        <li><a href="#sec3-2">Grupos del menú</a></li>
+        <li><a href="#sec3-3">Barra superior de navegación</a></li>
+      </ol>
+    </li>
+    <li><a href="#sec4">Módulo: Slider Principal</a></li>
+    <li><a href="#sec5">Módulo: Slider DIF Comunica</a></li>
+    <li><a href="#sec6">Módulo: Programas</a></li>
+    <li><a href="#sec7">Módulo: Trámites y Servicios</a></li>
+    <li><a href="#sec8">Módulo: Unidad de Autismo</a></li>
+    <li><a href="#sec9">Módulo: Noticias</a></li>
+    <li><a href="#sec10">Módulo: Galería</a></li>
+    <li><a href="#sec11">Módulo: Voluntariado</a></li>
+    <li><a href="#sec12">Módulo: Transparencia</a></li>
+    <li><a href="#sec13">Módulo: Acerca del DIF</a></li>
+    <li><a href="#sec14">Módulo: Footer</a></li>
+    <li><a href="#sec15">Módulo: Usuarios</a></li>
+    <li><a href="#sec16">Módulo: Reportes e Historial</a></li>
+    <li><a href="#sec17">Editor de Texto TinyMCE</a></li>
+    <li><a href="#sec18">Seguridad y Buenas Prácticas</a></li>
+    <li><a href="#sec19">Solución de Problemas Comunes</a></li>
+    <li><a href="#sec20">Glosario de Términos</a></li>
+    <li><a href="#sec21">Módulo: Documentación</a></li>
+  </ol>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 1 — INTRODUCCIÓN
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec1">
+  <h1 class="titulo-seccion"><span class="num">1</span> Introducción</h1>
+
+  <h2 class="titulo-subseccion" id="sec1-1">1.1 Propósito del Sistema</h2>
+  <p>El <strong>Sistema de Gestión de Contenido (CMS) del DIF San Mateo Atenco</strong> es una plataforma web desarrollada a medida para que el personal administrativo autorizado pueda gestionar, actualizar y publicar el contenido del sitio web institucional del Sistema Municipal DIF San Mateo Atenco, Estado de México, sin necesidad de conocimientos técnicos en programación.</p>
+  <p>El sistema permite administrar de manera centralizada todos los elementos del sitio público: imágenes del carrusel principal, programas sociales, trámites y servicios, noticias, galería fotográfica, información de transparencia, datos institucionales y mucho más. Cada cambio realizado en el panel de administración se refleja de forma inmediata en el sitio web visible para la ciudadanía.</p>
+  <p>El CMS fue diseñado con los siguientes objetivos principales:</p>
+  <ul class="lista">
+    <li><strong>Facilidad de uso:</strong> Interfaz intuitiva que no requiere conocimientos técnicos avanzados.</li>
+    <li><strong>Seguridad:</strong> Acceso restringido mediante autenticación, protección CSRF, y registro de actividad.</li>
+    <li><strong>Flexibilidad:</strong> Permite gestionar múltiples módulos de contenido de forma independiente.</li>
+    <li><strong>Transparencia:</strong> Módulo dedicado al cumplimiento de obligaciones de transparencia gubernamental.</li>
+    <li><strong>Control de acceso:</strong> Sistema de permisos por sección para usuarios con roles diferenciados.</li>
+  </ul>
+
+  <h2 class="titulo-subseccion" id="sec1-2">1.2 Alcance</h2>
+  <p>Este manual cubre la totalidad de las funcionalidades disponibles en el panel de administración del CMS. Está organizado por módulos funcionales y proporciona instrucciones paso a paso para cada operación disponible.</p>
+  <p>El presente documento <strong>no cubre</strong> aspectos técnicos de instalación, configuración del servidor, administración de la base de datos MySQL, ni modificaciones al código fuente PHP. Para esos temas, consulte al equipo técnico responsable del sistema.</p>
+  <p>El alcance funcional del sistema incluye:</p>
+  <ul class="lista">
+    <li>Gestión del contenido visual del sitio (sliders, imágenes, galerías).</li>
+    <li>Administración de programas sociales y sus secciones de contenido.</li>
+    <li>Gestión de trámites y servicios con galería fotográfica.</li>
+    <li>Publicación y edición de noticias institucionales.</li>
+    <li>Administración de información de transparencia (SEAC, Cuenta Pública, PAE, CONAC, etc.).</li>
+    <li>Gestión de información institucional (Presidencia, Direcciones, Organigrama).</li>
+    <li>Administración de usuarios y permisos de acceso.</li>
+    <li>Consulta de historial de actividad del sistema.</li>
+  </ul>
+
+  <h2 class="titulo-subseccion" id="sec1-3">1.3 Audiencia Objetivo</h2>
+  <p>Este manual está dirigido al personal administrativo del DIF San Mateo Atenco que tenga acceso autorizado al panel de administración del CMS. Se contemplan dos tipos de usuarios:</p>
+  <table class="tabla-manual">
+    <thead>
+      <tr>
+        <th>Tipo de Usuario</th>
+        <th>Descripción</th>
+        <th>Nivel de Acceso</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Administrador</strong></td>
+        <td>Usuario con acceso completo a todos los módulos del sistema, incluyendo la gestión de otros usuarios.</td>
+        <td>Total — todas las secciones</td>
+      </tr>
+      <tr>
+        <td><strong>Usuario Operativo</strong></td>
+        <td>Personal con acceso restringido a secciones específicas asignadas por el administrador.</td>
+        <td>Parcial — secciones asignadas</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>Se asume que el lector tiene conocimientos básicos de uso de computadora, navegador web e internet. No se requieren conocimientos de programación ni diseño web.</p>
+
+  <h2 class="titulo-subseccion" id="sec1-4">1.4 Convenciones del Documento</h2>
+  <p>A lo largo de este manual se utilizan las siguientes convenciones para facilitar la lectura:</p>
+  <table class="tabla-manual">
+    <thead>
+      <tr><th>Convención</th><th>Significado</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Texto en negrita</strong></td><td>Nombre de botones, campos de formulario, opciones de menú o términos importantes.</td></tr>
+      <tr><td><code>Texto en código</code></td><td>Rutas de URL, nombres de archivos o valores técnicos específicos.</td></tr>
+      <tr><td>1. Paso numerado</td><td>Instrucciones que deben seguirse en el orden indicado.</td></tr>
+      <tr><td>Nota ⚠️</td><td>Información importante que debe tenerse en cuenta antes de realizar una acción.</td></tr>
+      <tr><td>Alerta 🔴</td><td>Advertencia sobre acciones irreversibles o que pueden causar pérdida de datos.</td></tr>
+      <tr><td>[INSERTAR CAPTURA DE PANTALLA]</td><td>Espacio reservado para agregar una captura de pantalla ilustrativa.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 2 — ACCESO AL SISTEMA
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec2">
+  <h1 class="titulo-seccion"><span class="num">2</span> Acceso al Sistema</h1>
+
+  <h2 class="titulo-subseccion" id="sec2-1">2.1 URL de Acceso al Panel Administrativo</h2>
+  <p>El panel de administración del CMS se accede a través de un navegador web moderno (Google Chrome, Mozilla Firefox, Microsoft Edge o Safari). La dirección de acceso es:</p>
+  <div class="info">
+    <strong>Dirección del panel de administración:</strong><br>
+    <code>https://[dominio-del-sitio]/admin/login</code><br><br>
+    Sustituya <code>[dominio-del-sitio]</code> por el dominio real del sitio web institucional del DIF San Mateo Atenco. Consulte con el administrador del sistema si desconoce la dirección exacta.
+  </div>
+  <p>Se recomienda guardar esta dirección en los marcadores (favoritos) del navegador para acceder rápidamente. No comparta esta URL con personas no autorizadas.</p>
+
+  <h2 class="titulo-subseccion" id="sec2-2">2.2 Pantalla de Inicio de Sesión</h2>
+  <p>Al acceder a la URL del panel, se mostrará la pantalla de inicio de sesión. Esta pantalla presenta un formulario con fondo oscuro y un recuadro blanco central con el escudo institucional del DIF.</p>
+
+  <div class="captura" style="padding:0;border:1px solid #ddd;background:#fff;">
+    <img src="capturas_pantalla/Pantalla de inicio de sesión del panel de administración DIF.png" alt="Pantalla de inicio de sesión del panel de administración DIF" style="">
+  </div>
+
+  <p>La pantalla de inicio de sesión contiene los siguientes elementos:</p>
+  <ul class="lista">
+    <li><strong>Escudo institucional:</strong> Logo del DIF San Mateo Atenco en la parte superior del formulario.</li>
+    <li><strong>Campo "Usuario":</strong> Ingrese su nombre de usuario asignado.</li>
+    <li><strong>Campo "Contraseña":</strong> Ingrese su contraseña. Los caracteres se ocultan por seguridad.</li>
+    <li><strong>Botón "Iniciar sesión":</strong> Envía el formulario para autenticar al usuario.</li>
+    <li><strong>Mensaje de error:</strong> Si las credenciales son incorrectas, aparece un aviso en rojo indicando el problema.</li>
+    <li><strong>Mensaje de sesión expirada:</strong> Si fue redirigido por inactividad, aparece un aviso en amarillo.</li>
+  </ul>
+
+  <h2 class="titulo-subseccion" id="sec2-3">2.3 Credenciales y Seguridad</h2>
+  <p>Para acceder al sistema necesita un nombre de usuario y una contraseña que deben ser proporcionados por el administrador del sistema. Las credenciales son personales e intransferibles.</p>
+
+  <h3 class="titulo-sub2">Requisitos de contraseña</h3>
+  <p>El sistema exige que las contraseñas cumplan los siguientes requisitos mínimos de seguridad:</p>
+  <ul class="lista">
+    <li>Mínimo <strong>8 caracteres</strong> de longitud.</li>
+    <li>Al menos <strong>1 letra mayúscula</strong> (A–Z).</li>
+    <li>Al menos <strong>1 letra minúscula</strong> (a–z).</li>
+    <li>Al menos <strong>1 número</strong> (0–9).</li>
+    <li>Al menos <strong>1 símbolo especial</strong> (por ejemplo: <code>! @ # $ % ^ &amp; *</code>).</li>
+  </ul>
+
+  <h3 class="titulo-sub2">Bloqueo por intentos fallidos</h3>
+  <p>El sistema registra los intentos de inicio de sesión fallidos. Si se realizan <strong>5 o más intentos fallidos</strong> desde la misma dirección IP en un período de 15 minutos, el acceso queda bloqueado temporalmente durante ese período. Esto protege el sistema contra ataques de fuerza bruta.</p>
+  <div class="alerta">
+    <strong>⚠️ Importante:</strong> Si olvida su contraseña o su cuenta queda bloqueada, contacte al administrador del sistema para que restablezca sus credenciales. No intente adivinar la contraseña repetidamente, ya que esto activará el bloqueo temporal.
+  </div>
+
+  <h2 class="titulo-subseccion" id="sec2-4">2.4 Cierre de Sesión</h2>
+  <p>Es fundamental cerrar la sesión correctamente al terminar de trabajar en el panel de administración, especialmente si utiliza una computadora compartida o de acceso público.</p>
+  <p>Existen dos formas de cerrar sesión:</p>
+  <ol class="pasos">
+    <li><strong>Botón "Salir" en la barra superior:</strong> En la esquina superior derecha de cualquier página del panel, haga clic en el botón rojo <strong>"Salir"</strong> (con ícono de flecha de salida).</li>
+    <li><strong>Botón "Cerrar sesión" en el menú lateral:</strong> En la parte inferior del menú lateral izquierdo, haga clic en el botón <strong>"Cerrar sesión"</strong>.</li>
+  </ol>
+  <p>Al cerrar sesión, el sistema lo redirigirá automáticamente a la pantalla de inicio de sesión y su sesión quedará invalidada de forma segura.</p>
+
+  <h2 class="titulo-subseccion" id="sec2-5">2.5 Auto-logout por Inactividad</h2>
+  <p>Por razones de seguridad, el sistema cierra automáticamente la sesión del usuario después de <strong>5 minutos de inactividad</strong>. La inactividad se detecta cuando no hay movimiento del ratón, pulsaciones de teclado, clics, desplazamiento de página ni interacción táctil.</p>
+  <p>Cuando la sesión expira por inactividad, el sistema redirige automáticamente a la pantalla de inicio de sesión y muestra el siguiente mensaje:</p>
+  <div class="info">
+    <em>"Sesión expirada por inactividad."</em>
+  </div>
+  <div class="nota">
+    <strong>💡 Consejo:</strong> Si necesita ausentarse de su computadora durante más de 5 minutos mientras trabaja en el panel, guarde los cambios pendientes antes de alejarse. Al regresar, deberá iniciar sesión nuevamente.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 3 — NAVEGACIÓN
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec3">
+  <h1 class="titulo-seccion"><span class="num">3</span> Panel de Administración — Navegación</h1>
+
+  <p>Una vez que inicia sesión correctamente, el sistema lo lleva al <strong>Dashboard</strong> (tablero principal), que muestra un resumen de todas las secciones disponibles en forma de tarjetas. Desde aquí puede acceder a cualquier módulo del sistema.</p>
+
+  <div class="captura" style="padding:0;border:1px solid #ddd;background:#fff;">
+    <img src="capturas_pantalla/Dashboard principal con tarjetas de módulos.png" alt="Dashboard principal con tarjetas de módulos" style="">
+  </div>
+
+  <h2 class="titulo-subseccion" id="sec3-1">3.1 Descripción del Menú Lateral (Sidebar)</h2>
+  <p>El menú lateral se encuentra en el lado izquierdo de la pantalla y es el principal medio de navegación entre los módulos del sistema. Está siempre visible en pantallas de escritorio y puede ocultarse o mostrarse en dispositivos móviles.</p>
+
+  <div class="captura" style="padding:0;border:1px solid #ddd;background:#fff;">
+    <img src="capturas_pantalla/Menú lateral (sidebar) con grupos expandidos.png" alt="Menú lateral (sidebar) con grupos expandidos" style="">
+  </div>
+
+  <p>El menú lateral contiene los siguientes elementos:</p>
+  <ul class="lista">
+    <li><strong>Encabezado del sidebar:</strong> Muestra el escudo del DIF y el texto "Admin DIF". Al hacer clic en él, regresa al Dashboard.</li>
+    <li><strong>Grupos de menú:</strong> Las secciones están organizadas en grupos temáticos que se pueden expandir o contraer haciendo clic en el título del grupo.</li>
+    <li><strong>Ítem activo:</strong> La sección que está visualizando actualmente aparece resaltada con un fondo de color rojo.</li>
+    <li><strong>Botón "Cerrar sesión":</strong> En la parte inferior del sidebar, permite cerrar la sesión de forma segura.</li>
+    <li><strong>Botón de colapso (móvil):</strong> En dispositivos móviles, aparece un botón "X" para cerrar el menú lateral.</li>
+  </ul>
+
+  <p>Para expandir o contraer un grupo del menú, haga clic sobre el título del grupo. El grupo activo (que contiene la sección que está visitando) se expande automáticamente al cargar la página.</p>
+
+  <h2 class="titulo-subseccion" id="sec3-2">3.2 Grupos del Menú</h2>
+  <p>El menú lateral está organizado en los siguientes grupos temáticos:</p>
+
+  <table class="tabla-manual">
+    <thead>
+      <tr>
+        <th>Grupo</th>
+        <th>Secciones incluidas</th>
+        <th>Descripción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Inicio</strong></td>
+        <td>Slider Principal, Slider DIF Comunica, Programas, Imagen Institucional, Transparencia Index, Footer</td>
+        <td>Elementos de la página de inicio del sitio público.</td>
+      </tr>
+      <tr>
+        <td><strong>Acerca del DIF</strong></td>
+        <td>Presidencia, Direcciones, Organigrama</td>
+        <td>Información institucional del DIF.</td>
+      </tr>
+      <tr>
+        <td><strong>Servicios</strong></td>
+        <td>Trámites, Unidad de Autismo</td>
+        <td>Servicios y trámites que ofrece el DIF a la ciudadanía.</td>
+      </tr>
+      <tr>
+        <td><strong>Comunicación Social</strong></td>
+        <td>Noticias, Galería</td>
+        <td>Contenido informativo y multimedia.</td>
+      </tr>
+      <tr>
+        <td><strong>Voluntariado</strong></td>
+        <td>Voluntariado</td>
+        <td>Información y contenido del programa de voluntariado.</td>
+      </tr>
+      <tr>
+        <td><strong>Transparencia</strong></td>
+        <td>SEAC, Cuenta Pública, Presupuesto Anual, PAE, Matrices, CONAC, Financiero, Avisos de Privacidad, Secciones Dinámicas</td>
+        <td>Documentos y datos de transparencia gubernamental.</td>
+      </tr>
+      <tr>
+        <td><strong>Sistema</strong></td>
+        <td>Usuarios, Reportes</td>
+        <td>Administración del sistema y auditoría. Solo visible para el administrador.</td>
+      </tr>
+      <tr>
+        <td><strong>Documentación</strong></td>
+        <td>Documentación</td>
+        <td>Acceso al Manual de Usuario y al Documento Técnico del sistema.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="nota">
+    <strong>💡 Nota:</strong> Los usuarios con rol "operativo" solo verán en el menú las secciones que el administrador les haya asignado. Si no puede ver alguna sección, contacte al administrador para que le otorgue los permisos necesarios.
+  </div>
+
+  <h2 class="titulo-subseccion" id="sec3-3">3.3 Barra Superior de Navegación</h2>
+  <p>En la parte superior de cada página del panel existe una barra de navegación que contiene:</p>
+  <ul class="lista">
+    <li><strong>Botón de menú (☰):</strong> Permite mostrar u ocultar el menú lateral. Útil en pantallas pequeñas.</li>
+    <li><strong>Título de la sección:</strong> Muestra el nombre de la sección que está visualizando actualmente.</li>
+    <li><strong>Botón "Salir":</strong> Botón rojo en la esquina derecha para cerrar sesión de forma inmediata.</li>
+  </ul>
+
+  <div class="captura" style="padding:0;border:1px solid #ddd;background:#fff;">
+    <img src="capturas_pantalla/Barra superior de navegación del panel.png" alt="Barra superior de navegación del panel" style="">
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 4 — SLIDER PRINCIPAL
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec4">
+  <h1 class="titulo-seccion"><span class="num">4</span> Módulo: Slider Principal</h1>
+
+  <p>El <strong>Slider Principal</strong> es el carrusel de imágenes que aparece en la parte superior de la página de inicio del sitio web público. Es el primer elemento visual que ven los visitantes al ingresar al sitio. Puede contener múltiples imágenes que se muestran en rotación automática.</p>
+  <p>Para acceder a este módulo, en el menú lateral haga clic en el grupo <strong>"Inicio"</strong> y luego seleccione <strong>"Slider Principal"</strong>.</p>
+
+  <div class="captura" style="padding:0;border:1px solid #ddd;background:#fff;">
+    <img src="capturas_pantalla/Módulo Slider Principal con formulario de alta y listado de imágenes.png" alt="Módulo Slider Principal con formulario de alta y listado de imágenes" style="">
+  </div>
+
+  <h2 class="titulo-subseccion">4.1 Agregar Nueva Imagen al Slider</h2>
+  <p>Para agregar una nueva imagen al carrusel principal, siga estos pasos:</p>
+  <ol class="pasos">
+    <li>En la página del Slider Principal, localice el panel izquierdo titulado <strong>"Agregar imagen"</strong>.</li>
+    <li>Haga clic en el campo <strong>"Imagen"</strong> y seleccione el archivo de imagen desde su computadora. Se aceptan los formatos <strong>JPG, PNG y WEBP</strong> con un tamaño máximo de <strong>20 MB</strong>.</li>
+    <li>En el campo <strong>"Redirección al hacer clic"</strong>, seleccione del menú desplegable la página del sitio a la que se redirigirá al visitante cuando haga clic sobre esa imagen del slider. Si no desea que la imagen tenga redirección, seleccione <strong>"— Sin redirección —"</strong>.</li>
+    <li>Haga clic en el botón azul <strong>"Subir imagen"</strong>.</li>
+    <li>El sistema procesará la imagen y mostrará un mensaje de confirmación en verde: <em>"Imagen agregada correctamente."</em></li>
+    <li>La nueva imagen aparecerá en el panel derecho con el número de orden asignado automáticamente.</li>
+  </ol>
+
+  <div class="nota">
+    <strong>💡 Tamaños recomendados:</strong> Para que las imágenes del slider se vean correctamente en todos los dispositivos, se recomienda utilizar imágenes con una resolución de <strong>1920 × 600 píxeles</strong> (formato panorámico) y un peso inferior a 500 KB para garantizar una carga rápida.
+  </div>
+
+  <h2 class="titulo-subseccion">4.2 Configurar Redirección al Hacer Clic</h2>
+  <p>Cada imagen del slider puede tener configurada una página de destino a la que se redirigirá al visitante cuando haga clic sobre ella. Las opciones disponibles incluyen todas las páginas del sitio web:</p>
+  <ul class="lista">
+    <li>Inicio</li>
+    <li>Acerca del DIF (Presidencia, Direcciones, Organigrama)</li>
+    <li>Comunicación Social (Noticias, Galerías)</li>
+    <li>Transparencia (todas las subsecciones)</li>
+    <li>Voluntariado</li>
+    <li>Servicios — Unidad Municipal de Autismo</li>
+    <li>Todos los trámites y servicios registrados en el sistema</li>
+  </ul>
+  <p>Para modificar la redirección de una imagen existente, utilice la opción <strong>"Editar"</strong> descrita en la sección 4.4.</p>
+
+  <h2 class="titulo-subseccion">4.3 Reordenar Imágenes (Drag &amp; Drop)</h2>
+  <p>El orden en que aparecen las imágenes en el slider puede modificarse fácilmente mediante arrastrar y soltar (drag &amp; drop):</p>
+  <ol class="pasos">
+    <li>En el panel derecho <strong>"Imágenes del Slider Principal"</strong>, verá todas las imágenes actuales en una cuadrícula.</li>
+    <li>Coloque el cursor del ratón sobre la imagen que desea mover. El cursor cambiará a una mano de arrastre.</li>
+    <li>Mantenga presionado el botón izquierdo del ratón y arrastre la imagen a la posición deseada.</li>
+    <li>Suelte el botón del ratón. El sistema guardará automáticamente el nuevo orden mediante una petición en segundo plano.</li>
+    <li>Los números de orden (mostrados en la esquina superior izquierda de cada imagen) se actualizarán automáticamente.</li>
+  </ol>
+
+  <div class="captura" style="padding:0;border:1px solid #ddd;background:#fff;">
+    <img src="capturas_pantalla/Cuadrícula de imágenes del slider con indicador de arrastre.png" alt="Cuadrícula de imágenes del slider con indicador de arrastre" style="">
+  </div>
+
+  <h2 class="titulo-subseccion">4.4 Editar Imagen Existente</h2>
+  <p>Para editar una imagen ya existente en el slider:</p>
+  <ol class="pasos">
+    <li>En la cuadrícula de imágenes, localice la imagen que desea editar.</li>
+    <li>Haga clic en el botón de edición (ícono de lápiz ✏️) en la parte inferior de la tarjeta de imagen.</li>
+    <li>Se abrirá una ventana modal con las opciones de edición.</li>
+    <li>Para <strong>reemplazar la imagen</strong>: haga clic en el campo de archivo y seleccione la nueva imagen. Si deja este campo vacío, se conservará la imagen actual.</li>
+    <li>Para <strong>cambiar la redirección</strong>: seleccione la nueva página de destino en el menú desplegable.</li>
+    <li>Haga clic en el botón amarillo <strong>"Guardar"</strong>.</li>
+    <li>El sistema confirmará los cambios con un mensaje en verde.</li>
+  </ol>
+
+  <div class="captura" style="padding:0;border:1px solid #ddd;background:#fff;">
+    <img src="capturas_pantalla/Modal de edición de imagen del slider.png" alt="Modal de edición de imagen del slider" style="">
+  </div>
+
+  <h2 class="titulo-subseccion">4.5 Eliminar Imagen</h2>
+  <p>Para eliminar una imagen del slider:</p>
+  <ol class="pasos">
+    <li>En la cuadrícula de imágenes, localice la imagen que desea eliminar.</li>
+    <li>Haga clic en el botón de eliminación (ícono de papelera 🗑️) en la parte inferior de la tarjeta.</li>
+    <li>Se abrirá una ventana de confirmación mostrando la imagen que será eliminada.</li>
+    <li>Lea el mensaje de advertencia: <em>"Esta acción no se puede deshacer."</em></li>
+    <li>Si está seguro, haga clic en el botón rojo <strong>"Eliminar"</strong>. Para cancelar, haga clic en <strong>"Cancelar"</strong>.</li>
+    <li>El sistema eliminará la imagen del servidor y de la base de datos, y mostrará un mensaje de confirmación.</li>
+  </ol>
+
+  <div class="alerta">
+    <strong>🔴 Advertencia:</strong> La eliminación de imágenes es permanente e irreversible. Una vez eliminada, la imagen no puede recuperarse. Asegúrese de tener una copia de respaldo si la necesita en el futuro.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 5 — SLIDER DIF COMUNICA
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec5">
+  <h1 class="titulo-seccion"><span class="num">5</span> Módulo: Slider DIF Comunica</h1>
+
+  <p>El <strong>Slider DIF Comunica</strong> es un segundo carrusel de imágenes que aparece en la sección "DIF Comunica" de la página de inicio. Está destinado a comunicados, campañas, eventos especiales y mensajes institucionales dirigidos a la comunidad.</p>
+  <p>Para acceder a este módulo, en el menú lateral haga clic en el grupo <strong>"Inicio"</strong> y luego seleccione <strong>"Slider DIF Comunica"</strong>.</p>
+
+  <div class="captura">
+    <span class="icono">📢</span>
+    [INSERTAR CAPTURA DE PANTALLA — Módulo Slider DIF Comunica]
+  </div>
+
+  <p>El funcionamiento de este módulo es <strong>idéntico al Slider Principal</strong> (Sección 4). Las operaciones disponibles son:</p>
+
+  <h2 class="titulo-subseccion">5.1 Agregar Nueva Imagen</h2>
+  <p>Siga el mismo procedimiento descrito en la <strong>Sección 4.1</strong>. Utilice el formulario "Agregar imagen" en el panel izquierdo, seleccione el archivo (JPG, PNG o WEBP, máx. 20 MB), configure la redirección opcional y haga clic en <strong>"Subir imagen"</strong>.</p>
+
+  <h2 class="titulo-subseccion">5.2 Configurar Redirección</h2>
+  <p>Igual que en el Slider Principal (Sección 4.2), cada imagen puede tener una página de destino configurada. Seleccione la página deseada del menú desplegable al agregar o editar la imagen.</p>
+
+  <h2 class="titulo-subseccion">5.3 Reordenar Imágenes</h2>
+  <p>Utilice la función de arrastrar y soltar descrita en la <strong>Sección 4.3</strong> para cambiar el orden de las imágenes en este slider.</p>
+
+  <h2 class="titulo-subseccion">5.4 Editar Imagen Existente</h2>
+  <p>Haga clic en el botón de edición (✏️) de la imagen deseada y siga el procedimiento de la <strong>Sección 4.4</strong>.</p>
+
+  <h2 class="titulo-subseccion">5.5 Eliminar Imagen</h2>
+  <p>Haga clic en el botón de eliminación (🗑️) y confirme la acción siguiendo el procedimiento de la <strong>Sección 4.5</strong>.</p>
+
+  <div class="nota">
+    <strong>💡 Diferencia con el Slider Principal:</strong> Aunque el funcionamiento es idéntico, el Slider DIF Comunica está pensado para contenido de comunicación social: campañas de salud, eventos comunitarios, convocatorias, etc. Se recomienda mantener imágenes actualizadas y relevantes en este espacio.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 6 — PROGRAMAS
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec6">
+  <h1 class="titulo-seccion"><span class="num">6</span> Módulo: Programas</h1>
+
+  <p>El módulo de <strong>Programas</strong> permite gestionar los programas sociales que ofrece el DIF San Mateo Atenco. Cada programa tiene un nombre, una imagen representativa y puede contener múltiples secciones con contenido detallado (textos, imágenes, información de contacto).</p>
+  <p>Para acceder, en el menú lateral haga clic en <strong>"Inicio"</strong> → <strong>"Programas"</strong>.</p>
+
+  <div class="captura">
+    <span class="icono">📋</span>
+    [INSERTAR CAPTURA DE PANTALLA — Módulo Programas con formulario de creación y listado]
+  </div>
+
+  <h2 class="titulo-subseccion">6.1 Crear Nuevo Programa</h2>
+  <ol class="pasos">
+    <li>En la página de Programas, localice el panel izquierdo <strong>"Crear programa"</strong>.</li>
+    <li>En el campo <strong>"Nombre del programa"</strong>, escriba el nombre completo del programa (por ejemplo: "Programa de Atención a Adultos Mayores").</li>
+    <li>En el campo <strong>"Imagen"</strong>, haga clic y seleccione una imagen representativa del programa (JPG, PNG o WEBP, máx. 20 MB).</li>
+    <li>Haga clic en el botón azul <strong>"Crear programa"</strong>.</li>
+    <li>El sistema creará el programa y lo mostrará en la tabla de la derecha con un mensaje de confirmación en verde.</li>
+  </ol>
+
+  <div class="nota">
+    <strong>💡 Nota:</strong> Al crear un programa, este aparecerá en la sección "Nuestros Programas" de la página de inicio del sitio público. Para agregar contenido detallado al programa, utilice la función "Editar" descrita a continuación.
+  </div>
+
+  <h2 class="titulo-subseccion">6.2 Editar Programa Existente</h2>
+  <p>Para editar un programa, haga clic en el botón <strong>"Editar"</strong> (ícono de lápiz) en la fila del programa en la tabla. Esto lo llevará a la página de edición completa del programa, donde podrá:</p>
+  <ul class="lista">
+    <li>Cambiar el nombre del programa.</li>
+    <li>Reemplazar la imagen del programa.</li>
+    <li>Gestionar las secciones del programa.</li>
+    <li>Editar el contenido de cada sección.</li>
+    <li>Configurar el enlace de la imagen del programa.</li>
+  </ul>
+
+  <div class="captura">
+    <span class="icono">✏️</span>
+    [INSERTAR CAPTURA DE PANTALLA — Página de edición de programa con secciones]
+  </div>
+
+  <h2 class="titulo-subseccion">6.3 Gestionar Secciones de un Programa</h2>
+  <p>Cada programa puede tener múltiples secciones que representan diferentes aspectos o servicios del programa. Para gestionar las secciones:</p>
+
+  <h3 class="titulo-sub2">Agregar una nueva sección</h3>
+  <ol class="pasos">
+    <li>En la página de edición del programa, localice el área de secciones.</li>
+    <li>Haga clic en el botón <strong>"Agregar sección"</strong>.</li>
+    <li>Aparecerá un nuevo campo de texto. Escriba el título de la sección (por ejemplo: "Objetivos", "Beneficiarios", "Requisitos").</li>
+    <li>Puede agregar múltiples secciones repitiendo este proceso.</li>
+    <li>Haga clic en <strong>"Guardar"</strong> para confirmar los cambios.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Editar el título de una sección</h3>
+  <ol class="pasos">
+    <li>Localice la sección cuyo título desea modificar.</li>
+    <li>Haga clic directamente sobre el campo de texto del título.</li>
+    <li>Modifique el texto según sea necesario.</li>
+    <li>Guarde los cambios con el botón <strong>"Guardar"</strong>.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Eliminar una sección</h3>
+  <ol class="pasos">
+    <li>Localice la sección que desea eliminar.</li>
+    <li>Haga clic en el botón de eliminación (ícono de papelera 🗑️) junto al título de la sección.</li>
+    <li>Confirme la eliminación en el diálogo que aparece.</li>
+  </ol>
+
+  <div class="alerta">
+    <strong>🔴 Advertencia:</strong> Al eliminar una sección, también se elimina todo el contenido asociado a ella (textos, imágenes). Esta acción es irreversible.
+  </div>
+
+  <h2 class="titulo-subseccion">6.4 Editar Contenido de Cada Sección</h2>
+  <p>Para editar el contenido detallado de una sección específica del programa:</p>
+  <ol class="pasos">
+    <li>En la página de edición del programa, haga clic en el botón <strong>"Editar contenido"</strong> de la sección deseada.</li>
+    <li>Se abrirá el formulario de edición de contenido con los siguientes campos:</li>
+  </ol>
+  <ul class="lista">
+    <li><strong>Imagen 1:</strong> Imagen principal de la sección. Haga clic en el campo de archivo para seleccionar una imagen.</li>
+    <li><strong>Texto 1:</strong> Contenido principal de la sección. Utilice el editor TinyMCE para dar formato al texto (ver Sección 17).</li>
+    <li><strong>Imagen 2:</strong> Imagen secundaria opcional de la sección.</li>
+    <li><strong>Texto 2:</strong> Contenido secundario opcional con editor TinyMCE.</li>
+  </ul>
+  <ol class="pasos" start="3">
+    <li>Edite los campos necesarios.</li>
+    <li>Haga clic en <strong>"Guardar contenido"</strong> para confirmar los cambios.</li>
+  </ol>
+
+  <div class="captura">
+    <span class="icono">📝</span>
+    [INSERTAR CAPTURA DE PANTALLA — Formulario de edición de contenido de sección con editor TinyMCE]
+  </div>
+
+  <h2 class="titulo-subseccion">6.5 Configurar Información de Contacto por Sección</h2>
+  <p>Cada sección de un programa puede tener información de contacto específica que se mostrará al visitante. Para configurarla:</p>
+  <ol class="pasos">
+    <li>En la página de edición del programa, localice el panel de <strong>"Información de contacto"</strong>.</li>
+    <li>Complete los campos disponibles:
+      <ul class="lista">
+        <li><strong>Título 1 y Título 2:</strong> Encabezados de la información de contacto.</li>
+        <li><strong>Dirección:</strong> Dirección física del servicio.</li>
+        <li><strong>Teléfono:</strong> Número de contacto.</li>
+        <li><strong>Horario:</strong> Horario de atención.</li>
+        <li><strong>Correo electrónico:</strong> Dirección de correo de contacto.</li>
+      </ul>
+    </li>
+    <li>Haga clic en <strong>"Guardar información de contacto"</strong>.</li>
+  </ol>
+
+  <h2 class="titulo-subseccion">6.6 Eliminar Programa</h2>
+  <ol class="pasos">
+    <li>En la tabla de programas, localice el programa que desea eliminar.</li>
+    <li>Haga clic en el botón de eliminación (ícono de papelera 🗑️).</li>
+    <li>Se abrirá una ventana de confirmación mostrando el nombre del programa y advirtiendo que se eliminarán también todas sus secciones.</li>
+    <li>Si está seguro, haga clic en el botón rojo <strong>"Eliminar"</strong>.</li>
+  </ol>
+
+  <div class="alerta">
+    <strong>🔴 Advertencia:</strong> Eliminar un programa borra permanentemente el programa, todas sus secciones y todo el contenido asociado (textos e imágenes). Esta acción no puede deshacerse.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 7 — TRÁMITES Y SERVICIOS
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec7">
+  <h1 class="titulo-seccion"><span class="num">7</span> Módulo: Trámites y Servicios</h1>
+
+  <p>El módulo de <strong>Trámites y Servicios</strong> permite gestionar los trámites y servicios que el DIF San Mateo Atenco ofrece a la ciudadanía. Cada trámite tiene un título, un identificador único (slug), una imagen principal, contenido descriptivo y una galería fotográfica de hasta 5 imágenes.</p>
+  <p>Para acceder, en el menú lateral haga clic en <strong>"Servicios"</strong> → <strong>"Trámites"</strong>.</p>
+
+  <div class="captura">
+    <span class="icono">📄</span>
+    [INSERTAR CAPTURA DE PANTALLA — Módulo Trámites y Servicios con listado]
+  </div>
+
+  <h2 class="titulo-subseccion">7.1 Crear Nuevo Trámite</h2>
+  <p>Para crear un nuevo trámite, haga clic en el encabezado <strong>"Nuevo trámite"</strong> (panel colapsable en la parte superior) para expandir el formulario de creación.</p>
+  <ol class="pasos">
+    <li>En el campo <strong>"Título"</strong>, escriba el nombre completo del trámite o servicio (por ejemplo: "Dirección de Atención a la Mujer").</li>
+    <li>En el campo <strong>"Slug (identificador único)"</strong>, escriba un identificador corto y único para el trámite. Solo se permiten letras, números y guiones (por ejemplo: <code>DAM</code> o <code>atencion-mujer</code>). Este identificador se usará en la URL del trámite en el sitio público.</li>
+    <li>En el campo <strong>"Imagen (opcional)"</strong>, seleccione una imagen representativa del trámite si lo desea.</li>
+    <li>En el campo <strong>"Fotos de galería (opcional)"</strong>, puede seleccionar múltiples imágenes para la galería inicial del trámite. Recuerde que el límite es de <strong>5 fotos</strong> por trámite.</li>
+    <li>Haga clic en el botón azul <strong>"Crear"</strong>.</li>
+    <li>El sistema creará el trámite, generará su página PHP automáticamente y mostrará un mensaje de confirmación.</li>
+  </ol>
+
+  <div class="nota">
+    <strong>💡 Sobre el Slug:</strong> El slug es el identificador que aparece en la URL del trámite. Por ejemplo, si el slug es <code>DAM</code>, la URL del trámite será <code>/tramites/DAM</code>. Una vez creado, el slug no puede modificarse. Elija un slug descriptivo y sin espacios.
+  </div>
+
+  <h2 class="titulo-subseccion">7.2 Editar Trámite</h2>
+  <p>Para editar un trámite existente:</p>
+  <ol class="pasos">
+    <li>En la tabla de trámites, localice el trámite que desea editar.</li>
+    <li>Haga clic en el botón <strong>"Editar"</strong> (ícono de lápiz ✏️).</li>
+    <li>Se abrirá una ventana modal de edición con las siguientes secciones:</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Panel izquierdo — Datos básicos e imagen</h3>
+  <ul class="lista">
+    <li><strong>Título:</strong> Modifique el nombre del trámite si es necesario.</li>
+    <li><strong>Imagen actual:</strong> Se muestra la imagen principal actual con un botón para eliminarla.</li>
+    <li><strong>Nueva imagen:</strong> Seleccione un archivo para reemplazar la imagen actual. Puede hacer clic en <strong>"Subir imagen ahora"</strong> para subirla de inmediato sin cerrar el modal, o dejarla para que se suba al guardar el formulario.</li>
+  </ul>
+
+  <h3 class="titulo-sub2">Panel derecho — Contenido HTML</h3>
+  <ul class="lista">
+    <li><strong>Editor TinyMCE:</strong> Área de texto enriquecido donde puede escribir y dar formato al contenido descriptivo del trámite (requisitos, procedimiento, costos, etc.). Ver Sección 17 para instrucciones del editor.</li>
+    <li><strong>Vista previa:</strong> Un marco de vista previa muestra cómo se verá el contenido en el sitio público.</li>
+  </ul>
+
+  <ol class="pasos" start="4">
+    <li>Realice los cambios necesarios.</li>
+    <li>Haga clic en el botón <strong>"Guardar"</strong> en la parte inferior del modal.</li>
+  </ol>
+
+  <div class="captura">
+    <span class="icono">✏️</span>
+    [INSERTAR CAPTURA DE PANTALLA — Modal de edición de trámite con editor TinyMCE y galería]
+  </div>
+
+  <h2 class="titulo-subseccion">7.3 Galería de Fotos por Trámite</h2>
+  <p>Cada trámite puede tener una galería de hasta <strong>5 fotografías</strong> que se muestran en la página del trámite en el sitio público. La galería se gestiona desde el mismo modal de edición del trámite.</p>
+
+  <h3 class="titulo-sub2">Subir nuevas fotos a la galería</h3>
+  <ol class="pasos">
+    <li>En el modal de edición del trámite, desplácese hacia abajo hasta la sección <strong>"Galería de fotos"</strong>.</li>
+    <li>Haga clic en el campo de archivo de la galería y seleccione una o varias imágenes (JPG, PNG o WEBP).</li>
+    <li>Haga clic en el botón verde <strong>"Subir"</strong>.</li>
+    <li>Las imágenes se subirán de inmediato y aparecerán en la cuadrícula de la galería.</li>
+    <li>Si ya tiene 5 fotos, el sistema mostrará el mensaje: <em>"Máximo 5 fotos por trámite."</em></li>
+  </ol>
+
+  <h3 class="titulo-sub2">Reordenar fotos de la galería</h3>
+  <ol class="pasos">
+    <li>En la cuadrícula de la galería, coloque el cursor sobre la foto que desea mover.</li>
+    <li>Arrastre la foto a la posición deseada (drag &amp; drop).</li>
+    <li>El nuevo orden se guarda automáticamente.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Eliminar una foto de la galería</h3>
+  <ol class="pasos">
+    <li>En la cuadrícula de la galería, localice la foto que desea eliminar.</li>
+    <li>Haga clic en el botón de papelera 🗑️ debajo de la foto.</li>
+    <li>La foto se eliminará inmediatamente del servidor y de la galería.</li>
+  </ol>
+
+  <div class="info">
+    <strong>ℹ️ Límite de galería:</strong> Cada trámite admite un máximo de 5 fotografías en su galería. Si necesita mostrar más imágenes, considere crear un álbum en el módulo de Galería (Sección 10) y enlazarlo desde el contenido del trámite.
+  </div>
+
+  <h2 class="titulo-subseccion">7.4 Eliminar Trámite</h2>
+  <ol class="pasos">
+    <li>En la tabla de trámites, localice el trámite que desea eliminar.</li>
+    <li>Haga clic en el botón <strong>"Eliminar"</strong> (ícono de papelera 🗑️).</li>
+    <li>Se abrirá una ventana de confirmación.</li>
+    <li>Haga clic en el botón rojo <strong>"Eliminar"</strong> para confirmar.</li>
+  </ol>
+
+  <div class="alerta">
+    <strong>🔴 Advertencia:</strong> Al eliminar un trámite se borran permanentemente: la imagen principal, todas las fotos de la galería, el contenido HTML y el archivo PHP del trámite en el servidor. Esta acción es irreversible.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 8 — UNIDAD DE AUTISMO
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec8">
+  <h1 class="titulo-seccion"><span class="num">8</span> Módulo: Unidad de Autismo</h1>
+
+  <p>El módulo de <strong>Unidad de Autismo</strong> permite gestionar el contenido de la página dedicada a la Unidad Municipal de Atención al Autismo del DIF San Mateo Atenco. Esta página tiene una estructura fija con áreas de texto e imágenes predefinidas.</p>
+  <p>Para acceder, en el menú lateral haga clic en <strong>"Servicios"</strong> → <strong>"Unidad de Autismo"</strong>.</p>
+
+  <div class="captura">
+    <span class="icono">💙</span>
+    [INSERTAR CAPTURA DE PANTALLA — Módulo Unidad de Autismo con formulario de edición]
+  </div>
+
+  <h2 class="titulo-subseccion">8.1 Editar Textos con TinyMCE</h2>
+  <p>La página de la Unidad de Autismo tiene tres áreas de texto editables:</p>
+
+  <table class="tabla-manual">
+    <thead>
+      <tr><th>Área de texto</th><th>Descripción</th><th>Ubicación en la página</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Texto Derecha</strong></td>
+        <td>Contenido principal que aparece en la columna derecha de la página.</td>
+        <td>Columna derecha, junto a la imagen central.</td>
+      </tr>
+      <tr>
+        <td><strong>Texto Centro</strong></td>
+        <td>Contenido central de la página, generalmente información general del servicio.</td>
+        <td>Sección central de la página.</td>
+      </tr>
+      <tr>
+        <td><strong>Texto Inferior</strong></td>
+        <td>Contenido adicional en la parte inferior de la página.</td>
+        <td>Parte inferior de la página.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Para editar cualquiera de estos textos:</p>
+  <ol class="pasos">
+    <li>Localice el área de texto correspondiente en el formulario de edición.</li>
+    <li>Haga clic dentro del editor TinyMCE para comenzar a editar.</li>
+    <li>Utilice las herramientas del editor para dar formato al texto (ver Sección 17).</li>
+    <li>Una vez terminada la edición, haga clic en el botón <strong>"Guardar"</strong> del formulario.</li>
+  </ol>
+
+  <h2 class="titulo-subseccion">8.2 Cambiar Imágenes</h2>
+  <p>La página de la Unidad de Autismo tiene tres imágenes configurables:</p>
+
+  <table class="tabla-manual">
+    <thead>
+      <tr><th>Imagen</th><th>Descripción</th><th>Tamaño recomendado</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Logo</strong></td>
+        <td>Logotipo de la Unidad de Autismo que aparece en la parte superior de la página.</td>
+        <td>300 × 300 px (cuadrado)</td>
+      </tr>
+      <tr>
+        <td><strong>Imagen Central</strong></td>
+        <td>Imagen principal que aparece en el centro de la página.</td>
+        <td>800 × 500 px</td>
+      </tr>
+      <tr>
+        <td><strong>Imagen Inferior</strong></td>
+        <td>Imagen complementaria en la parte inferior de la página.</td>
+        <td>1200 × 400 px</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Para cambiar cualquiera de estas imágenes:</p>
+  <ol class="pasos">
+    <li>Localice el campo de imagen correspondiente en el formulario.</li>
+    <li>Haga clic en el campo de archivo y seleccione la nueva imagen desde su computadora.</li>
+    <li>Haga clic en <strong>"Guardar"</strong> para aplicar el cambio.</li>
+    <li>La imagen anterior será reemplazada automáticamente.</li>
+  </ol>
+
+  <div class="nota">
+    <strong>💡 Nota:</strong> Si deja un campo de imagen vacío al guardar, se conservará la imagen actual. Solo se reemplaza la imagen cuando se selecciona un nuevo archivo.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 9 — NOTICIAS
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec9">
+  <h1 class="titulo-seccion"><span class="num">9</span> Módulo: Noticias</h1>
+
+  <p>El módulo de <strong>Noticias</strong> permite publicar, editar y eliminar noticias e información institucional del DIF San Mateo Atenco. Las noticias publicadas aparecen en la sección "Comunicación Social" del sitio web público.</p>
+  <p>Para acceder, en el menú lateral haga clic en <strong>"Comunicación Social"</strong> → <strong>"Noticias"</strong>.</p>
+
+  <div class="captura">
+    <span class="icono">📰</span>
+    [INSERTAR CAPTURA DE PANTALLA — Módulo Noticias con listado de noticias publicadas]
+  </div>
+
+  <h2 class="titulo-subseccion">9.1 Crear Noticia</h2>
+  <ol class="pasos">
+    <li>En la página de Noticias, haga clic en el botón <strong>"Nueva noticia"</strong> o en el formulario de creación disponible.</li>
+    <li>Complete los campos del formulario:
+      <ul class="lista">
+        <li><strong>Título:</strong> Escriba el título de la noticia (obligatorio).</li>
+        <li><strong>Fecha:</strong> Seleccione la fecha de publicación de la noticia.</li>
+        <li><strong>Imagen principal:</strong> Seleccione una imagen representativa de la noticia (JPG, PNG o WEBP).</li>
+        <li><strong>Contenido:</strong> Utilice el editor TinyMCE para redactar el cuerpo de la noticia con formato enriquecido.</li>
+      </ul>
+    </li>
+    <li>Haga clic en el botón <strong>"Publicar noticia"</strong> o <strong>"Guardar"</strong>.</li>
+    <li>La noticia aparecerá inmediatamente en el sitio público.</li>
+  </ol>
+
+  <div class="captura">
+    <span class="icono">✍️</span>
+    [INSERTAR CAPTURA DE PANTALLA — Formulario de creación de noticia con editor TinyMCE]
+  </div>
+
+  <h2 class="titulo-subseccion">9.2 Editar Noticia</h2>
+  <ol class="pasos">
+    <li>En la tabla de noticias, localice la noticia que desea editar.</li>
+    <li>Haga clic en el botón <strong>"Editar"</strong> (ícono de lápiz ✏️).</li>
+    <li>Se abrirá el formulario de edición con los datos actuales de la noticia.</li>
+    <li>Modifique los campos necesarios: título, fecha, imagen o contenido.</li>
+    <li>Haga clic en <strong>"Guardar cambios"</strong>.</li>
+    <li>Los cambios se reflejarán inmediatamente en el sitio público.</li>
+  </ol>
+
+  <h2 class="titulo-subseccion">9.3 Eliminar Noticia</h2>
+  <ol class="pasos">
+    <li>En la tabla de noticias, localice la noticia que desea eliminar.</li>
+    <li>Haga clic en el botón <strong>"Eliminar"</strong> (ícono de papelera 🗑️).</li>
+    <li>Confirme la eliminación en el diálogo de confirmación.</li>
+    <li>La noticia y su imagen asociada serán eliminadas permanentemente.</li>
+  </ol>
+
+  <div class="alerta">
+    <strong>🔴 Advertencia:</strong> La eliminación de noticias es permanente. Si necesita ocultar temporalmente una noticia sin eliminarla, consulte con el administrador del sistema sobre opciones de desactivación.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 10 — GALERÍA
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec10">
+  <h1 class="titulo-seccion"><span class="num">10</span> Módulo: Galería</h1>
+
+  <p>El módulo de <strong>Galería</strong> permite gestionar álbumes fotográficos del DIF San Mateo Atenco. Los álbumes y sus fotografías se muestran en la sección "Comunicación Social → Galería" del sitio público.</p>
+  <p>Para acceder, en el menú lateral haga clic en <strong>"Comunicación Social"</strong> → <strong>"Galería"</strong>.</p>
+
+  <div class="captura">
+    <span class="icono">📷</span>
+    [INSERTAR CAPTURA DE PANTALLA — Módulo Galería con listado de álbumes]
+  </div>
+
+  <h2 class="titulo-subseccion">10.1 Crear Álbum</h2>
+  <ol class="pasos">
+    <li>En la página de Galería, localice el formulario de creación de álbum.</li>
+    <li>En el campo <strong>"Nombre del álbum"</strong>, escriba un nombre descriptivo (por ejemplo: "Evento Día del Niño 2025").</li>
+    <li>Opcionalmente, seleccione una imagen de portada para el álbum.</li>
+    <li>Haga clic en <strong>"Crear álbum"</strong>.</li>
+    <li>El álbum aparecerá en la lista y estará listo para recibir fotografías.</li>
+  </ol>
+
+  <h2 class="titulo-subseccion">10.2 Agregar Fotos a un Álbum</h2>
+  <ol class="pasos">
+    <li>En la lista de álbumes, localice el álbum al que desea agregar fotos.</li>
+    <li>Haga clic en el botón <strong>"Agregar fotos"</strong> o <strong>"Editar"</strong> del álbum.</li>
+    <li>En el formulario de carga, haga clic en el campo de archivo y seleccione una o varias imágenes desde su computadora. Puede seleccionar múltiples archivos manteniendo presionada la tecla <strong>Ctrl</strong> (Windows) o <strong>Cmd</strong> (Mac) mientras hace clic en los archivos.</li>
+    <li>Haga clic en <strong>"Subir fotos"</strong>.</li>
+    <li>Las fotos se procesarán y aparecerán en el álbum.</li>
+  </ol>
+
+  <div class="nota">
+    <strong>💡 Consejo:</strong> Para una mejor experiencia visual, utilice fotografías con una resolución mínima de 800 × 600 píxeles y en formato JPG para optimizar el tamaño del archivo.
+  </div>
+
+  <h2 class="titulo-subseccion">10.3 Eliminar Fotos y Álbumes</h2>
+
+  <h3 class="titulo-sub2">Eliminar una foto individual</h3>
+  <ol class="pasos">
+    <li>Abra el álbum que contiene la foto.</li>
+    <li>Localice la foto que desea eliminar.</li>
+    <li>Haga clic en el botón de eliminación (🗑️) de la foto.</li>
+    <li>Confirme la eliminación.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Eliminar un álbum completo</h3>
+  <ol class="pasos">
+    <li>En la lista de álbumes, localice el álbum que desea eliminar.</li>
+    <li>Haga clic en el botón <strong>"Eliminar álbum"</strong>.</li>
+    <li>Confirme la eliminación en el diálogo de confirmación.</li>
+  </ol>
+
+  <div class="alerta">
+    <strong>🔴 Advertencia:</strong> Al eliminar un álbum se eliminan permanentemente todas las fotografías que contiene. Esta acción no puede deshacerse.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 11 — VOLUNTARIADO
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec11">
+  <h1 class="titulo-seccion"><span class="num">11</span> Módulo: Voluntariado</h1>
+
+  <p>El módulo de <strong>Voluntariado</strong> permite gestionar el contenido de la página del programa de voluntariado del DIF San Mateo Atenco. Incluye el logo del programa, textos institucionales (lema, misión, visión, valores) y una galería fotográfica de hasta 5 imágenes.</p>
+  <p>Para acceder, en el menú lateral haga clic en <strong>"Voluntariado"</strong> → <strong>"Voluntariado"</strong>.</p>
+
+  <div class="captura">
+    <span class="icono">❤️</span>
+    [INSERTAR CAPTURA DE PANTALLA — Módulo Voluntariado con formulario de edición]
+  </div>
+
+  <h2 class="titulo-subseccion">11.1 Editar Logo del Voluntariado</h2>
+  <ol class="pasos">
+    <li>En la página del módulo Voluntariado, localice el campo <strong>"Logo"</strong>.</li>
+    <li>Haga clic en el campo de archivo y seleccione la nueva imagen del logo (JPG, PNG o WEBP).</li>
+    <li>Haga clic en <strong>"Guardar"</strong> para aplicar el cambio.</li>
+  </ol>
+  <div class="nota">
+    <strong>💡 Tamaño recomendado para el logo:</strong> 300 × 300 píxeles en formato PNG con fondo transparente para mejor integración visual.
+  </div>
+
+  <h2 class="titulo-subseccion">11.2 Editar Contenido (Lema, Misión, Visión, Valores)</h2>
+  <p>La página de Voluntariado tiene cuatro áreas de contenido editables:</p>
+
+  <table class="tabla-manual">
+    <thead>
+      <tr><th>Campo</th><th>Descripción</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Lema</strong></td>
+        <td>Frase o slogan del programa de voluntariado. Texto corto e impactante.</td>
+      </tr>
+      <tr>
+        <td><strong>Misión</strong></td>
+        <td>Declaración de la misión del programa de voluntariado. Describe el propósito fundamental.</td>
+      </tr>
+      <tr>
+        <td><strong>Visión</strong></td>
+        <td>Declaración de la visión a futuro del programa de voluntariado.</td>
+      </tr>
+      <tr>
+        <td><strong>Valores</strong></td>
+        <td>Lista o descripción de los valores que guían el programa de voluntariado.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Para editar cualquiera de estos campos:</p>
+  <ol class="pasos">
+    <li>Localice el campo correspondiente en el formulario de edición.</li>
+    <li>Haga clic dentro del editor TinyMCE del campo.</li>
+    <li>Modifique el contenido según sea necesario.</li>
+    <li>Haga clic en <strong>"Guardar"</strong> para confirmar todos los cambios.</li>
+  </ol>
+
+  <h2 class="titulo-subseccion">11.3 Gestionar Galería de Fotos (Máximo 5 Fotos)</h2>
+  <p>La página de Voluntariado incluye una galería fotográfica con un límite de <strong>5 fotografías</strong>.</p>
+
+  <h3 class="titulo-sub2">Agregar fotos a la galería</h3>
+  <ol class="pasos">
+    <li>En la sección de galería del formulario, haga clic en el campo de archivo.</li>
+    <li>Seleccione una o varias imágenes (hasta completar el límite de 5).</li>
+    <li>Haga clic en <strong>"Subir fotos"</strong>.</li>
+    <li>Las fotos aparecerán en la cuadrícula de la galería.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Eliminar una foto de la galería</h3>
+  <ol class="pasos">
+    <li>En la cuadrícula de la galería, localice la foto que desea eliminar.</li>
+    <li>Haga clic en el botón de papelera 🗑️ debajo de la foto.</li>
+    <li>La foto se eliminará inmediatamente.</li>
+  </ol>
+
+  <div class="info">
+    <strong>ℹ️ Límite de galería:</strong> La galería del Voluntariado admite un máximo de 5 fotografías. Si desea mostrar más imágenes del programa, puede crear un álbum dedicado en el módulo de Galería (Sección 10).
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 12 — TRANSPARENCIA
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec12">
+  <h1 class="titulo-seccion"><span class="num">12</span> Módulo: Transparencia</h1>
+
+  <p>El módulo de <strong>Transparencia</strong> es uno de los más extensos del sistema. Permite gestionar toda la información de transparencia gubernamental que el DIF San Mateo Atenco está obligado a publicar conforme a la legislación vigente. Está organizado en múltiples subsecciones, cada una con su propia estructura de datos.</p>
+  <p>Para acceder a cualquier subsección de Transparencia, en el menú lateral haga clic en el grupo <strong>"Transparencia"</strong> y seleccione la subsección deseada.</p>
+
+  <div class="captura">
+    <span class="icono">🛡️</span>
+    [INSERTAR CAPTURA DE PANTALLA — Grupo Transparencia en el menú lateral con todas las subsecciones]
+  </div>
+
+  <!-- 12.1 SEAC -->
+  <h2 class="titulo-subseccion">12.1 SEAC (Sistema de Evaluación y Acreditación de la Calidad)</h2>
+  <p>La sección SEAC permite gestionar documentos organizados por <strong>año</strong>, <strong>bloques temáticos</strong>, <strong>conceptos</strong> y <strong>PDFs por trimestre</strong>.</p>
+
+  <div class="captura">
+    <span class="icono">📊</span>
+    [INSERTAR CAPTURA DE PANTALLA — Módulo SEAC con estructura de bloques y años]
+  </div>
+
+  <h3 class="titulo-sub2">Agregar un nuevo bloque por año</h3>
+  <ol class="pasos">
+    <li>En la página SEAC, localice el formulario <strong>"Agregar bloque"</strong>.</li>
+    <li>Seleccione o escriba el <strong>año</strong> al que corresponde el bloque.</li>
+    <li>Escriba el <strong>nombre del bloque</strong> (por ejemplo: "Primer Trimestre 2025").</li>
+    <li>Haga clic en <strong>"Agregar"</strong>.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Agregar conceptos a un bloque</h3>
+  <ol class="pasos">
+    <li>Localice el bloque al que desea agregar conceptos.</li>
+    <li>Haga clic en <strong>"Agregar concepto"</strong>.</li>
+    <li>Escriba el nombre del concepto.</li>
+    <li>Confirme con <strong>"Guardar"</strong>.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Subir PDFs por trimestre</h3>
+  <ol class="pasos">
+    <li>Localice el concepto al que desea asociar un PDF.</li>
+    <li>Haga clic en el botón de subir PDF.</li>
+    <li>Seleccione el archivo PDF desde su computadora.</li>
+    <li>Seleccione el <strong>trimestre</strong> correspondiente (1°, 2°, 3° o 4° trimestre).</li>
+    <li>Haga clic en <strong>"Subir"</strong>.</li>
+    <li>El PDF quedará disponible para descarga en el sitio público.</li>
+  </ol>
+
+  <div class="nota">
+    <strong>💡 Formato de archivos:</strong> Solo se aceptan archivos en formato <strong>PDF</strong> para los documentos de transparencia. Asegúrese de que los archivos estén correctamente nombrados antes de subirlos.
+  </div>
+
+  <!-- 12.2 Cuenta Pública -->
+  <h2 class="titulo-subseccion">12.2 Cuenta Pública</h2>
+  <p>La sección de <strong>Cuenta Pública</strong> permite gestionar los documentos de cuenta pública organizados en bloques, títulos y conceptos.</p>
+
+  <h3 class="titulo-sub2">Gestión de bloques</h3>
+  <ol class="pasos">
+    <li>En la página Cuenta Pública, use el formulario de creación para agregar un nuevo bloque.</li>
+    <li>Asigne un nombre descriptivo al bloque (por ejemplo: "Cuenta Pública 2024").</li>
+    <li>Haga clic en <strong>"Crear bloque"</strong>.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Gestión de títulos dentro de un bloque</h3>
+  <ol class="pasos">
+    <li>Dentro de un bloque, haga clic en <strong>"Agregar título"</strong>.</li>
+    <li>Escriba el título (por ejemplo: "Ingresos", "Egresos", "Patrimonio").</li>
+    <li>Guarde el título.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Gestión de conceptos y PDFs</h3>
+  <ol class="pasos">
+    <li>Dentro de un título, haga clic en <strong>"Agregar concepto"</strong>.</li>
+    <li>Escriba el nombre del concepto y suba el archivo PDF correspondiente.</li>
+    <li>Guarde los cambios.</li>
+  </ol>
+
+  <!-- 12.3 Presupuesto Anual -->
+  <h2 class="titulo-subseccion">12.3 Presupuesto Anual</h2>
+  <p>La sección de <strong>Presupuesto Anual</strong> organiza los documentos presupuestales por bloques y sub-años.</p>
+
+  <h3 class="titulo-sub2">Gestión de bloques</h3>
+  <ol class="pasos">
+    <li>En la página Presupuesto Anual, use el formulario para crear un nuevo bloque.</li>
+    <li>Asigne un nombre al bloque (por ejemplo: "Presupuesto de Egresos").</li>
+    <li>Haga clic en <strong>"Crear"</strong>.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Gestión de sub-años</h3>
+  <ol class="pasos">
+    <li>Dentro de un bloque, haga clic en <strong>"Agregar año"</strong>.</li>
+    <li>Escriba el año (por ejemplo: 2025).</li>
+    <li>Suba el archivo PDF correspondiente al presupuesto de ese año.</li>
+    <li>Guarde los cambios.</li>
+  </ol>
+
+  <!-- 12.4 PAE -->
+  <h2 class="titulo-subseccion">12.4 PAE (Programa Anual de Evaluación)</h2>
+  <p>La sección <strong>PAE</strong> permite gestionar los documentos del Programa Anual de Evaluación organizados por títulos y PDFs por año.</p>
+
+  <h3 class="titulo-sub2">Gestión de títulos</h3>
+  <ol class="pasos">
+    <li>En la página PAE, use el formulario para agregar un nuevo título.</li>
+    <li>Escriba el nombre del título del documento.</li>
+    <li>Haga clic en <strong>"Agregar"</strong>.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Subir PDFs por año</h3>
+  <ol class="pasos">
+    <li>Dentro de un título, haga clic en <strong>"Agregar PDF"</strong>.</li>
+    <li>Seleccione el año correspondiente.</li>
+    <li>Seleccione el archivo PDF desde su computadora.</li>
+    <li>Haga clic en <strong>"Subir"</strong>.</li>
+  </ol>
+
+  <!-- 12.5 Matrices de Indicadores -->
+  <h2 class="titulo-subseccion">12.5 Matrices de Indicadores</h2>
+  <p>La sección de <strong>Matrices de Indicadores</strong> permite subir los documentos PDF de las matrices de indicadores de resultados, organizados por año.</p>
+
+  <ol class="pasos">
+    <li>En la página Matrices de Indicadores, localice el formulario de carga.</li>
+    <li>Seleccione el <strong>año</strong> al que corresponde el documento.</li>
+    <li>Haga clic en el campo de archivo y seleccione el PDF de la matriz de indicadores.</li>
+    <li>Haga clic en <strong>"Subir"</strong>.</li>
+    <li>El documento quedará disponible para descarga en el sitio público.</li>
+  </ol>
+
+  <div class="captura">
+    <span class="icono">📈</span>
+    [INSERTAR CAPTURA DE PANTALLA — Módulo Matrices de Indicadores con listado por año]
+  </div>
+
+  <!-- 12.6 CONAC -->
+  <h2 class="titulo-subseccion">12.6 CONAC (Consejo Nacional de Armonización Contable)</h2>
+  <p>La sección <strong>CONAC</strong> permite gestionar los documentos contables requeridos por el Consejo Nacional de Armonización Contable, organizados en bloques y PDFs por trimestre.</p>
+
+  <h3 class="titulo-sub2">Gestión de bloques</h3>
+  <ol class="pasos">
+    <li>En la página CONAC, use el formulario para crear un nuevo bloque.</li>
+    <li>Asigne un nombre descriptivo al bloque (por ejemplo: "Estados Financieros 2025").</li>
+    <li>Haga clic en <strong>"Crear bloque"</strong>.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Subir PDFs por trimestre</h3>
+  <ol class="pasos">
+    <li>Dentro de un bloque, localice el trimestre correspondiente.</li>
+    <li>Haga clic en el botón de subir PDF del trimestre deseado.</li>
+    <li>Seleccione el archivo PDF.</li>
+    <li>Haga clic en <strong>"Subir"</strong>.</li>
+  </ol>
+
+  <!-- 12.7 Financiero -->
+  <h2 class="titulo-subseccion">12.7 Financiero</h2>
+  <p>La sección <strong>Financiero</strong> permite gestionar los documentos financieros del DIF organizados en bloques y conceptos.</p>
+
+  <h3 class="titulo-sub2">Gestión de bloques</h3>
+  <ol class="pasos">
+    <li>En la página Financiero, use el formulario para crear un nuevo bloque.</li>
+    <li>Asigne un nombre al bloque (por ejemplo: "Información Financiera Trimestral").</li>
+    <li>Haga clic en <strong>"Crear"</strong>.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Gestión de conceptos</h3>
+  <ol class="pasos">
+    <li>Dentro de un bloque, haga clic en <strong>"Agregar concepto"</strong>.</li>
+    <li>Escriba el nombre del concepto y suba el PDF correspondiente.</li>
+    <li>Guarde los cambios.</li>
+  </ol>
+
+  <!-- 12.8 Avisos de Privacidad -->
+  <h2 class="titulo-subseccion">12.8 Avisos de Privacidad</h2>
+  <p>La sección de <strong>Avisos de Privacidad</strong> permite editar el texto del aviso de privacidad del DIF y gestionar los botones de descarga de PDFs relacionados.</p>
+
+  <h3 class="titulo-sub2">Editar el texto del aviso de privacidad</h3>
+  <ol class="pasos">
+    <li>En la página Avisos de Privacidad, localice el editor TinyMCE con el texto actual del aviso.</li>
+    <li>Haga clic dentro del editor y modifique el texto según sea necesario.</li>
+    <li>Haga clic en <strong>"Guardar"</strong>.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Gestionar botones PDF</h3>
+  <ol class="pasos">
+    <li>En la sección de botones PDF, haga clic en <strong>"Agregar botón"</strong>.</li>
+    <li>Escriba el texto que aparecerá en el botón (por ejemplo: "Aviso de Privacidad Integral").</li>
+    <li>Seleccione el archivo PDF correspondiente.</li>
+    <li>Haga clic en <strong>"Guardar"</strong>.</li>
+    <li>Para eliminar un botón, haga clic en el ícono de papelera junto al botón.</li>
+  </ol>
+
+  <!-- 12.9 Secciones Dinámicas -->
+  <h2 class="titulo-subseccion">12.9 Secciones Dinámicas de Transparencia</h2>
+  <p>Las <strong>Secciones Dinámicas</strong> permiten crear secciones personalizadas de transparencia que no están contempladas en las categorías predefinidas del sistema. Esto proporciona flexibilidad para cumplir con nuevos requerimientos de transparencia.</p>
+
+  <h3 class="titulo-sub2">Crear una nueva sección dinámica</h3>
+  <ol class="pasos">
+    <li>En la página Secciones Dinámicas, haga clic en <strong>"Nueva sección"</strong>.</li>
+    <li>Escriba el <strong>nombre de la sección</strong> (por ejemplo: "Declaraciones Patrimoniales").</li>
+    <li>Escriba el <strong>slug</strong> de la sección (identificador único para la URL).</li>
+    <li>Haga clic en <strong>"Crear sección"</strong>.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Editar una sección dinámica</h3>
+  <ol class="pasos">
+    <li>En la lista de secciones dinámicas, localice la sección que desea editar.</li>
+    <li>Haga clic en <strong>"Editar"</strong>.</li>
+    <li>Modifique el nombre, el contenido o los documentos PDF de la sección.</li>
+    <li>Haga clic en <strong>"Guardar"</strong>.</li>
+  </ol>
+
+  <div class="captura">
+    <span class="icono">⚙️</span>
+    [INSERTAR CAPTURA DE PANTALLA — Módulo Secciones Dinámicas de Transparencia]
+  </div>
+
+  <div class="nota">
+    <strong>💡 Nota sobre Transparencia:</strong> Todos los documentos de transparencia deben estar actualizados conforme a los plazos establecidos por la legislación de transparencia y acceso a la información del Estado de México. Consulte con el área jurídica del DIF para conocer los plazos de actualización obligatorios.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 13 — ACERCA DEL DIF
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec13">
+  <h1 class="titulo-seccion"><span class="num">13</span> Módulo: Acerca del DIF</h1>
+
+  <p>El módulo <strong>Acerca del DIF</strong> permite gestionar la información institucional del DIF San Mateo Atenco que se muestra en la sección "Acerca del DIF" del sitio público. Incluye tres subsecciones: Presidencia, Direcciones y Organigrama.</p>
+
+  <!-- 13.1 Presidencia -->
+  <h2 class="titulo-subseccion">13.1 Presidencia</h2>
+  <p>La subsección <strong>Presidencia</strong> permite editar la información de la Presidenta del DIF San Mateo Atenco que aparece en la página institucional.</p>
+  <p>Para acceder, en el menú lateral haga clic en <strong>"Acerca del DIF"</strong> → <strong>"Presidencia"</strong>.</p>
+
+  <div class="captura">
+    <span class="icono">👤</span>
+    [INSERTAR CAPTURA DE PANTALLA — Módulo Presidencia con formulario de edición]
+  </div>
+
+  <p>Los campos disponibles para editar son:</p>
+  <table class="tabla-manual">
+    <thead>
+      <tr><th>Campo</th><th>Descripción</th><th>Tipo</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Nombre completo</strong></td>
+        <td>Nombre y apellidos de la Presidenta del DIF.</td>
+        <td>Texto</td>
+      </tr>
+      <tr>
+        <td><strong>Cargo</strong></td>
+        <td>Título del cargo (por ejemplo: "Presidenta del DIF San Mateo Atenco").</td>
+        <td>Texto</td>
+      </tr>
+      <tr>
+        <td><strong>Fotografía</strong></td>
+        <td>Foto oficial de la Presidenta. Se recomienda una imagen formal de buena calidad.</td>
+        <td>Imagen (JPG/PNG)</td>
+      </tr>
+      <tr>
+        <td><strong>Descripción / Semblanza</strong></td>
+        <td>Texto biográfico o semblanza de la Presidenta. Admite formato enriquecido con TinyMCE.</td>
+        <td>Editor TinyMCE</td>
+      </tr>
+      <tr>
+        <td><strong>URL de Facebook</strong></td>
+        <td>Enlace al perfil o página de Facebook oficial de la Presidenta o del DIF.</td>
+        <td>URL</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="titulo-sub2">Procedimiento para editar la información de Presidencia</h3>
+  <ol class="pasos">
+    <li>En la página Presidencia, localice el formulario de edición con los datos actuales.</li>
+    <li>Modifique los campos de texto que necesite actualizar (nombre, cargo, URL de Facebook).</li>
+    <li>Para cambiar la fotografía: haga clic en el campo de archivo de imagen y seleccione la nueva foto.</li>
+    <li>Para editar la semblanza: haga clic dentro del editor TinyMCE y modifique el texto con el formato deseado.</li>
+    <li>Una vez realizados todos los cambios, haga clic en el botón <strong>"Guardar"</strong>.</li>
+    <li>El sistema confirmará los cambios con un mensaje en verde.</li>
+  </ol>
+
+  <div class="nota">
+    <strong>💡 Tamaño recomendado para la fotografía:</strong> 400 × 500 píxeles (formato retrato) en JPG de alta calidad. La imagen debe ser una fotografía oficial y profesional.
+  </div>
+
+  <!-- 13.2 Direcciones -->
+  <h2 class="titulo-subseccion">13.2 Direcciones</h2>
+  <p>La subsección <strong>Direcciones</strong> permite gestionar la información de los directivos y directoras del DIF San Mateo Atenco que aparecen en la página institucional.</p>
+  <p>Para acceder, en el menú lateral haga clic en <strong>"Acerca del DIF"</strong> → <strong>"Direcciones"</strong>.</p>
+
+  <div class="captura">
+    <span class="icono">👥</span>
+    [INSERTAR CAPTURA DE PANTALLA — Módulo Direcciones con listado de directivos]
+  </div>
+
+  <h3 class="titulo-sub2">Agregar un nuevo directivo</h3>
+  <ol class="pasos">
+    <li>En la página Direcciones, localice el formulario <strong>"Agregar directivo"</strong>.</li>
+    <li>Complete los campos:
+      <ul class="lista">
+        <li><strong>Nombre completo:</strong> Nombre y apellidos del directivo.</li>
+        <li><strong>Cargo / Dirección:</strong> Nombre del cargo o dirección que ocupa.</li>
+        <li><strong>Fotografía:</strong> Foto oficial del directivo (opcional).</li>
+      </ul>
+    </li>
+    <li>Haga clic en <strong>"Agregar"</strong>.</li>
+    <li>El directivo aparecerá en la lista y en el sitio público.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Editar información de un directivo</h3>
+  <ol class="pasos">
+    <li>En la lista de directivos, localice al directivo que desea editar.</li>
+    <li>Haga clic en el botón <strong>"Editar"</strong> (ícono de lápiz ✏️).</li>
+    <li>Modifique los campos necesarios en el modal de edición.</li>
+    <li>Haga clic en <strong>"Guardar"</strong>.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Eliminar un directivo</h3>
+  <ol class="pasos">
+    <li>En la lista de directivos, localice al directivo que desea eliminar.</li>
+    <li>Haga clic en el botón de eliminación (🗑️).</li>
+    <li>Confirme la eliminación en el diálogo de confirmación.</li>
+  </ol>
+
+  <!-- 13.3 Organigrama -->
+  <h2 class="titulo-subseccion">13.3 Organigrama</h2>
+  <p>La subsección <strong>Organigrama</strong> permite subir o actualizar la imagen del organigrama institucional del DIF San Mateo Atenco.</p>
+  <p>Para acceder, en el menú lateral haga clic en <strong>"Acerca del DIF"</strong> → <strong>"Organigrama"</strong>.</p>
+
+  <div class="captura">
+    <span class="icono">🏢</span>
+    [INSERTAR CAPTURA DE PANTALLA — Módulo Organigrama con imagen actual y formulario de actualización]
+  </div>
+
+  <h3 class="titulo-sub2">Subir o actualizar el organigrama</h3>
+  <ol class="pasos">
+    <li>En la página Organigrama, verá la imagen actual del organigrama (si existe).</li>
+    <li>Haga clic en el campo de archivo y seleccione la nueva imagen del organigrama.</li>
+    <li>Se aceptan formatos JPG, PNG y WEBP. Para organigramas con texto legible, se recomienda PNG de alta resolución.</li>
+    <li>Haga clic en <strong>"Guardar"</strong>.</li>
+    <li>La nueva imagen reemplazará a la anterior en el sitio público.</li>
+  </ol>
+
+  <div class="nota">
+    <strong>💡 Recomendación:</strong> El organigrama debe ser una imagen de alta resolución para que el texto sea legible. Se recomienda una resolución mínima de 1200 × 900 píxeles en formato PNG. Si el organigrama es un documento Word o PowerPoint, expórtelo como imagen PNG antes de subirlo.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 14 — FOOTER
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec14">
+  <h1 class="titulo-seccion"><span class="num">14</span> Módulo: Footer</h1>
+
+  <p>El módulo <strong>Footer</strong> permite gestionar el contenido del pie de página del sitio web público del DIF San Mateo Atenco. El footer aparece en todas las páginas del sitio y contiene información de contacto, redes sociales y enlaces de navegación.</p>
+  <p>Para acceder, en el menú lateral haga clic en <strong>"Inicio"</strong> → <strong>"Footer"</strong>.</p>
+
+  <div class="captura">
+    <span class="icono">🔻</span>
+    [INSERTAR CAPTURA DE PANTALLA — Módulo Footer con formulario de información de contacto]
+  </div>
+
+  <h2 class="titulo-subseccion">14.1 Editar Información de Contacto</h2>
+  <p>La sección de información de contacto del footer incluye los siguientes campos editables:</p>
+
+  <table class="tabla-manual">
+    <thead>
+      <tr><th>Campo</th><th>Descripción</th><th>Ejemplo</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Horario de atención</strong></td>
+        <td>Días y horas en que el DIF atiende al público.</td>
+        <td>Lunes a Viernes de 9:00 a 17:00 hrs.</td>
+      </tr>
+      <tr>
+        <td><strong>Dirección</strong></td>
+        <td>Dirección física de las instalaciones del DIF.</td>
+        <td>Av. Independencia No. 1, San Mateo Atenco, Edo. Méx.</td>
+      </tr>
+      <tr>
+        <td><strong>Teléfono</strong></td>
+        <td>Número(s) de teléfono de contacto.</td>
+        <td>(722) 123-4567</td>
+      </tr>
+      <tr>
+        <td><strong>Correo electrónico</strong></td>
+        <td>Dirección de correo electrónico institucional.</td>
+        <td>contacto@difsanmateoatenco.gob.mx</td>
+      </tr>
+      <tr>
+        <td><strong>Facebook</strong></td>
+        <td>URL de la página oficial de Facebook del DIF.</td>
+        <td>https://www.facebook.com/DIFSanMateoAtenco</td>
+      </tr>
+      <tr>
+        <td><strong>Instagram</strong></td>
+        <td>URL del perfil oficial de Instagram del DIF.</td>
+        <td>https://www.instagram.com/difsanmateoatenco</td>
+      </tr>
+      <tr>
+        <td><strong>Twitter / X</strong></td>
+        <td>URL del perfil oficial de Twitter/X del DIF.</td>
+        <td>https://twitter.com/DIFSanMateo</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="titulo-sub2">Procedimiento para editar la información de contacto</h3>
+  <ol class="pasos">
+    <li>En la página Footer, localice el formulario de <strong>"Información de contacto"</strong>.</li>
+    <li>Modifique los campos que necesite actualizar.</li>
+    <li>Haga clic en el botón <strong>"Guardar información de contacto"</strong>.</li>
+    <li>Los cambios se reflejarán inmediatamente en el footer de todas las páginas del sitio.</li>
+  </ol>
+
+  <h2 class="titulo-subseccion">14.2 Gestionar Enlaces de Navegación del Footer</h2>
+  <p>El footer del sitio puede incluir una sección de enlaces de navegación rápida. Estos enlaces pueden crearse, editarse, reordenarse y eliminarse desde este módulo.</p>
+
+  <div class="captura">
+    <span class="icono">🔗</span>
+    [INSERTAR CAPTURA DE PANTALLA — Sección de gestión de enlaces del footer]
+  </div>
+
+  <h3 class="titulo-sub2">Crear un nuevo enlace</h3>
+  <ol class="pasos">
+    <li>En la sección de enlaces del footer, localice el formulario <strong>"Agregar enlace"</strong>.</li>
+    <li>En el campo <strong>"Texto del enlace"</strong>, escriba el texto que aparecerá en el footer (por ejemplo: "Aviso de Privacidad").</li>
+    <li>En el campo <strong>"URL"</strong>, escriba la dirección a la que apuntará el enlace.</li>
+    <li>Haga clic en <strong>"Agregar"</strong>.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Editar un enlace existente</h3>
+  <ol class="pasos">
+    <li>En la lista de enlaces, localice el enlace que desea editar.</li>
+    <li>Haga clic en el botón <strong>"Editar"</strong> (ícono de lápiz ✏️).</li>
+    <li>Modifique el texto o la URL en el modal de edición.</li>
+    <li>Haga clic en <strong>"Guardar"</strong>.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Reordenar enlaces</h3>
+  <ol class="pasos">
+    <li>En la lista de enlaces, arrastre y suelte los elementos para cambiar su orden de aparición en el footer.</li>
+    <li>El nuevo orden se guarda automáticamente.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Eliminar un enlace</h3>
+  <ol class="pasos">
+    <li>En la lista de enlaces, localice el enlace que desea eliminar.</li>
+    <li>Haga clic en el botón de eliminación (🗑️).</li>
+    <li>Confirme la eliminación.</li>
+  </ol>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 15 — USUARIOS
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec15">
+  <h1 class="titulo-seccion"><span class="num">15</span> Módulo: Usuarios</h1>
+
+  <p>El módulo de <strong>Usuarios</strong> permite al administrador del sistema crear y gestionar cuentas de usuario para el panel de administración. Solo el usuario con rol de <strong>administrador</strong> puede acceder a esta sección.</p>
+  <p>Para acceder, en el menú lateral haga clic en <strong>"Sistema"</strong> → <strong>"Usuarios"</strong>.</p>
+
+  <div class="captura">
+    <span class="icono">👥</span>
+    [INSERTAR CAPTURA DE PANTALLA — Módulo Usuarios con formulario de creación y listado de usuarios]
+  </div>
+
+  <h2 class="titulo-subseccion">15.1 Crear Usuario Administrador</h2>
+  <p>Para crear un nuevo usuario con acceso al panel de administración:</p>
+  <ol class="pasos">
+    <li>En la página Usuarios, localice el panel izquierdo <strong>"Nuevo usuario"</strong>.</li>
+    <li>En el campo <strong>"Usuario"</strong>, escriba el nombre de usuario único (por ejemplo: <code>maria.garcia</code>). Solo se permiten letras, números y puntos.</li>
+    <li>En el campo <strong>"Nombre completo"</strong>, escriba el nombre real del usuario (por ejemplo: "María García López").</li>
+    <li>En el campo <strong>"Contraseña"</strong>, cree una contraseña segura que cumpla todos los requisitos:
+      <ul class="lista">
+        <li>Mínimo 8 caracteres</li>
+        <li>Al menos 1 mayúscula (A-Z)</li>
+        <li>Al menos 1 minúscula (a-z)</li>
+        <li>Al menos 1 número (0-9)</li>
+        <li>Al menos 1 símbolo especial (!@#$%...)</li>
+      </ul>
+    </li>
+    <li>El sistema muestra en tiempo real una barra de fortaleza de la contraseña y una lista de requisitos. Todos los requisitos deben estar marcados en verde antes de continuar.</li>
+    <li>Opcionalmente, puede hacer clic en <strong>"Generar contraseña segura automáticamente"</strong> para que el sistema cree una contraseña que cumpla todos los requisitos. La contraseña generada se mostrará brevemente en texto claro y luego se ocultará.</li>
+    <li>En la sección <strong>"Secciones permitidas"</strong>, marque las casillas de las secciones del panel a las que este usuario tendrá acceso.</li>
+    <li>Haga clic en el botón rojo <strong>"Crear usuario"</strong>.</li>
+    <li>El sistema confirmará la creación del usuario con un mensaje en verde.</li>
+  </ol>
+
+  <div class="captura">
+    <span class="icono">➕</span>
+    [INSERTAR CAPTURA DE PANTALLA — Formulario de creación de usuario con barra de fortaleza de contraseña]
+  </div>
+
+  <div class="alerta">
+    <strong>🔴 Importante:</strong> Comunique la contraseña al nuevo usuario de forma segura (en persona o por un canal cifrado). No envíe contraseñas por correo electrónico no cifrado. Solicite al usuario que cambie su contraseña en el primer inicio de sesión.
+  </div>
+
+  <h2 class="titulo-subseccion">15.2 Asignar Permisos por Sección</h2>
+  <p>Los permisos determinan qué secciones del panel puede ver y editar cada usuario. Para modificar los permisos de un usuario existente:</p>
+  <ol class="pasos">
+    <li>En la lista de usuarios del panel derecho, localice el usuario al que desea modificar los permisos.</li>
+    <li>Haga clic en el botón <strong>"Permisos"</strong> (ícono de escudo 🛡️).</li>
+    <li>Se abrirá una ventana modal con la lista de todas las secciones del panel, organizadas por grupos.</li>
+    <li>Marque o desmarque las casillas de las secciones según los permisos que desea otorgar o revocar.</li>
+    <li>Haga clic en <strong>"Guardar permisos"</strong>.</li>
+    <li>El sistema confirmará los cambios. Los nuevos permisos se aplicarán en el próximo inicio de sesión del usuario.</li>
+  </ol>
+
+  <div class="captura">
+    <span class="icono">🛡️</span>
+    [INSERTAR CAPTURA DE PANTALLA — Modal de gestión de permisos por sección]
+  </div>
+
+  <div class="nota">
+    <strong>💡 Principio de mínimo privilegio:</strong> Asigne a cada usuario únicamente los permisos que necesita para realizar su trabajo. No otorgue acceso a secciones que el usuario no necesita gestionar. Esto reduce el riesgo de modificaciones accidentales.
+  </div>
+
+  <h2 class="titulo-subseccion">15.3 Cambiar Contraseña de un Usuario</h2>
+  <p>El administrador puede restablecer la contraseña de cualquier usuario operativo:</p>
+  <ol class="pasos">
+    <li>En la lista de usuarios, localice el usuario cuya contraseña desea cambiar.</li>
+    <li>Haga clic en el botón <strong>"Contraseña"</strong> (ícono de llave 🔑).</li>
+    <li>Se abrirá una ventana modal con un campo para la nueva contraseña.</li>
+    <li>Escriba la nueva contraseña (debe cumplir todos los requisitos de seguridad) o haga clic en <strong>"Generar contraseña segura"</strong>.</li>
+    <li>Haga clic en <strong>"Cambiar"</strong>.</li>
+    <li>Comunique la nueva contraseña al usuario de forma segura.</li>
+  </ol>
+
+  <h2 class="titulo-subseccion">15.4 Activar / Desactivar Usuario</h2>
+  <p>Es posible desactivar temporalmente el acceso de un usuario sin eliminarlo:</p>
+  <ol class="pasos">
+    <li>En la lista de usuarios, localice el usuario que desea desactivar.</li>
+    <li>Haga clic en el botón <strong>"Desactivar"</strong> (ícono de pausa ⏸️).</li>
+    <li>El usuario quedará marcado como "Inactivo" y no podrá iniciar sesión hasta que sea reactivado.</li>
+    <li>Para reactivar, haga clic en el botón <strong>"Activar"</strong> (ícono de reproducción ▶️).</li>
+  </ol>
+
+  <h2 class="titulo-subseccion">15.5 Eliminar Usuario</h2>
+  <ol class="pasos">
+    <li>En la lista de usuarios, localice el usuario que desea eliminar.</li>
+    <li>Haga clic en el botón <strong>"Eliminar"</strong> (ícono de papelera 🗑️).</li>
+    <li>Aparecerá un diálogo de confirmación: <em>"¿Eliminar usuario [nombre]? Esta acción no se puede deshacer."</em></li>
+    <li>Haga clic en <strong>"Aceptar"</strong> para confirmar la eliminación.</li>
+  </ol>
+
+  <div class="alerta">
+    <strong>🔴 Advertencia:</strong> La eliminación de usuarios es permanente. Si solo necesita revocar el acceso temporalmente, use la opción de desactivar en lugar de eliminar.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 16 — REPORTES E HISTORIAL
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec16">
+  <h1 class="titulo-seccion"><span class="num">16</span> Módulo: Reportes e Historial</h1>
+
+  <p>El módulo de <strong>Reportes e Historial</strong> permite al administrador consultar un registro detallado de todas las acciones realizadas en el panel de administración. Este registro es fundamental para la auditoría y el control de cambios en el sistema.</p>
+  <p>Para acceder, en el menú lateral haga clic en <strong>"Sistema"</strong> → <strong>"Reportes"</strong>.</p>
+
+  <div class="captura">
+    <span class="icono">📊</span>
+    [INSERTAR CAPTURA DE PANTALLA — Módulo Reportes e Historial con tabla de actividad]
+  </div>
+
+  <h2 class="titulo-subseccion">16.1 Ver Historial de Actividad</h2>
+  <p>El historial de actividad muestra un registro cronológico de todas las acciones realizadas en el sistema, incluyendo:</p>
+  <ul class="lista">
+    <li><strong>Inicios de sesión:</strong> Fecha, hora y usuario que inició sesión.</li>
+    <li><strong>Creación de contenido:</strong> Qué elemento fue creado, por quién y cuándo.</li>
+    <li><strong>Edición de contenido:</strong> Qué elemento fue modificado, por quién y cuándo.</li>
+    <li><strong>Eliminación de contenido:</strong> Qué elemento fue eliminado, por quién y cuándo.</li>
+    <li><strong>Cambios de configuración:</strong> Modificaciones a la configuración del sistema.</li>
+  </ul>
+
+  <p>La tabla del historial muestra las siguientes columnas:</p>
+  <table class="tabla-manual">
+    <thead>
+      <tr><th>Columna</th><th>Descripción</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Fecha y hora</strong></td><td>Momento exacto en que se realizó la acción.</td></tr>
+      <tr><td><strong>Usuario</strong></td><td>Nombre del usuario que realizó la acción.</td></tr>
+      <tr><td><strong>Acción</strong></td><td>Tipo de acción realizada (login, crear, editar, eliminar).</td></tr>
+      <tr><td><strong>Módulo</strong></td><td>Sección del sistema donde se realizó la acción.</td></tr>
+      <tr><td><strong>Descripción</strong></td><td>Detalle adicional sobre la acción realizada.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="titulo-subseccion">16.2 Filtrar por Usuario y Fecha</h2>
+  <p>Para facilitar la búsqueda en el historial, el sistema ofrece filtros de búsqueda:</p>
+  <ol class="pasos">
+    <li>En la parte superior de la tabla del historial, localice los filtros disponibles.</li>
+    <li>Para filtrar por <strong>usuario</strong>: seleccione el usuario deseado del menú desplegable.</li>
+    <li>Para filtrar por <strong>fecha</strong>: seleccione el rango de fechas (fecha de inicio y fecha de fin).</li>
+    <li>Para filtrar por <strong>tipo de acción</strong>: seleccione el tipo de acción del menú desplegable.</li>
+    <li>Haga clic en <strong>"Filtrar"</strong> o <strong>"Buscar"</strong> para aplicar los filtros.</li>
+    <li>La tabla se actualizará mostrando solo los registros que coincidan con los criterios seleccionados.</li>
+    <li>Para limpiar los filtros y ver todo el historial, haga clic en <strong>"Limpiar filtros"</strong>.</li>
+  </ol>
+
+  <div class="info">
+    <strong>ℹ️ Uso del historial:</strong> El historial de actividad es una herramienta de auditoría. Úselo para verificar quién realizó cambios específicos, investigar modificaciones no autorizadas o hacer seguimiento de las actualizaciones de contenido. Se recomienda revisar el historial periódicamente.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 17 — EDITOR TINYMCE
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec17">
+  <h1 class="titulo-seccion"><span class="num">17</span> Editor de Texto TinyMCE</h1>
+
+  <p>El <strong>Editor TinyMCE</strong> es el editor de texto enriquecido que se utiliza en múltiples módulos del sistema para crear y editar contenido con formato. Permite aplicar estilos de texto, insertar listas, alinear contenido y mucho más, de forma similar a un procesador de textos como Microsoft Word.</p>
+  <p>El editor TinyMCE se utiliza en los siguientes módulos: Programas (contenido de secciones), Trámites (contenido), Unidad de Autismo (textos), Noticias, Voluntariado, Presidencia (semblanza) y Avisos de Privacidad.</p>
+
+  <div class="captura">
+    <span class="icono">✍️</span>
+    [INSERTAR CAPTURA DE PANTALLA — Editor TinyMCE con barra de herramientas completa]
+  </div>
+
+  <h2 class="titulo-subseccion">17.1 Descripción de la Barra de Herramientas</h2>
+  <p>La barra de herramientas del editor TinyMCE contiene los siguientes grupos de botones:</p>
+
+  <table class="tabla-manual">
+    <thead>
+      <tr><th>Botón / Grupo</th><th>Función</th><th>Atajo de teclado</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Deshacer / Rehacer</strong></td><td>Deshace o rehace la última acción realizada en el editor.</td><td>Ctrl+Z / Ctrl+Y</td></tr>
+      <tr><td><strong>Negrita (B)</strong></td><td>Aplica o quita el formato de negrita al texto seleccionado.</td><td>Ctrl+B</td></tr>
+      <tr><td><strong>Cursiva (I)</strong></td><td>Aplica o quita el formato de cursiva al texto seleccionado.</td><td>Ctrl+I</td></tr>
+      <tr><td><strong>Subrayado (U)</strong></td><td>Aplica o quita el subrayado al texto seleccionado.</td><td>Ctrl+U</td></tr>
+      <tr><td><strong>Tachado</strong></td><td>Aplica o quita el tachado al texto seleccionado.</td><td>—</td></tr>
+      <tr><td><strong>Color de texto</strong></td><td>Cambia el color del texto seleccionado.</td><td>—</td></tr>
+      <tr><td><strong>Color de fondo</strong></td><td>Cambia el color de fondo del texto seleccionado.</td><td>—</td></tr>
+      <tr><td><strong>Alinear izquierda</strong></td><td>Alinea el párrafo seleccionado a la izquierda.</td><td>Ctrl+L</td></tr>
+      <tr><td><strong>Centrar</strong></td><td>Centra el párrafo seleccionado.</td><td>Ctrl+E</td></tr>
+      <tr><td><strong>Alinear derecha</strong></td><td>Alinea el párrafo seleccionado a la derecha.</td><td>Ctrl+R</td></tr>
+      <tr><td><strong>Justificar</strong></td><td>Justifica el párrafo seleccionado.</td><td>Ctrl+J</td></tr>
+      <tr><td><strong>Lista con viñetas</strong></td><td>Crea o elimina una lista con viñetas (puntos).</td><td>—</td></tr>
+      <tr><td><strong>Lista numerada</strong></td><td>Crea o elimina una lista numerada.</td><td>—</td></tr>
+      <tr><td><strong>Sangría</strong></td><td>Aumenta o disminuye la sangría del párrafo.</td><td>Tab / Shift+Tab</td></tr>
+      <tr><td><strong>Tipo de fuente</strong></td><td>Cambia el tipo de letra del texto seleccionado.</td><td>—</td></tr>
+      <tr><td><strong>Tamaño de fuente</strong></td><td>Cambia el tamaño del texto seleccionado.</td><td>—</td></tr>
+      <tr><td><strong>Formato de párrafo</strong></td><td>Aplica estilos predefinidos: Párrafo, Encabezado 1, Encabezado 2, etc.</td><td>—</td></tr>
+      <tr><td><strong>Insertar enlace</strong></td><td>Inserta o edita un hipervínculo en el texto seleccionado.</td><td>Ctrl+K</td></tr>
+      <tr><td><strong>Insertar imagen</strong></td><td>Inserta una imagen en el contenido.</td><td>—</td></tr>
+      <tr><td><strong>Insertar tabla</strong></td><td>Inserta una tabla con el número de filas y columnas especificado.</td><td>—</td></tr>
+      <tr><td><strong>Código fuente</strong></td><td>Muestra y permite editar el código HTML del contenido directamente.</td><td>—</td></tr>
+      <tr><td><strong>Pantalla completa</strong></td><td>Expande el editor a pantalla completa para mayor comodidad.</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="titulo-subseccion">17.2 Cómo Usar Negritas, Cursiva y Colores</h2>
+
+  <h3 class="titulo-sub2">Aplicar negrita</h3>
+  <ol class="pasos">
+    <li>Seleccione el texto al que desea aplicar negrita haciendo clic y arrastrando el cursor.</li>
+    <li>Haga clic en el botón <strong>B</strong> en la barra de herramientas, o presione <strong>Ctrl+B</strong>.</li>
+    <li>El texto seleccionado aparecerá en negrita.</li>
+    <li>Para quitar la negrita, seleccione el texto en negrita y repita el proceso.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Aplicar cursiva</h3>
+  <ol class="pasos">
+    <li>Seleccione el texto al que desea aplicar cursiva.</li>
+    <li>Haga clic en el botón <strong>I</strong> en la barra de herramientas, o presione <strong>Ctrl+I</strong>.</li>
+    <li>El texto seleccionado aparecerá en cursiva.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Cambiar el color del texto</h3>
+  <ol class="pasos">
+    <li>Seleccione el texto cuyo color desea cambiar.</li>
+    <li>Haga clic en el botón de <strong>Color de texto</strong> (ícono de letra "A" con una barra de color debajo).</li>
+    <li>Se abrirá una paleta de colores. Haga clic en el color deseado.</li>
+    <li>El texto seleccionado cambiará al color elegido.</li>
+    <li>Para usar un color personalizado, haga clic en <strong>"Más colores..."</strong> e ingrese el código hexadecimal del color.</li>
+  </ol>
+
+  <div class="nota">
+    <strong>💡 Recomendación de colores:</strong> Para mantener la coherencia visual con la identidad institucional del DIF, utilice preferentemente los colores institucionales: rojo (<code>#C8102C</code>), gris oscuro (<code>#6B625A</code>) y negro (<code>#2d2d2d</code>) para el texto.
+  </div>
+
+  <h2 class="titulo-subseccion">17.3 Cómo Insertar Listas</h2>
+
+  <h3 class="titulo-sub2">Lista con viñetas (puntos)</h3>
+  <ol class="pasos">
+    <li>Coloque el cursor en el lugar donde desea iniciar la lista, o seleccione el texto que desea convertir en lista.</li>
+    <li>Haga clic en el botón de <strong>Lista con viñetas</strong> (ícono de lista con puntos) en la barra de herramientas.</li>
+    <li>Escriba el primer elemento de la lista y presione <strong>Enter</strong> para agregar más elementos.</li>
+    <li>Para terminar la lista, presione <strong>Enter</strong> dos veces o haga clic nuevamente en el botón de lista.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Lista numerada</h3>
+  <ol class="pasos">
+    <li>Coloque el cursor donde desea iniciar la lista numerada.</li>
+    <li>Haga clic en el botón de <strong>Lista numerada</strong> (ícono de lista con números) en la barra de herramientas.</li>
+    <li>Escriba el primer elemento y presione <strong>Enter</strong> para continuar.</li>
+    <li>Los números se asignan automáticamente.</li>
+  </ol>
+
+  <h2 class="titulo-subseccion">17.4 Cómo Alinear Texto</h2>
+  <ol class="pasos">
+    <li>Haga clic dentro del párrafo que desea alinear, o seleccione múltiples párrafos.</li>
+    <li>Haga clic en uno de los botones de alineación:
+      <ul class="lista">
+        <li><strong>Alinear izquierda:</strong> El texto se alinea al margen izquierdo (predeterminado).</li>
+        <li><strong>Centrar:</strong> El texto se centra entre los márgenes.</li>
+        <li><strong>Alinear derecha:</strong> El texto se alinea al margen derecho.</li>
+        <li><strong>Justificar:</strong> El texto se distribuye uniformemente entre ambos márgenes.</li>
+      </ul>
+    </li>
+  </ol>
+
+  <h2 class="titulo-subseccion">17.5 Cómo Cambiar Tamaño y Tipo de Fuente</h2>
+
+  <h3 class="titulo-sub2">Cambiar el tamaño de la fuente</h3>
+  <ol class="pasos">
+    <li>Seleccione el texto cuyo tamaño desea cambiar.</li>
+    <li>En la barra de herramientas, localice el menú desplegable de <strong>Tamaño de fuente</strong> (muestra un número como "12pt" o "14px").</li>
+    <li>Haga clic en el menú y seleccione el tamaño deseado, o escriba directamente el tamaño.</li>
+    <li>El texto seleccionado cambiará al tamaño especificado.</li>
+  </ol>
+
+  <h3 class="titulo-sub2">Cambiar el tipo de fuente</h3>
+  <ol class="pasos">
+    <li>Seleccione el texto cuyo tipo de letra desea cambiar.</li>
+    <li>En la barra de herramientas, localice el menú desplegable de <strong>Tipo de fuente</strong> (muestra el nombre de la fuente actual).</li>
+    <li>Haga clic en el menú y seleccione la fuente deseada de la lista.</li>
+  </ol>
+
+  <div class="nota">
+    <strong>💡 Recomendación tipográfica:</strong> Para mantener la coherencia visual del sitio, se recomienda no cambiar el tipo de fuente en el contenido, ya que el sitio web tiene una tipografía definida en su hoja de estilos. Cambiar la fuente en el editor puede generar inconsistencias visuales en el sitio público.
+  </div>
+
+  <h2 class="titulo-subseccion">17.6 Guardar el Contenido del Editor</h2>
+  <p>El editor TinyMCE no guarda automáticamente el contenido. Para guardar los cambios realizados en el editor:</p>
+  <ol class="pasos">
+    <li>Una vez terminada la edición, haga clic en el botón <strong>"Guardar"</strong> del formulario que contiene el editor (no dentro del editor mismo).</li>
+    <li>El sistema procesará el contenido HTML generado por el editor y lo guardará en la base de datos.</li>
+    <li>Un mensaje de confirmación en verde indicará que los cambios fueron guardados exitosamente.</li>
+  </ol>
+
+  <div class="alerta">
+    <strong>⚠️ Importante:</strong> Si cierra la ventana del navegador o navega a otra página sin guardar, perderá todos los cambios realizados en el editor. Guarde frecuentemente mientras trabaja en contenido extenso.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 18 — SEGURIDAD Y BUENAS PRÁCTICAS
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec18">
+  <h1 class="titulo-seccion"><span class="num">18</span> Seguridad y Buenas Prácticas</h1>
+
+  <p>La seguridad del sistema de gestión de contenido es responsabilidad compartida entre el equipo técnico y los usuarios del panel de administración. Seguir las buenas prácticas descritas en esta sección ayuda a proteger la información institucional y a mantener la integridad del sitio web del DIF San Mateo Atenco.</p>
+
+  <h2 class="titulo-subseccion">18.1 Cambio Periódico de Contraseñas</h2>
+  <p>Se recomienda cambiar la contraseña del panel de administración de forma periódica para reducir el riesgo de acceso no autorizado:</p>
+  <ul class="lista">
+    <li>Cambie su contraseña al menos <strong>cada 3 meses</strong>.</li>
+    <li>Cambie su contraseña <strong>inmediatamente</strong> si sospecha que alguien más la conoce.</li>
+    <li>No reutilice contraseñas anteriores.</li>
+    <li>Use una contraseña diferente para el panel de administración que para otros servicios.</li>
+    <li>Considere usar un gestor de contraseñas para generar y almacenar contraseñas seguras.</li>
+  </ul>
+
+  <p>Para cambiar su propia contraseña, contacte al administrador del sistema para que la restablezca desde el módulo de Usuarios (Sección 15.3).</p>
+
+  <h2 class="titulo-subseccion">18.2 No Compartir Credenciales</h2>
+  <p>Las credenciales de acceso al panel de administración son personales e intransferibles:</p>
+  <ul class="lista">
+    <li><strong>Nunca comparta</strong> su nombre de usuario y contraseña con otras personas, incluso si son compañeros de trabajo.</li>
+    <li>Si otra persona necesita acceso al panel, el administrador debe <strong>crear una cuenta nueva</strong> para esa persona.</li>
+    <li>No escriba su contraseña en papel ni la guarde en archivos de texto sin cifrar.</li>
+    <li>No ingrese sus credenciales en computadoras públicas o de personas desconocidas.</li>
+    <li>Si alguien le solicita su contraseña alegando ser soporte técnico, <strong>no la proporcione</strong>. El equipo técnico legítimo nunca necesita su contraseña.</li>
+  </ul>
+
+  <div class="alerta">
+    <strong>🔴 Importante:</strong> Cada acción realizada en el panel queda registrada con el nombre del usuario que la realizó. Si comparte sus credenciales, otras personas podrán realizar cambios en el sistema bajo su nombre, lo que puede tener consecuencias disciplinarias.
+  </div>
+
+  <h2 class="titulo-subseccion">18.3 Cerrar Sesión al Terminar</h2>
+  <p>Siempre cierre sesión correctamente al terminar de trabajar en el panel de administración:</p>
+  <ul class="lista">
+    <li>Haga clic en el botón <strong>"Salir"</strong> o <strong>"Cerrar sesión"</strong> antes de alejarse de la computadora.</li>
+    <li>No cierre simplemente la pestaña o ventana del navegador sin cerrar sesión primero.</li>
+    <li>Si trabaja en una computadora compartida, cierre también el navegador después de cerrar sesión.</li>
+    <li>Recuerde que el sistema cierra la sesión automáticamente después de 5 minutos de inactividad, pero es mejor cerrarla manualmente.</li>
+  </ul>
+
+  <h2 class="titulo-subseccion">18.4 Tamaños Recomendados de Imágenes</h2>
+  <p>Para garantizar que el sitio web cargue rápidamente y las imágenes se vean correctamente en todos los dispositivos, siga estas recomendaciones:</p>
+
+  <table class="tabla-manual">
+    <thead>
+      <tr><th>Módulo / Uso</th><th>Dimensiones recomendadas</th><th>Formato</th><th>Peso máximo</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Slider Principal / DIF Comunica</td><td>1920 × 600 px</td><td>JPG / WEBP</td><td>500 KB</td></tr>
+      <tr><td>Imagen de programa</td><td>600 × 400 px</td><td>JPG / PNG</td><td>200 KB</td></tr>
+      <tr><td>Imagen de trámite</td><td>800 × 500 px</td><td>JPG / PNG</td><td>300 KB</td></tr>
+      <tr><td>Galería de trámite</td><td>800 × 600 px</td><td>JPG</td><td>300 KB</td></tr>
+      <tr><td>Foto de noticia</td><td>1200 × 630 px</td><td>JPG</td><td>400 KB</td></tr>
+      <tr><td>Fotos de galería</td><td>1200 × 900 px</td><td>JPG</td><td>500 KB</td></tr>
+      <tr><td>Logo de voluntariado</td><td>300 × 300 px</td><td>PNG (transparente)</td><td>100 KB</td></tr>
+      <tr><td>Foto de presidenta</td><td>400 × 500 px</td><td>JPG</td><td>200 KB</td></tr>
+      <tr><td>Foto de directivo</td><td>300 × 400 px</td><td>JPG</td><td>150 KB</td></tr>
+      <tr><td>Organigrama</td><td>1200 × 900 px mínimo</td><td>PNG</td><td>1 MB</td></tr>
+      <tr><td>Logo Unidad de Autismo</td><td>300 × 300 px</td><td>PNG (transparente)</td><td>100 KB</td></tr>
+      <tr><td>Imagen central Autismo</td><td>800 × 500 px</td><td>JPG</td><td>300 KB</td></tr>
+    </tbody>
+  </table>
+
+  <div class="nota">
+    <strong>💡 Optimización de imágenes:</strong> Antes de subir imágenes al sistema, se recomienda optimizarlas usando herramientas gratuitas como <strong>TinyPNG</strong> (tinypng.com) o <strong>Squoosh</strong> (squoosh.app). Esto reduce el tamaño del archivo sin pérdida visible de calidad, mejorando la velocidad de carga del sitio.
+  </div>
+
+  <h2 class="titulo-subseccion">18.5 Buenas Prácticas Adicionales</h2>
+  <ul class="lista">
+    <li><strong>Verifique el contenido antes de publicar:</strong> Revise ortografía, gramática y que los datos sean correctos antes de guardar cambios en el sitio público.</li>
+    <li><strong>Mantenga respaldos:</strong> Antes de realizar cambios importantes (como eliminar programas o trámites), solicite al equipo técnico un respaldo de la base de datos.</li>
+    <li><strong>Use el historial:</strong> Consulte el módulo de Reportes e Historial (Sección 16) para verificar los cambios realizados y detectar actividad inusual.</li>
+    <li><strong>Actualice el contenido regularmente:</strong> El sitio web institucional debe reflejar información actualizada. Revise periódicamente que los datos de contacto, horarios y documentos de transparencia estén vigentes.</li>
+    <li><strong>Reporte problemas:</strong> Si detecta un comportamiento inusual en el sistema (errores frecuentes, accesos no reconocidos en el historial), repórtelo inmediatamente al administrador del sistema.</li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 19 — SOLUCIÓN DE PROBLEMAS
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec19">
+  <h1 class="titulo-seccion"><span class="num">19</span> Solución de Problemas Comunes</h1>
+
+  <p>Esta sección describe los problemas más frecuentes que pueden presentarse al usar el panel de administración y cómo resolverlos. Si el problema persiste después de seguir los pasos indicados, contacte al administrador del sistema o al equipo técnico.</p>
+
+  <!-- 19.1 Error CSRF -->
+  <h2 class="titulo-subseccion">19.1 Error de Token CSRF</h2>
+
+  <div class="alerta">
+    <strong>Mensaje de error:</strong> <em>"Token CSRF inválido. Intente de nuevo."</em> o <em>"Solicitud inválida. Por favor recarga la página e intenta de nuevo."</em>
+  </div>
+
+  <p><strong>¿Qué es el error CSRF?</strong></p>
+  <p>El token CSRF (Cross-Site Request Forgery) es un mecanismo de seguridad que protege el sistema contra ataques maliciosos. Cada formulario del panel tiene un token único que expira después de cierto tiempo o cuando la sesión cambia.</p>
+
+  <p><strong>Causas comunes:</strong></p>
+  <ul class="lista">
+    <li>La página estuvo abierta durante mucho tiempo sin actividad antes de enviar el formulario.</li>
+    <li>Se abrió el mismo formulario en múltiples pestañas del navegador.</li>
+    <li>La sesión expiró mientras se llenaba el formulario.</li>
+    <li>Se usó el botón "Atrás" del navegador para regresar a un formulario ya enviado.</li>
+  </ul>
+
+  <p><strong>Solución:</strong></p>
+  <ol class="pasos">
+    <li>Haga clic en el botón <strong>"Atrás"</strong> del navegador o en el enlace de la sección en el menú lateral.</li>
+    <li>La página se recargará con un nuevo token CSRF válido.</li>
+    <li>Vuelva a llenar el formulario y envíelo.</li>
+    <li>Si el error persiste, cierre sesión, vuelva a iniciar sesión y repita la operación.</li>
+  </ol>
+
+  <!-- 19.2 Imagen no sube -->
+  <h2 class="titulo-subseccion">19.2 La Imagen No Se Sube</h2>
+
+  <div class="alerta">
+    <strong>Síntoma:</strong> Al intentar subir una imagen, el sistema muestra un error o la imagen no aparece después de guardar.
+  </div>
+
+  <p><strong>Causas posibles y soluciones:</strong></p>
+
+  <table class="tabla-manual">
+    <thead>
+      <tr><th>Causa</th><th>Solución</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>El archivo es demasiado grande (supera 20 MB)</td>
+        <td>Reduzca el tamaño del archivo usando una herramienta de compresión de imágenes como TinyPNG o Squoosh antes de subirlo.</td>
+      </tr>
+      <tr>
+        <td>El formato del archivo no es compatible</td>
+        <td>Solo se aceptan formatos JPG, JPEG, PNG y WEBP. Convierta el archivo al formato correcto.</td>
+      </tr>
+      <tr>
+        <td>El archivo está dañado o corrupto</td>
+        <td>Intente abrir la imagen en un visor de imágenes para verificar que no esté dañada. Si está dañada, obtenga una copia nueva del archivo.</td>
+      </tr>
+      <tr>
+        <td>Conexión a internet lenta o inestable</td>
+        <td>Espere a que la conexión mejore y vuelva a intentarlo. Para archivos grandes, use una conexión más estable.</td>
+      </tr>
+      <tr>
+        <td>El servidor no tiene espacio disponible</td>
+        <td>Contacte al administrador del sistema para que verifique el espacio disponible en el servidor.</td>
+      </tr>
+      <tr>
+        <td>Permisos de escritura en el servidor</td>
+        <td>Contacte al equipo técnico para que verifique los permisos de escritura en las carpetas de subida.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 19.3 TinyMCE no carga -->
+  <h2 class="titulo-subseccion">19.3 El Editor TinyMCE No Carga</h2>
+
+  <div class="alerta">
+    <strong>Síntoma:</strong> En lugar del editor con barra de herramientas, aparece un área de texto simple sin formato, o el editor aparece en blanco.
+  </div>
+
+  <p><strong>Causas posibles y soluciones:</strong></p>
+  <ul class="lista">
+    <li>
+      <strong>JavaScript bloqueado por el navegador:</strong> Verifique que el navegador no esté bloqueando JavaScript. En Chrome, vaya a Configuración → Privacidad y seguridad → Configuración del sitio → JavaScript y asegúrese de que esté habilitado.
+    </li>
+    <li>
+      <strong>Extensiones del navegador interfieren:</strong> Algunas extensiones de bloqueo de anuncios o scripts pueden interferir con TinyMCE. Intente desactivar temporalmente las extensiones o use el modo incógnito del navegador.
+    </li>
+    <li>
+      <strong>Caché del navegador desactualizada:</strong> Limpie la caché del navegador presionando <strong>Ctrl+Shift+Delete</strong> (Windows) o <strong>Cmd+Shift+Delete</strong> (Mac), seleccione "Imágenes y archivos en caché" y haga clic en "Borrar datos". Luego recargue la página.
+    </li>
+    <li>
+      <strong>Navegador desactualizado:</strong> Actualice su navegador a la versión más reciente. TinyMCE requiere un navegador moderno.
+    </li>
+    <li>
+      <strong>Problema de conectividad con CDN:</strong> TinyMCE puede cargarse desde una red de distribución de contenido (CDN). Si hay problemas de conectividad, el editor puede no cargar. Verifique su conexión a internet.
+    </li>
+  </ul>
+
+  <p>Si ninguna de las soluciones anteriores funciona, puede usar el área de texto simple para ingresar contenido HTML básico directamente, y reportar el problema al equipo técnico.</p>
+
+  <!-- 19.4 Sesión expirada -->
+  <h2 class="titulo-subseccion">19.4 Sesión Expirada</h2>
+
+  <div class="alerta">
+    <strong>Síntoma:</strong> El sistema lo redirige a la pantalla de inicio de sesión con el mensaje: <em>"Sesión expirada por inactividad."</em>
+  </div>
+
+  <p><strong>Causa:</strong> El sistema cierra automáticamente la sesión después de 5 minutos de inactividad como medida de seguridad.</p>
+
+  <p><strong>Solución:</strong></p>
+  <ol class="pasos">
+    <li>Inicie sesión nuevamente con sus credenciales.</li>
+    <li>Si estaba trabajando en un formulario con contenido importante, es posible que haya perdido los cambios no guardados.</li>
+    <li>Para evitar que esto ocurra en el futuro, guarde su trabajo frecuentemente y mantenga actividad en el navegador (movimiento del ratón, clics) mientras trabaja.</li>
+  </ol>
+
+  <!-- 19.5 Otros problemas -->
+  <h2 class="titulo-subseccion">19.5 Otros Problemas Frecuentes</h2>
+
+  <table class="tabla-manual">
+    <thead>
+      <tr><th>Problema</th><th>Posible causa</th><th>Solución</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Los cambios no se reflejan en el sitio público</td>
+        <td>Caché del navegador del visitante</td>
+        <td>Espere unos minutos y recargue el sitio público presionando Ctrl+F5 para forzar la recarga sin caché.</td>
+      </tr>
+      <tr>
+        <td>No puedo ver una sección en el menú</td>
+        <td>No tiene permisos para esa sección</td>
+        <td>Contacte al administrador del sistema para que le asigne los permisos necesarios.</td>
+      </tr>
+      <tr>
+        <td>El PDF no se puede visualizar en el visor</td>
+        <td>El archivo PDF está dañado o el navegador no soporta el visor</td>
+        <td>Intente descargar el PDF directamente. Si el archivo está dañado, suba una nueva versión.</td>
+      </tr>
+      <tr>
+        <td>El drag &amp; drop para reordenar no funciona</td>
+        <td>JavaScript deshabilitado o problema con el navegador</td>
+        <td>Verifique que JavaScript esté habilitado. Intente con otro navegador.</td>
+      </tr>
+      <tr>
+        <td>Error 500 al guardar</td>
+        <td>Error interno del servidor</td>
+        <td>Contacte al equipo técnico inmediatamente con la descripción del error y los pasos que realizó.</td>
+      </tr>
+      <tr>
+        <td>La página carga muy lento</td>
+        <td>Imágenes muy pesadas o conexión lenta</td>
+        <td>Optimice las imágenes antes de subirlas. Verifique su conexión a internet.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="info">
+    <strong>ℹ️ Contacto de soporte técnico:</strong> Si experimenta un problema que no está descrito en esta sección o que no puede resolver con las soluciones indicadas, contacte al equipo técnico responsable del sistema proporcionando: descripción detallada del problema, pasos que realizó antes de que ocurriera el error, captura de pantalla del mensaje de error (si aplica) y fecha y hora en que ocurrió el problema.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 20 — GLOSARIO
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec20">
+  <h1 class="titulo-seccion"><span class="num">20</span> Glosario de Términos</h1>
+
+  <p>A continuación se definen los términos técnicos y especializados utilizados en este manual y en el sistema CMS del DIF San Mateo Atenco.</p>
+
+  <dl>
+    <div class="glosario-item">
+      <dt>Administrador (Admin)</dt>
+      <dd>Usuario con acceso completo a todos los módulos del panel de administración, incluyendo la gestión de otros usuarios y la configuración del sistema. Es el nivel de acceso más alto del sistema.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>Álbum</dt>
+      <dd>Colección organizada de fotografías dentro del módulo de Galería. Cada álbum tiene un nombre y puede contener múltiples imágenes relacionadas temáticamente.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>Auto-logout</dt>
+      <dd>Cierre automático de sesión que ocurre después de un período de inactividad del usuario. En este sistema, el auto-logout se activa después de 5 minutos sin actividad.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>Bloque</dt>
+      <dd>Unidad organizativa dentro de los módulos de Transparencia que agrupa documentos relacionados. Por ejemplo, un bloque puede representar un año fiscal o una categoría de documentos.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>CMS (Content Management System)</dt>
+      <dd>Sistema de Gestión de Contenido. Software que permite crear, editar, organizar y publicar contenido digital en un sitio web sin necesidad de conocimientos de programación.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>CONAC</dt>
+      <dd>Consejo Nacional de Armonización Contable. Organismo que establece las normas contables para los entes públicos en México. El módulo CONAC gestiona los documentos requeridos por este organismo.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>CSRF (Cross-Site Request Forgery)</dt>
+      <dd>Tipo de ataque informático que intenta ejecutar acciones no autorizadas en un sistema web. El token CSRF es un mecanismo de seguridad que protege contra este tipo de ataques verificando que las solicitudes provienen de fuentes legítimas.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>Dashboard</dt>
+      <dd>Tablero principal del panel de administración. Es la primera pantalla que aparece después de iniciar sesión y muestra un resumen de todas las secciones disponibles en forma de tarjetas.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>DIF</dt>
+      <dd>Sistema para el Desarrollo Integral de la Familia. Organismo público que brinda servicios de asistencia social a la población. En este contexto, se refiere al Sistema Municipal DIF San Mateo Atenco, Estado de México.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>Drag &amp; Drop (Arrastrar y Soltar)</dt>
+      <dd>Técnica de interacción que permite mover elementos en la pantalla haciendo clic sobre ellos, arrastrándolos a una nueva posición y soltando el botón del ratón. Se usa en este sistema para reordenar imágenes del slider y fotos de galerías.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>Editor TinyMCE</dt>
+      <dd>Editor de texto enriquecido (WYSIWYG) integrado en el sistema que permite crear y formatear contenido HTML de forma visual, similar a un procesador de textos. WYSIWYG significa "What You See Is What You Get" (Lo que ves es lo que obtienes).</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>Flash Message</dt>
+      <dd>Mensaje temporal que aparece en la parte superior de la página después de realizar una acción (guardar, eliminar, etc.) para informar al usuario si la operación fue exitosa o si ocurrió un error. Desaparece automáticamente o al hacer clic en el botón de cierre.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>Footer</dt>
+      <dd>Pie de página del sitio web. Sección que aparece en la parte inferior de todas las páginas del sitio público y contiene información de contacto, redes sociales y enlaces de navegación.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>Galería</dt>
+      <dd>Colección de imágenes fotográficas organizadas en álbumes. En el contexto de este sistema, puede referirse tanto al módulo de Galería general como a las galerías específicas de trámites y voluntariado.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>HTML (HyperText Markup Language)</dt>
+      <dd>Lenguaje de marcado utilizado para crear páginas web. El editor TinyMCE genera código HTML automáticamente cuando el usuario da formato al texto. Los usuarios no necesitan conocer HTML para usar el sistema.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>JPG / JPEG</dt>
+      <dd>Formato de imagen digital ampliamente utilizado para fotografías. Ofrece buena calidad con tamaños de archivo relativamente pequeños gracias a su compresión. Es el formato recomendado para fotografías en este sistema.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>Modal</dt>
+      <dd>Ventana emergente que aparece sobre el contenido principal de la página para mostrar un formulario, confirmación o información adicional. Para cerrar un modal, haga clic en el botón "Cerrar" o "Cancelar", o presione la tecla Escape.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>MySQL</dt>
+      <dd>Sistema de gestión de bases de datos relacionales utilizado por el CMS para almacenar toda la información del sitio web (contenido, imágenes, usuarios, configuraciones, etc.).</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>PAE</dt>
+      <dd>Programa Anual de Evaluación. Documento de planeación que establece los programas y acciones a evaluar durante el ejercicio fiscal. El módulo PAE gestiona los documentos PDF de este programa.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>PDF (Portable Document Format)</dt>
+      <dd>Formato de archivo desarrollado por Adobe que preserva el formato del documento independientemente del software o sistema operativo utilizado para visualizarlo. Es el formato estándar para documentos de transparencia en este sistema.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>Permiso</dt>
+      <dd>Autorización otorgada a un usuario para acceder y gestionar una sección específica del panel de administración. Los permisos son asignados por el administrador del sistema.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>PHP</dt>
+      <dd>Lenguaje de programación del lado del servidor utilizado para desarrollar el CMS. Los usuarios no necesitan conocer PHP para usar el sistema.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>PNG</dt>
+      <dd>Formato de imagen digital que soporta transparencia (fondo transparente). Es el formato recomendado para logos e imágenes que requieren fondo transparente.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>SEAC</dt>
+      <dd>Sistema de Evaluación y Acreditación de la Calidad. Módulo del sistema de transparencia que gestiona los documentos de evaluación y acreditación organizados por año, bloques y trimestres.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>Sesión</dt>
+      <dd>Período de tiempo durante el cual un usuario está autenticado en el sistema. La sesión comienza al iniciar sesión y termina al cerrar sesión o por inactividad (auto-logout).</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>Sidebar</dt>
+      <dd>Menú lateral del panel de administración ubicado en el lado izquierdo de la pantalla. Contiene los grupos de navegación y los enlaces a todas las secciones del sistema.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>Slider / Carrusel</dt>
+      <dd>Componente visual del sitio web que muestra una serie de imágenes en rotación automática. El sistema tiene dos sliders: el Slider Principal (en la parte superior de la página de inicio) y el Slider DIF Comunica.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>Slug</dt>
+      <dd>Identificador único de texto utilizado en las URLs del sitio web. Está compuesto por letras minúsculas, números y guiones, sin espacios ni caracteres especiales. Por ejemplo, el slug <code>atencion-mujer</code> genera la URL <code>/tramites/atencion-mujer</code>.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>Token CSRF</dt>
+      <dd>Código de seguridad único generado por el servidor para cada formulario del panel de administración. Verifica que la solicitud proviene de una fuente legítima y no de un sitio malicioso. Ver también: CSRF.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>Transparencia</dt>
+      <dd>Obligación legal de los organismos públicos de publicar información sobre su gestión, finanzas y actividades. El módulo de Transparencia del CMS gestiona todos los documentos que el DIF debe publicar conforme a la Ley de Transparencia y Acceso a la Información Pública del Estado de México.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>URL (Uniform Resource Locator)</dt>
+      <dd>Dirección web que identifica la ubicación de un recurso en internet. Por ejemplo: <code>https://www.difsanmateoatenco.gob.mx/tramites/DAM</code>.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>Usuario Operativo</dt>
+      <dd>Usuario del panel de administración con acceso restringido a las secciones específicas que le ha asignado el administrador. A diferencia del administrador, no puede gestionar otros usuarios ni acceder a secciones no autorizadas.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>WEBP</dt>
+      <dd>Formato de imagen moderno desarrollado por Google que ofrece mejor compresión que JPG y PNG manteniendo alta calidad. Es compatible con los navegadores modernos y es una buena opción para optimizar el rendimiento del sitio.</dd>
+    </div>
+
+    <div class="glosario-item">
+      <dt>WYSIWYG</dt>
+      <dd>"What You See Is What You Get" (Lo que ves es lo que obtienes). Tipo de editor que muestra el contenido tal como aparecerá en el resultado final, sin necesidad de ver el código fuente. El editor TinyMCE es un editor WYSIWYG.</dd>
+    </div>
+  </dl>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 21 — DOCUMENTACIÓN
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec21">
+  <h1 class="titulo-seccion"><span class="num">21</span> Módulo: Documentación</h1>
+
+  <p>El módulo de <strong>Documentación</strong> centraliza el acceso a los documentos de referencia del sistema CMS. Desde aquí puede consultar el Manual de Usuario y el Documento Técnico directamente desde el panel de administración, sin necesidad de buscarlos en otra ubicación.</p>
+  <p>Para acceder, en el menú lateral haga clic en el grupo <strong>"Documentación"</strong> y seleccione <strong>"Documentación"</strong>.</p>
+
+  <h2 class="titulo-subseccion">21.1 Documentos Disponibles</h2>
+  <p>La página muestra dos tarjetas, una por cada documento disponible:</p>
+  <table class="tabla-manual">
+    <thead>
+      <tr>
+        <th>Documento</th>
+        <th>Descripción</th>
+        <th>Audiencia</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Manual de Usuario</strong></td>
+        <td>Guía paso a paso para el uso del panel de administración. Cubre todos los módulos del sistema con instrucciones detalladas.</td>
+        <td>Todo el personal con acceso al panel</td>
+      </tr>
+      <tr>
+        <td><strong>Documento Técnico</strong></td>
+        <td>Especificaciones técnicas del sistema: arquitectura, base de datos, seguridad, API interna y guía de instalación.</td>
+        <td>Equipo técnico y desarrolladores</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="titulo-subseccion">21.2 Cómo Abrir un Documento</h2>
+  <ol class="pasos">
+    <li>En la página de Documentación, localice la tarjeta del documento que desea consultar.</li>
+    <li>Haga clic sobre la tarjeta.</li>
+    <li>El documento se abrirá en una <strong>nueva pestaña</strong> del navegador.</li>
+    <li>Puede navegar por el documento usando la tabla de contenidos del lado izquierdo.</li>
+    <li>Para regresar al panel, cierre la pestaña del documento o cambie a la pestaña del panel.</li>
+  </ol>
+
+  <div class="nota">
+    <strong>💡 Nota:</strong> Los documentos se abren en el navegador como páginas HTML. Puede usar <strong>Ctrl + P</strong> (o Cmd + P en Mac) para imprimirlos o guardarlos como PDF desde el navegador si necesita una copia física.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PIE DE PÁGINA
+═══════════════════════════════════════════════════════════════ -->
+<div class="pie-pagina">
+  <p><strong>Manual de Usuario — Sistema CMS DIF San Mateo Atenco</strong></p>
+  <p>Versión 1.0 &mdash; 2025</p>
+  <p>Sistema Municipal DIF San Mateo Atenco &mdash; Estado de México, México</p>
+  <p style="margin-top:10px;font-size:0.75rem;">
+    Este documento es de uso interno y confidencial. Está destinado exclusivamente al personal administrativo autorizado del DIF San Mateo Atenco.<br>
+    Queda prohibida su reproducción, distribución o divulgación sin autorización expresa de la institución.
+  </p>
+</div>
+
+</div><!-- fin .contenido -->
+</body>
+</html>
