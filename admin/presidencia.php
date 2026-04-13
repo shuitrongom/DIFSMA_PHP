@@ -67,14 +67,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         if ($current) {
             $stmt = $pdo->prepare(
-                'UPDATE presidencia SET nombre = ?, apellidos = ?, cargo = ?, descripcion = ?, imagen_path = ? WHERE id = ?'
+                'UPDATE presidencia SET nombre = ?, apellidos = ?, cargo = ?, descripcion = ?, imagen_path = ?, url_facebook = ? WHERE id = ?'
             );
-            $stmt->execute([$nombre, $apellidos, $cargo, $descripcion, $imagenPath, $current['id']]);
+            $stmt->execute([$nombre, $apellidos, $cargo, $descripcion, $imagenPath, $url_facebook, $current['id']]);
         } else {
             $stmt = $pdo->prepare(
-                'INSERT INTO presidencia (nombre, apellidos, cargo, descripcion, imagen_path) VALUES (?, ?, ?, ?, ?)'
+                'INSERT INTO presidencia (nombre, apellidos, cargo, descripcion, imagen_path, url_facebook) VALUES (?, ?, ?, ?, ?, ?)'
             );
-            $stmt->execute([$nombre, $apellidos, $cargo, $descripcion, $imagenPath]);
+            $stmt->execute([$nombre, $apellidos, $cargo, $descripcion, $imagenPath, $url_facebook]);
         }
 
         $_SESSION['flash_message'] = 'Datos de presidencia actualizados correctamente.';
@@ -231,6 +231,12 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                         <input type="file" class="form-control" id="imagen" name="imagen"
                                                accept=".jpg,.jpeg,.png,.webp"
                                                <?= !$presidencia ? 'required' : '' ?>>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">URL de Facebook (opcional)</label>
+                                        <input type="url" class="form-control" name="url_facebook"
+                                               value="<?= htmlspecialchars($presidencia['url_facebook'] ?? '') ?>"
+                                               placeholder="https://facebook.com/...">
                                     </div>
                                     <button type="submit" class="btn btn-primary w-100">
                                         <i class="bi bi-save me-1"></i>
