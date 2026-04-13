@@ -245,7 +245,7 @@ function aut_img_card(string $campo, string $label, string $default, ?array $con
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js"></script>
+<script src="../lib/tinymce/tinymce.min.js"></script>
 <script src="../js/upload-progress.js?v=13"></script>
 <script>
     tinymce.init({
