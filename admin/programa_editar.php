@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/programa_editar.php — Edición completa de un programa
  */
@@ -424,7 +424,7 @@ document.querySelectorAll('.accordion-collapse').forEach(function(collapse) {
                     branding: false, promotion: false, language: 'es',
                     font_family_formats: 'Montserrat=Montserrat,sans-serif;Arial=arial,helvetica,sans-serif;Georgia=georgia,palatino;Tahoma=tahoma,arial,helvetica,sans-serif;Verdana=verdana,geneva;',
                     font_size_formats: '8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 24pt 28pt 32pt',
-                    content_style: 'body { font-family: Montserrat, sans-serif; font-size: 14px; line-height: 1.6; color: #333; padding: 12px; }',
+                    content_style: 'body { font-family: Montserrat, sans-serif; font-size: 14px; line-height: 1.6; color: #333; padding: 12px; } p { margin: 0 0 8px 0; }',
                     content_css: false, resize: true,
                     setup: function(ed) { ed.on('change input keyup', function() { ed.save(); }); }
                 });

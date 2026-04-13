@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/presidencia.php — Gestión de datos de Presidencia
  *
@@ -26,7 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre      = trim($_POST['nombre'] ?? '');
     $apellidos   = trim($_POST['apellidos'] ?? '');
     $cargo       = trim($_POST['cargo'] ?? '');
-    $descripcion = trim($_POST['descripcion'] ?? '');
+    $descripcion = $_POST['descripcion'] ?? '';
+    // Limpiar clases y atributos de Word (MsoNormal, mso-*, etc.)
+    $descripcion = preg_replace('/\s*class="Mso[^"]*"/i', '', $descripcion);
+    $descripcion = preg_replace('/\s*style="[^"]*mso-[^"]*"/i', '', $descripcion);
+    $descripcion = preg_replace('/<span[^>]*mso-spacerun[^>]*>.*?<\/span>/i', '', $descripcion);
 
     if (empty($nombre) || empty($apellidos) || empty($cargo)) {
         $_SESSION['flash_message'] = 'El nombre, apellidos y cargo son obligatorios.';
@@ -165,7 +169,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                     <h5 class="mb-1"><?= htmlspecialchars($presidencia['apellidos'] ?? '') ?></h5>
                                     <p class="text-muted"><?= htmlspecialchars($presidencia['cargo']) ?></p>
                                     <?php if (!empty($presidencia['descripcion'])): ?>
-                                        <p class="text-muted small"><?= nl2br(htmlspecialchars($presidencia['descripcion'])) ?></p>
+                                        <div class="text-muted small"><?= $presidencia['descripcion'] ?></div>
                                     <?php endif; ?>
                                     <?php if (!empty($presidencia['updated_at'])): ?>
                                         <small class="text-muted">
@@ -250,7 +254,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
     <script>
         tinymce.init({
             selector: '#descripcion',
-            plugins: 'lists link image table code fullscreen preview wordcount charmap hr pagebreak emoticons',
+            plugins: 'lists link image table code fullscreen preview wordcount charmap hr pagebreak emoticons align',
             toolbar1: 'undo redo | cut copy paste | selectall | searchreplace | fullscreen preview',
             toolbar2: 'fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor | removeformat',
             toolbar3: 'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | blockquote hr',
@@ -269,7 +273,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                 'Verdana=verdana,geneva;' +
                 'Courier New=courier new,courier,monospace;',
             font_size_formats: '8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 24pt 28pt 32pt 36pt 48pt',
-            content_style: 'body { font-family: Montserrat, sans-serif; font-size: 14px; line-height: 1.6; color: #333; padding: 12px; }',
+            content_style: 'body { font-family: Montserrat, sans-serif; font-size: 14px; line-height: 1.6; color: #333; padding: 12px; } p { margin: 0 0 8px 0; }',
             content_css: false,
             resize: true,
             statusbar: true,

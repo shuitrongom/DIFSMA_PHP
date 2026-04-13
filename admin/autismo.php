@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/autismo.php — Gestión de la página Unidad Municipal de Autismo
  */
@@ -250,7 +250,7 @@ function aut_img_card(string $campo, string $label, string $default, ?array $con
 <script>
     tinymce.init({
         selector: '.tinymce-editor',
-        plugins: 'lists link image table code fullscreen preview wordcount charmap hr pagebreak emoticons',
+        plugins: 'lists link image table code fullscreen preview wordcount charmap hr pagebreak emoticons align',
         toolbar1: 'undo redo | cut copy paste | selectall | searchreplace | fullscreen preview',
         toolbar2: 'fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor | removeformat',
         toolbar3: 'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | blockquote hr',
@@ -269,7 +269,7 @@ function aut_img_card(string $campo, string $label, string $default, ?array $con
             'Verdana=verdana,geneva;' +
             'Courier New=courier new,courier,monospace;',
         font_size_formats: '8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 24pt 28pt 32pt 36pt 48pt',
-        content_style: 'body { font-family: Montserrat, sans-serif; font-size: 14px; line-height: 1.6; color: #333; padding: 12px; }',
+        content_style: 'body { font-family: Montserrat, sans-serif; font-size: 14px; line-height: 1.6; color: #333; padding: 12px; } p { margin: 0 0 8px 0; }',
         content_css: false,
         resize: true,
         statusbar: true,
