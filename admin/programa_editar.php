@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/programa_editar.php — Edición completa de un programa
  */

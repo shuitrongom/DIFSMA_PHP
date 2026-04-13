@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/tramites.php — Gestión de Trámites y Servicios
  * Permite crear, editar y eliminar trámites dinámicamente.

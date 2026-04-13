@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/autismo.php — Gestión de la página Unidad Municipal de Autismo
  */

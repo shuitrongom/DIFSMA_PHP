@@ -1,12 +1,9 @@
-﻿<?php
+<?php
 /**
  * admin/presidencia.php — Gestión de datos de Presidencia
  *
  * Requisitos: 5.1, 5.2
  */
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
 require_once __DIR__ . '/auth_guard.php';
 require_once __DIR__ . '/csrf.php';
