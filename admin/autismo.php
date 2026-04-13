@@ -248,6 +248,7 @@ function aut_img_card(string $campo, string $label, string $default, ?array $con
 <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
 <script src="../js/upload-progress.js?v=13"></script>
 <script>
+    if (typeof tinymce !== 'undefined') {
     tinymce.init({
         selector: '.tinymce-editor',
         license_key: 'gpl',
@@ -277,6 +278,7 @@ function aut_img_card(string $campo, string $label, string $default, ?array $con
         setup: function(ed) { ed.on('change input keyup', function() { ed.save(); }); }
     });
     document.querySelectorAll('form').forEach(function(f) { f.addEventListener('submit', function() { tinymce.triggerSave(); }); });
+    } // end if tinymce
     const sidebar = document.getElementById('sidebar');
     if (window.innerWidth <= 768) sidebar.classList.add('collapsed');
     document.getElementById('toggleSidebar').addEventListener('click', () => sidebar.classList.toggle('collapsed'));

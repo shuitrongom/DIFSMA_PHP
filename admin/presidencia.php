@@ -248,35 +248,37 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
     <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
     <script src="../js/upload-progress.js?v=13"></script>
     <script>
-        tinymce.init({
-            selector: '#descripcion',
-            license_key: 'gpl',
-            plugins: 'lists link image table code fullscreen preview wordcount charmap hr pagebreak emoticons align',
-            toolbar1: 'undo redo | cut copy paste | selectall | searchreplace | fullscreen preview',
-            toolbar2: 'fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor | removeformat',
-            toolbar3: 'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | blockquote hr',
-            toolbar4: 'link image table charmap emoticons | code | h1 h2 h3 h4 p',
-            menubar: 'file edit view insert format tools table',
-            height: 300,
-            branding: false,
-            promotion: false,
-            language: 'es',
-            font_family_formats:
-                'Montserrat=Montserrat,sans-serif;' +
-                'Arial=arial,helvetica,sans-serif;' +
-                'Georgia=georgia,palatino;' +
-                'Tahoma=tahoma,arial,helvetica,sans-serif;' +
-                'Times New Roman=times new roman,times;' +
-                'Verdana=verdana,geneva;' +
-                'Courier New=courier new,courier,monospace;',
-            font_size_formats: '8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 24pt 28pt 32pt 36pt 48pt',
-            content_style: 'body { font-family: Montserrat, sans-serif; font-size: 14px; line-height: 1.6; color: #333; padding: 12px; } p { margin: 0 0 8px 0; }',
-            content_css: false,
-            resize: true,
-            statusbar: true,
-            setup: function(ed) { ed.on('change input keyup', function() { ed.save(); }); }
-        });
-        document.querySelector('form').addEventListener('submit', function() { tinymce.triggerSave(); });
+        if (typeof tinymce !== 'undefined') {
+            tinymce.init({
+                selector: '#descripcion',
+                license_key: 'gpl',
+                plugins: 'lists link image table code fullscreen preview wordcount charmap hr pagebreak emoticons align',
+                toolbar1: 'undo redo | cut copy paste | selectall | searchreplace | fullscreen preview',
+                toolbar2: 'fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor | removeformat',
+                toolbar3: 'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | blockquote hr',
+                toolbar4: 'link image table charmap emoticons | code | h1 h2 h3 h4 p',
+                menubar: 'file edit view insert format tools table',
+                height: 300,
+                branding: false,
+                promotion: false,
+                language: 'es',
+                font_family_formats:
+                    'Montserrat=Montserrat,sans-serif;' +
+                    'Arial=arial,helvetica,sans-serif;' +
+                    'Georgia=georgia,palatino;' +
+                    'Tahoma=tahoma,arial,helvetica,sans-serif;' +
+                    'Times New Roman=times new roman,times;' +
+                    'Verdana=verdana,geneva;' +
+                    'Courier New=courier new,courier,monospace;',
+                font_size_formats: '8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 24pt 28pt 32pt 36pt 48pt',
+                content_style: 'body { font-family: Montserrat, sans-serif; font-size: 14px; line-height: 1.6; color: #333; padding: 12px; } p { margin: 0 0 8px 0; }',
+                content_css: false,
+                resize: true,
+                statusbar: true,
+                setup: function(ed) { ed.on('change input keyup', function() { ed.save(); }); }
+            });
+            document.querySelector('form').addEventListener('submit', function() { tinymce.triggerSave(); });
+        }
         const sidebar = document.getElementById('sidebar');
         if (window.innerWidth <= 768) sidebar.classList.add('collapsed');
         document.getElementById('toggleSidebar').addEventListener('click', function () {
