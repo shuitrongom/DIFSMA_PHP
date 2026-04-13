@@ -66,14 +66,8 @@ require_once __DIR__ . '/../includes/navbar.php';
     <div class="container-fluid px-0">
         <div style="display:flex;justify-content:center;">
             <div class="sec-titulo-wrap">
-                <?php
-                $words = explode(' ', $titulo);
-                $mid   = (int)ceil(count($words) / 2);
-                $line1 = implode(' ', array_slice($words, 0, $mid));
-                $line2 = implode(' ', array_slice($words, $mid));
-                ?>
                 <h4 class="sec-titulo-text">
-                    <?= htmlspecialchars($line1) ?><?php if ($line2): ?><br><?= htmlspecialchars($line2) ?><?php endif; ?>
+                    <?= htmlspecialchars($titulo) ?>
                 </h4>
             </div>
         </div>
@@ -271,6 +265,8 @@ require_once __DIR__ . '/../includes/navbar.php';
     max-width: var(--sec-titulo-max-w, 800px);
     padding: 0 1rem;
     line-height: 1.4;
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 /* Imagenes con variables de posicion */
