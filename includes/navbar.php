@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Navbar principal del sitio DIF San Mateo Atenco
  *
@@ -29,7 +29,7 @@ $active_page = $active_page ?? '';
 
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link-red dropdown-toggle<?= $active_page === 'acerca' ? ' active' : '' ?>"
-                           data-bs-toggle="dropdown">ACERCA DEL DIF</a>
+                           data-bs-toggle="dropdown" data-bs-offset="0,0" data-bs-flip="false" data-bs-offset="0,0" data-bs-flip="false">ACERCA DEL DIF</a>
                         <li class="dropdown-menu rounded-0">
                             <a href="<?= htmlspecialchars($base_path) ?>acerca-del-dif/presidencia"
                                class="dropdown-item" style="color:#fff!important">Presidencia</a>
@@ -42,7 +42,7 @@ $active_page = $active_page ?? '';
 
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link-yellow dropdown-toggle<?= $active_page === 'servicios' ? ' active' : '' ?>"
-                           data-bs-toggle="dropdown">SERVICIOS</a>
+                           data-bs-toggle="dropdown" data-bs-offset="0,0" data-bs-flip="false" data-bs-offset="0,0" data-bs-flip="false">SERVICIOS</a>
                         <div class="dropdown-menu m-0 rounded-0">
                             <?php
                             try {
@@ -65,7 +65,7 @@ $active_page = $active_page ?? '';
 
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link-pink dropdown-toggle<?= $active_page === 'comunicacion' ? ' active' : '' ?>"
-                           data-bs-toggle="dropdown">COMUNICACIÓN SOCIAL</a>
+                           data-bs-toggle="dropdown" data-bs-offset="0,0" data-bs-flip="false" data-bs-offset="0,0" data-bs-flip="false">COMUNICACIÓN SOCIAL</a>
                         <div class="dropdown-menu m-0 rounded-0">
                             <a href="<?= htmlspecialchars($base_path) ?>comunicacion-social/noticias"
                                class="dropdown-item" style="color:#fff!important">Noticias</a>
@@ -76,7 +76,7 @@ $active_page = $active_page ?? '';
 
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link-purple dropdown-toggle<?= $active_page === 'transparencia' ? ' active' : '' ?>"
-                           data-bs-toggle="dropdown">TRANSPARENCIA</a>
+                           data-bs-toggle="dropdown" data-bs-offset="0,0" data-bs-flip="false" data-bs-offset="0,0" data-bs-flip="false">TRANSPARENCIA</a>
                         <div class="dropdown-menu m-0 rounded-0">
                             <a href="https://www.ipomex.org.mx/ipo3/lgt/indice/DIFSANMATEO.web" target="_blank"
                                class="dropdown-item" style="color:#fff!important">IPOMEX</a>

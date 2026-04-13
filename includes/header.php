@@ -419,6 +419,19 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
     <style>
         body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
         h4.mb-1.d-inline-block { text-transform: uppercase; }
+        /* Forzar dropdown siempre abajo del navbar desde el inicio */
+        .navbar .nav-item { position: relative !important; }
+        .navbar .dropdown-menu {
+            position: absolute !important;
+            top: 100% !important;
+            bottom: auto !important;
+            transform: none !important;
+            display: none !important;
+        }
+        .navbar .nav-item:hover .dropdown-menu,
+        .navbar .nav-item .dropdown-menu.show {
+            display: block !important;
+        }
     </style>
 </head>
 

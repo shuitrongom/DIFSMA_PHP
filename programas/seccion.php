@@ -116,7 +116,7 @@ require_once __DIR__ . '/../includes/navbar.php';
         <?php endif; ?>
 
         <!-- Botón regresar -->
-        <div class="text-center pb-4">
+        <div class="text-center py-4" style="clear:both;margin-top:2rem;position:relative;z-index:10;">
             <a href="<?= $base_path ?>index" class="btn btn-danger px-4 py-2" style="font-family:'Montserrat',sans-serif;font-weight:700;letter-spacing:1px;background:rgb(200,16,44);border:none;">
                 REGRESAR INICIO
             </a>
