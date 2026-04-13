@@ -27,10 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $apellidos   = trim($_POST['apellidos'] ?? '');
     $cargo       = trim($_POST['cargo'] ?? '');
     $descripcion = $_POST['descripcion'] ?? '';
-    // Limpiar clases y atributos de Word (MsoNormal, mso-*, etc.)
-    $descripcion = preg_replace('/\s*class="Mso[^"]*"/i', '', $descripcion);
-    $descripcion = preg_replace('/\s*style="[^"]*mso-[^"]*"/i', '', $descripcion);
-    $descripcion = preg_replace('/<span[^>]*mso-spacerun[^>]*>.*?<\/span>/i', '', $descripcion);
 
     if (empty($nombre) || empty($apellidos) || empty($cargo)) {
         $_SESSION['flash_message'] = 'El nombre, apellidos y cargo son obligatorios.';
