@@ -17,8 +17,6 @@ if ($doc && isset($allowed_docs[$doc])) {
     if (file_exists($path)) {
         header('Content-Type: text/html; charset=UTF-8');
         $html = file_get_contents($path);
-        // Inyectar base tag para que rutas relativas resuelvan correctamente
-        $html = str_replace('<head>', '<head><base href="../">', $html);
         echo $html;
         exit;
     }
