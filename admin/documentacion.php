@@ -17,6 +17,15 @@ if ($doc && isset($allowed_docs[$doc])) {
     if (file_exists($path)) {
         header('Content-Type: text/html; charset=UTF-8');
         $html = file_get_contents($path);
+        // Forzar encoding UTF-8 si el archivo lo necesita
+        if (!mb_check_encoding($html, 'UTF-8')) {
+            $html = mb_convert_encoding($html, 'UTF-8', 'ISO-8859-1');
+        }
+        // Si es descarga, inyectar script de impresión para guardar como PDF
+        if (isset($_GET['download'])) {
+            $printScript = '<script>window.onload=function(){window.print();}</script>';
+            $html = str_replace('</body>', $printScript . '</body>', $html);
+        }
         echo $html;
         exit;
     }
@@ -93,12 +102,18 @@ if ($doc && isset($allowed_docs[$doc])) {
                         <h5>Manual de Usuario</h5>
                         <p>Guía paso a paso para el uso del panel de administración</p>
                     </a>
+                    <a href="documentacion?doc=manual&download=1" target="_blank" class="btn btn-outline-danger w-100 mt-2">
+                        <i class="bi bi-file-earmark-pdf me-1"></i> Descargar PDF
+                    </a>
                 </div>
                 <div class="col-sm-6 col-md-4">
                     <a href="documentacion?doc=tecnico" target="_blank" class="doc-card">
                         <div class="doc-icon"><i class="bi bi-file-earmark-code"></i></div>
                         <h5>Documento Técnico</h5>
                         <p>Arquitectura, base de datos, seguridad y especificaciones del sistema</p>
+                    </a>
+                    <a href="documentacion?doc=tecnico&download=1" target="_blank" class="btn btn-outline-danger w-100 mt-2">
+                        <i class="bi bi-file-earmark-pdf me-1"></i> Descargar PDF
                     </a>
                 </div>
             </div>
