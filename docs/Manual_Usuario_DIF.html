@@ -392,6 +392,8 @@
         <li><a href="#sec2-3">Credenciales y seguridad</a></li>
         <li><a href="#sec2-4">Cierre de sesión</a></li>
         <li><a href="#sec2-5">Auto-logout por inactividad</a></li>
+        <li><a href="#sec2-6">Olvidé mi contraseña</a></li>
+        <li><a href="#sec2-7">Cambio obligatorio de contraseña</a></li>
       </ol>
     </li>
     <li><a href="#sec3">Panel de Administración — Navegación</a>
@@ -441,6 +443,7 @@
     <li><a href="#grp-sistema">Grupo: Sistema</a>
       <ol>
         <li><a href="#sec15">Usuarios</a></li>
+        <li><a href="#sec15b">Analíticas de Visitas</a></li>
         <li><a href="#sec16">Reportes e Historial</a></li>
         <li><a href="#sec21">Documentación</a></li>
       </ol>
@@ -595,6 +598,35 @@
   </div>
   <div class="nota">
     <strong>💡 Consejo:</strong> Si necesita ausentarse de su computadora durante más de 5 minutos mientras trabaja en el panel, guarde los cambios pendientes antes de alejarse. Al regresar, deberá iniciar sesión nuevamente.
+  </div>
+
+  <h2 class="titulo-subseccion" id="sec2-6">2.6 Olvidé mi Contraseña</h2>
+  <p>Si olvidó su contraseña y no puede iniciar sesión, puede solicitar ayuda al administrador directamente desde la pantalla de login:</p>
+  <ol class="pasos">
+    <li>En la pantalla de inicio de sesión, haga clic en el enlace <strong>"¿Olvidaste tu contraseña?"</strong> ubicado debajo del botón de iniciar sesión.</li>
+    <li>Se abrirá la página de recuperación de contraseña.</li>
+    <li>Ingrese su <strong>nombre de usuario</strong> en el campo correspondiente.</li>
+    <li>Haga clic en <strong>"Solicitar recuperación"</strong>.</li>
+    <li>El sistema enviará automáticamente un correo al administrador notificándole que usted necesita restablecer su contraseña.</li>
+    <li>Espere a que el administrador restablezca su contraseña y se la comunique.</li>
+  </ol>
+  <div class="nota">
+    <strong>💡 Nota de seguridad:</strong> El sistema no envía la contraseña directamente por correo. En su lugar, notifica al administrador para que la restablezca de forma segura desde el panel y se la comparta personalmente.
+  </div>
+
+  <h2 class="titulo-subseccion" id="sec2-7">2.7 Cambio Obligatorio de Contraseña</h2>
+  <p>Por política de seguridad, el sistema obliga a cambiar la contraseña cada <strong>90 días</strong>. Cuando su contraseña expira:</p>
+  <ol class="pasos">
+    <li>Al iniciar sesión, el sistema lo redirige automáticamente a la página <strong>"Contraseña Expirada"</strong>.</li>
+    <li>Ingrese su <strong>contraseña actual</strong> para verificar su identidad.</li>
+    <li>Ingrese la <strong>nueva contraseña</strong> que debe cumplir todos los requisitos de seguridad (mínimo 8 caracteres, mayúscula, minúscula, número y símbolo).</li>
+    <li>Puede usar el botón <strong>"Generar contraseña segura"</strong> para que el sistema cree una automáticamente.</li>
+    <li>Confirme la nueva contraseña y haga clic en <strong>"Actualizar contraseña"</strong>.</li>
+    <li>Se enviará un correo de confirmación a su correo registrado y al administrador.</li>
+    <li>Será redirigido al panel de administración.</li>
+  </ol>
+  <div class="alerta">
+    <strong>⚠️ Importante:</strong> No podrá acceder al panel hasta que actualice su contraseña. Si no recuerda su contraseña actual, contacte al administrador para que la restablezca.
   </div>
 </div>
 
@@ -786,6 +818,18 @@
   <div class="alerta">
     <strong>🔴 Advertencia:</strong> La eliminación de imágenes es permanente e irreversible. Una vez eliminada, la imagen no puede recuperarse. Asegúrese de tener una copia de respaldo si la necesita en el futuro.
   </div>
+
+  <h2 class="titulo-subseccion">4.6 Configurar Velocidad del Slider</h2>
+  <p>Puede ajustar el tiempo que cada imagen permanece visible antes de pasar a la siguiente:</p>
+  <ol class="pasos">
+    <li>En la página Slider Principal, localice la tarjeta <strong>"Velocidad del Slider"</strong> en la parte superior izquierda.</li>
+    <li>En el campo <strong>"Tiempo entre imágenes"</strong>, ingrese el valor en milisegundos. Ejemplos: <code>3000</code> = 3 segundos, <code>5000</code> = 5 segundos.</li>
+    <li>Haga clic en <strong>"Guardar"</strong>.</li>
+    <li>El cambio se aplica de inmediato en el sitio público.</li>
+  </ol>
+  <div class="nota">
+    <strong>💡 Recomendación:</strong> Un tiempo entre 4000 y 7000 ms (4-7 segundos) es ideal para que los visitantes puedan leer el contenido de cada imagen sin que el slider avance demasiado rápido.
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════════
@@ -821,6 +865,9 @@
   <div class="nota">
     <strong>💡 Diferencia con el Slider Principal:</strong> Aunque el funcionamiento es idéntico, el Slider DIF Comunica está pensado para contenido de comunicación social: campañas de salud, eventos comunitarios, convocatorias, etc. Se recomienda mantener imágenes actualizadas y relevantes en este espacio.
   </div>
+
+  <h2 class="titulo-subseccion">5.6 Configurar Velocidad del Slider</h2>
+  <p>Igual que en el Slider Principal (Sección 4.6), puede ajustar el tiempo entre imágenes desde la tarjeta <strong>"Velocidad del Slider"</strong> en la parte superior de esta página.</p>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════════
@@ -1472,6 +1519,17 @@
   <div class="alerta">
     <strong>🔴 Advertencia:</strong> La eliminación de imágenes es permanente y no puede deshacerse.
   </div>
+
+  <h2 class="titulo-subseccion">9.4 Configurar Velocidad del Carrusel de Noticias</h2>
+  <p>Cuando hay 4 o más noticias del día, se activa el carrusel automático. Puede ajustar su velocidad:</p>
+  <ol class="pasos">
+    <li>En la página Noticias, localice la tarjeta <strong>"Velocidad del Carrusel"</strong> en la parte superior izquierda.</li>
+    <li>Ingrese el tiempo en milisegundos (ej: <code>3000</code> = 3 seg).</li>
+    <li>Haga clic en <strong>"Guardar"</strong>.</li>
+  </ol>
+  <div class="nota">
+    <strong>💡 Nota:</strong> Si hay menos de 4 noticias del día, las imágenes se muestran estáticas sin carrusel y esta configuración no tiene efecto.
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════════
@@ -2007,6 +2065,107 @@
 
   <div class="alerta">
     <strong>🔴 Advertencia:</strong> La eliminación de usuarios es permanente. Si solo necesita revocar el acceso temporalmente, use la opción de desactivar en lugar de eliminar.
+  </div>
+
+  <h2 class="titulo-subseccion">15.6 Correo Electrónico del Usuario</h2>
+  <p>Al crear un usuario, el campo <strong>"Correo electrónico"</strong> es obligatorio. Este correo se utiliza para:</p>
+  <ul class="lista">
+    <li>Enviar las credenciales de acceso (usuario y contraseña) al momento de crear la cuenta.</li>
+    <li>Notificar al usuario cuando su contraseña es actualizada.</li>
+    <li>Recibir notificaciones de seguridad del sistema.</li>
+  </ul>
+  <div class="nota">
+    <strong>💡 Nota:</strong> El correo debe ser válido y accesible por el usuario, ya que recibirá sus credenciales de acceso inmediatamente después de que se cree su cuenta.
+  </div>
+
+  <h2 class="titulo-subseccion">15.7 Expiración de Contraseña (90 días)</h2>
+  <p>Por seguridad, el sistema obliga a todos los usuarios a cambiar su contraseña cada <strong>90 días</strong>. Cuando una contraseña expira:</p>
+  <ol class="pasos">
+    <li>Al intentar iniciar sesión, el sistema detecta que la contraseña tiene más de 90 días.</li>
+    <li>El usuario es redirigido automáticamente a la página <strong>"Contraseña Expirada"</strong>.</li>
+    <li>No puede acceder al panel hasta que actualice su contraseña.</li>
+    <li>Debe ingresar su contraseña actual, elegir una nueva que cumpla los requisitos de seguridad y confirmarla.</li>
+    <li>Al guardar, se envía un correo de confirmación al usuario y al administrador.</li>
+  </ol>
+  <div class="alerta">
+    <strong>⚠️ Importante:</strong> Si un usuario no puede recordar su contraseña actual para actualizarla, el administrador debe restablecerla desde <strong>Sistema → Usuarios → Contraseña</strong>.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN 15B — ANALÍTICAS DE VISITAS
+═══════════════════════════════════════════════════════════════ -->
+<div class="seccion seccion-break" id="sec15b">
+  <h1 class="titulo-seccion"><span class="num">15b</span> Módulo: Analíticas de Visitas</h1>
+
+  <p>El módulo de <strong>Analíticas de Visitas</strong> permite al administrador conocer en detalle cuántas personas visitan el sitio web público del DIF, desde qué dispositivos, en qué horarios y qué páginas son las más consultadas. Toda la información se presenta con gráficas interactivas y tablas detalladas.</p>
+  <p>Para acceder, en el menú lateral haga clic en <strong>"Sistema"</strong> → <strong>"Analíticas"</strong>.</p>
+
+  <div class="captura">
+    <span class="icono">📊</span>
+    [INSERTAR CAPTURA DE PANTALLA — Módulo Analíticas con KPIs y gráficas]
+  </div>
+
+  <h2 class="titulo-subseccion">15b.1 Indicadores Principales (KPIs)</h2>
+  <p>En la parte superior de la página se muestran cuatro tarjetas con los indicadores más importantes del período seleccionado:</p>
+  <table class="tabla-manual">
+    <thead><tr><th>Indicador</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Total de visitas</strong></td><td>Número total de páginas vistas en el período, incluyendo visitas repetidas del mismo usuario.</td></tr>
+      <tr><td><strong>Sesiones únicas</strong></td><td>Número de sesiones de navegación distintas. Una sesión agrupa todas las páginas vistas por un mismo usuario en una visita continua.</td></tr>
+      <tr><td><strong>IPs únicas</strong></td><td>Número aproximado de visitantes distintos, identificados por su dirección IP (anonimizada por seguridad).</td></tr>
+      <tr><td><strong>Promedio diario</strong></td><td>Promedio de visitas por día dentro del período seleccionado.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="titulo-subseccion">15b.2 Filtros de Fecha y Dispositivo</h2>
+  <p>En la parte superior de la página puede filtrar los datos por:</p>
+  <ul class="lista">
+    <li><strong>Desde / Hasta:</strong> Seleccione el rango de fechas que desea analizar.</li>
+    <li><strong>Dispositivo:</strong> Filtre por tipo de dispositivo: Todos, PC/Laptop, Celular o Tablet.</li>
+  </ul>
+  <ol class="pasos">
+    <li>Seleccione las fechas de inicio y fin en los campos correspondientes.</li>
+    <li>Opcionalmente seleccione un tipo de dispositivo.</li>
+    <li>Haga clic en <strong>"Filtrar"</strong>.</li>
+    <li>Todas las gráficas y tablas se actualizarán con los datos del período seleccionado.</li>
+    <li>Para restablecer los filtros, haga clic en el botón <strong>"X"</strong> junto al botón Filtrar.</li>
+  </ol>
+
+  <h2 class="titulo-subseccion">15b.3 Gráficas Disponibles</h2>
+  <table class="tabla-manual">
+    <thead><tr><th>Gráfica</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Visitas por día</strong></td><td>Barras que muestran cuántas visitas hubo cada día del período. Permite identificar días de mayor tráfico.</td></tr>
+      <tr><td><strong>Por dispositivo</strong></td><td>Gráfica de dona que muestra la proporción de visitas desde PC/Laptop, Celular y Tablet.</td></tr>
+      <tr><td><strong>Visitas por hora del día</strong></td><td>Línea que muestra en qué horas del día se concentran más las visitas (de 0:00 a 23:00 hrs).</td></tr>
+      <tr><td><strong>Navegadores</strong></td><td>Barras horizontales con los navegadores más usados por los visitantes (Chrome, Firefox, Safari, Edge, etc.).</td></tr>
+      <tr><td><strong>Sistemas Operativos</strong></td><td>Barras horizontales con los sistemas operativos detectados (Windows, Android, iOS, macOS, etc.).</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="titulo-subseccion">15b.4 Páginas Más Visitadas</h2>
+  <p>La tabla de páginas más visitadas muestra las 15 páginas del sitio con más visitas en el período, incluyendo:</p>
+  <ul class="lista">
+    <li>Título de la página y URL.</li>
+    <li>Número total de visitas.</li>
+    <li>Barra de progreso visual que indica la proporción respecto a la página más visitada.</li>
+  </ul>
+
+  <h2 class="titulo-subseccion">15b.5 Registro de Últimas Visitas</h2>
+  <p>La tabla de últimas 50 visitas muestra el detalle de cada visita reciente con la siguiente información:</p>
+  <table class="tabla-manual">
+    <thead><tr><th>Columna</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Fecha / Hora</strong></td><td>Fecha y hora exacta en que se realizó la visita.</td></tr>
+      <tr><td><strong>Página</strong></td><td>Título y URL de la página visitada. Si el visitante llegó desde otro sitio, se muestra el dominio de origen.</td></tr>
+      <tr><td><strong>Dispositivo</strong></td><td>Tipo de dispositivo: PC, Celular o Tablet, con ícono identificador.</td></tr>
+      <tr><td><strong>OS / Navegador</strong></td><td>Sistema operativo y navegador detectados del visitante.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="nota">
+    <strong>💡 Nota de privacidad:</strong> El sistema no almacena direcciones IP completas. Las IPs se convierten en un código hash anónimo para proteger la privacidad de los visitantes. Los bots y rastreadores automáticos son detectados y excluidos de las estadísticas.
   </div>
 </div>
 
