@@ -327,5 +327,25 @@ if (count($horario_parts) === 2) {
         })();
     </script>
 
+<!-- ── Visitor Analytics Tracker ─────────────────────────────────────────── -->
+<script>
+(function(){
+    // Generar/recuperar session ID anónimo
+    var sid = sessionStorage.getItem('_dif_sid');
+    if (!sid) {
+        sid = Array.from(crypto.getRandomValues(new Uint8Array(20)))
+                   .map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+        sessionStorage.setItem('_dif_sid', sid);
+    }
+    var fd = new FormData();
+    fd.append('pagina',   window.location.pathname + window.location.search);
+    fd.append('titulo',   document.title);
+    fd.append('referrer', document.referrer || '');
+    fd.append('session',  sid);
+    fetch('<?= rtrim($base_path, '/') ?>/track.php', { method:'POST', body:fd })
+      .catch(function(){});
+})();
+</script>
+
 </body>
 </html>

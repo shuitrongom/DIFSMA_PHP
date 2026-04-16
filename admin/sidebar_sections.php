@@ -70,8 +70,9 @@ $sidebar_groups = [
         'group' => 'Sistema',
         'icon'  => 'bi-gear',
         'items' => [
-            ['title' => 'Usuarios', 'file' => 'usuarios', 'icon' => 'bi-people'],
-            ['title' => 'Reportes', 'file' => 'reportes_historial', 'icon' => 'bi-file-earmark-bar-graph'],
+            ['title' => 'Usuarios',    'file' => 'usuarios',           'icon' => 'bi-people'],
+            ['title' => 'Analíticas',  'file' => 'analytics',          'icon' => 'bi-graph-up'],
+            ['title' => 'Reportes',    'file' => 'reportes_historial',  'icon' => 'bi-file-earmark-bar-graph'],
         ],
     ],
     [
