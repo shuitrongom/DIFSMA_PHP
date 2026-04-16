@@ -34,12 +34,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // CREAR USUARIO
     if ($action === 'create') {
-        $username = trim($_POST['username'] ?? '');
-        $nombre = trim($_POST['nombre'] ?? '');
-        $password = $_POST['password'] ?? '';
+        $username  = trim($_POST['username'] ?? '');
+        $nombre    = trim($_POST['nombre'] ?? '');
+        $email     = trim($_POST['email'] ?? '');
+        $password  = $_POST['password'] ?? '';
         $secciones = $_POST['secciones'] ?? [];
-        if (empty($username) || empty($password)) {
-            $_SESSION['flash_message'] = 'Usuario y contrasena son obligatorios.';
+
+        if (empty($username) || empty($password) || empty($email)) {
+            $_SESSION['flash_message'] = 'Usuario, correo y contraseña son obligatorios.';
+            $_SESSION['flash_type'] = 'warning';
+            header('Location: usuarios'); exit;
+        }
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $_SESSION['flash_message'] = 'El correo electrónico no es válido.';
             $_SESSION['flash_type'] = 'warning';
             header('Location: usuarios'); exit;
         }
@@ -56,13 +63,99 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         try {
             $hash = password_hash($password, PASSWORD_DEFAULT);
-            $pdo->prepare('INSERT INTO admin (username, nombre, password, rol, activo) VALUES (?,?,?,?,1)')
-                ->execute([$username, $nombre, $hash, 'usuario']);
+            $pdo->prepare('INSERT INTO admin (username, nombre, email, password, rol, activo) VALUES (?,?,?,?,?,1)')
+                ->execute([$username, $nombre, $email, $hash, 'usuario']);
             $userId = (int) $pdo->lastInsertId();
             // Asignar permisos
             $stmtP = $pdo->prepare('INSERT INTO admin_permisos (user_id, seccion_file) VALUES (?,?)');
             foreach ($secciones as $sec) { $stmtP->execute([$userId, $sec]); }
-            $_SESSION['flash_message'] = "Usuario \"{$username}\" creado con " . count($secciones) . " secciones.";
+
+            // Enviar correo de bienvenida
+            try {
+                require_once __DIR__ . '/../vendor/autoload.php';
+                require_once __DIR__ . '/../config.php';
+                $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+                $mail->isSMTP();
+                $mail->Host       = MAIL_HOST;
+                $mail->SMTPAuth   = true;
+                $mail->Username   = MAIL_USER;
+                $mail->Password   = MAIL_PASS;
+                $mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port       = MAIL_PORT;
+                $mail->CharSet    = 'UTF-8';
+                $mail->setFrom(MAIL_FROM, MAIL_FROM_NAME);
+                $mail->addAddress($email, $nombre ?: $username);
+                $mail->isHTML(true);
+                $mail->Subject = 'Acceso al Panel de Administración — DIF San Mateo Atenco';
+                $mail->Body = '
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background:#f4f4f4;font-family:\'Segoe UI\',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:40px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+        <!-- Header -->
+        <tr>
+          <td style="background:linear-gradient(135deg,#1a2332 0%,#2d2d2d 60%,#C8102C 100%);padding:40px 40px 30px;text-align:center;">
+            <h1 style="color:#ffffff;margin:0;font-size:24px;font-weight:800;letter-spacing:-0.5px;">DIF San Mateo Atenco</h1>
+            <p style="color:rgba(255,255,255,0.75);margin:8px 0 0;font-size:14px;">Panel de Administración — Acceso Creado</p>
+          </td>
+        </tr>
+        <!-- Body -->
+        <tr>
+          <td style="padding:40px;">
+            <p style="color:#374151;font-size:16px;margin:0 0 20px;">Hola <strong>' . htmlspecialchars($nombre ?: $username) . '</strong>,</p>
+            <p style="color:#374151;font-size:15px;margin:0 0 28px;line-height:1.6;">Se ha creado tu cuenta de acceso al <strong>Panel de Administración</strong> del Sistema de Gestión de Contenido del DIF San Mateo Atenco. A continuación encontrarás tus credenciales de acceso:</p>
+            <!-- Credenciales -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f9fa;border-radius:10px;border:1px solid #e2e8f0;margin-bottom:28px;">
+              <tr>
+                <td style="padding:20px 24px;">
+                  <table width="100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td style="padding:10px 0;border-bottom:1px solid #e2e8f0;">
+                        <span style="color:#6b7280;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Usuario</span><br>
+                        <span style="color:#1a2332;font-size:18px;font-weight:700;font-family:monospace;">' . htmlspecialchars($username) . '</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding:10px 0;">
+                        <span style="color:#6b7280;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Contraseña</span><br>
+                        <span style="color:#C8102C;font-size:18px;font-weight:700;font-family:monospace;">' . htmlspecialchars($password) . '</span>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+            <div style="background:#fff8e1;border-left:4px solid #f59e0b;border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:28px;">
+              <p style="color:#92400e;font-size:13px;margin:0;line-height:1.6;"><strong>⚠️ Importante:</strong> Por seguridad, te recomendamos cambiar tu contraseña después de tu primer inicio de sesión. No compartas estas credenciales con nadie.</p>
+            </div>
+            <p style="color:#374151;font-size:15px;margin:0 0 20px;">Puedes acceder al panel desde el siguiente enlace:</p>
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
+              <tr><td align="center">
+                <a href="' . (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . htmlspecialchars($_SERVER['HTTP_HOST']) . '/admin/login" style="display:inline-block;background:#C8102C;color:#ffffff;text-decoration:none;padding:14px 36px;border-radius:8px;font-weight:700;font-size:15px;">Ir al Panel de Administración</a>
+              </td></tr>
+            </table>
+          </td>
+        </tr>
+        <!-- Footer -->
+        <tr>
+          <td style="background:#1a2332;padding:24px 40px;text-align:center;">
+            <p style="color:rgba(255,255,255,0.5);font-size:12px;margin:0;">Sistema de Gestión de Contenido — DIF San Mateo Atenco<br>Estado de México, México &nbsp;|&nbsp; Uso interno — Confidencial</p>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>';
+                $mail->AltBody = "Hola {$nombre},\n\nTus credenciales de acceso al Panel de Administración DIF:\n\nUsuario: {$username}\nContraseña: {$password}\n\nAccede en: " . (isset($_SERVER['HTTPS']) ? 'https' : 'http') . "://{$_SERVER['HTTP_HOST']}/admin/login\n\nNo compartas estas credenciales.";
+                $mail->send();
+                $_SESSION['flash_message'] = "Usuario \"{$username}\" creado con " . count($secciones) . " secciones. Correo de bienvenida enviado a {$email}.";
+            } catch (\Exception $e) {
+                $_SESSION['flash_message'] = "Usuario \"{$username}\" creado con " . count($secciones) . " secciones. (No se pudo enviar el correo: " . $e->getMessage() . ")";
+            }
             $_SESSION['flash_type'] = 'success';
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al crear.';
@@ -189,6 +282,15 @@ $token = csrf_token();
 </div>
 
 <div class="mb-3">
+  <label class="form-label fw-semibold">Correo electrónico <span class="text-danger">*</span></label>
+  <div class="input-group">
+    <span class="input-group-text bg-white"><i class="bi bi-envelope text-secondary"></i></span>
+    <input type="email" class="form-control" name="email" required placeholder="Ej: juan.perez@dominio.com" autocomplete="off">
+  </div>
+  <small class="text-muted">Se enviará un correo con las credenciales de acceso.</small>
+</div>
+
+<div class="mb-3">
   <label class="form-label fw-semibold">Contraseña <span class="text-danger">*</span></label>
   <div class="input-group">
     <span class="input-group-text bg-white"><i class="bi bi-lock text-secondary"></i></span>
@@ -264,6 +366,7 @@ $token = csrf_token();
 <?php if ($usr['activo']): ?><span class="badge bg-success ms-1">Activo</span><?php else: ?><span class="badge bg-secondary ms-1">Inactivo</span><?php endif; ?>
 </h6>
 <?php if (!empty($usr['nombre'])): ?><small class="text-muted"><?= htmlspecialchars($usr['nombre']) ?></small><br><?php endif; ?>
+<?php if (!empty($usr['email'])): ?><small class="text-muted"><i class="bi bi-envelope me-1"></i><?= htmlspecialchars($usr['email']) ?></small><br><?php endif; ?>
 <small class="text-muted"><?= count($uPerms) ?> secciones asignadas</small>
 </div>
 <div class="d-flex gap-1 flex-wrap justify-content-end">
@@ -449,6 +552,22 @@ if (formCrear) {
             nombre.classList.add('is-invalid');
             showWarn('card-text', 'Nombre requerido',
                 'El campo "Nombre completo" es obligatorio. Ingresa el nombre del usuario.', nombre);
+            return;
+        }
+        var email = this.querySelector('[name="email"]');
+        if (!email.value.trim()) {
+            e.preventDefault();
+            email.classList.add('is-invalid');
+            showWarn('envelope', 'Correo requerido',
+                'El campo "Correo electrónico" es obligatorio.', email);
+            return;
+        }
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email.value.trim())) {
+            e.preventDefault();
+            email.classList.add('is-invalid');
+            showWarn('envelope-x', 'Correo inválido',
+                'Ingresa un correo electrónico válido. Ej: nombre@dominio.com', email);
             return;
         }
         if (!password.value) {

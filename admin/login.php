@@ -355,6 +355,12 @@ $csrf = csrf_token();
                         Iniciar sesión
                     </button>
                 </form>
+
+                <div class="text-center mt-3">
+                    <a href="olvide_password" style="font-size:0.8rem;color:#6b7280;text-decoration:none;">
+                        <i class="bi bi-question-circle me-1"></i>¿Olvidaste tu contraseña?
+                    </a>
+                </div>
             </div>
 
             <!-- Footer -->

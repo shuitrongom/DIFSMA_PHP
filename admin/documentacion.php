@@ -10,21 +10,38 @@ $allowed_docs = [
     'tecnico' => ['title' => 'Documento Técnico',  'file' => '../docs/Documento_Tecnico_DIF.html'],
 ];
 
-// Si se solicita un doc válido, mostrarlo embebido
+// ── Descarga PDF pre-generado ──────────────────────────────────────────────────
+if ($doc && isset($allowed_docs[$doc]) && isset($_GET['download'])) {
+    $pdfs = [
+        'manual'  => __DIR__ . '/../docs/pdf/Manual de Usuario — Sistema CMS DIF San Mateo Atenco.pdf',
+        'tecnico' => __DIR__ . '/../docs/pdf/Documento Técnico  DIF San Mateo Atenco CMS.pdf',
+    ];
+    $pdfPath = $pdfs[$doc];
+    if (file_exists($pdfPath)) {
+        $filename = ($doc === 'manual') ? 'Manual_Usuario_DIF.pdf' : 'Documento_Tecnico_DIF.pdf';
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Length: ' . filesize($pdfPath));
+        header('Cache-Control: no-cache');
+        readfile($pdfPath);
+        exit;
+    } else {
+        // PDF no disponible aún
+        $_SESSION['flash_message'] = 'El PDF aún no está disponible. Por favor contacte al administrador.';
+        $_SESSION['flash_type'] = 'warning';
+        header('Location: documentacion');
+        exit;
+    }
+}
+
+// ── Ver documento HTML ─────────────────────────────────────────────────────────
 if ($doc && isset($allowed_docs[$doc])) {
-    $info = $allowed_docs[$doc];
-    $path = __DIR__ . '/' . $info['file'];
+    $path = __DIR__ . '/' . $allowed_docs[$doc]['file'];
     if (file_exists($path)) {
         header('Content-Type: text/html; charset=UTF-8');
         $html = file_get_contents($path);
-        // Forzar encoding UTF-8 si el archivo lo necesita
         if (!mb_check_encoding($html, 'UTF-8')) {
             $html = mb_convert_encoding($html, 'UTF-8', 'ISO-8859-1');
-        }
-        // Si es descarga, inyectar script de impresión para guardar como PDF
-        if (isset($_GET['download'])) {
-            $printScript = '<script>window.onload=function(){window.print();}</script>';
-            $html = str_replace('</body>', $printScript . '</body>', $html);
         }
         echo $html;
         exit;
@@ -102,7 +119,7 @@ if ($doc && isset($allowed_docs[$doc])) {
                         <h5>Manual de Usuario</h5>
                         <p>Guía paso a paso para el uso del panel de administración</p>
                     </a>
-                    <a href="documentacion?doc=manual&download=1" target="_blank" class="btn btn-outline-danger w-100 mt-2">
+                    <a href="documentacion?doc=manual&download=1" target="_blank" class="btn btn-outline-danger w-100 mt-2 no-pdf-viewer" onclick="window.open(this.href,'_blank');return false;">
                         <i class="bi bi-file-earmark-pdf me-1"></i> Descargar PDF
                     </a>
                 </div>
@@ -112,7 +129,7 @@ if ($doc && isset($allowed_docs[$doc])) {
                         <h5>Documento Técnico</h5>
                         <p>Arquitectura, base de datos, seguridad y especificaciones del sistema</p>
                     </a>
-                    <a href="documentacion?doc=tecnico&download=1" target="_blank" class="btn btn-outline-danger w-100 mt-2">
+                    <a href="documentacion?doc=tecnico&download=1" target="_blank" class="btn btn-outline-danger w-100 mt-2 no-pdf-viewer" onclick="window.open(this.href,'_blank');return false;">
                         <i class="bi bi-file-earmark-pdf me-1"></i> Descargar PDF
                     </a>
                 </div>

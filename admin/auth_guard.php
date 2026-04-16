@@ -26,15 +26,35 @@ $SESSION_TIMEOUT = 300; // segundos
 
 if (isset($_SESSION['last_activity'])) {
     if (time() - $_SESSION['last_activity'] > $SESSION_TIMEOUT) {
-        // Sesión expirada por inactividad
         session_unset();
         session_destroy();
         header('Location: login?expired=1');
         exit;
     }
 }
-// Actualizar timestamp de última actividad
 $_SESSION['last_activity'] = time();
+
+// ── Verificar expiración de contraseña (90 días) ─────────────────────────────
+$change_pass_page = 'cambiar_password.php';
+if ($current_admin_file_guard !== $change_pass_page && $current_admin_file_guard !== 'logout.php') {
+    try {
+        require_once __DIR__ . '/../includes/db.php';
+        $pdo_exp = get_db();
+        $stmt_exp = $pdo_exp->prepare('SELECT password_changed_at FROM admin WHERE id = ?');
+        $stmt_exp->execute([$_SESSION['admin_id'] ?? 0]);
+        $row_exp = $stmt_exp->fetch();
+        if ($row_exp) {
+            $changed = $row_exp['password_changed_at']
+                ? strtotime($row_exp['password_changed_at'])
+                : 0;
+            $days_elapsed = (time() - $changed) / 86400;
+            if ($days_elapsed >= 90) {
+                header('Location: cambiar_password?motivo=expiracion');
+                exit;
+            }
+        }
+    } catch (PDOException $e) {}
+}
 
 // ── Verificar permisos de sección para usuarios no-admin ────────────────────
 $current_admin_file_guard = basename($_SERVER['SCRIPT_FILENAME'] ?? '');

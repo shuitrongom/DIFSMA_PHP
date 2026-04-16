@@ -237,6 +237,8 @@ document.addEventListener('change', function(e) {
         var a = e.target.closest('a[target="_blank"]');
         if (!a) return;
         var href = a.getAttribute('href') || '';
+        // Ignorar botones de descarga directa
+        if (href.indexOf('download=1') !== -1) return;
         if (/\.pdf(\?|$)/i.test(href) || a.querySelector('.bi-file-earmark-pdf,.bi-file-pdf,.bi-eye')) {
             e.preventDefault();
             var row = a.closest('tr');

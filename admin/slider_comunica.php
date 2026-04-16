@@ -9,8 +9,10 @@ require_once __DIR__ . '/auth_guard.php';
 require_once __DIR__ . '/csrf.php';
 require_once __DIR__ . '/upload_handler.php';
 require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/slider_config_helper.php';
 
 $pdo = get_db();
+$autoplay_delay = get_slider_delay('slider_comunica', 3200);
 
 $meses_nombre = [
     1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril',
@@ -52,8 +54,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido. Intente de nuevo.';
         $_SESSION['flash_type']    = 'danger';
-        header('Location: slider_comunica');
-        exit;
+        header('Location: slider_comunica'); exit;
+    }
+
+    // ── SAVE CONFIG ───────────────────────────────────────────────────────────
+    if ($action === 'save_config') {
+        $delay = max(500, min(30000, (int)($_POST['autoplay_delay'] ?? 3200)));
+        save_slider_delay('slider_comunica', $delay);
+        $_SESSION['flash_message'] = 'Configuración guardada.';
+        $_SESSION['flash_type']    = 'success';
+        header('Location: slider_comunica'); exit;
     }
 
     // ── ADD ────────────────────────────────────────────────────────────────────
@@ -325,6 +335,33 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                     </div>
                 <?php endif; ?>
 
+                <!-- Config velocidad -->
+                <div class="card mb-3">
+                    <div class="card-header bg-secondary text-white">
+                        <i class="bi bi-stopwatch me-1"></i> Velocidad del Slider
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="slider_comunica" class="row g-2 align-items-end">
+                            <input type="hidden" name="action" value="save_config">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+                            <div class="col">
+                                <label class="form-label fw-semibold mb-1">Tiempo entre imágenes</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="autoplay_delay"
+                                           value="<?= $autoplay_delay ?>" min="500" max="30000" step="100" required>
+                                    <span class="input-group-text">ms</span>
+                                </div>
+                                <small class="text-muted">Ej: 3000 = 3 seg, 5000 = 5 seg</small>
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-secondary">
+                                    <i class="bi bi-save me-1"></i> Guardar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
                 <!-- Formulario de alta -->
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">
@@ -552,7 +589,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                     formData.append('csrf_token', '<?= htmlspecialchars($token) ?>');
                     formData.append('order', ids.join(','));
 
-                    fetch('slider_comunica.php', { method: 'POST', body: formData })
+                    fetch('slider_comunica', { method: 'POST', body: formData })
                         .then(function(r) { return r.json(); })
                         .then(function(data) {
                             if (!data.success) alert('Error al guardar orden');

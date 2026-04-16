@@ -9,10 +9,16 @@
  */
 
 require_once 'includes/db.php';
+require_once 'admin/slider_config_helper.php';
 
 $base_path   = '';
 $active_page = 'inicio';
 $page_title  = 'DIF San Mateo Atenco';
+
+// ── Delays de autoplay desde BD ───────────────────────────────────────────────
+$delay_principal = get_slider_delay('slider_principal', 3200);
+$delay_comunica  = get_slider_delay('slider_comunica',  3200);
+$delay_noticias  = get_slider_delay('noticias',         3000);
 
 // ── Consultar slider_principal ────────────────────────────────────────────────
 $slider_images = [];
@@ -221,7 +227,7 @@ require_once 'includes/navbar.php';
 
         // ── Auto-avance ───────────────────────────────────────────────────────
         let timer = null;
-        function startAuto()   { stopAuto(); timer = setInterval(next, 7000); }
+        function startAuto()   { stopAuto(); timer = setInterval(next, <?= $delay_principal ?>); }
         function stopAuto()    { if (timer) { clearInterval(timer); timer = null; } }
         function restartAuto() { stopAuto(); startAuto(); }
 
@@ -361,11 +367,9 @@ require_once 'includes/navbar.php';
 
             <?php if (!empty($noticias_images)): ?>
             <?php
-            // Swiper loop con 3 slidesPerView necesita mínimo 7 slides (2*slidesPerView+1)
             $notice_slides = $noticias_images;
-            while (count($notice_slides) < 7) {
-                $notice_slides = array_merge($notice_slides, $noticias_images);
-            }
+            $use_loop = false; // nunca duplicar
+            $use_carousel = count($noticias_images) >= 4;
             ?>
             <div class="position-relative">
                 <div class="swiper notice-swiper">
@@ -375,7 +379,7 @@ require_once 'includes/navbar.php';
                         <?php endforeach; ?>
                     </div>
                 </div>
-                <div class="d-flex justify-content-center gap-3 mt-3">
+                <div class="d-flex justify-content-center gap-3 mt-3" <?= !$use_carousel ? 'style="display:none!important;"' : '' ?>>
                     <button class="notice-btn" id="noticePrev" aria-label="Anterior">&#10094;</button>
                     <button class="notice-btn" id="noticeNext" aria-label="Siguiente">&#10095;</button>
                 </div>
@@ -500,7 +504,7 @@ document.addEventListener('click', function(e) {
             slideShadows: false
         },
         autoplay: {
-            delay: 3200,
+            delay: <?= $delay_comunica ?>,
             disableOnInteraction: false
         },
         pagination: {
@@ -518,20 +522,16 @@ document.addEventListener('click', function(e) {
 <?php if (!empty($noticias_images)): ?>
 <script>
     var noticeSwiper = new Swiper('.notice-swiper', {
-        loop: true,
-        slidesPerView: 1,
+        loop: false,
+        slidesPerView: <?= min(count($noticias_images), 1) ?>,
         spaceBetween: 16,
-        autoplay: {
-            delay: 12000,
-            disableOnInteraction: false
-        },
-        navigation: {
-            nextEl: '#noticeNext',
-            prevEl: '#noticePrev'
-        },
+        <?php if ($use_carousel): ?>
+        autoplay: { delay: <?= $delay_noticias ?>, disableOnInteraction: false },
+        navigation: { nextEl: '#noticeNext', prevEl: '#noticePrev' },
+        <?php endif; ?>
         breakpoints: {
-            576: { slidesPerView: 2 },
-            992: { slidesPerView: 3 }
+            576: { slidesPerView: <?= min(2, count($noticias_images)) ?> },
+            992: { slidesPerView: <?= min(3, count($noticias_images)) ?> }
         }
     });
 </script>

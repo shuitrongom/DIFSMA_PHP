@@ -393,7 +393,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                     var fd = new FormData();
                     fd.append('action', 'reorder_images');
                     fd.append('order', ids.join(','));
-                    fetch('voluntariado.php', { method: 'POST', body: fd })
+                    fetch('voluntariado', { method: 'POST', body: fd })
                         .then(function(r) { return r.json(); })
                         .then(function(d) { if (!d.success) alert('Error al guardar orden'); })
                         .catch(function() { alert('Error de conexión'); });

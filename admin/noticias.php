@@ -9,8 +9,10 @@ require_once __DIR__ . '/auth_guard.php';
 require_once __DIR__ . '/csrf.php';
 require_once __DIR__ . '/upload_handler.php';
 require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/slider_config_helper.php';
 
 $pdo = get_db();
+$autoplay_delay = get_slider_delay('noticias', 3000);
 
 // ── Procesamiento POST ─────────────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -20,8 +22,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido. Intente de nuevo.';
         $_SESSION['flash_type']    = 'danger';
-        header('Location: noticias');
-        exit;
+        header('Location: noticias'); exit;
+    }
+
+    // ── SAVE CONFIG ───────────────────────────────────────────────────────────
+    if ($action === 'save_config') {
+        $delay = max(500, min(30000, (int)($_POST['autoplay_delay'] ?? 3000)));
+        save_slider_delay('noticias', $delay);
+        $_SESSION['flash_message'] = 'Configuración guardada.';
+        $_SESSION['flash_type']    = 'success';
+        header('Location: noticias'); exit;
     }
 
     // ── ADD: nueva imagen de noticia ───────────────────────────────────────────
@@ -269,6 +279,27 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                 <div class="row g-4">
                     <!-- Formulario de alta -->
                     <div class="col-lg-4">
+                        <div class="card mb-3">
+                            <div class="card-header bg-secondary text-white">
+                                <i class="bi bi-stopwatch me-1"></i> Velocidad del Carrusel
+                            </div>
+                            <div class="card-body">
+                                <form method="POST" action="noticias">
+                                    <input type="hidden" name="action" value="save_config">
+                                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+                                    <label class="form-label fw-semibold">Tiempo entre imágenes</label>
+                                    <div class="input-group mb-2">
+                                        <input type="number" class="form-control" name="autoplay_delay"
+                                               value="<?= $autoplay_delay ?>" min="500" max="30000" step="100" required>
+                                        <span class="input-group-text">ms</span>
+                                    </div>
+                                    <small class="text-muted d-block mb-3">Ej: 3000 = 3 seg, 5000 = 5 seg</small>
+                                    <button type="submit" class="btn btn-secondary w-100">
+                                        <i class="bi bi-save me-1"></i> Guardar
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
                         <div class="card">
                             <div class="card-header bg-primary text-white">
                                 <i class="bi bi-plus-circle me-1"></i> Agregar imagen de noticia
@@ -291,6 +322,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                 </form>
                             </div>
                         </div>
+                    </div>
                     </div>
 
                     <!-- Listado de noticias agrupadas por fecha -->
