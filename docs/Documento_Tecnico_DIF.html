@@ -1130,7 +1130,6 @@ AddHandler cgi-script .php .pl .py .jsp .asp .sh .cgi</code></pre>
   <h3>7.16 M�dulo: Historial y Reportes</h3>
   <p><strong>Archivos:</strong> <code>admin/historial.php</code>, <code>admin/reportes_historial.php</code> | <strong>Tabla:</strong> <code>admin_historial</code></p>
   <p>Visualiza el registro completo de actividad del panel de administraci�n con filtros por usuario, secci�n, tipo de acci�n y rango de fechas. El m�dulo de reportes genera estad�sticas de uso del sistema.</p>
-</section>
   <h3>7.17 Módulo: Analíticas de Visitas</h3>
   <p><strong>Archivos:</strong> <code>admin/analytics.php</code>, <code>track.php</code> | <strong>Tabla:</strong> <code>visitor_analytics</code></p>
   <p>Sistema completo de analíticas del sitio público. El endpoint <code>track.php</code> recibe peticiones POST desde el footer de cada página pública (via <code>fetch()</code>) y registra la visita con detección automática de bots, dispositivo, OS, navegador e IP anonimizada (SHA-256). El panel <code>admin/analytics.php</code> presenta KPIs, gráficas Chart.js (visitas por día, por hora, dispositivos, navegadores, OS) y tabla de últimas visitas.</p>
@@ -1156,6 +1155,8 @@ AddHandler cgi-script .php .pl .py .jsp .asp .sh .cgi</code></pre>
     <tr><td><code>enviar_correo</code></td><td>Envía el PDF seleccionado como adjunto al correo indicado. Campos: <code>doc_key</code>, <code>destinatario</code>, <code>nombre_dest</code>, <code>mensaje_extra</code>, <code>csrf_token</code>.</td></tr>
   </table>
 
+
+</section>
 
 <!-- --------------------------------------------------------------------------
      SECCI�N 8 ? API INTERNA / ENDPOINTS AJAX
