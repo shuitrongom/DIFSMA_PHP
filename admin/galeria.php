@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_validate($token)) {
         $_SESSION['flash_message'] = 'Token CSRF inválido. Intente de nuevo.';
         $_SESSION['flash_type']    = 'danger';
-        $redirect = $albumId > 0 ? "galeria.php?album_id={$albumId}" : 'galeria.php';
+        $redirect = $albumId > 0 ? "galeria?album_id={$albumId}" : 'galeria';
         header("Location: {$redirect}");
         exit;
     }
@@ -475,7 +475,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                 <i class="bi bi-pencil-square me-1"></i> Datos del álbum
                             </div>
                             <div class="card-body">
-                                <form method="POST" enctype="multipart/form-data" action="galeria.php?album_id=<?= (int) $currentAlbum['id'] ?>">
+                                <form method="POST" enctype="multipart/form-data" action="galeria?album_id=<?= (int) $currentAlbum['id'] ?>">
                                     <input type="hidden" name="action" value="edit_album">
                                     <input type="hidden" name="id" value="<?= (int) $currentAlbum['id'] ?>">
                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
@@ -512,7 +512,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                 <i class="bi bi-plus-circle me-1"></i> Agregar imágenes al álbum
                             </div>
                             <div class="card-body">
-                                <form method="POST" enctype="multipart/form-data" action="galeria.php?album_id=<?= (int) $currentAlbum['id'] ?>">
+                                <form method="POST" enctype="multipart/form-data" action="galeria?album_id=<?= (int) $currentAlbum['id'] ?>">
                                     <input type="hidden" name="action" value="add_image">
                                     <input type="hidden" name="album_id" value="<?= (int) $currentAlbum['id'] ?>">
                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
@@ -574,7 +574,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                         <div class="modal fade" id="deleteImgModal<?= (int) $img['id'] ?>" tabindex="-1" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
-                                                    <form method="POST" action="galeria.php?album_id=<?= (int) $currentAlbum['id'] ?>">
+                                                    <form method="POST" action="galeria?album_id=<?= (int) $currentAlbum['id'] ?>">
                                                         <input type="hidden" name="action" value="delete_image">
                                                         <input type="hidden" name="image_id" value="<?= (int) $img['id'] ?>">
                                                         <input type="hidden" name="album_id" value="<?= (int) $currentAlbum['id'] ?>">
@@ -741,7 +741,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                                             <?php endif; ?>
                                                         </td>
                                                         <td>
-                                                            <a href="galeria.php?album_id=<?= (int) $album['id'] ?>"
+                                                            <a href="galeria?album_id=<?= (int) $album['id'] ?>"
                                                                class="btn btn-sm btn-outline-primary" title="Ver álbum">
                                                                 <i class="bi bi-eye"></i> Ver
                                                             </a>
