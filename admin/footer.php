@@ -394,6 +394,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                             <optgroup label="Especiales">
                                                 <option value="__ubicacion__">Ubicacion en Google Maps</option>
                                                 <option value="#">Sin enlace (#)</option>
+                                                <option value="mantenimiento">P�gina de Mantenimiento</option>
                                             </optgroup>
                                             <?php if (!empty($tramites_footer)): ?>
                                             <optgroup label="Servicios y Trámites">
@@ -524,6 +525,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                             <optgroup label="Especiales">
                                                 <option value="__ubicacion__" <?= $fl['url']==='__ubicacion__'?'selected':'' ?>>Ubicacion en Google Maps</option>
                                                 <option value="#" <?= $fl['url']==='#'?'selected':'' ?>>Sin enlace (#)</option>
+                                                <option value="mantenimiento" <?= $fl['url']==='mantenimiento'?'selected':'' ?>>Página de Mantenimiento</option>
                                             </optgroup>
                                         </select>
                                         <input type="text" class="form-control" id="link_url_<?= (int)$fl['id'] ?>" name="link_url" value="<?= htmlspecialchars($fl['url']) ?>" placeholder="index.php o https://...">

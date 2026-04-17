@@ -114,62 +114,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // ── EDIT: reemplazar imagen y/o link ──────────────────────────────────────
+    // ── EDIT: reemplazar imagen/video y/o link ────────────────────────────────
     if ($action === 'edit') {
         $id = (int) ($_POST['id'] ?? 0);
 
         if ($id <= 0) {
-            $_SESSION['flash_message'] = 'ID de imagen inválido.';
+            $_SESSION['flash_message'] = 'ID inválido.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: slider_principal');
-            exit;
+            header('Location: slider_principal'); exit;
         }
 
-        $stmt = $pdo->prepare('SELECT imagen_path FROM slider_principal WHERE id = ?');
+        $stmt = $pdo->prepare('SELECT imagen_path, tipo FROM slider_principal WHERE id = ?');
         $stmt->execute([$id]);
         $old = $stmt->fetch();
 
         if (!$old) {
             $_SESSION['flash_message'] = 'Registro no encontrado.';
             $_SESSION['flash_type']    = 'danger';
-            header('Location: slider_principal');
-            exit;
+            header('Location: slider_principal'); exit;
         }
 
         $link_url   = trim($_POST['link_url'] ?? '') ?: null;
         $new_imagen = null;
+        $nuevo_tipo = null;
 
-        // Solo procesar imagen si se seleccionó una
         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] !== UPLOAD_ERR_NO_FILE) {
-            $upload = handle_upload($_FILES['imagen'], 'image');
+            $ext_edit   = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
+            $es_vid_edit = in_array($ext_edit, ['mp4', 'webm', 'ogv', 'ogg']);
+            $upload_type_edit = $es_vid_edit ? 'video' : 'image';
+            $nuevo_tipo = $es_vid_edit ? 'video' : 'imagen';
+
+            $upload = handle_upload($_FILES['imagen'], $upload_type_edit);
             if (!$upload['success']) {
                 $_SESSION['flash_message'] = $upload['error'];
                 $_SESSION['flash_type']    = 'danger';
-                header('Location: slider_principal');
-                exit;
+                header('Location: slider_principal'); exit;
             }
             $new_imagen = $upload['path'];
         }
 
         try {
             if ($new_imagen) {
-                // Actualizar imagen y link
-                $params = $has_link_url
-                    ? [$new_imagen, $link_url, $id]
-                    : [$new_imagen, $id];
-                $pdo->prepare(
-                    $has_link_url
-                        ? 'UPDATE slider_principal SET imagen_path = ?, link_url = ? WHERE id = ?'
-                        : 'UPDATE slider_principal SET imagen_path = ? WHERE id = ?'
-                )->execute($params);
-                // Eliminar imagen anterior
+                if ($has_tipo && $has_link_url) {
+                    $pdo->prepare('UPDATE slider_principal SET imagen_path=?, tipo=?, link_url=? WHERE id=?')
+                        ->execute([$new_imagen, $nuevo_tipo, $link_url, $id]);
+                } elseif ($has_link_url) {
+                    $pdo->prepare('UPDATE slider_principal SET imagen_path=?, link_url=? WHERE id=?')
+                        ->execute([$new_imagen, $link_url, $id]);
+                } else {
+                    $pdo->prepare('UPDATE slider_principal SET imagen_path=? WHERE id=?')
+                        ->execute([$new_imagen, $id]);
+                }
                 $oldFile = BASE_PATH . '/' . $old['imagen_path'];
                 if (file_exists($oldFile)) unlink($oldFile);
-                $_SESSION['flash_message'] = 'Imagen y configuración actualizadas.';
+                $_SESSION['flash_message'] = 'Archivo y configuración actualizados.';
             } else {
-                // Solo actualizar link_url
                 if ($has_link_url) {
-                    $pdo->prepare('UPDATE slider_principal SET link_url = ? WHERE id = ?')
+                    $pdo->prepare('UPDATE slider_principal SET link_url=? WHERE id=?')
                         ->execute([$link_url, $id]);
                 }
                 $_SESSION['flash_message'] = 'Configuración actualizada.';
@@ -180,8 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['flash_type']    = 'danger';
         }
 
-        header('Location: slider_principal');
-        exit;
+        header('Location: slider_principal'); exit;
     }
 
     // ── DELETE: eliminar imagen ────────────────────────────────────────────────
@@ -228,10 +228,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// ── Consultar imágenes actuales ────────────────────────────────────────────────
-$select_slides = $has_link_url
-    ? 'SELECT * FROM slider_principal ORDER BY orden ASC'
-    : 'SELECT *, NULL AS link_url FROM slider_principal ORDER BY orden ASC';
+// ── Consultar slides actuales ──────────────────────────────────────────────────
+if ($has_link_url && $has_tipo) {
+    $select_slides = 'SELECT * FROM slider_principal ORDER BY orden ASC';
+} elseif ($has_link_url) {
+    $select_slides = "SELECT *, 'imagen' AS tipo FROM slider_principal ORDER BY orden ASC";
+} elseif ($has_tipo) {
+    $select_slides = 'SELECT *, NULL AS link_url FROM slider_principal ORDER BY orden ASC';
+} else {
+    $select_slides = "SELECT *, NULL AS link_url, 'imagen' AS tipo FROM slider_principal ORDER BY orden ASC";
+}
 $stmt = $pdo->query($select_slides);
 $slides = $stmt->fetchAll();
 
@@ -254,6 +260,7 @@ $menu_pages = [
     'transparencia/avisos_privacidad'           => 'Transparencia — Avisos de Privacidad',
     'voluntariado'                              => 'Voluntariado',
     'autismo'                                   => 'Servicios — Unidad Municipal de Autismo',
+    'mantenimiento'                             => 'Página de Mantenimiento',
 ];
 // Agregar trámites dinámicamente
 try {
@@ -366,7 +373,6 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                 </form>
                             </div>
                         </div>
-                    </div>
                     </div>
 
                     <!-- Listado de imágenes -->

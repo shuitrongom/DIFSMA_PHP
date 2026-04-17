@@ -186,16 +186,22 @@ require_once 'includes/navbar.php';
                 if (tipos[i] === 'video') {
                     media = document.createElement('video');
                     media.src = src;
-                    media.autoplay = true;
+                    media.autoplay = false;
                     media.muted = true;
-                    media.loop = true;
+                    media.loop = false;
                     media.playsInline = true;
                     media.setAttribute('playsinline', '');
                     media.style.width = '100%';
                     media.style.height = 'auto';
+                    media.style.maxHeight = '520px';
+                    media.style.objectFit = 'cover';
                     media.style.display = 'block';
-                    // Pausar/reanudar según slide activo
                     media.dataset.slideIndex = i;
+                    // Al terminar el video avanza al siguiente slide
+                    media.addEventListener('ended', function() {
+                        next();
+                        restartAuto();
+                    });
                     slide.appendChild(media);
                 } else {
                     media = document.createElement('img');
@@ -267,13 +273,9 @@ require_once 'includes/navbar.php';
                 d.classList.toggle('active', i === current);
             });
             syncVideos(current);
-            // Si el slide actual es video, pausar el autoplay mientras dura
+            // Si el slide es video pausar el autoplay — avanzará solo al terminar
             if (tipos[current] === 'video') {
                 stopAuto();
-                var vid = viewport.querySelector('video[data-slide-index="' + current + '"]');
-                if (vid) {
-                    vid.onended = function() { next(); restartAuto(); };
-                }
             }
         }
 
