@@ -65,6 +65,8 @@ if ($current_admin_file_guard !== $change_pass_page && $current_admin_file_guard
 
 // ── Verificar permisos de sección para usuarios no-admin ────────────────────
 $current_admin_file_guard = basename($_SERVER['SCRIPT_FILENAME'] ?? '');
+// Normalizar: quitar .php para comparar con seccion_file del sidebar (sin extensión)
+$current_admin_file_guard_noext = preg_replace('/\.php$/i', '', $current_admin_file_guard);
 $is_admin_role = ($_SESSION['admin_rol'] ?? 'admin') === 'admin';
 
 // Cargar helper de historial
@@ -132,8 +134,15 @@ if (!$is_admin_role && !in_array($current_admin_file_guard, $public_pages)) {
     try {
         require_once __DIR__ . '/../includes/db.php';
         $pdo_guard = get_db();
-        $stmt_guard = $pdo_guard->prepare('SELECT id FROM admin_permisos WHERE user_id = ? AND seccion_file = ?');
-        $stmt_guard->execute([$_SESSION['admin_id'] ?? 0, $current_admin_file_guard]);
+        // Comparar con y sin extensión .php para compatibilidad
+        $stmt_guard = $pdo_guard->prepare(
+            'SELECT id FROM admin_permisos WHERE user_id = ? AND (seccion_file = ? OR seccion_file = ?)'
+        );
+        $stmt_guard->execute([
+            $_SESSION['admin_id'] ?? 0,
+            $current_admin_file_guard,
+            $current_admin_file_guard_noext
+        ]);
         if (!$stmt_guard->fetch()) {
             $_SESSION['flash_message'] = 'No tienes permiso para acceder a esta seccion.';
             $_SESSION['flash_type'] = 'danger';
