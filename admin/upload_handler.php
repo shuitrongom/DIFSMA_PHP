@@ -40,6 +40,14 @@ function handle_upload(array $file, string $type = 'image'): array
         $maxBytes     = UPLOAD_MAX_IMAGE_MB * 1024 * 1024;
         $destDir      = rtrim(UPLOADS_PATH, '/') . '/images/';
         $relDir       = 'uploads/images/';
+    } elseif ($type === 'video') {
+        $allowedMimes = ['video/mp4', 'video/webm', 'video/ogg'];
+        $allowedExts  = ['mp4', 'webm', 'ogv', 'ogg'];
+        $maxBytes     = 200 * 1024 * 1024; // 200 MB para videos
+        $destDir      = rtrim(UPLOADS_PATH, '/') . '/videos/';
+        $relDir       = 'uploads/videos/';
+        // Crear directorio si no existe
+        if (!is_dir($destDir)) mkdir($destDir, 0755, true);
     } elseif ($type === 'pdf') {
         $allowedMimes = ['application/pdf'];
         $allowedExts  = ['pdf'];

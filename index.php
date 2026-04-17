@@ -24,12 +24,15 @@ $delay_noticias  = get_slider_delay('noticias',         3000);
 $slider_images = [];
 try {
     $pdo  = get_db();
-    // Verificar si la columna link_url existe
     $cols = $pdo->query("SHOW COLUMNS FROM slider_principal LIKE 'link_url'")->fetchAll();
     $has_link_url = !empty($cols);
-    $select = $has_link_url
-        ? 'SELECT imagen_path, link_url FROM slider_principal WHERE activo = 1 ORDER BY orden ASC'
-        : 'SELECT imagen_path, NULL AS link_url FROM slider_principal WHERE activo = 1 ORDER BY orden ASC';
+    $cols_tipo = $pdo->query("SHOW COLUMNS FROM slider_principal LIKE 'tipo'")->fetchAll();
+    $has_tipo_col = !empty($cols_tipo);
+
+    $select = 'SELECT imagen_path' .
+              ($has_link_url  ? ', link_url' : ', NULL AS link_url') .
+              ($has_tipo_col  ? ', tipo'     : ', \'imagen\' AS tipo') .
+              ' FROM slider_principal WHERE activo = 1 ORDER BY orden ASC';
     $stmt = $pdo->prepare($select);
     $stmt->execute();
     $slider_images = $stmt->fetchAll();
@@ -39,13 +42,15 @@ try {
     }
 }
 
-// Construir array de rutas y links para el JS
+// Construir arrays para el JS
 if (!empty($slider_images)) {
     $images_js = array_map(fn($row) => $row['imagen_path'], $slider_images);
     $links_js  = array_map(fn($row) => $row['link_url'] ?? '', $slider_images);
+    $tipos_js  = array_map(fn($row) => $row['tipo'] ?? 'imagen', $slider_images);
 } else {
     $images_js = ['img/carousel-1.jpg'];
     $links_js  = [''];
+    $tipos_js  = ['imagen'];
 }
 
 // ── Consultar slider_comunica del mes actual (DIF Comunica — Swiper 3D) ──────
@@ -163,6 +168,7 @@ require_once 'includes/navbar.php';
     (function () {
         const images = <?= json_encode($images_js, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
         const links  = <?= json_encode($links_js,  JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
+        const tipos  = <?= json_encode($tipos_js,  JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
 
         const viewport = document.getElementById('viewport');
         const dotsEl   = document.getElementById('dots');
@@ -176,36 +182,75 @@ require_once 'includes/navbar.php';
                 const slide = document.createElement('div');
                 slide.className = 'slide';
 
-                const img = document.createElement('img');
-                img.src = src;
-                img.alt = 'Imagen del slider ' + (i + 1);
-                img.loading = i === 0 ? 'eager' : 'lazy';
-                img.style.width = '100%';
-                img.style.height = 'auto';
-                img.style.display = 'block';
+                let media;
+                if (tipos[i] === 'video') {
+                    media = document.createElement('video');
+                    media.src = src;
+                    media.autoplay = true;
+                    media.muted = true;
+                    media.loop = true;
+                    media.playsInline = true;
+                    media.setAttribute('playsinline', '');
+                    media.style.width = '100%';
+                    media.style.height = 'auto';
+                    media.style.display = 'block';
+                    // Pausar/reanudar según slide activo
+                    media.dataset.slideIndex = i;
+                    slide.appendChild(media);
+                } else {
+                    media = document.createElement('img');
+                    media.src = src;
+                    media.alt = 'Imagen del slider ' + (i + 1);
+                    media.loading = i === 0 ? 'eager' : 'lazy';
+                    media.style.width = '100%';
+                    media.style.height = 'auto';
+                    media.style.display = 'block';
 
-                // Envolver en <a> si tiene link
-                if (links[i]) {
+                    if (links[i]) {
+                        const a = document.createElement('a');
+                        a.href = links[i];
+                        a.style.display = 'block';
+                        a.style.cursor = 'pointer';
+                        a.appendChild(media);
+                        slide.appendChild(a);
+                    } else {
+                        slide.appendChild(media);
+                    }
+                }
+
+                if (tipos[i] !== 'video') {
+                    // ya se agregó arriba
+                } else if (links[i]) {
+                    // video con link — envolver en <a>
                     const a = document.createElement('a');
                     a.href = links[i];
                     a.style.display = 'block';
-                    a.style.cursor = 'pointer';
-                    a.appendChild(img);
+                    slide.innerHTML = '';
+                    a.appendChild(media);
                     slide.appendChild(a);
-                } else {
-                    slide.appendChild(img);
                 }
 
                 viewport.appendChild(slide);
 
                 const dot = document.createElement('button');
                 dot.className = 'dot' + (i === 0 ? ' active' : '');
-                dot.setAttribute('aria-label', 'Ir a imagen ' + (i + 1));
+                dot.setAttribute('aria-label', 'Ir a elemento ' + (i + 1));
                 dot.addEventListener('click', function () {
                     goTo(i);
                     restartAuto();
                 });
                 dotsEl.appendChild(dot);
+            });
+        }
+
+        // ── Controlar videos (pausar los que no están activos) ────────────────
+        function syncVideos(activeIndex) {
+            viewport.querySelectorAll('video').forEach(function(v) {
+                if (parseInt(v.dataset.slideIndex) === activeIndex) {
+                    v.play().catch(function(){});
+                } else {
+                    v.pause();
+                }
             });
         }
 
@@ -221,6 +266,15 @@ require_once 'includes/navbar.php';
             Array.from(dotsEl.children).forEach(function (d, i) {
                 d.classList.toggle('active', i === current);
             });
+            syncVideos(current);
+            // Si el slide actual es video, pausar el autoplay mientras dura
+            if (tipos[current] === 'video') {
+                stopAuto();
+                var vid = viewport.querySelector('video[data-slide-index="' + current + '"]');
+                if (vid) {
+                    vid.onended = function() { next(); restartAuto(); };
+                }
+            }
         }
 
         function next() { goTo(current + 1); }
@@ -233,11 +287,14 @@ require_once 'includes/navbar.php';
 
         // Pausar al pasar el cursor
         viewport.addEventListener('mouseenter', stopAuto);
-        viewport.addEventListener('mouseleave', startAuto);
+        viewport.addEventListener('mouseleave', function() {
+            if (tipos[current] !== 'video') startAuto();
+        });
 
         // ── Inicializar ───────────────────────────────────────────────────────
         buildSlides(images);
-        startAuto();
+        syncVideos(0);
+        if (tipos[0] !== 'video') startAuto();
     })();
     </script>
 

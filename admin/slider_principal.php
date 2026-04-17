@@ -18,6 +18,10 @@ $autoplay_delay = get_slider_delay('slider_principal', 3200);
 $_cols = $pdo->query("SHOW COLUMNS FROM slider_principal LIKE 'link_url'")->fetchAll();
 $has_link_url = !empty($_cols);
 
+// Verificar si la columna tipo existe
+$_cols_tipo = $pdo->query("SHOW COLUMNS FROM slider_principal LIKE 'tipo'")->fetchAll();
+$has_tipo = !empty($_cols_tipo);
+
 // ── Procesamiento POST ─────────────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
@@ -57,16 +61,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: slider_principal'); exit;
     }
 
-    // ── ADD: nueva imagen ──────────────────────────────────────────────────────
+    // ── ADD: nueva imagen o video ──────────────────────────────────────────────
     if ($action === 'add') {
         if (!isset($_FILES['imagen']) || $_FILES['imagen']['error'] === UPLOAD_ERR_NO_FILE) {
-            $_SESSION['flash_message'] = 'Debe seleccionar una imagen.';
+            $_SESSION['flash_message'] = 'Debe seleccionar un archivo.';
             $_SESSION['flash_type']    = 'warning';
             header('Location: slider_principal');
             exit;
         }
 
-        $upload = handle_upload($_FILES['imagen'], 'image');
+        // Detectar si es video o imagen por extensión
+        $ext = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
+        $es_video = in_array($ext, ['mp4', 'webm', 'ogv', 'ogg']);
+        $upload_type = $es_video ? 'video' : 'image';
+        $tipo_valor  = $es_video ? 'video' : 'imagen';
+
+        $upload = handle_upload($_FILES['imagen'], $upload_type);
 
         if (!$upload['success']) {
             $_SESSION['flash_message'] = $upload['error'];
@@ -82,15 +92,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $link_url = trim($_POST['link_url'] ?? '') ?: null;
 
-            $stmt = $pdo->prepare(
-                $has_link_url
-                    ? 'INSERT INTO slider_principal (imagen_path, orden, activo, link_url) VALUES (?, ?, 1, ?)'
-                    : 'INSERT INTO slider_principal (imagen_path, orden, activo) VALUES (?, ?, 1)'
-            );
-            $params = $has_link_url ? [$upload['path'], $nextOrden, $link_url] : [$upload['path'], $nextOrden];
-            $stmt->execute($params);
+            if ($has_tipo && $has_link_url) {
+                $stmt = $pdo->prepare('INSERT INTO slider_principal (imagen_path, tipo, orden, activo, link_url) VALUES (?, ?, ?, 1, ?)');
+                $stmt->execute([$upload['path'], $tipo_valor, $nextOrden, $link_url]);
+            } elseif ($has_link_url) {
+                $stmt = $pdo->prepare('INSERT INTO slider_principal (imagen_path, orden, activo, link_url) VALUES (?, ?, 1, ?)');
+                $stmt->execute([$upload['path'], $nextOrden, $link_url]);
+            } else {
+                $stmt = $pdo->prepare('INSERT INTO slider_principal (imagen_path, orden, activo) VALUES (?, ?, 1)');
+                $stmt->execute([$upload['path'], $nextOrden]);
+            }
 
-            $_SESSION['flash_message'] = 'Imagen agregada correctamente.';
+            $_SESSION['flash_message'] = $es_video ? 'Video agregado correctamente.' : 'Imagen agregada correctamente.';
             $_SESSION['flash_type']    = 'success';
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = (defined('APP_DEBUG') && APP_DEBUG) ? $e->getMessage() : 'Error al guardar en la base de datos.';
@@ -334,8 +347,10 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                     <input type="hidden" name="action" value="add">
                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                                     <div class="mb-3">
-                                        <label for="imagen" class="form-label">Imagen (JPG, PNG, WEBP — máx. 20 MB)</label>
-                                        <input type="file" class="form-control" id="imagen" name="imagen" accept=".jpg,.jpeg,.png,.webp" required>
+                                        <label for="imagen" class="form-label">Imagen o Video</label>
+                                        <input type="file" class="form-control" id="imagen" name="imagen"
+                                               accept=".jpg,.jpeg,.png,.webp,.mp4,.webm,.ogv" required>
+                                        <small class="text-muted">Imágenes: JPG, PNG, WEBP (máx. 20 MB)<br>Videos: MP4, WEBM (máx. 200 MB)</small>
                                     </div>
                                     <div class="mb-3">
                                         <label for="link_url_add" class="form-label">Redirección al hacer clic <small class="text-muted">(opcional)</small></label>
@@ -374,9 +389,19 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                         <div class="col-6 col-md-4 sortable-item" data-id="<?= (int)$slide['id'] ?>">
                                             <div class="card h-100 shadow-sm" style="cursor:grab;">
                                                 <div class="position-relative">
+                                                    <?php $es_vid = ($slide['tipo'] ?? 'imagen') === 'video'; ?>
+                                                    <?php if ($es_vid): ?>
+                                                    <video src="../<?= htmlspecialchars($slide['imagen_path']) ?>"
+                                                           class="card-img-top" style="height:100px;object-fit:cover;background:#000;"
+                                                           muted preload="metadata"></video>
+                                                    <span class="position-absolute top-50 start-50 translate-middle" style="pointer-events:none;">
+                                                        <i class="bi bi-play-circle-fill" style="font-size:1.8rem;color:rgba(255,255,255,.85);"></i>
+                                                    </span>
+                                                    <?php else: ?>
                                                     <img src="../<?= htmlspecialchars($slide['imagen_path']) ?>"
                                                          alt="Slide <?= (int)$slide['orden'] ?>"
                                                          class="card-img-top" style="height:100px;object-fit:contain;background:#f5f5f5;">
+                                                    <?php endif; ?>
                                                     <span class="position-absolute top-0 start-0 badge bg-dark m-1 orden-badge"><?= (int)$slide['orden'] ?></span>
                                                     <?php if ($slide['activo']): ?>
                                                     <span class="position-absolute top-0 end-0 badge bg-success m-1">Activo</span>
@@ -422,10 +447,15 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body">
+                        <?php if (($slide['tipo'] ?? 'imagen') === 'video'): ?>
+                        <video src="../<?= htmlspecialchars($slide['imagen_path']) ?>" class="img-fluid rounded mb-3" style="max-height:200px;width:100%;" controls muted></video>
+                        <?php else: ?>
                         <img src="../<?= htmlspecialchars($slide['imagen_path']) ?>" class="img-fluid rounded mb-3" style="max-height:200px;">
+                        <?php endif; ?>
                         <div class="mb-3">
-                            <label class="form-label">Nueva imagen <small class="text-muted">(opcional — dejar vacío para mantener la actual)</small></label>
-                            <input type="file" class="form-control" name="imagen" accept=".jpg,.jpeg,.png,.webp">
+                            <label class="form-label">Nueva imagen o video <small class="text-muted">(opcional — dejar vacío para mantener el actual)</small></label>
+                            <input type="file" class="form-control" name="imagen" accept=".jpg,.jpeg,.png,.webp,.mp4,.webm,.ogv">
+                            <small class="text-muted">Imágenes: JPG, PNG, WEBP (máx. 20 MB) · Videos: MP4, WEBM (máx. 200 MB)</small>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Redirección al hacer clic <small class="text-muted">(opcional)</small></label>
@@ -457,8 +487,12 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body">
-                        <p>¿Está seguro de eliminar esta imagen del slider?</p>
+                        <p>¿Está seguro de eliminar este elemento del slider?</p>
+                        <?php if (($slide['tipo'] ?? 'imagen') === 'video'): ?>
+                        <video src="../<?= htmlspecialchars($slide['imagen_path']) ?>" class="img-fluid rounded" style="max-height:150px;width:100%;" muted preload="metadata"></video>
+                        <?php else: ?>
                         <img src="../<?= htmlspecialchars($slide['imagen_path']) ?>" class="img-fluid rounded" style="max-height:150px;">
+                        <?php endif; ?>
                         <p class="text-muted small mt-2">Esta acción no se puede deshacer.</p>
                     </div>
                     <div class="modal-footer">
