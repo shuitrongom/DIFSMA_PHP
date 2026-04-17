@@ -9,7 +9,7 @@ function page_help(string $seccion): void {
         'slider_principal' => [
             'icon'  => 'bi-images',
             'title' => 'Slider Principal',
-            'desc'  => 'Administra las imágenes del carrusel principal de la página de inicio. Puedes subir nuevas imágenes (JPG, PNG o WEBP, máx. 20 MB) y configurar opcionalmente una redirección: al hacer clic en la imagen en el sitio, el visitante será llevado a la sección que elijas. Al editar, puedes cambiar solo la imagen, solo la redirección, o ambas a la vez — si no seleccionas una nueva imagen, la actual se conserva. Arrastra las tarjetas para reordenar las imágenes. Se recomienda usar imágenes horizontales de al menos 1200×500 px.',
+            'desc'  => 'Administra las imágenes y videos del carrusel principal de la página de inicio. Puedes subir imágenes (JPG, PNG o WEBP, máx. 20 MB) o videos (MP4, WEBM, máx. 200 MB). Configura opcionalmente una redirección: al hacer clic en el elemento, el visitante será llevado a la sección que elijas. Los videos se reproducen automáticamente sin sonido y avanzan al siguiente slide al terminar. Arrastra las tarjetas para reordenar. Se recomienda imágenes de al menos 1200×500 px y videos en formato MP4 optimizados para web.',
         ],
         'slider_comunica' => [
             'icon'  => 'bi-megaphone',

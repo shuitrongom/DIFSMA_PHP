@@ -124,9 +124,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Location: slider_principal'); exit;
         }
 
-        $stmt = $pdo->prepare('SELECT imagen_path, tipo FROM slider_principal WHERE id = ?');
+        $stmt = $pdo->prepare($has_tipo
+            ? 'SELECT imagen_path, tipo FROM slider_principal WHERE id = ?'
+            : 'SELECT imagen_path FROM slider_principal WHERE id = ?');
         $stmt->execute([$id]);
         $old = $stmt->fetch();
+        if (!isset($old['tipo'])) $old['tipo'] = 'imagen';
 
         if (!$old) {
             $_SESSION['flash_message'] = 'Registro no encontrado.';
@@ -347,7 +350,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                         </div>
                         <div class="card">
                             <div class="card-header bg-primary text-white">
-                                <i class="bi bi-plus-circle me-1"></i> Agregar imagen
+                                <i class="bi bi-plus-circle me-1"></i> Agregar imagen / video
                             </div>
                             <div class="card-body">
                                 <form method="POST" enctype="multipart/form-data" action="slider_principal">

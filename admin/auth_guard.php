@@ -40,17 +40,24 @@ if ($current_admin_file_guard !== $change_pass_page && $current_admin_file_guard
     try {
         require_once __DIR__ . '/../includes/db.php';
         $pdo_exp = get_db();
-        $stmt_exp = $pdo_exp->prepare('SELECT password_changed_at FROM admin WHERE id = ?');
-        $stmt_exp->execute([$_SESSION['admin_id'] ?? 0]);
-        $row_exp = $stmt_exp->fetch();
-        if ($row_exp) {
-            $changed = $row_exp['password_changed_at']
-                ? strtotime($row_exp['password_changed_at'])
-                : 0;
-            $days_elapsed = (time() - $changed) / 86400;
-            if ($days_elapsed >= 90) {
-                header('Location: cambiar_password?motivo=expiracion');
-                exit;
+        // Verificar que la columna existe antes de consultarla
+        $col_check = $pdo_exp->query("SHOW COLUMNS FROM admin LIKE 'password_changed_at'")->fetch();
+        if ($col_check) {
+            $stmt_exp = $pdo_exp->prepare('SELECT password_changed_at FROM admin WHERE id = ?');
+            $stmt_exp->execute([$_SESSION['admin_id'] ?? 0]);
+            $row_exp = $stmt_exp->fetch();
+            if ($row_exp) {
+                $changed = $row_exp['password_changed_at']
+                    ? strtotime($row_exp['password_changed_at'])
+                    : 0;
+                // Solo redirigir si la fecha es válida (no 0) y han pasado 90 días
+                if ($changed > 0) {
+                    $days_elapsed = (time() - $changed) / 86400;
+                    if ($days_elapsed >= 90) {
+                        header('Location: cambiar_password?motivo=expiracion');
+                        exit;
+                    }
+                }
             }
         }
     } catch (PDOException $e) {}

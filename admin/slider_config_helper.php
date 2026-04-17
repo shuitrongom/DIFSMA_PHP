@@ -16,8 +16,12 @@ function get_slider_delay(string $seccion, int $default = 3000): int {
 }
 
 function save_slider_delay(string $seccion, int $delay): void {
-    $pdo = get_db();
-    $pdo->prepare('INSERT INTO slider_config (seccion, autoplay_delay) VALUES (?,?)
-                   ON DUPLICATE KEY UPDATE autoplay_delay = VALUES(autoplay_delay)')
-        ->execute([$seccion, $delay]);
+    try {
+        $pdo = get_db();
+        $pdo->prepare('INSERT INTO slider_config (seccion, autoplay_delay) VALUES (?,?)
+                       ON DUPLICATE KEY UPDATE autoplay_delay = VALUES(autoplay_delay)')
+            ->execute([$seccion, $delay]);
+    } catch (PDOException $e) {
+        // Tabla no existe aún — ignorar silenciosamente
+    }
 }
