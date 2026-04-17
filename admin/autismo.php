@@ -21,22 +21,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // ── Guardar configuración de textos ───────────────────────────────────────
     if ($action === 'save_config') {
-        $texto_derecha  = trim($_POST['texto_derecha']  ?? '');
-        $texto_centro   = trim($_POST['texto_centro']   ?? '');
-        $texto_inferior = trim($_POST['texto_inferior'] ?? '');
+        $texto_derecha    = trim($_POST['texto_derecha']  ?? '');
+        $texto_centro     = trim($_POST['texto_centro']   ?? '');
+        $texto_inferior   = trim($_POST['texto_inferior'] ?? '');
+        $en_mantenimiento = isset($_POST['en_mantenimiento']) ? 1 : 0;
 
         $stmt = $pdo->query('SELECT id FROM autismo_config LIMIT 1');
         $current = $stmt->fetch();
 
         try {
             if ($current) {
-                $pdo->prepare('UPDATE autismo_config SET texto_derecha=?, texto_centro=?, texto_inferior=?, updated_at=NOW() WHERE id=?')
-                    ->execute([$texto_derecha, $texto_centro, $texto_inferior, $current['id']]);
+                $pdo->prepare('UPDATE autismo_config SET texto_derecha=?, texto_centro=?, texto_inferior=?, en_mantenimiento=?, updated_at=NOW() WHERE id=?')
+                    ->execute([$texto_derecha, $texto_centro, $texto_inferior, $en_mantenimiento, $current['id']]);
             } else {
-                $pdo->prepare('INSERT INTO autismo_config (texto_derecha, texto_centro, texto_inferior) VALUES (?,?,?)')
-                    ->execute([$texto_derecha, $texto_centro, $texto_inferior]);
+                $pdo->prepare('INSERT INTO autismo_config (texto_derecha, texto_centro, texto_inferior, en_mantenimiento) VALUES (?,?,?,?)')
+                    ->execute([$texto_derecha, $texto_centro, $texto_inferior, $en_mantenimiento]);
             }
-            $_SESSION['flash_message'] = 'Textos actualizados correctamente.';
+            $_SESSION['flash_message'] = 'Configuración actualizada correctamente.';
             $_SESSION['flash_type']    = 'success';
         } catch (PDOException $e) {
             $_SESSION['flash_message'] = 'Error al guardar.';
@@ -232,6 +233,23 @@ function aut_img_card(string $campo, string $label, string $default, ?array $con
                                     <label class="form-label fw-semibold">Texto inferior (derecha, junto a foto inferior)</label>
                                     <small class="text-muted d-block mb-1">Aparece a la derecha de la imagen inferior</small>
                                     <textarea class="form-control tinymce-editor" id="texto_inferior" name="texto_inferior" rows="5"><?= htmlspecialchars($config['texto_inferior'] ?? '') ?></textarea>
+                                </div>
+
+                                <div class="mb-4 p-3 rounded" style="background:#f8f9fa;border:1px solid #e2e8f0;">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <label class="form-label fw-semibold mb-0">
+                                                <i class="bi bi-tools me-1 text-danger"></i> Modo Mantenimiento
+                                            </label>
+                                            <p class="text-muted small mb-0">Si está activo, los visitantes verán la página de mantenimiento en lugar de la página de Autismo.</p>
+                                        </div>
+                                        <div class="form-check form-switch ms-3">
+                                            <input class="form-check-input" type="checkbox" role="switch"
+                                                   name="en_mantenimiento" id="toggleMantenimiento"
+                                                   style="width:3rem;height:1.5rem;cursor:pointer;"
+                                                   <?= !empty($config['en_mantenimiento']) ? 'checked' : '' ?>>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <button type="submit" class="btn btn-warning w-100"><i class="bi bi-save me-1"></i> Guardar textos</button>

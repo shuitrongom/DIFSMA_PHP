@@ -17,6 +17,12 @@ try {
     if (defined('APP_DEBUG') && APP_DEBUG) error_log('autismo.php: ' . $e->getMessage());
 }
 
+// Redirigir a mantenimiento si está activo
+if (!empty($config['en_mantenimiento'])) {
+    header('Location: mantenimiento');
+    exit;
+}
+
 $logo_path      = !empty($config['logo_path'])            ? htmlspecialchars($config['logo_path'])            : 'img/UMA_SMA.png';
 $texto_derecha  = $config['texto_derecha']  ?? '';
 $texto_centro   = $config['texto_centro']   ?? '';
