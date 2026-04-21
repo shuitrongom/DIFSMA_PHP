@@ -10,7 +10,7 @@ $stmt = $pdo->prepare('SELECT * FROM trans_secciones WHERE id = ?');
 $stmt->execute([$secId]); $seccion = $stmt->fetch();
 if (!$seccion) { header('Location: transparencia_dinamica'); exit; }
 $plantilla = $seccion['plantilla'];
-$baseUrl = "transparencia_seccion.php?id={$secId}";
+$baseUrl = "transparencia_seccion?id={$secId}";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? ''; $token = $_POST['csrf_token'] ?? '';
     if (!csrf_validate($token)) { $_SESSION['flash_message']='Token CSRF invalido.'; $_SESSION['flash_type']='danger'; header("Location: {$baseUrl}"); exit; }
