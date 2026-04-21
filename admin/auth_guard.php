@@ -129,7 +129,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
 // Páginas que todos pueden ver (dashboard, logout, su perfil)
 $public_pages = ['dashboard.php', 'logout.php'];
 
+// Páginas auxiliares — accesibles si el usuario tiene permiso en la página padre
+$paginas_auxiliares = [
+    'transparencia_seccion.php' => 'transparencia_dinamica',
+    'programa_editar.php'       => 'programas',
+];
+
 if (!$is_admin_role && !in_array($current_admin_file_guard, $public_pages)) {
+    // Si es página auxiliar, verificar permiso de la página padre
+    $check_file = $current_admin_file_guard;
+    if (isset($paginas_auxiliares[$current_admin_file_guard])) {
+        $check_file = $paginas_auxiliares[$current_admin_file_guard] . '.php';
+    }
+    $check_file_noext = preg_replace('/\.php$/i', '', $check_file);
     // Verificar si tiene permiso para esta sección
     try {
         require_once __DIR__ . '/../includes/db.php';
@@ -140,8 +152,8 @@ if (!$is_admin_role && !in_array($current_admin_file_guard, $public_pages)) {
         );
         $stmt_guard->execute([
             $_SESSION['admin_id'] ?? 0,
-            $current_admin_file_guard,
-            $current_admin_file_guard_noext
+            $check_file,
+            $check_file_noext
         ]);
         if (!$stmt_guard->fetch()) {
             $_SESSION['flash_message'] = 'No tienes permiso para acceder a esta seccion.';
