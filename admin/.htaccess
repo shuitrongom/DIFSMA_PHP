@@ -11,3 +11,11 @@
     RewriteCond %{REQUEST_FILENAME}.php -f
     RewriteRule ^(.+)$ $1.php [L]
 </IfModule>
+
+# Output buffering para prevenir "headers already sent" por BOM
+<IfModule mod_php.c>
+    php_value output_buffering On
+</IfModule>
+<IfModule mod_php8.c>
+    php_value output_buffering On
+</IfModule>

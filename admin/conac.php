@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/conac.php — CRUD para CONAC (Bloques por año, Conceptos por bloque, PDFs por trimestre)
  */

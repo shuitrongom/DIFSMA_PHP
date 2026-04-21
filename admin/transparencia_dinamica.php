@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/transparencia_dinamica.php — Gestión de secciones dinámicas de Transparencia
  * Permite crear nuevas secciones eligiendo una plantilla (SEAC, Cuenta Pública, etc.)

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * admin/cuenta_publica.php — CRUD para Cuenta Pública
  * Estructura: Bloques (año) → Títulos (módulos) → Conceptos (con PDF)
