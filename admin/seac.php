@@ -2,6 +2,10 @@
 /**
  * admin/seac.php — CRUD para SEAC (Bloques por año, Conceptos por bloque, PDFs)
  */
+// Debug temporal — quitar después de identificar el error
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 require_once __DIR__ . '/auth_guard.php';
 require_once __DIR__ . '/csrf.php';
 require_once __DIR__ . '/upload_handler.php';

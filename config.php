@@ -18,7 +18,7 @@ define('DB_PASS', getenv('DB_PASS') ?: 'JSlf45#%$$235Ads');
 // ── Entorno ────────────────────────────────────────────────────────────────────
 // true  → muestra errores detallados (solo en desarrollo)
 // false → errores genéricos al usuario, detalles solo en logs
-define('APP_DEBUG', (bool)(getenv('APP_DEBUG') ?: false));
+define('APP_DEBUG', (bool)(getenv('APP_DEBUG') ?: true));
 
 // ── Límites de subida de archivos ──────────────────────────────────────────
 define('UPLOAD_MAX_IMAGE_MB', 20);  // Máximo para imágenes (JPG, PNG, WEBP)
