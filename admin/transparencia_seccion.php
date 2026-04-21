@@ -21,6 +21,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action==='delete_titulo') { $pdo->prepare('DELETE FROM trans_titulos WHERE id=? AND seccion_id=?')->execute([(int)($_POST['titulo_id']??0),$secId]); $_SESSION['flash_message']='Titulo eliminado.';$_SESSION['flash_type']='success';header("Location: {$baseUrl}");exit; }
     if ($action==='add_concepto') { $nombre=trim($_POST['nombre']??'');$bId=(int)($_POST['bloque_id']??0);$pdfPath=null; if(isset($_FILES['pdf'])&&$_FILES['pdf']['error']!==UPLOAD_ERR_NO_FILE){$u=handle_upload($_FILES['pdf'],'pdf');if($u['success'])$pdfPath=$u['path'];} $pdo->prepare('INSERT INTO trans_conceptos (seccion_id,bloque_id,nombre,pdf_path,orden) VALUES (?,?,?,?,1)')->execute([$secId,$bId>0?$bId:null,$nombre,$pdfPath]); $_SESSION['flash_message']='Concepto agregado.';$_SESSION['flash_type']='success';header("Location: {$baseUrl}&bloque_id={$bId}");exit; }
     if ($action==='edit_concepto') { $cId=(int)($_POST['concepto_id']??0);$nombre=trim($_POST['nombre']??''); $pdo->prepare('UPDATE trans_conceptos SET nombre=? WHERE id=? AND seccion_id=?')->execute([$nombre,$cId,$secId]); $_SESSION['flash_message']='Concepto actualizado.';$_SESSION['flash_type']='success';header("Location: {$baseUrl}&bloque_id={$bloqueId}");exit; }
+    if ($action==='upload_concepto_pdf') {
+        $cId=(int)($_POST['concepto_id']??0);
+        if($cId<=0){$_SESSION['flash_message']='ID inválido.';$_SESSION['flash_type']='danger';header("Location: {$baseUrl}&bloque_id={$bloqueId}");exit;}
+        if(!isset($_FILES['pdf'])||$_FILES['pdf']['error']===UPLOAD_ERR_NO_FILE){$_SESSION['flash_message']='Seleccione un PDF.';$_SESSION['flash_type']='warning';header("Location: {$baseUrl}&bloque_id={$bloqueId}");exit;}
+        $u=handle_upload($_FILES['pdf'],'pdf');
+        if(!$u['success']){$_SESSION['flash_message']=$u['error'];$_SESSION['flash_type']='danger';header("Location: {$baseUrl}&bloque_id={$bloqueId}");exit;}
+        // Eliminar PDF anterior si existe
+        $old=$pdo->prepare('SELECT pdf_path FROM trans_conceptos WHERE id=? AND seccion_id=?');$old->execute([$cId,$secId]);$oldRow=$old->fetch();
+        if($oldRow&&!empty($oldRow['pdf_path'])){$f=BASE_PATH.'/'.$oldRow['pdf_path'];if(file_exists($f))unlink($f);}
+        $pdo->prepare('UPDATE trans_conceptos SET pdf_path=? WHERE id=? AND seccion_id=?')->execute([$u['path'],$cId,$secId]);
+        $_SESSION['flash_message']='PDF subido correctamente.';$_SESSION['flash_type']='success';
+        header("Location: {$baseUrl}&bloque_id={$bloqueId}");exit;
+    }
     if ($action==='delete_concepto') { $cId=(int)($_POST['concepto_id']??0); $pdo->prepare('DELETE FROM trans_pdfs WHERE concepto_id=?')->execute([$cId]); $pdo->prepare('DELETE FROM trans_conceptos WHERE id=? AND seccion_id=?')->execute([$cId,$secId]); $_SESSION['flash_message']='Concepto eliminado.';$_SESSION['flash_type']='success';header("Location: {$baseUrl}&bloque_id={$bloqueId}");exit; }
     if ($action==='upload_pdf') { $cId=(int)($_POST['concepto_id']??0);$tId=(int)($_POST['titulo_id']??0);$anio=$_POST['anio']??null;$trim=$_POST['trimestre']??null; if(!isset($_FILES['pdf'])||$_FILES['pdf']['error']===UPLOAD_ERR_NO_FILE){$_SESSION['flash_message']='Seleccione PDF.';$_SESSION['flash_type']='warning';header("Location: {$baseUrl}&bloque_id={$bloqueId}");exit;} $u=handle_upload($_FILES['pdf'],'pdf');if(!$u['success']){$_SESSION['flash_message']=$u['error'];$_SESSION['flash_type']='danger';header("Location: {$baseUrl}&bloque_id={$bloqueId}");exit;} $w='seccion_id=?';$p=[$secId];if($cId>0){$w.=' AND concepto_id=?';$p[]=$cId;}if($tId>0){$w.=' AND titulo_id=?';$p[]=$tId;}if($trim){$w.=' AND trimestre=?';$p[]=(int)$trim;}if($anio){$w.=' AND anio=?';$p[]=$anio;} $st=$pdo->prepare("SELECT id FROM trans_pdfs WHERE {$w}");$st->execute($p);$ex=$st->fetch(); if($ex){$pdo->prepare('UPDATE trans_pdfs SET pdf_path=? WHERE id=?')->execute([$u['path'],$ex['id']]);}else{$pdo->prepare('INSERT INTO trans_pdfs (seccion_id,concepto_id,titulo_id,anio,trimestre,pdf_path) VALUES (?,?,?,?,?,?)')->execute([$secId,$cId>0?$cId:null,$tId>0?$tId:null,$anio,$trim?(int)$trim:null,$u['path']]);} $_SESSION['flash_message']='PDF subido.';$_SESSION['flash_type']='success';header("Location: {$baseUrl}&bloque_id={$bloqueId}");exit; }
     if ($action==='delete_pdf') { $pdo->prepare('DELETE FROM trans_pdfs WHERE id=? AND seccion_id=?')->execute([(int)($_POST['pdf_id']??0),$secId]); $_SESSION['flash_message']='PDF eliminado.';$_SESSION['flash_type']='success';header("Location: {$baseUrl}&bloque_id={$bloqueId}");exit; }
@@ -163,14 +176,14 @@ $plN=['seac'=>'SEAC','cuenta_publica'=>'Cuenta Publica','presupuesto_anual'=>'Pr
 <?php if(!empty($c['pdf_path'])): ?>
   <a href="../<?= htmlspecialchars($c['pdf_path']) ?>" target="_blank" class="btn btn-sm btn-outline-success mb-1"><i class="bi bi-file-earmark-pdf me-1"></i>Ver</a><br>
   <form method="POST" enctype="multipart/form-data" action="<?= $baseUrl ?>&bloque_id=<?= $bloqueId ?>" class="d-inline">
-    <input type="hidden" name="action" value="upload_pdf">
+    <input type="hidden" name="action" value="upload_concepto_pdf">
     <input type="hidden" name="concepto_id" value="<?= (int)$c['id'] ?>">
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
     <div class="input-group input-group-sm mt-1"><input type="file" class="form-control form-control-sm" name="pdf" accept=".pdf" required><button type="submit" class="btn btn-sm btn-warning" title="Reemplazar PDF"><i class="bi bi-arrow-repeat"></i></button></div>
   </form>
 <?php else: ?>
   <form method="POST" enctype="multipart/form-data" action="<?= $baseUrl ?>&bloque_id=<?= $bloqueId ?>">
-    <input type="hidden" name="action" value="upload_pdf">
+    <input type="hidden" name="action" value="upload_concepto_pdf">
     <input type="hidden" name="concepto_id" value="<?= (int)$c['id'] ?>">
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
     <div class="input-group input-group-sm"><input type="file" class="form-control form-control-sm" name="pdf" accept=".pdf" required><button type="submit" class="btn btn-sm btn-success" title="Subir PDF"><i class="bi bi-upload"></i></button></div>
