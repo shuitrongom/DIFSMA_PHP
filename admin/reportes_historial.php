@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * @author  Sergio Huitron Gomez
  * @project DIF San Mateo Atenco - Sistema de Gestion de Contenido
@@ -693,10 +693,10 @@ $filtros_qs = http_build_query([
 <!-- Botones de descarga o mensaje informativo -->
 <?php if ($total > 0): ?>
 <div class="d-flex gap-2 mb-4">
-<a href="reportes_historial.php?<?= $filtros_qs ?>&action=pdf" class="btn btn-danger">
+<a href="reportes_historial?<?= $filtros_qs ?>&action=pdf" class="btn btn-danger">
 <i class="bi bi-file-earmark-pdf me-1"></i> Descargar PDF
 </a>
-<a href="reportes_historial.php?<?= $filtros_qs ?>&action=excel" class="btn btn-success">
+<a href="reportes_historial?<?= $filtros_qs ?>&action=excel" class="btn btn-success">
 <i class="bi bi-file-earmark-excel me-1"></i> Descargar Excel
 </a>
 </div>

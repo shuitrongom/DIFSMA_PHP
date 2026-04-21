@@ -40,6 +40,7 @@ function handle_upload(array $file, string $type = 'image'): array
         $maxBytes     = UPLOAD_MAX_IMAGE_MB * 1024 * 1024;
         $destDir      = rtrim(UPLOADS_PATH, '/') . '/images/';
         $relDir       = 'uploads/images/';
+        if (!is_dir($destDir)) mkdir($destDir, 0755, true);
     } elseif ($type === 'video') {
         $allowedMimes = ['video/mp4', 'video/webm', 'video/ogg'];
         $allowedExts  = ['mp4', 'webm', 'ogv', 'ogg'];
@@ -54,6 +55,7 @@ function handle_upload(array $file, string $type = 'image'): array
         $maxBytes     = UPLOAD_MAX_PDF_MB * 1024 * 1024;
         $destDir      = rtrim(UPLOADS_PATH, '/') . '/pdfs/';
         $relDir       = 'uploads/pdfs/';
+        if (!is_dir($destDir)) mkdir($destDir, 0755, true);
     } else {
         $result['error'] = 'Tipo de archivo no soportado: ' . htmlspecialchars($type);
         return $result;

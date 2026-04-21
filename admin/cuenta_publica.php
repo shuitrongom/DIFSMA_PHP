@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/cuenta_publica.php — CRUD para Cuenta Pública
  * Estructura: Bloques (año) → Títulos (módulos) → Conceptos (con PDF)
@@ -230,7 +230,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
 <tr><td><strong><?=htmlspecialchars($b['anio'])?></strong></td>
 <td><span class="badge bg-info"><?=(int)$b['num_titulos']?></span></td>
 <td><span class="badge bg-secondary"><?=(int)$b['num_conceptos']?></span></td>
-<td><a href="cuenta_publica.php?bloque_id=<?=(int)$b['id']?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye me-1"></i> Ver</a></td></tr>
+<td><a href="cuenta_publica?bloque_id=<?=(int)$b['id']?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye me-1"></i> Ver</a></td></tr>
 <?php endforeach;?>
 </tbody></table></div>
 <?php endif;?>

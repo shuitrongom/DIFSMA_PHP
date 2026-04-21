@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * @author  Sergio Huitron Gomez
  * @copyright 2025-2026 Sergio Huitron Gomez. Todos los derechos reservados.
@@ -198,7 +198,7 @@ require_once __DIR__ . '/page_help.php';
 <td><small class="text-muted"><?= htmlspecialchars($r['ip'] ?? '—') ?><?php if (!empty($r['hostname'])): ?><br><span style="color:#aaa;font-size:11px;"><?= htmlspecialchars($r['hostname']) ?></span><?php endif; ?></small></td>
 <td class="no-print">
 <?php if (($_SESSION['admin_rol'] ?? '') === 'admin'): ?>
-<form method="POST" action="historial.php?<?= http_build_query($_GET) ?>" class="d-inline" onsubmit="return confirm('Eliminar?')">
+<form method="POST" action="historial?<?= http_build_query($_GET) ?>" class="d-inline" onsubmit="return confirm('Eliminar?')">
 <input type="hidden" name="action" value="delete_log"><input type="hidden" name="log_id" value="<?= (int)$r['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
 <button type="submit" class="btn btn-sm btn-action-delete py-0"><i class="bi bi-trash3"></i></button>
 </form>
@@ -214,7 +214,7 @@ require_once __DIR__ . '/page_help.php';
 <div class="d-flex justify-content-center py-3 no-print">
 <nav><ul class="pagination pagination-sm mb-0">
 <?php for ($p = 1; $p <= $totalPaginas; $p++): $qp = array_merge($_GET, ['pagina' => $p]); ?>
-<li class="page-item <?= $p === $pagina ? 'active' : '' ?>"><a class="page-link" href="historial.php?<?= http_build_query($qp) ?>"><?= $p ?></a></li>
+<li class="page-item <?= $p === $pagina ? 'active' : '' ?>"><a class="page-link" href="historial?<?= http_build_query($qp) ?>"><?= $p ?></a></li>
 <?php endfor; ?>
 </ul></nav>
 </div>

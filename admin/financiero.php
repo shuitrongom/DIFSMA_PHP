@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/financiero.php — CRUD para Financiero
  * Estructura: Bloques (año) → Conceptos con PDF directo
@@ -190,7 +190,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
 <?php foreach($bloques as $b):?>
 <tr><td><strong><?=htmlspecialchars($b['anio'])?></strong></td>
 <td><span class="badge bg-secondary"><?=(int)$b['num_conceptos']?></span></td>
-<td><a href="financiero.php?bloque_id=<?=(int)$b['id']?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye me-1"></i> Ver</a></td></tr>
+<td><a href="financiero?bloque_id=<?=(int)$b['id']?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye me-1"></i> Ver</a></td></tr>
 <?php endforeach;?>
 </tbody></table></div>
 <?php endif;?>

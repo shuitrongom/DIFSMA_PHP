@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/seac.php — CRUD para SEAC (Bloques por año, Conceptos por bloque, PDFs)
  */
@@ -271,7 +271,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
             <div class="card mb-3">
                 <div class="card-header bg-success text-white"><i class="bi bi-plus-circle me-1"></i> Agregar concepto</div>
                 <div class="card-body">
-                    <form method="POST" action="seac.php?bloque_id=<?= (int)$currentBloque['id'] ?>" class="row g-2 align-items-end">
+                    <form method="POST" action="seac?bloque_id=<?= (int)$currentBloque['id'] ?>" class="row g-2 align-items-end">
                         <input type="hidden" name="action" value="add_concepto">
                         <input type="hidden" name="bloque_id" value="<?= (int)$currentBloque['id'] ?>">
                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
@@ -312,7 +312,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                     <td class="seac-cell text-center">
 <?php if ($cell && !empty($cell['pdf_path'])): ?>
                                         <a href="../<?= htmlspecialchars($cell['pdf_path']) ?>" target="_blank" class="btn btn-sm btn-outline-primary mb-1"><i class="bi bi-file-earmark-pdf me-1"></i>Ver</a>
-                                        <form method="POST" enctype="multipart/form-data" action="seac.php?bloque_id=<?= (int)$currentBloque['id'] ?>" class="mb-1">
+                                        <form method="POST" enctype="multipart/form-data" action="seac?bloque_id=<?= (int)$currentBloque['id'] ?>" class="mb-1">
                                             <input type="hidden" name="action" value="upload_pdf">
                                             <input type="hidden" name="bloque_id" value="<?= (int)$currentBloque['id'] ?>">
                                             <input type="hidden" name="concepto_id" value="<?= (int)$c['id'] ?>">
@@ -320,7 +320,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
                                             <div class="input-group input-group-sm"><input type="file" class="form-control form-control-sm" name="pdf" accept=".pdf" required><button type="submit" class="btn btn-sm btn-warning"><i class="bi bi-arrow-repeat"></i></button></div>
                                         </form>
-                                        <form method="POST" action="seac.php?bloque_id=<?= (int)$currentBloque['id'] ?>" onsubmit="return confirm('¿Eliminar este PDF?');">
+                                        <form method="POST" action="seac?bloque_id=<?= (int)$currentBloque['id'] ?>" onsubmit="return confirm('¿Eliminar este PDF?');">
                                             <input type="hidden" name="action" value="delete_pdf">
                                             <input type="hidden" name="pdf_id" value="<?= (int)$cell['id'] ?>">
                                             <input type="hidden" name="bloque_id" value="<?= (int)$currentBloque['id'] ?>">
@@ -328,7 +328,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                             <button type="submit" class="btn btn-sm btn-action-delete"><i class="bi bi-file-earmark-x"></i></button>
                                         </form>
 <?php else: ?>
-                                        <form method="POST" enctype="multipart/form-data" action="seac.php?bloque_id=<?= (int)$currentBloque['id'] ?>">
+                                        <form method="POST" enctype="multipart/form-data" action="seac?bloque_id=<?= (int)$currentBloque['id'] ?>">
                                             <input type="hidden" name="action" value="upload_pdf">
                                             <input type="hidden" name="bloque_id" value="<?= (int)$currentBloque['id'] ?>">
                                             <input type="hidden" name="concepto_id" value="<?= (int)$c['id'] ?>">
@@ -341,7 +341,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
 <?php endfor; ?>
                                     <td class="text-center">
                                         <button type="button" class="btn btn-sm btn-outline-primary mb-1" data-bs-toggle="modal" data-bs-target="#editC<?= (int)$c['id'] ?>"><i class="bi bi-pencil"></i></button>
-                                        <form method="POST" action="seac.php?bloque_id=<?= (int)$currentBloque['id'] ?>" class="d-inline" onsubmit="return confirm('¿Eliminar concepto y sus PDFs?');">
+                                        <form method="POST" action="seac?bloque_id=<?= (int)$currentBloque['id'] ?>" class="d-inline" onsubmit="return confirm('¿Eliminar concepto y sus PDFs?');">
                                             <input type="hidden" name="action" value="delete_concepto">
                                             <input type="hidden" name="bloque_id" value="<?= (int)$currentBloque['id'] ?>">
                                             <input type="hidden" name="concepto_id" value="<?= (int)$c['id'] ?>">
@@ -353,7 +353,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                 <!-- Modal editar concepto -->
                                 <div class="modal fade" id="editC<?= (int)$c['id'] ?>" tabindex="-1" aria-hidden="true">
                                     <div class="modal-dialog"><div class="modal-content">
-                                        <form method="POST" action="seac.php?bloque_id=<?= (int)$currentBloque['id'] ?>">
+                                        <form method="POST" action="seac?bloque_id=<?= (int)$currentBloque['id'] ?>">
                                             <input type="hidden" name="action" value="edit_concepto">
                                             <input type="hidden" name="bloque_id" value="<?= (int)$currentBloque['id'] ?>">
                                             <input type="hidden" name="concepto_id" value="<?= (int)$c['id'] ?>">
@@ -424,7 +424,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                             <td><span class="badge bg-info text-dark fs-6"><i class="bi bi-calendar-event me-1"></i><?= htmlspecialchars($bl['anio']) ?></span></td>
                                             <td class="text-center"><span class="badge bg-primary"><?= (int)$bl['num_pdfs'] ?></span></td>
                                             <td>
-                                                <a href="seac.php?bloque_id=<?= (int)$bl['id'] ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i> Ver</a>
+                                                <a href="seac?bloque_id=<?= (int)$bl['id'] ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i> Ver</a>
                                                 <button type="button" class="btn btn-sm btn-action-delete" data-bs-toggle="modal" data-bs-target="#delBL<?= (int)$bl['id'] ?>"><i class="bi bi-trash3"></i> Eliminar</button>
                                             </td>
                                         </tr>

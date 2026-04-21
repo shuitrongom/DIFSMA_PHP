@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/presupuesto_anual.php — CRUD para Presupuesto Anual
  * Estructura: Bloques (año) → Conceptos → Sub-años con PDF
@@ -419,7 +419,7 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                         <tr>
                             <td><strong><?= htmlspecialchars($b['anio']) ?></strong></td>
                             <td class="text-center"><span class="badge bg-primary"><?= (int)$b['num_pdfs'] ?></span></td>
-                            <td><a href="presupuesto_anual.php?bloque_id=<?= (int)$b['id'] ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye me-1"></i> Ver</a></td>
+                            <td><a href="presupuesto_anual?bloque_id=<?= (int)$b['id'] ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye me-1"></i> Ver</a></td>
                         </tr>
                         <?php endforeach; ?>
                         </tbody>
