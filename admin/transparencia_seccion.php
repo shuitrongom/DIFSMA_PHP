@@ -159,7 +159,23 @@ $plN=['seac'=>'SEAC','cuenta_publica'=>'Cuenta Publica','presupuesto_anual'=>'Pr
 <form method="POST" enctype="multipart/form-data" action="<?= $baseUrl ?>&bloque_id=<?= $bloqueId ?>"><input type="hidden" name="action" value="upload_pdf"><input type="hidden" name="concepto_id" value="<?= (int)$c['id'] ?>"><input type="hidden" name="trimestre" value="<?= $t ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
 <div class="input-group input-group-sm"><input type="file" class="form-control form-control-sm" name="pdf" accept=".pdf" required><button type="submit" class="btn btn-sm btn-success"><i class="bi bi-upload"></i></button></div></form></td>
 <?php endfor; ?>
-<?php elseif($plantilla==='financiero'||$plantilla==='cuenta_publica'): ?><td class="text-center"><?php if(!empty($c['pdf_path'])): ?><a href="../<?= htmlspecialchars($c['pdf_path']) ?>" target="_blank" class="btn btn-sm btn-outline-success"><i class="bi bi-file-earmark-pdf me-1"></i>Ver</a><?php else: ?><span class="badge bg-secondary">Sin PDF</span><?php endif; ?></td>
+<?php elseif($plantilla==='financiero'||$plantilla==='cuenta_publica'): ?><td class="text-center">
+<?php if(!empty($c['pdf_path'])): ?>
+  <a href="../<?= htmlspecialchars($c['pdf_path']) ?>" target="_blank" class="btn btn-sm btn-outline-success mb-1"><i class="bi bi-file-earmark-pdf me-1"></i>Ver</a><br>
+  <form method="POST" enctype="multipart/form-data" action="<?= $baseUrl ?>&bloque_id=<?= $bloqueId ?>" class="d-inline">
+    <input type="hidden" name="action" value="upload_pdf">
+    <input type="hidden" name="concepto_id" value="<?= (int)$c['id'] ?>">
+    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+    <div class="input-group input-group-sm mt-1"><input type="file" class="form-control form-control-sm" name="pdf" accept=".pdf" required><button type="submit" class="btn btn-sm btn-warning" title="Reemplazar PDF"><i class="bi bi-arrow-repeat"></i></button></div>
+  </form>
+<?php else: ?>
+  <form method="POST" enctype="multipart/form-data" action="<?= $baseUrl ?>&bloque_id=<?= $bloqueId ?>">
+    <input type="hidden" name="action" value="upload_pdf">
+    <input type="hidden" name="concepto_id" value="<?= (int)$c['id'] ?>">
+    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+    <div class="input-group input-group-sm"><input type="file" class="form-control form-control-sm" name="pdf" accept=".pdf" required><button type="submit" class="btn btn-sm btn-success" title="Subir PDF"><i class="bi bi-upload"></i></button></div>
+  </form>
+<?php endif; ?></td>
 <?php elseif($plantilla==='presupuesto_anual'): ?><td>
 <form method="POST" enctype="multipart/form-data" action="<?= $baseUrl ?>&bloque_id=<?= $bloqueId ?>" class="row g-1 align-items-end mb-2"><input type="hidden" name="action" value="upload_pdf"><input type="hidden" name="concepto_id" value="<?= (int)$c['id'] ?>"><input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
 <div class="col-4"><input type="number" class="form-control form-control-sm" name="anio" min="2000" max="<?= date('Y') ?>" placeholder="Anio" required></div><div class="col-5"><input type="file" class="form-control form-control-sm" name="pdf" accept=".pdf" required></div><div class="col-3"><button type="submit" class="btn btn-sm btn-success w-100"><i class="bi bi-upload"></i></button></div></form>
