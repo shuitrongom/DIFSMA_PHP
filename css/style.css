@@ -2,16 +2,14 @@
 #spinner {
     opacity: 0;
     visibility: hidden;
-    transition: opacity .5s ease-out, visibility 0s linear .5s;
-    z-index: 50;
-    pointer-events: none;
+    transition: opacity .8s ease-out, visibility 0s linear .5s;
+    z-index: 99999;
 }
 
 #spinner.show {
-    transition: opacity .5s ease-out, visibility 0s linear .0s;
+    transition: opacity .8s ease-out, visibility 0s linear .0s;
     visibility: visible;
     opacity: 1;
-    pointer-events: auto;
 }
 
 #spinner .spinner-wrapper {
@@ -84,21 +82,6 @@ h1, h2, h3, h4, h5, h6,
     justify-content: center;
     transition: 0.5s;
     z-index: 99;
-}
-
-/* Asegurar que todo el contenido tenga z-index bajo para que navbar esté encima */
-main, section, article, .container, .container-fluid,
-.card, .program-item, .service-item, .events-item,
-.team-item, .blog-item, .testimonial-item {
-    position: relative;
-    z-index: 1;
-}
-
-/* Excepto el navbar que debe estar encima */
-.container-fluid.border-bottom.bg-white:has(nav.navbar),
-nav.navbar,
-.navbar-collapse {
-    z-index: 1000 !important;
 }
 
 h1,
@@ -245,36 +228,9 @@ h6,
 
 
 /*** Navbar Start ***/
-.container-fluid.border-bottom.bg-white {
-    position: relative;
-    z-index: 1000 !important;
-}
-
-.container-fluid.border-bottom.bg-white .container {
-    position: relative;
-    z-index: 1000 !important;
-}
-
 .navbar {
     border-bottom: 1px solid rgba(255, 255, 255, .1);
     color: #FFFFFF;
-    position: relative;
-    z-index: 1000 !important;
-}
-
-.navbar-expand-xl {
-    position: relative;
-    z-index: 1000 !important;
-}
-
-/* Forzar z-index durante animaciones WOW */
-.wow.fadeIn {
-    z-index: inherit !important;
-}
-
-.container-fluid.border-bottom.bg-white.wow,
-.container-fluid.border-bottom.bg-white.animated {
-    z-index: 1000 !important;
 }
 
 .navbar .navbar-nav .nav-link .nav-link-green {
@@ -313,27 +269,14 @@ h6,
         transition: opacity .3s, visibility .3s;
         opacity: 0;
         position: absolute;
-        z-index: 9999 !important;
     }
 }
 
-.navbar .nav-item { position: relative; z-index: 9999 !important; }
+.navbar .nav-item { position: relative; }
 .navbar .dropdown-menu {
     position: absolute !important;
     top: 100% !important;
     bottom: auto !important;
-    z-index: 9999 !important;
-}
-
-.navbar .nav-item:hover .dropdown-menu {
-    transform: translateY(0) !important;
-    visibility: visible;
-    background: rgb(133, 133, 119) !important;
-    border-radius: 10px !important;
-    transition: opacity .3s, visibility .3s;
-    opacity: 1;
-    color: var(--bs-white) !important;
-    z-index: 9999 !important;
 }
 
 .dropdown .dropdown-menu a:hover {
