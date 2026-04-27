@@ -228,10 +228,35 @@ h6,
 
 
 /*** Navbar Start ***/
+.container-fluid.border-bottom.bg-white {
+    position: relative;
+    z-index: 10000 !important;
+}
+
+.container-fluid.border-bottom.bg-white .container {
+    position: relative;
+    z-index: 10000 !important;
+}
+
 .navbar {
     border-bottom: 1px solid rgba(255, 255, 255, .1);
     color: #FFFFFF;
     position: relative;
+    z-index: 10000 !important;
+}
+
+.navbar-expand-xl {
+    position: relative;
+    z-index: 10000 !important;
+}
+
+/* Forzar z-index durante animaciones WOW */
+.wow.fadeIn {
+    z-index: 10000 !important;
+}
+
+.container-fluid.border-bottom.bg-white.wow,
+.container-fluid.border-bottom.bg-white.animated {
     z-index: 10000 !important;
 }
 
