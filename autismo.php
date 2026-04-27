@@ -15,6 +15,8 @@ try {
     $config = $stmt->fetch();
 } catch (PDOException $e) {
     if (defined('APP_DEBUG') && APP_DEBUG) error_log('autismo.php: ' . $e->getMessage());
+    // Si hay error en la BD, continuar sin config
+    $config = [];
 }
 
 // Redirigir a mantenimiento si está activo
@@ -23,10 +25,34 @@ if (!empty($config['en_mantenimiento'])) {
     exit;
 }
 
+// Si no hay config, usar valores por defecto
+if (empty($config)) {
+    $config = [
+        'logo_path' => '',
+        'texto_derecha' => '',
+        'texto_centro' => '',
+        'texto_inferior' => '',
+        'imagen_centro_path' => '',
+        'imagen_inferior_path' => ''
+    ];
+}
+
+// Si no hay config, usar valores por defecto
+if (empty($config)) {
+    $config = [
+        'logo_path' => '',
+        'texto_derecha' => '',
+        'texto_centro' => '',
+        'texto_inferior' => '',
+        'imagen_centro_path' => '',
+        'imagen_inferior_path' => ''
+    ];
+}
+
 $logo_path      = !empty($config['logo_path'])            ? htmlspecialchars($config['logo_path'])            : 'img/UMA_SMA.png';
-$texto_derecha  = $config['texto_derecha']  ?? '';
-$texto_centro   = $config['texto_centro']   ?? '';
-$texto_inferior = $config['texto_inferior'] ?? '';
+$texto_derecha  = isset($config['texto_derecha'])  ? $config['texto_derecha']  : '';
+$texto_centro   = isset($config['texto_centro'])   ? $config['texto_centro']   : '';
+$texto_inferior = isset($config['texto_inferior']) ? $config['texto_inferior'] : '';
 $img_centro     = !empty($config['imagen_centro_path'])   ? htmlspecialchars($config['imagen_centro_path'])   : 'img/front-view-boy-playing-memory-game.jpg';
 $img_inferior   = !empty($config['imagen_inferior_path']) ? htmlspecialchars($config['imagen_inferior_path']) : 'img/top-view-kid-playing-with-colorful-game.jpg';
 
