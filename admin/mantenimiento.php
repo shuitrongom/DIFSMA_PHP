@@ -185,29 +185,36 @@ $grupo_iconos = [
     <link rel="stylesheet" href="../css/admin.css?v=7">
     <style>
         /* Estilos personalizados para el acordeón de mantenimiento */
-        .accordion-button:not(.collapsed) {
+        .accordion-btn-custom {
+            background: rgb(107,98,90) !important;
+            color: #fff !important;
+            padding: 0.75rem 1rem;
+            font-weight: 500;
+        }
+        .accordion-btn-custom:not(.collapsed) {
             background: rgb(107,98,90) !important;
             color: #fff !important;
             box-shadow: none;
         }
-        .accordion-button:focus {
+        .accordion-btn-custom.collapsed {
+            background: rgb(107,98,90) !important;
+            color: #fff !important;
+        }
+        .accordion-btn-custom:focus {
             box-shadow: none;
             border-color: rgba(0,0,0,.125);
         }
-        .accordion-button::after {
+        .accordion-btn-custom::after {
             filter: brightness(0) invert(1);
+        }
+        .accordion-btn-custom:hover {
+            background: rgb(97,88,80) !important;
+            color: #fff !important;
         }
         .accordion-item {
             border: 1px solid rgba(0,0,0,.125);
             border-radius: 0.375rem !important;
             overflow: hidden;
-        }
-        .accordion-button {
-            font-weight: 500;
-        }
-        .accordion-button:hover {
-            background: rgb(97,88,80);
-            color: #fff;
         }
     </style>
 </head>
@@ -281,11 +288,10 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                 ?>
                                 <div class="accordion-item mb-2 shadow-sm">
                                     <h2 class="accordion-header" id="heading<?= $index ?>">
-                                        <button class="accordion-button <?= !$isFirst ? 'collapsed' : '' ?>" type="button" 
+                                        <button class="accordion-button accordion-btn-custom <?= !$isFirst ? 'collapsed' : '' ?>" type="button" 
                                                 data-bs-toggle="collapse" data-bs-target="#<?= $collapseId ?>" 
                                                 aria-expanded="<?= $isFirst ? 'true' : 'false' ?>" 
-                                                aria-controls="<?= $collapseId ?>"
-                                                style="background:rgb(107,98,90);color:#fff;padding:0.75rem 1rem;">
+                                                aria-controls="<?= $collapseId ?>">
                                             <i class="bi <?= $grupo_iconos[$grupo] ?? 'bi-folder' ?> me-2"></i>
                                             <?= htmlspecialchars($grupo) ?>
                                             <span class="badge bg-light text-dark ms-2"><?= count($items) ?></span>
