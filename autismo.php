@@ -19,7 +19,7 @@ try {
 
 // Redirigir a mantenimiento si está activo
 if (!empty($config['en_mantenimiento'])) {
-    header('Location: mantenimiento');
+    header('Location: ' . $base_path . 'mantenimiento.php');
     exit;
 }
 
