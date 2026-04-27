@@ -183,6 +183,33 @@ $grupo_iconos = [
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../css/admin.css?v=7">
+    <style>
+        /* Estilos personalizados para el acordeón de mantenimiento */
+        .accordion-button:not(.collapsed) {
+            background: rgb(107,98,90) !important;
+            color: #fff !important;
+            box-shadow: none;
+        }
+        .accordion-button:focus {
+            box-shadow: none;
+            border-color: rgba(0,0,0,.125);
+        }
+        .accordion-button::after {
+            filter: brightness(0) invert(1);
+        }
+        .accordion-item {
+            border: 1px solid rgba(0,0,0,.125);
+            border-radius: 0.375rem !important;
+            overflow: hidden;
+        }
+        .accordion-button {
+            font-weight: 500;
+        }
+        .accordion-button:hover {
+            background: rgb(97,88,80);
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
     <div class="d-flex">
@@ -245,30 +272,51 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                             <input type="hidden" name="action" value="save_paginas">
                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
 
-                            <?php foreach ($grupos_ordenados as $grupo => $items): ?>
-                            <div class="card shadow-sm mb-3">
-                                <div class="card-header py-2" style="background:rgb(107,98,90);color:#fff;">
-                                    <i class="bi <?= $grupo_iconos[$grupo] ?? 'bi-folder' ?> me-1"></i>
-                                    <?= htmlspecialchars($grupo) ?>
-                                    <span class="badge bg-light text-dark ms-1"><?= count($items) ?></span>
-                                </div>
-                                <div class="card-body py-2">
-                                    <?php foreach ($items as $p): ?>
-                                    <div class="d-flex align-items-center justify-content-between py-1 <?= $p !== end($items) ? 'border-bottom' : '' ?>">
-                                        <span style="font-size:0.85rem;"><?= htmlspecialchars($p['pagina_nombre']) ?></span>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" name="paginas[]"
-                                                   value="<?= htmlspecialchars($p['pagina_key']) ?>"
-                                                   style="width:2.2rem;height:1.1rem;cursor:pointer;"
-                                                   <?= $p['en_mantenimiento'] == 1 ? 'checked' : '' ?>>
+                            <div class="accordion" id="accordionMantenimiento">
+                                <?php 
+                                $index = 0;
+                                foreach ($grupos_ordenados as $grupo => $items): 
+                                    $collapseId = 'collapse' . $index;
+                                    $isFirst = ($index === 0);
+                                ?>
+                                <div class="accordion-item mb-2 shadow-sm">
+                                    <h2 class="accordion-header" id="heading<?= $index ?>">
+                                        <button class="accordion-button <?= !$isFirst ? 'collapsed' : '' ?>" type="button" 
+                                                data-bs-toggle="collapse" data-bs-target="#<?= $collapseId ?>" 
+                                                aria-expanded="<?= $isFirst ? 'true' : 'false' ?>" 
+                                                aria-controls="<?= $collapseId ?>"
+                                                style="background:rgb(107,98,90);color:#fff;padding:0.75rem 1rem;">
+                                            <i class="bi <?= $grupo_iconos[$grupo] ?? 'bi-folder' ?> me-2"></i>
+                                            <?= htmlspecialchars($grupo) ?>
+                                            <span class="badge bg-light text-dark ms-2"><?= count($items) ?></span>
+                                        </button>
+                                    </h2>
+                                    <div id="<?= $collapseId ?>" 
+                                         class="accordion-collapse collapse <?= $isFirst ? 'show' : '' ?>" 
+                                         aria-labelledby="heading<?= $index ?>" 
+                                         data-bs-parent="#accordionMantenimiento">
+                                        <div class="accordion-body py-2 px-3">
+                                            <?php foreach ($items as $p): ?>
+                                            <div class="d-flex align-items-center justify-content-between py-2 <?= $p !== end($items) ? 'border-bottom' : '' ?>">
+                                                <span style="font-size:0.85rem;"><?= htmlspecialchars($p['pagina_nombre']) ?></span>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" name="paginas[]"
+                                                           value="<?= htmlspecialchars($p['pagina_key']) ?>"
+                                                           style="width:2.2rem;height:1.1rem;cursor:pointer;"
+                                                           <?= $p['en_mantenimiento'] == 1 ? 'checked' : '' ?>>
+                                                </div>
+                                            </div>
+                                            <?php endforeach; ?>
                                         </div>
                                     </div>
-                                    <?php endforeach; ?>
                                 </div>
+                                <?php 
+                                $index++;
+                                endforeach; 
+                                ?>
                             </div>
-                            <?php endforeach; ?>
 
-                            <button type="submit" class="btn btn-danger w-100 mb-3">
+                            <button type="submit" class="btn btn-danger w-100 mt-3 mb-3">
                                 <i class="bi bi-save me-1"></i> Guardar estado de páginas
                             </button>
                         </form>
