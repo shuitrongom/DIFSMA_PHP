@@ -12,29 +12,17 @@ $config = null;
 try {
     $pdo    = get_db();
     $stmt   = $pdo->query('SELECT * FROM autismo_config LIMIT 1');
-    $config = $stmt->fetch();
+    $config = $stmt->fetch(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     if (defined('APP_DEBUG') && APP_DEBUG) error_log('autismo.php: ' . $e->getMessage());
     // Si hay error en la BD, continuar sin config
     $config = [];
 }
 
-// Redirigir a mantenimiento si está activo
-if (!empty($config['en_mantenimiento'])) {
-    header('Location: ' . $base_path . 'mantenimiento.php');
+// Redirigir a mantenimiento si está activo (valor 1)
+if (isset($config['en_mantenimiento']) && $config['en_mantenimiento'] == 1) {
+    header('Location: mantenimiento.php');
     exit;
-}
-
-// Si no hay config, usar valores por defecto
-if (empty($config)) {
-    $config = [
-        'logo_path' => '',
-        'texto_derecha' => '',
-        'texto_centro' => '',
-        'texto_inferior' => '',
-        'imagen_centro_path' => '',
-        'imagen_inferior_path' => ''
-    ];
 }
 
 // Si no hay config, usar valores por defecto
