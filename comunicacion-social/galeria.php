@@ -8,6 +8,10 @@ $base_path   = '../';
 $active_page = 'comunicacion';
 $page_title  = 'Galería — DIF San Mateo Atenco';
 
+// Verificar mantenimiento centralizado
+$pagina_key = 'galeria';
+require_once __DIR__ . '/../includes/mantenimiento_check.php';
+
 $albumes = [];
 try {
     $pdo = get_db();

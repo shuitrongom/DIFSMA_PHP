@@ -73,7 +73,7 @@ $sidebar_groups = [
             ['title' => 'Usuarios',    'file' => 'usuarios',           'icon' => 'bi-people'],
             ['title' => 'Analíticas',  'file' => 'analytics',          'icon' => 'bi-graph-up'],
             ['title' => 'Reportes',    'file' => 'reportes_historial',  'icon' => 'bi-file-earmark-bar-graph'],
-            ['title' => 'Mantenimiento', 'file' => '../mantenimiento',  'icon' => 'bi-tools'],
+            ['title' => 'Mantenimiento', 'file' => 'mantenimiento',  'icon' => 'bi-tools'],
         ],
     ],
     [
@@ -136,11 +136,7 @@ function render_admin_sidebar(array $sidebar_groups, string $current_file): void
             </div>
             <div class="sidebar-group-items" id="g<?= $gi ?>" style="<?= $groupActive ? '' : 'max-height:0;' ?>">
 <?php foreach ($visible_items as $item): ?>
-<?php 
-    // Abrir en nueva pestaña si es la página de mantenimiento
-    $target = ($item['file'] === '../mantenimiento') ? ' target="_blank" rel="noopener noreferrer"' : '';
-?>
-                <a class="nav-link<?= $item['file'] === $current_file ? ' active' : '' ?>" href="<?= htmlspecialchars($item['file']) ?>"<?= $target ?>>
+                <a class="nav-link<?= $item['file'] === $current_file ? ' active' : '' ?>" href="<?= htmlspecialchars($item['file']) ?>">
                     <i class="bi <?= htmlspecialchars($item['icon']) ?>"></i> <?= htmlspecialchars($item['title']) ?>
                 </a>
 <?php endforeach; ?>

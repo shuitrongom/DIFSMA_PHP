@@ -13,6 +13,10 @@ require_once __DIR__ . '/../includes/db.php';
 
 $base_path   = '../';
 $active_page = 'acerca';
+
+// Verificar mantenimiento centralizado
+$pagina_key = 'organigrama';
+require_once __DIR__ . '/../includes/mantenimiento_check.php';
 $page_title  = 'Organigrama — DIF San Mateo Atenco';
 
 // ── Consultar registro de organigrama ────────────────────────────────────────

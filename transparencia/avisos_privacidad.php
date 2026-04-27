@@ -9,6 +9,10 @@ $base_path   = '../';
 $active_page = 'transparencia';
 $page_title  = 'Avisos de Privacidad — DIF San Mateo Atenco';
 
+// Verificar mantenimiento centralizado
+$pagina_key = 'avisos_privacidad';
+require_once __DIR__ . '/../includes/mantenimiento_check.php';
+
 $texto_aviso = '';
 $botones     = [];
 

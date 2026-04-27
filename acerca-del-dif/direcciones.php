@@ -12,6 +12,10 @@ $base_path   = '../';
 $active_page = 'acerca';
 $page_title  = 'Direcciones — DIF San Mateo Atenco';
 
+// Verificar mantenimiento centralizado
+$pagina_key = 'direcciones';
+require_once __DIR__ . '/../includes/mantenimiento_check.php';
+
 $direcciones = [];
 try {
     $pdo  = get_db();

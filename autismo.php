@@ -15,15 +15,12 @@ try {
     $config = $stmt->fetch(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     if (defined('APP_DEBUG') && APP_DEBUG) error_log('autismo.php: ' . $e->getMessage());
-    // Si hay error en la BD, continuar sin config
     $config = [];
 }
 
-// Redirigir a mantenimiento si está activo (valor 1)
-if (isset($config['en_mantenimiento']) && $config['en_mantenimiento'] == 1) {
-    require_once __DIR__ . '/mantenimiento.php';
-    exit;
-}
+// Verificar mantenimiento centralizado
+$pagina_key = 'autismo';
+require_once __DIR__ . '/includes/mantenimiento_check.php';
 
 // Si no hay config, usar valores por defecto
 if (empty($config)) {

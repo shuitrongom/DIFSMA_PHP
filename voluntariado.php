@@ -8,6 +8,10 @@ $base_path   = '';
 $active_page = 'voluntariado';
 $page_title  = 'Voluntariado — DIF San Mateo Atenco';
 
+// Verificar mantenimiento centralizado
+$pagina_key = 'voluntariado';
+require_once __DIR__ . '/includes/mantenimiento_check.php';
+
 $config = null;
 $imagenes = [];
 try {

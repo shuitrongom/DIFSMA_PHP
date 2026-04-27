@@ -8,6 +8,10 @@ $base_path   = '../';
 $active_page = 'transparencia';
 $page_title  = 'SEAC — DIF San Mateo Atenco';
 
+// Verificar mantenimiento centralizado
+$pagina_key = 'seac';
+require_once __DIR__ . '/../includes/mantenimiento_check.php';
+
 $bloques       = [];
 $conceptos_map = [];
 $pdfs_map      = [];

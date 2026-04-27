@@ -9,6 +9,10 @@ $base_path   = '../';
 $active_page = 'transparencia';
 $page_title  = 'Matrices de Indicadores — DIF San Mateo Atenco';
 
+// Verificar mantenimiento centralizado
+$pagina_key = 'matrices_indicadores';
+require_once __DIR__ . '/../includes/mantenimiento_check.php';
+
 $registros = [];
 try {
     $pdo  = get_db();

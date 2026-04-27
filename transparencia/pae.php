@@ -9,6 +9,10 @@ $base_path   = '../';
 $active_page = 'transparencia';
 $page_title  = 'Programa Anual de Evaluación — DIF San Mateo Atenco';
 
+// Verificar mantenimiento centralizado
+$pagina_key = 'pae';
+require_once __DIR__ . '/../includes/mantenimiento_check.php';
+
 $titulos = [];
 $pdfs    = [];
 $years   = [];

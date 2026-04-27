@@ -12,6 +12,10 @@ $base_path   = '../';
 $active_page = 'acerca';
 $page_title  = 'Presidente DIF — DIF San Mateo Atenco';
 
+// Verificar mantenimiento centralizado
+$pagina_key = 'presidencia';
+require_once __DIR__ . '/../includes/mantenimiento_check.php';
+
 // ── Consultar registro de presidencia ────────────────────────────────────────
 $presidente = null;
 try {

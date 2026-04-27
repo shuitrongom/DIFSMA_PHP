@@ -15,6 +15,10 @@ $base_path   = '';
 $active_page = 'inicio';
 $page_title  = 'DIF San Mateo Atenco';
 
+// Verificar mantenimiento centralizado
+$pagina_key = 'index';
+require_once __DIR__ . '/includes/mantenimiento_check.php';
+
 // ── Delays de autoplay desde BD ───────────────────────────────────────────────
 $delay_principal = get_slider_delay('slider_principal', 3200);
 $delay_comunica  = get_slider_delay('slider_comunica',  3200);

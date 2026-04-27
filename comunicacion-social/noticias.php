@@ -14,6 +14,10 @@ $base_path   = '../';
 $active_page = 'comunicacion';
 $page_title  = 'Noticias — DIF San Mateo Atenco';
 
+// Verificar mantenimiento centralizado
+$pagina_key = 'noticias';
+require_once __DIR__ . '/../includes/mantenimiento_check.php';
+
 // ── Consultar noticias_imagenes del día actual ───────────────────────────────
 $noticias_images = [];
 try {
