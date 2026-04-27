@@ -47,7 +47,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                 <div class="swiper-wrapper">
                     <?php foreach ($noticias_images as $i => $img): ?>
                     <div class="swiper-slide">
-                        <a href="https://www.facebook.com/people/DIF-San-Mateo-Atenco/100064587487266/" target="_blank" rel="noopener noreferrer">
+                        <a href="https://www.facebook.com/DifSanMateoAtenco/" target="_blank" rel="noopener noreferrer">
                             <img src="<?= htmlspecialchars($base_path . $img['imagen_path']) ?>" class="notice-img" alt="Noticia <?= $i + 1 ?>" loading="lazy" style="max-height:750px;object-fit:contain;cursor:pointer;">
                         </a>
                     </div>
