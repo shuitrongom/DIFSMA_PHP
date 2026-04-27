@@ -439,7 +439,8 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
 
     <!-- Spinner Start -->
     <div id="spinner"
-        class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center">
+        class="show w-100 bg-white position-fixed d-flex align-items-center justify-content-center"
+        style="top: 0; left: 0; right: 0; bottom: 0; z-index: 9998;">
         <div class="spinner-wrapper">
             <div class="spinner-ring"></div>
             <img src="<?= $base_path ?>img/logo_DIF.png" alt="Cargando..." class="spinner-logo">
@@ -452,11 +453,11 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
         var sp = document.getElementById('spinner');
         if (sp) { sp.classList.remove('show'); sp.style.display = 'none'; }
     });
-    // Fallback: ocultar despues de 3 segundos si load no dispara
+    // Fallback: ocultar despues de 1 segundo si load no dispara (REDUCIDO)
     setTimeout(function() {
         var sp = document.getElementById('spinner');
         if (sp) { sp.classList.remove('show'); sp.style.display = 'none'; }
-    }, 3000);
+    }, 1000);
     </script>
 
     <!-- Logo Principal Start -->
