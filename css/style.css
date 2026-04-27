@@ -269,14 +269,16 @@ h6,
         transition: opacity .3s, visibility .3s;
         opacity: 0;
         position: absolute;
+        z-index: 9999 !important;
     }
 }
 
-.navbar .nav-item { position: relative; }
+.navbar .nav-item { position: relative; z-index: 9999; }
 .navbar .dropdown-menu {
     position: absolute !important;
     top: 100% !important;
     bottom: auto !important;
+    z-index: 9999 !important;
 }
 
 .dropdown .dropdown-menu a:hover {
