@@ -21,7 +21,7 @@ try {
 
 // Redirigir a mantenimiento si está activo (valor 1)
 if (isset($config['en_mantenimiento']) && $config['en_mantenimiento'] == 1) {
-    header('Location: mantenimiento.php');
+    require_once __DIR__ . '/mantenimiento.php';
     exit;
 }
 
