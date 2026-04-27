@@ -141,6 +141,7 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
             margin: 0;
             overflow: hidden;
             border-radius: 0;
+            z-index: 1;
         }
 
         .viewport {
@@ -228,6 +229,12 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
         /* Global section rhythm */
         section, .container-fluid { scroll-margin-top: 70px; }
         .section-title { margin-bottom: 2rem; }
+        
+        /* Asegurar que el slider principal tenga z-index bajo */
+        .container-fluid.border-bottom.bg-white:has(.slider) {
+            position: relative;
+            z-index: 1 !important;
+        }
 
         /* Color de fuente principal al 80% negro — excluye navbar y footer */
         body {
