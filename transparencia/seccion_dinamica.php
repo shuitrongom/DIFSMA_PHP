@@ -11,6 +11,10 @@ $active_page = 'transparencia';
 $slug = $_GET['slug'] ?? '';
 if (empty($slug)) { header('Location: ' . $base_path); exit; }
 
+// Verificar mantenimiento centralizado para esta sección
+$pagina_key = 'trans_' . $slug;
+require_once __DIR__ . '/../includes/mantenimiento_check.php';
+
 $pdo = get_db();
 $stmt = $pdo->prepare('SELECT * FROM trans_secciones WHERE slug = ? AND activo = 1');
 $stmt->execute([$slug]);

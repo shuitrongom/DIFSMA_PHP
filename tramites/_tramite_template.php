@@ -14,6 +14,10 @@ require_once __DIR__ . '/../includes/db.php';
 $base_path   = '../';
 $active_page = 'tramites';
 
+// Verificar mantenimiento centralizado para este trámite
+$pagina_key = 'tramite_' . ($tramite_slug ?? '');
+require_once __DIR__ . '/../includes/mantenimiento_check.php';
+
 // ── Consultar registro del trámite ──────────────────────────────────────────
 $tramite = null;
 $galeria_imgs = [];

@@ -2,9 +2,9 @@
 /**
  * admin/mantenimiento.php — Gestión centralizada de Mantenimiento
  *
- * Permite:
- *  - Editar contenido de la página de mantenimiento (título, descripción, tarjetas, correo)
- *  - Activar/desactivar mantenimiento por página con toggles individuales
+ * - Editar contenido de la página de mantenimiento
+ * - Activar/desactivar mantenimiento por página con toggles
+ * - Sincroniza automáticamente trámites, programas y secciones dinámicas de transparencia
  */
 
 require_once __DIR__ . '/auth_guard.php';
@@ -17,11 +17,40 @@ $pdo = get_db();
 try {
     $pdo->query('SELECT 1 FROM mantenimiento_config LIMIT 1');
 } catch (PDOException $e) {
-    // Crear tablas si no existen
     $sql = file_get_contents(__DIR__ . '/../database/dif_cms_mantenimiento_config.sql');
-    if ($sql) {
-        $pdo->exec($sql);
+    if ($sql) { $pdo->exec($sql); }
+}
+
+// ── Sincronizar páginas dinámicas (trámites, programas, secciones transparencia) ──
+try {
+    // Trámites
+    $tramites = $pdo->query('SELECT slug, titulo FROM tramites ORDER BY id ASC')->fetchAll();
+    foreach ($tramites as $t) {
+        $key = 'tramite_' . $t['slug'];
+        $nombre = 'Trámite: ' . $t['titulo'];
+        $pdo->prepare('INSERT INTO mantenimiento_paginas (pagina_key, pagina_nombre, grupo, en_mantenimiento) VALUES (?,?,?,0) ON DUPLICATE KEY UPDATE pagina_nombre=VALUES(pagina_nombre), grupo=VALUES(grupo)')
+            ->execute([$key, $nombre, 'Servicios']);
     }
+
+    // Programas (secciones)
+    $programas = $pdo->query('SELECT ps.slug, ps.titulo, p.nombre FROM programas_secciones ps JOIN programas p ON p.id = ps.programa_id WHERE ps.slug IS NOT NULL ORDER BY p.orden ASC, ps.orden ASC')->fetchAll();
+    foreach ($programas as $pr) {
+        $key = 'programa_' . $pr['slug'];
+        $nombre = 'Programa: ' . $pr['titulo'];
+        $pdo->prepare('INSERT INTO mantenimiento_paginas (pagina_key, pagina_nombre, grupo, en_mantenimiento) VALUES (?,?,?,0) ON DUPLICATE KEY UPDATE pagina_nombre=VALUES(pagina_nombre), grupo=VALUES(grupo)')
+            ->execute([$key, $nombre, 'Programas']);
+    }
+
+    // Secciones dinámicas de transparencia
+    $secciones = $pdo->query('SELECT slug, nombre FROM trans_secciones WHERE activo = 1 ORDER BY orden ASC')->fetchAll();
+    foreach ($secciones as $s) {
+        $key = 'trans_' . $s['slug'];
+        $nombre = 'Transparencia: ' . $s['nombre'];
+        $pdo->prepare('INSERT INTO mantenimiento_paginas (pagina_key, pagina_nombre, grupo, en_mantenimiento) VALUES (?,?,?,0) ON DUPLICATE KEY UPDATE pagina_nombre=VALUES(pagina_nombre), grupo=VALUES(grupo)')
+            ->execute([$key, $nombre, 'Transparencia']);
+    }
+} catch (PDOException $e) {
+    // Silenciar si alguna tabla no existe aún
 }
 
 // ── Procesamiento POST ─────────────────────────────────────────────────────────
@@ -36,7 +65,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // ── Guardar contenido de la página ─────────────────────────────────────────
     if ($action === 'save_contenido') {
         $titulo       = trim($_POST['titulo'] ?? 'Sitio en Mantenimiento');
         $descripcion  = trim($_POST['descripcion'] ?? '');
@@ -51,7 +79,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $stmt = $pdo->query('SELECT id FROM mantenimiento_config LIMIT 1');
             $current = $stmt->fetch();
-
             if ($current) {
                 $pdo->prepare('UPDATE mantenimiento_config SET titulo=?, descripcion=?, correo_contacto=?, tarjeta1_titulo=?, tarjeta1_texto=?, tarjeta2_titulo=?, tarjeta2_texto=?, tarjeta3_titulo=?, tarjeta3_texto=?, updated_at=NOW() WHERE id=?')
                     ->execute([$titulo, $descripcion, $correo, $t1_titulo, $t1_texto, $t2_titulo, $t2_texto, $t3_titulo, $t3_texto, $current['id']]);
@@ -59,40 +86,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $pdo->prepare('INSERT INTO mantenimiento_config (titulo, descripcion, correo_contacto, tarjeta1_titulo, tarjeta1_texto, tarjeta2_titulo, tarjeta2_texto, tarjeta3_titulo, tarjeta3_texto) VALUES (?,?,?,?,?,?,?,?,?)')
                     ->execute([$titulo, $descripcion, $correo, $t1_titulo, $t1_texto, $t2_titulo, $t2_texto, $t3_titulo, $t3_texto]);
             }
-
             $_SESSION['flash_message'] = 'Contenido de mantenimiento actualizado.';
             $_SESSION['flash_type']    = 'success';
         } catch (PDOException $e) {
-            $_SESSION['flash_message'] = 'Error al guardar: ' . ($e->getMessage());
+            $_SESSION['flash_message'] = 'Error al guardar.';
             $_SESSION['flash_type']    = 'danger';
         }
-
         header('Location: mantenimiento');
         exit;
     }
 
-    // ── Guardar toggles de páginas ─────────────────────────────────────────────
     if ($action === 'save_paginas') {
         $paginas_activas = $_POST['paginas'] ?? [];
-
         try {
-            // Primero desactivar todas
             $pdo->exec('UPDATE mantenimiento_paginas SET en_mantenimiento = 0');
-
-            // Activar las seleccionadas
             if (!empty($paginas_activas)) {
                 $placeholders = implode(',', array_fill(0, count($paginas_activas), '?'));
                 $pdo->prepare("UPDATE mantenimiento_paginas SET en_mantenimiento = 1 WHERE pagina_key IN ($placeholders)")
                     ->execute($paginas_activas);
             }
-
             $_SESSION['flash_message'] = 'Estado de mantenimiento actualizado.';
             $_SESSION['flash_type']    = 'success';
         } catch (PDOException $e) {
-            $_SESSION['flash_message'] = 'Error al guardar: ' . ($e->getMessage());
+            $_SESSION['flash_message'] = 'Error al guardar.';
             $_SESSION['flash_type']    = 'danger';
         }
-
         header('Location: mantenimiento');
         exit;
     }
@@ -103,26 +121,56 @@ $config = [];
 try {
     $stmt = $pdo->query('SELECT * FROM mantenimiento_config LIMIT 1');
     $config = $stmt->fetch() ?: [];
-} catch (PDOException $e) { $config = []; }
+} catch (PDOException $e) {}
 
 $paginas = [];
 try {
-    $stmt = $pdo->query('SELECT * FROM mantenimiento_paginas ORDER BY id ASC');
+    $stmt = $pdo->query('SELECT * FROM mantenimiento_paginas ORDER BY grupo ASC, id ASC');
     $paginas = $stmt->fetchAll();
-} catch (PDOException $e) { $paginas = []; }
+} catch (PDOException $e) {}
 
-// Contar páginas activas
+// Agrupar páginas por grupo
+$grupos = [];
+foreach ($paginas as $p) {
+    $g = $p['grupo'] ?? 'Otros';
+    $grupos[$g][] = $p;
+}
+
+// Orden de grupos como el menú
+$grupo_orden = ['Inicio', 'Acerca del DIF', 'Servicios', 'Programas', 'Comunicación Social', 'Voluntariado', 'Transparencia', 'Otros'];
+$grupos_ordenados = [];
+foreach ($grupo_orden as $go) {
+    if (isset($grupos[$go])) {
+        $grupos_ordenados[$go] = $grupos[$go];
+    }
+}
+// Agregar grupos que no estén en el orden
+foreach ($grupos as $g => $items) {
+    if (!isset($grupos_ordenados[$g])) {
+        $grupos_ordenados[$g] = $items;
+    }
+}
+
 $activas = 0;
 foreach ($paginas as $p) {
     if ($p['en_mantenimiento'] == 1) $activas++;
 }
 
-// ── Flash messages ─────────────────────────────────────────────────────────────
 $flashMessage = $_SESSION['flash_message'] ?? '';
 $flashType    = $_SESSION['flash_type'] ?? '';
 unset($_SESSION['flash_message'], $_SESSION['flash_type']);
-
 $token = csrf_token();
+
+// Iconos por grupo
+$grupo_iconos = [
+    'Inicio' => 'bi-house-door',
+    'Acerca del DIF' => 'bi-info-circle',
+    'Servicios' => 'bi-file-earmark-text',
+    'Programas' => 'bi-grid-3x3-gap',
+    'Comunicación Social' => 'bi-megaphone',
+    'Voluntariado' => 'bi-heart',
+    'Transparencia' => 'bi-shield-check',
+];
 
 ?>
 <!DOCTYPE html>
@@ -146,12 +194,8 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                 <button class="btn btn-outline-secondary me-2" id="toggleSidebar" aria-label="Abrir/cerrar menú">
                     <i class="bi bi-list"></i>
                 </button>
-                <span class="navbar-brand mb-0 h6">
-                    <i class="bi bi-tools me-1"></i> Gestión de Mantenimiento
-                </span>
-                <a href="logout" class="btn btn-sm btn-outline-danger ms-auto">
-                    <i class="bi bi-box-arrow-right"></i> Salir
-                </a>
+                <span class="navbar-brand mb-0 h6"><i class="bi bi-tools me-1"></i> Gestión de Mantenimiento</span>
+                <a href="logout" class="btn btn-sm btn-outline-danger ms-auto"><i class="bi bi-box-arrow-right"></i> Salir</a>
             </nav>
 
             <div class="container-fluid p-4">
@@ -195,54 +239,39 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                 </div>
 
                 <div class="row g-4">
-
-                    <!-- ═══ COLUMNA IZQUIERDA: Toggles de páginas ═══ -->
+                    <!-- ═══ COLUMNA IZQUIERDA: Toggles por grupo ═══ -->
                     <div class="col-lg-5">
-                        <div class="card shadow-sm">
-                            <div class="card-header bg-danger text-white">
-                                <i class="bi bi-toggles me-1"></i> Páginas en Mantenimiento
-                            </div>
-                            <div class="card-body">
-                                <p class="text-muted small mb-3">
-                                    <i class="bi bi-info-circle me-1"></i>
-                                    Active el switch en las páginas que desea poner en mantenimiento. Los visitantes verán la página de mantenimiento en lugar del contenido.
-                                </p>
-                                <form method="POST" action="mantenimiento">
-                                    <input type="hidden" name="action" value="save_paginas">
-                                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
+                        <form method="POST" action="mantenimiento">
+                            <input type="hidden" name="action" value="save_paginas">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token) ?>">
 
-                                    <?php foreach ($paginas as $p): ?>
-                                    <div class="d-flex align-items-center justify-content-between py-2 border-bottom">
-                                        <div>
-                                            <span class="fw-semibold" style="font-size:0.9rem;">
-                                                <?= htmlspecialchars($p['pagina_nombre']) ?>
-                                            </span>
-                                            <br>
-                                            <small class="text-muted"><?= htmlspecialchars($p['pagina_key']) ?></small>
-                                        </div>
+                            <?php foreach ($grupos_ordenados as $grupo => $items): ?>
+                            <div class="card shadow-sm mb-3">
+                                <div class="card-header py-2" style="background:rgb(107,98,90);color:#fff;">
+                                    <i class="bi <?= $grupo_iconos[$grupo] ?? 'bi-folder' ?> me-1"></i>
+                                    <?= htmlspecialchars($grupo) ?>
+                                    <span class="badge bg-light text-dark ms-1"><?= count($items) ?></span>
+                                </div>
+                                <div class="card-body py-2">
+                                    <?php foreach ($items as $p): ?>
+                                    <div class="d-flex align-items-center justify-content-between py-1 <?= $p !== end($items) ? 'border-bottom' : '' ?>">
+                                        <span style="font-size:0.85rem;"><?= htmlspecialchars($p['pagina_nombre']) ?></span>
                                         <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox"
-                                                   name="paginas[]"
+                                            <input class="form-check-input" type="checkbox" name="paginas[]"
                                                    value="<?= htmlspecialchars($p['pagina_key']) ?>"
-                                                   style="width:2.5rem;height:1.3rem;cursor:pointer;"
+                                                   style="width:2.2rem;height:1.1rem;cursor:pointer;"
                                                    <?= $p['en_mantenimiento'] == 1 ? 'checked' : '' ?>>
                                         </div>
                                     </div>
                                     <?php endforeach; ?>
-
-                                    <?php if (empty($paginas)): ?>
-                                    <div class="text-center text-muted py-3">
-                                        <i class="bi bi-exclamation-circle" style="font-size:1.5rem;"></i>
-                                        <p class="mt-2 mb-0">No hay páginas configuradas. Ejecute el SQL de instalación.</p>
-                                    </div>
-                                    <?php endif; ?>
-
-                                    <button type="submit" class="btn btn-danger w-100 mt-3">
-                                        <i class="bi bi-save me-1"></i> Guardar estado de páginas
-                                    </button>
-                                </form>
+                                </div>
                             </div>
-                        </div>
+                            <?php endforeach; ?>
+
+                            <button type="submit" class="btn btn-danger w-100 mb-3">
+                                <i class="bi bi-save me-1"></i> Guardar estado de páginas
+                            </button>
+                        </form>
                     </div>
 
                     <!-- ═══ COLUMNA DERECHA: Editar contenido ═══ -->
@@ -261,12 +290,10 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                                         <input type="text" class="form-control" id="titulo" name="titulo"
                                                value="<?= htmlspecialchars($config['titulo'] ?? 'Sitio en Mantenimiento') ?>" required>
                                     </div>
-
                                     <div class="mb-3">
                                         <label for="descripcion" class="form-label fw-semibold">Descripción</label>
                                         <textarea class="form-control" id="descripcion" name="descripcion" rows="3"><?= htmlspecialchars($config['descripcion'] ?? '') ?></textarea>
                                     </div>
-
                                     <div class="mb-3">
                                         <label for="correo_contacto" class="form-label fw-semibold">Correo de contacto</label>
                                         <input type="email" class="form-control" id="correo_contacto" name="correo_contacto"
@@ -275,7 +302,6 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
 
                                     <hr>
                                     <h6 class="fw-bold mb-3"><i class="bi bi-card-text me-1"></i> Tarjetas informativas</h6>
-
                                     <div class="row g-3">
                                         <div class="col-md-6">
                                             <label class="form-label small fw-semibold">Tarjeta 1 — Título</label>
@@ -316,12 +342,10 @@ require_once __DIR__ . '/page_help.php'; render_admin_sidebar($sidebar_groups, $
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
-
     <script src="../js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

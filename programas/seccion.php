@@ -11,6 +11,10 @@ $active_page = 'servicios';
 $slug = trim($_GET['slug'] ?? '');
 if (empty($slug)) { header('Location: ../index'); exit; }
 
+// Verificar mantenimiento centralizado para este programa
+$pagina_key = 'programa_' . $slug;
+require_once __DIR__ . '/../includes/mantenimiento_check.php';
+
 $seccion = null;
 $pagina  = null;
 $programa = null;
