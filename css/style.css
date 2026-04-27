@@ -269,6 +269,7 @@ h6,
         transition: opacity .3s, visibility .3s;
         opacity: 0;
         position: absolute;
+        z-index: 9999;
     }
 }
 
@@ -277,6 +278,7 @@ h6,
     position: absolute !important;
     top: 100% !important;
     bottom: auto !important;
+    z-index: 9999;
 }
 
 .dropdown .dropdown-menu a:hover {

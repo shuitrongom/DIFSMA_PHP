@@ -141,6 +141,12 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
             margin: 0;
             overflow: hidden;
             border-radius: 0;
+            z-index: 1;
+        }
+        
+        /* Contenedor del slider principal debe estar debajo del navbar */
+        .container-fluid.border-bottom.bg-white .slider {
+            z-index: 1;
         }
 
         .viewport {
