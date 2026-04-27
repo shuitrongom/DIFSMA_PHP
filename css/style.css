@@ -232,24 +232,24 @@ h6,
 /*** Navbar Start ***/
 .container-fluid.border-bottom.bg-white {
     position: relative;
-    z-index: 100 !important;
+    z-index: 1000 !important;
 }
 
 .container-fluid.border-bottom.bg-white .container {
     position: relative;
-    z-index: 100 !important;
+    z-index: 1000 !important;
 }
 
 .navbar {
     border-bottom: 1px solid rgba(255, 255, 255, .1);
     color: #FFFFFF;
     position: relative;
-    z-index: 100 !important;
+    z-index: 1000 !important;
 }
 
 .navbar-expand-xl {
     position: relative;
-    z-index: 100 !important;
+    z-index: 1000 !important;
 }
 
 /* Forzar z-index durante animaciones WOW */
@@ -259,7 +259,7 @@ h6,
 
 .container-fluid.border-bottom.bg-white.wow,
 .container-fluid.border-bottom.bg-white.animated {
-    z-index: 100 !important;
+    z-index: 1000 !important;
 }
 
 .navbar .navbar-nav .nav-link .nav-link-green {
@@ -298,16 +298,27 @@ h6,
         transition: opacity .3s, visibility .3s;
         opacity: 0;
         position: absolute;
-        z-index: 101 !important;
+        z-index: 9999 !important;
     }
 }
 
-.navbar .nav-item { position: relative; z-index: 101 !important; }
+.navbar .nav-item { position: relative; z-index: 9999 !important; }
 .navbar .dropdown-menu {
     position: absolute !important;
     top: 100% !important;
     bottom: auto !important;
-    z-index: 101 !important;
+    z-index: 9999 !important;
+}
+
+.navbar .nav-item:hover .dropdown-menu {
+    transform: translateY(0) !important;
+    visibility: visible;
+    background: rgb(133, 133, 119) !important;
+    border-radius: 10px !important;
+    transition: opacity .3s, visibility .3s;
+    opacity: 1;
+    color: var(--bs-white) !important;
+    z-index: 9999 !important;
 }
 
 .dropdown .dropdown-menu a:hover {
