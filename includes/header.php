@@ -230,8 +230,19 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
         section, .container-fluid { scroll-margin-top: 70px; }
         .section-title { margin-bottom: 2rem; }
         
-        /* Asegurar que el slider principal tenga z-index bajo */
-        .container-fluid.border-bottom.bg-white:has(.slider) {
+        /* Asegurar que todos los contenedores de contenido tengan z-index bajo */
+        .container-fluid:not(.border-bottom.bg-white:first-of-type) {
+            position: relative;
+            z-index: 1 !important;
+        }
+        
+        section {
+            position: relative;
+            z-index: 1 !important;
+        }
+        
+        /* Contenedores de programas, servicios, etc */
+        .program, .service, .events, .team, .testimonial, .blog {
             position: relative;
             z-index: 1 !important;
         }
