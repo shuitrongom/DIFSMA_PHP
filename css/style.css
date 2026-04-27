@@ -3,7 +3,7 @@
     opacity: 0;
     visibility: hidden;
     transition: opacity .5s ease-out, visibility 0s linear .5s;
-    z-index: 1000;
+    z-index: 50;
     pointer-events: none;
 }
 
@@ -232,34 +232,34 @@ h6,
 /*** Navbar Start ***/
 .container-fluid.border-bottom.bg-white {
     position: relative;
-    z-index: 10000 !important;
+    z-index: 100 !important;
 }
 
 .container-fluid.border-bottom.bg-white .container {
     position: relative;
-    z-index: 10000 !important;
+    z-index: 100 !important;
 }
 
 .navbar {
     border-bottom: 1px solid rgba(255, 255, 255, .1);
     color: #FFFFFF;
     position: relative;
-    z-index: 10000 !important;
+    z-index: 100 !important;
 }
 
 .navbar-expand-xl {
     position: relative;
-    z-index: 10000 !important;
+    z-index: 100 !important;
 }
 
 /* Forzar z-index durante animaciones WOW */
 .wow.fadeIn {
-    z-index: 10000 !important;
+    z-index: inherit !important;
 }
 
 .container-fluid.border-bottom.bg-white.wow,
 .container-fluid.border-bottom.bg-white.animated {
-    z-index: 10000 !important;
+    z-index: 100 !important;
 }
 
 .navbar .navbar-nav .nav-link .nav-link-green {
@@ -298,16 +298,16 @@ h6,
         transition: opacity .3s, visibility .3s;
         opacity: 0;
         position: absolute;
-        z-index: 10001 !important;
+        z-index: 101 !important;
     }
 }
 
-.navbar .nav-item { position: relative; z-index: 10001 !important; }
+.navbar .nav-item { position: relative; z-index: 101 !important; }
 .navbar .dropdown-menu {
     position: absolute !important;
     top: 100% !important;
     bottom: auto !important;
-    z-index: 10001 !important;
+    z-index: 101 !important;
 }
 
 .dropdown .dropdown-menu a:hover {
