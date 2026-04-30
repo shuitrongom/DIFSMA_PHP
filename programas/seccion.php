@@ -350,6 +350,9 @@ require_once __DIR__ . '/../includes/navbar.php';
     .sec-img1, .sec-img2 { max-height: 220px !important; transform: none !important; }
     .sec-row-2 .col-md-5 { order: 1 !important; padding: 0 !important; }
     .sec-row-2 .col-md-7 { order: 2 !important; }
+    /* Fila 2: imagen primero, texto después en móvil */
+    .sec-row-2 .col-md-6:has(.sec-img2) { order: 1 !important; }
+    .sec-row-2 .col-md-6.d-flex:not(:has(.sec-img2)) { order: 2 !important; }
 }
 </style>
 
