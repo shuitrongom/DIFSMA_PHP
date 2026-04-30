@@ -463,7 +463,9 @@ if (!isset($page_title)) $page_title = 'DIF San Mateo Atenco';
 
     <!-- Logo Principal Start -->
     <div class="container d-flex justify-content-center pt-4 pb-0">
-        <img src="<?= $base_path ?>img/logos.png" class="img-fluid" style="max-width:70%;" alt="DIF San Mateo Atenco">
+        <a href="<?= $base_path ?>index">
+            <img src="<?= $base_path ?>img/logos.png" class="img-fluid" style="max-width:70%;" alt="DIF San Mateo Atenco">
+        </a>
     </div>
     <!-- Logo Principal End -->
 
