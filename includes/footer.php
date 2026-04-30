@@ -161,7 +161,7 @@ if (count($horario_parts) === 2) {
                         </div>
                     </div>
                     <!-- Logos institucionales -->
-                    <div class="d-flex justify-content-center gap-5 ps-4 mb-3">
+                    <div class="d-flex gap-5 ps-4 mb-4">
                         <a href="https://www.imcufidesma.gob.mx/" target="_blank" rel="noopener noreferrer">
                             <img src="<?= $base_path ?>img/imcufide.png" alt="IMCUFIDE" style="height:50px;width:auto;object-fit:contain;">
                         </a>
