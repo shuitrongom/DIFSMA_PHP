@@ -611,7 +611,10 @@ $stats_seccion = $stmtSec->fetchAll();
 
 // Listas para selects del formulario
 $secciones = $pdo->query("SELECT DISTINCT seccion FROM admin_historial ORDER BY seccion ASC")->fetchAll(PDO::FETCH_COLUMN);
-$usuarios  = $pdo->query("SELECT DISTINCT username FROM admin_historial ORDER BY username ASC")->fetchAll(PDO::FETCH_COLUMN);
+// Solo usuarios que aún existen en el sistema
+$todos_usuarios_historial = $pdo->query("SELECT DISTINCT username FROM admin_historial ORDER BY username ASC")->fetchAll(PDO::FETCH_COLUMN);
+$usuarios_activos = $pdo->query("SELECT username FROM `admin`")->fetchAll(PDO::FETCH_COLUMN);
+$usuarios = array_values(array_intersect($todos_usuarios_historial, $usuarios_activos));
 
 // Vista previa: primeros 50 registros
 $preview = array_slice($registros, 0, 50);
