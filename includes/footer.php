@@ -161,12 +161,12 @@ if (count($horario_parts) === 2) {
                         </div>
                     </div>
                     <!-- Logos institucionales -->
-                    <div class="d-flex justify-content-center gap-4 ps-4 mb-3">
+                    <div class="d-flex justify-content-center gap-5 ps-4 mb-3">
                         <a href="https://www.imcufidesma.gob.mx/" target="_blank" rel="noopener noreferrer">
-                            <img src="<?= $base_path ?>img/imcufide.png" alt="IMCUFIDE" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
+                            <img src="<?= $base_path ?>img/imcufide.png" alt="IMCUFIDE" style="height:50px;width:auto;object-fit:contain;">
                         </a>
                         <a href="https://www.opdapassma.gob.mx/" target="_blank" rel="noopener noreferrer">
-                            <img src="<?= $base_path ?>img/opdapas.png" alt="OPDAPAS" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
+                            <img src="<?= $base_path ?>img/opdapas.png" alt="OPDAPAS" style="height:50px;width:auto;object-fit:contain;">
                         </a>
                     </div>
                     <!-- Redes sociales — siempre al fondo -->
