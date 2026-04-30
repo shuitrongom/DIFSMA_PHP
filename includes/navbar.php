@@ -78,8 +78,10 @@ $active_page = $active_page ?? '';
                         <a href="#" class="nav-link-purple dropdown-toggle<?= $active_page === 'transparencia' ? ' active' : '' ?>"
                            data-bs-toggle="dropdown" data-bs-offset="0,0" data-bs-flip="false" data-bs-offset="0,0" data-bs-flip="false">TRANSPARENCIA</a>
                         <div class="dropdown-menu m-0 rounded-0">
-                            <a href="https://www.ipomex.org.mx/ipo3/lgt/indice/DIFSANMATEO.web" target="_blank"
-                               class="dropdown-item" style="color:#fff!important">IPOMEX</a>
+                            <a href="https://www.ipomex.org.mx/ipo3/lgt/indice/SANMATEOATENCO.web" target="_blank"
+                               class="dropdown-item" style="color:#fff!important">IPOMEX 3.0</a>
+                            <a href="https://infoem2.ipomex.org.mx/ipomex/#/obligaciones/167" target="_blank"
+                               class="dropdown-item" style="color:#fff!important">IPOMEX 4.0</a>
                             <a href="https://www.saimex.org.mx/saimex/ciudadano/login.page" target="_blank"
                                class="dropdown-item" style="color:#fff!important">SAIMEX</a>
                             <a href="https://www.plataformadetransparencia.org.mx/" target="_blank"

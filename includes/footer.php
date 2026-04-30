@@ -160,6 +160,15 @@ if (count($horario_parts) === 2) {
                             <?php endif; ?>
                         </div>
                     </div>
+                    <!-- Logos institucionales -->
+                    <div class="d-flex justify-content-center gap-4 ps-4 mb-3">
+                        <a href="https://www.imcufidesma.gob.mx/" target="_blank" rel="noopener noreferrer">
+                            <img src="<?= $base_path ?>img/imcufide.png" alt="IMCUFIDE" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
+                        </a>
+                        <a href="https://www.opdapassma.gob.mx/" target="_blank" rel="noopener noreferrer">
+                            <img src="<?= $base_path ?>img/opdapas.png" alt="OPDAPAS" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
+                        </a>
+                    </div>
                     <!-- Redes sociales — siempre al fondo -->
                     <div class="footer-social d-flex justify-content-start gap-4 ps-4 flex-wrap mt-auto">
                         <a href="<?= _fe($footer['url_twitter']) ?>" class="text-white text-decoration-none d-flex align-items-center gap-2" target="_blank">
@@ -183,7 +192,9 @@ if (count($horario_parts) === 2) {
 
     <!-- Copyright Start -->
     <div class="copyright-bar">
-        <img src="<?= $base_path ?>img/logo_administracion.png" width="200" class="img-fluid d-block mx-auto mb-2" alt="Administración">
+        <a href="https://www.sanmateoatenco.gob.mx/" target="_blank" rel="noopener noreferrer">
+            <img src="<?= $base_path ?>img/logo_administracion.png" width="200" class="img-fluid d-block mx-auto mb-2" alt="Administración">
+        </a>
         <p class="mb-0" style="font-size:12px;color:#fff;">© <?= date('Y') ?> DIF San Mateo Atenco. Todos los derechos reservados.</p>
     </div>
     <!-- Copyright End -->
